@@ -8,15 +8,16 @@ import { normalize } from '../../utils';
 /**
  * PERSPECTIVE
  * represents the angle the user is looking at the hills
- * from 0.0 to 30.0
  */
 
-const transformParameters = ({ height, perspective }) => {
-  const distanceBetweenRows = normalize(perspective, 0, 30, 0, height * 0.1);
+const transformParameters = ({ height, perspective, spikyness }) => {
+  const distanceBetweenRows = normalize(perspective, 0, 100, 0, height * 0.1);
+
+  const perlinRatio = (100 - spikyness) / 100;
 
   console.log(distanceBetweenRows);
 
-  return { distanceBetweenRows };
+  return { distanceBetweenRows, perlinRatio };
 };
 
 export default transformParameters;

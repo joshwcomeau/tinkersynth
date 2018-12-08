@@ -60,7 +60,7 @@ const getSampleCoordinates = ({
   ) + rowOffset,
 ];
 
-const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow) => {
+const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   // Calculate the noise value for this point in space.
   // We need to do linear interpolation, because while we might have 50 or
   // 500 or 5000 samples per row, we only want to use a standard perlin range
@@ -73,7 +73,10 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow) => {
     PERLIN_RANGE_PER_ROW
   );
 
-  let noiseVal = perlin2(noiseX, rowIndex * 1.5);
+  const p2 = perlin2(noiseX, rowIndex * 1.5);
+  const rnd = (Math.random() - 0.5) * 0.5;
+
+  let noiseVal = p2 * perlinRatio + rnd * (1 - perlinRatio);
 
   // Different rows have different damping amounts
   const damping = rowIndex % 2 === 0 ? 0.85 : 1;
@@ -147,20 +150,29 @@ export default ({
   height,
   margins,
   distanceBetweenRows,
+  perlinRatio,
   samplesPerRow = 250,
 }) => {
   const [verticalMargin, horizontalMargin] = margins;
 
-  const numOfRows = 30;
-  const peakAmplitudeMultiplier = 1;
+  const numOfRows = 50;
+  // const peakAmplitudeMultiplier = 1;
 
-  const rowHeight = height * 0.05;
+  const rowHeight = height * 0.1;
 
   let lines = [];
+
+  let peakAmplitudeMultiplier;
+  let rowAmplifications = [];
 
   // Generate some data!
   range(numOfRows).forEach(rowIndex => {
     let row = [];
+
+    // TODO: Randomize this per row. Seed it somehow.
+    peakAmplitudeMultiplier = 1;
+
+    rowAmplifications.push(peakAmplitudeMultiplier);
 
     const previousRowIndices = getPossiblyOccludingRowIndices({
       rowIndex,
@@ -169,7 +181,12 @@ export default ({
     });
 
     range(samplesPerRow).forEach(sampleIndex => {
-      const value = getValueAtPoint(sampleIndex, rowIndex, samplesPerRow);
+      const value = getValueAtPoint(
+        sampleIndex,
+        rowIndex,
+        samplesPerRow,
+        perlinRatio
+      );
 
       const rowOffset = getRowOffset(
         rowIndex,
@@ -198,7 +215,8 @@ export default ({
       const previousValue = getValueAtPoint(
         sampleIndex - 1,
         rowIndex,
-        samplesPerRow
+        samplesPerRow,
+        perlinRatio
       );
       const previousSamplePoint = getSampleCoordinates({
         sampleIndex: sampleIndex - 1,
@@ -225,27 +243,29 @@ export default ({
             value: getValueAtPoint(
               sampleIndex - 1,
               previousRowIndex,
-              samplesPerRow
+              samplesPerRow,
+              perlinRatio
             ),
             sampleIndex: sampleIndex - 1,
             distanceBetweenSamples,
             rowHeight,
             rowOffset: previousRowOffset,
             horizontalMargin,
-            peakAmplitudeMultiplier,
+            peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
           }),
           getSampleCoordinates({
             value: getValueAtPoint(
               sampleIndex,
               previousRowIndex,
-              samplesPerRow
+              samplesPerRow,
+              perlinRatio
             ),
             sampleIndex: sampleIndex,
             distanceBetweenSamples,
             rowHeight,
             rowOffset: previousRowOffset,
             horizontalMargin,
-            peakAmplitudeMultiplier,
+            peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
           }),
         ];
       });

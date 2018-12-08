@@ -13,7 +13,7 @@ type Props = {
   lineDensity: number,
 };
 
-const Slopes = ({ width = 850, perspective }: Props) => {
+const Slopes = ({ width = 850, perspective, spikyness }: Props) => {
   const aspectRatio = 11 / 8.5;
   const height = width * aspectRatio;
 
@@ -30,9 +30,10 @@ const Slopes = ({ width = 850, perspective }: Props) => {
   // high-level param might tweak several low-level vars, and the same
   // variable might be affected by multiple params.
 
-  const { distanceBetweenRows } = transformParameters({
+  const { distanceBetweenRows, perlinRatio } = transformParameters({
     height,
     perspective,
+    spikyness,
   });
 
   const lines = useMemo(
@@ -42,8 +43,9 @@ const Slopes = ({ width = 850, perspective }: Props) => {
         height,
         margins: [topMargin, leftMargin],
         distanceBetweenRows,
+        perlinRatio,
       }),
-    [width, perspective]
+    [width, perspective, perlinRatio]
   );
 
   useEffect(
@@ -56,7 +58,7 @@ const Slopes = ({ width = 850, perspective }: Props) => {
         context,
       });
     },
-    [width, perspective]
+    [width, perspective, perlinRatio]
   );
 
   return (

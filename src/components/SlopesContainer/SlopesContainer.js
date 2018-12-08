@@ -8,13 +8,16 @@ import SlopesControls from '../SlopesControls';
 const SlopesContainer = () => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(3);
+  const [spikyness, setSpikyness] = useState(0);
 
   return (
     <Wrapper>
-      <Slopes perspective={perspective} />
+      <Slopes perspective={perspective} spikyness={spikyness} />
       <SlopesControls
         perspective={perspective}
+        spikyness={spikyness}
         setPerspective={setPerspective}
+        setSpikyness={setSpikyness}
       />
     </Wrapper>
   );
