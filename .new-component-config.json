@@ -1,0 +1,6 @@
+{
+  "type": "functional",
+  "prettierConfig": {
+    "singleQuote": true
+  }
+}
