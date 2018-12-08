@@ -1,10 +1,11 @@
+// @flow
 import React, { Component } from 'react';
 
-import Slopes from '../Slopes';
+import ArtWithControls from '../ArtWithControls';
 
 class App extends Component {
   render() {
-    return <Slopes width={500} height={500} />;
+    return <ArtWithControls />;
   }
 }
 
