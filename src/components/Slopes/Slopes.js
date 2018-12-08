@@ -5,13 +5,14 @@ import renderPolylines from '../../vendor/render-polylines';
 import Canvas from '../Canvas';
 
 import generator from './Slopes.generator';
+import transformParameters from './Slopes.params';
 
 type Props = {
   width?: number,
   lineDensity: number,
 };
 
-const Slopes = ({ width = 850, lineDensity }: Props) => {
+const Slopes = ({ width = 850, perspective }: Props) => {
   const aspectRatio = 11 / 8.5;
   const height = width * aspectRatio;
 
@@ -26,16 +27,26 @@ const Slopes = ({ width = 850, lineDensity }: Props) => {
     () => {
       const context = ctxRef.current;
 
+      // The user can tweak "high-level parameters" like spikyness, perspective,
+      // etc. These values need to be reduced to low-level variables used in
+      // calculation. There is not a 1:1 mapping between them: a single
+      // high-level param might tweak several low-level vars, and the same
+      // variable might be affected by multiple params.
+      const { distanceBetweenRows } = transformParameters({
+        height,
+        perspective,
+      });
+
       const lines = generator({
         width,
         height,
         margins: [topMargin, leftMargin],
-        lineDensity,
+        distanceBetweenRows,
       });
 
       renderPolylines(lines, { width, height, context });
     },
-    [lineDensity]
+    [perspective]
   );
 
   return <Canvas width={width} height={height} innerRef={ctxRef} />;

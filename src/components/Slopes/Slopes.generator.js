@@ -146,7 +146,7 @@ export default ({
   width,
   height,
   margins,
-  lineDensity,
+  distanceBetweenRows,
   samplesPerRow = 250,
 }) => {
   const [verticalMargin, horizontalMargin] = margins;
@@ -155,7 +155,6 @@ export default ({
   const peakAmplitudeMultiplier = 1;
 
   const rowHeight = height * 0.05;
-  const distanceBetweenRows = height * (lineDensity / 200);
 
   let lines = [];
 

@@ -5,15 +5,16 @@ import styled from 'styled-components';
 import Slopes from '../Slopes';
 import SlopesControls from '../SlopesControls';
 
-const ArtWithControls = () => {
-  const [lineDensity, setLineDensity] = useState(3);
+const SlopesContainer = () => {
+  // High-level "Parameters", tweakable settings
+  const [perspective, setPerspective] = useState(3);
 
   return (
     <Wrapper>
-      <Slopes lineDensity={lineDensity} />
+      <Slopes perspective={perspective} />
       <SlopesControls
-        lineDensity={lineDensity}
-        setLineDensity={setLineDensity}
+        perspective={perspective}
+        setPerspective={setPerspective}
       />
     </Wrapper>
   );
@@ -23,4 +24,4 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-export default ArtWithControls;
+export default SlopesContainer;
