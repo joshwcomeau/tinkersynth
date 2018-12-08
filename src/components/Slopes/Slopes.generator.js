@@ -7,7 +7,10 @@ import {
 import { normalize, range, compose } from '../../utils';
 import { seed, perlin2 } from '../../vendor/noise';
 
-import { occludeLineIfNecessary } from './Slopes.helpers';
+import {
+  occludeLineIfNecessary,
+  getPossiblyOccludingRowIndices,
+} from './Slopes.helpers';
 
 seed(20);
 
@@ -16,26 +19,15 @@ seed(20);
  * STATIC SETTINGS
  *
  */
-const MARGIN = 1;
 
-// TODO: When this number drops below 300, the occlusion starts to fail a bit,
-// you can see lines cutting into other curves :thinking-face:.
-// I should fix this, since I should only need 250 samples per row for smooth
-// curves, and a lower # will mean much faster rendering.
-const SAMPLES_PER_ROW = 250;
-const DISTANCE_BETWEEN_ROWS = 0.25;
-const NUM_ROWS = 30;
-
-// The avg. number of peaks per row depends on the `SAMPLES_PER_ROW`.
+// The avg. number of peaks per row depends on the `samplesPerRow`.
 // That value, though, is really just "print resolution", and we shouldn't
 // be changing it for cosmetic effect (unless we want to do a low-poly one or
 // something).
-// Our `PERLIN_MULTIPLIER` value ensures that we can tweak `SAMPLES_PER_ROW`
+// Our `PERLIN_MULTIPLIER` value ensures that we can tweak `samplesPerRow`
 // without chaging the appearance of the design, only the # of dots that the
 // plotter has to worry about.
 const PERLIN_RANGE_PER_ROW = 10;
-
-const PEAK_AMPLITUDE_MULTIPLIER = 0.35;
 
 /**
  *
@@ -45,8 +37,9 @@ const PEAK_AMPLITUDE_MULTIPLIER = 0.35;
 const getRowOffset = (
   rowIndex,
   pageHeight,
-  distanceBetweenRows = DISTANCE_BETWEEN_ROWS
-) => pageHeight - MARGIN * 2 - rowIndex * distanceBetweenRows;
+  verticalMargin,
+  distanceBetweenRows
+) => pageHeight - verticalMargin * 2 - rowIndex * distanceBetweenRows;
 
 const getSampleCoordinates = ({
   value,
@@ -54,18 +47,20 @@ const getSampleCoordinates = ({
   distanceBetweenSamples,
   rowOffset,
   rowHeight,
+  horizontalMargin,
+  peakAmplitudeMultiplier,
 }) => [
-  sampleIndex * distanceBetweenSamples + MARGIN,
+  sampleIndex * distanceBetweenSamples + horizontalMargin,
   normalize(
     value,
     -1,
     1,
-    -rowHeight * PEAK_AMPLITUDE_MULTIPLIER,
-    rowHeight * PEAK_AMPLITUDE_MULTIPLIER
+    -rowHeight * peakAmplitudeMultiplier,
+    rowHeight * peakAmplitudeMultiplier
   ) + rowOffset,
 ];
 
-const getValueAtPoint = (sampleIndex, rowIndex) => {
+const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow) => {
   // Calculate the noise value for this point in space.
   // We need to do linear interpolation, because while we might have 50 or
   // 500 or 5000 samples per row, we only want to use a standard perlin range
@@ -73,7 +68,7 @@ const getValueAtPoint = (sampleIndex, rowIndex) => {
   const noiseX = normalize(
     sampleIndex,
     0,
-    SAMPLES_PER_ROW,
+    samplesPerRow,
     0,
     PERLIN_RANGE_PER_ROW
   );
@@ -103,23 +98,23 @@ const getValueAtPoint = (sampleIndex, rowIndex) => {
   The second half will be the mirror image, starting high and dropping low.
   */
 
-  const ratio = sampleIndex / SAMPLES_PER_ROW;
+  const ratio = sampleIndex / samplesPerRow;
   const isInFirstHalf = ratio < 0.5;
 
   let bezierArgs = {};
   if (isInFirstHalf) {
     bezierArgs = {
       startPoint: [0, 0],
-      controlPoint1: [0.15, 0.05],
-      controlPoint2: [1, -0.1],
+      controlPoint1: [1, 0],
+      controlPoint2: [1, 1],
       endPoint: [1, 1],
       t: ratio * 2,
     };
   } else {
     bezierArgs = {
       startPoint: [0, 1],
-      controlPoint1: [0, -0.1],
-      controlPoint2: [0.85, 0.05],
+      controlPoint1: [0, 1],
+      controlPoint2: [1, 0],
       endPoint: [1, 0],
       t: normalize(ratio, 0.5, 1),
     };
@@ -127,7 +122,13 @@ const getValueAtPoint = (sampleIndex, rowIndex) => {
 
   const [, heightDampingAmount] = getValuesForBezierCurve(bezierArgs);
 
-  return noiseVal * heightDampingAmount;
+  // By default, our bezier curve damping has a relatively modest effect.
+  // If we want to truly isolate the peaks to the center of the page, we need
+  // to raise that effect exponentially.
+  // 4 seems to do a good job imitating the harsh curve I was using before.
+  const DAMPING_STRENGTH = 4;
+
+  return noiseVal * heightDampingAmount ** DAMPING_STRENGTH;
 };
 
 /**
@@ -141,20 +142,45 @@ const getValueAtPoint = (sampleIndex, rowIndex) => {
  *
  *
  */
-export default ({ width, height }) => {
-  const ROW_HEIGHT = height * 0.5;
+export default ({
+  width,
+  height,
+  margins,
+  lineDensity,
+  samplesPerRow = 250,
+}) => {
+  const [verticalMargin, horizontalMargin] = margins;
+
+  const numOfRows = 30;
+  const peakAmplitudeMultiplier = 1;
+
+  const rowHeight = height * 0.05;
+  const distanceBetweenRows = height * (lineDensity / 200);
 
   let lines = [];
 
   // Generate some data!
-  range(NUM_ROWS).forEach(rowIndex => {
+  range(numOfRows).forEach(rowIndex => {
     let row = [];
 
-    range(SAMPLES_PER_ROW).forEach(sampleIndex => {
-      const value = getValueAtPoint(sampleIndex, rowIndex);
+    const previousRowIndices = getPossiblyOccludingRowIndices({
+      rowIndex,
+      rowHeight,
+      distanceBetweenRows,
+    });
 
-      const rowOffset = getRowOffset(rowIndex, height);
-      const distanceBetweenSamples = (width - MARGIN * 2) / SAMPLES_PER_ROW;
+    range(samplesPerRow).forEach(sampleIndex => {
+      const value = getValueAtPoint(sampleIndex, rowIndex, samplesPerRow);
+
+      const rowOffset = getRowOffset(
+        rowIndex,
+        height,
+        verticalMargin,
+        distanceBetweenRows
+      );
+
+      const distanceBetweenSamples =
+        (width - horizontalMargin * 2) / samplesPerRow;
 
       if (sampleIndex === 0) {
         return;
@@ -164,48 +190,63 @@ export default ({ width, height }) => {
         sampleIndex,
         value,
         distanceBetweenSamples,
+        rowHeight,
         rowOffset,
-        rowHeight: ROW_HEIGHT,
+        horizontalMargin,
+        peakAmplitudeMultiplier,
       });
 
-      const previousValue = getValueAtPoint(sampleIndex - 1, rowIndex);
+      const previousValue = getValueAtPoint(
+        sampleIndex - 1,
+        rowIndex,
+        samplesPerRow
+      );
       const previousSamplePoint = getSampleCoordinates({
         sampleIndex: sampleIndex - 1,
         value: previousValue,
         distanceBetweenSamples,
+        rowHeight,
         rowOffset,
-        rowHeight: ROW_HEIGHT,
+        horizontalMargin,
+        peakAmplitudeMultiplier,
       });
 
       let line = [previousSamplePoint, samplePoint];
 
-      // Take the 3 most recent rows into account
-      const previousRowIndices = [
-        rowIndex - 1,
-        rowIndex - 2,
-        rowIndex - 3,
-        rowIndex - 4,
-        rowIndex - 5,
-        rowIndex - 6,
-      ].filter(index => index >= 0);
-
       const previousLines = previousRowIndices.map(previousRowIndex => {
-        const previousRowOffset = getRowOffset(previousRowIndex, height);
+        const previousRowOffset = getRowOffset(
+          previousRowIndex,
+          height,
+          verticalMargin,
+          distanceBetweenRows
+        );
 
         return [
           getSampleCoordinates({
-            value: getValueAtPoint(sampleIndex - 1, previousRowIndex),
+            value: getValueAtPoint(
+              sampleIndex - 1,
+              previousRowIndex,
+              samplesPerRow
+            ),
             sampleIndex: sampleIndex - 1,
             distanceBetweenSamples,
+            rowHeight,
             rowOffset: previousRowOffset,
-            rowHeight: ROW_HEIGHT,
+            horizontalMargin,
+            peakAmplitudeMultiplier,
           }),
           getSampleCoordinates({
-            value: getValueAtPoint(sampleIndex, previousRowIndex),
+            value: getValueAtPoint(
+              sampleIndex,
+              previousRowIndex,
+              samplesPerRow
+            ),
             sampleIndex: sampleIndex,
             distanceBetweenSamples,
+            rowHeight,
             rowOffset: previousRowOffset,
-            rowHeight: ROW_HEIGHT,
+            horizontalMargin,
+            peakAmplitudeMultiplier,
           }),
         ];
       });
@@ -224,7 +265,7 @@ export default ({ width, height }) => {
     clipLinesWithMargin
   );
 
-  lines = linePrep({ lines, margin: MARGIN, width, height });
+  lines = linePrep({ lines, margins, width, height });
 
   return lines;
 };

@@ -28,14 +28,16 @@ export const getDistanceBetweenPoints = (p1, p2) => {
 };
 
 export const clipLinesWithMargin = ({
-  margin,
+  lines,
   width,
   height,
-  lines,
+  margins,
   withBorder,
 }) => {
+  let [top, left] = margins;
+
   // Clip all the lines to a margin
-  const box = [margin, margin, width - margin, height - margin];
+  const box = [left, top, width - left, height - top];
   let newLines = clipPolylinesToBox(lines, box);
 
   if (withBorder) {

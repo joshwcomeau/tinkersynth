@@ -106,3 +106,27 @@ export const occludeLineIfNecessary = (line, previousLines) => {
 
   return [start, end];
 };
+
+export const getPossiblyOccludingRowIndices = ({
+  rowIndex,
+  rowHeight,
+  distanceBetweenRows,
+}) => {
+  // The largest possible peak will be `rowHeight`px tall.
+  // If our rowHeight is 100px, and our distanceBetweenRows is 20, we know that
+  // we need to check up to 5 previous rows, since a max peak will be 100px
+  // tall, and 100px below.
+  const maxNumOfOccludingRows = Math.ceil(rowHeight / distanceBetweenRows);
+
+  const lowestRowIndex = Math.max(0, rowIndex - maxNumOfOccludingRows);
+
+  const possiblyOccludingRowIndices = [];
+  let cursor = rowIndex - 1;
+
+  while (cursor >= lowestRowIndex) {
+    possiblyOccludingRowIndices.push(cursor);
+    cursor--;
+  }
+
+  return possiblyOccludingRowIndices;
+};
