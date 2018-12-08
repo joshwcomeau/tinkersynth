@@ -9,15 +9,15 @@ const SvgShortcutModal = ({ lines, width, height }) => {
 
   useEffect(() => {
     window.addEventListener('keydown', ev => {
-      ev.preventDefault();
-
       // For now, we'll use the shortcut "Cmd+S" to trigger.
       if (ev.key === 's' && ev.metaKey) {
+        ev.preventDefault();
         setShowModal(true);
         return;
       }
 
       if (ev.key === 'Escape') {
+        ev.preventDefault();
         setShowModal(false);
         return;
       }
@@ -32,7 +32,7 @@ const SvgShortcutModal = ({ lines, width, height }) => {
 
   return (
     <Wrapper>
-      <Backdrop />
+      <Backdrop onClick={() => setShowModal(false)} />
       <Modal>
         <Svg
           width={width / 2}
@@ -64,8 +64,8 @@ const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   z-index: 1;
-
   background: rgba(40, 40, 40, 0.4);
+  cursor: pointer;
 `;
 
 const Modal = styled.div`
