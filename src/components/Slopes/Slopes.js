@@ -1,7 +1,7 @@
 // @flow
 import React, { useRef, useEffect } from 'react';
 
-import renderPolylines from '../../vendor/render-polylines';
+import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 import Canvas from '../Canvas';
 
 import generator from './Slopes.generator';
@@ -43,6 +43,8 @@ const Slopes = ({ width = 850, perspective }: Props) => {
         margins: [topMargin, leftMargin],
         distanceBetweenRows,
       });
+
+      console.log(polylinesToSVG(lines, { width, height }));
 
       renderPolylines(lines, { width, height, context });
     },
