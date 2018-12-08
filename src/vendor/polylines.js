@@ -46,15 +46,6 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var lineWidth = opt.lineWidth || 1;
 
   return [
-    '<?xml version="1.0" standalone="no"?>',
-    '  <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" ',
-    '      "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
-    '  <svg width="' + width + units + '" height="' + height + units + '"',
-    '      xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ' +
-      viewWidth +
-      ' ' +
-      viewHeight +
-      '">',
     '    <g>',
     '      <path d="' +
       svgPath +
@@ -67,7 +58,6 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
       units +
       '" />',
     '    </g>',
-    '</svg>',
   ].join('\n');
 };
 
