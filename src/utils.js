@@ -173,3 +173,17 @@ export const getDistanceBetweenPoints = (p1, p2) => {
 
 export const convertRadiansToDegrees = angle => (angle * 180) / Math.PI;
 export const convertDegreesToRadians = angle => (angle * Math.PI) / 180;
+
+export const convertCartesianToPolar = ([x, y]) => {
+  const radius = Math.sqrt(x ** 2 + y ** 2);
+  const theta = Math.atan(y / x);
+
+  return [radius, theta];
+};
+
+export const convertPolarToCartesian = ([radius, θ]) => {
+  const x = radius * Math.cos(θ);
+  const y = radius * Math.sin(θ);
+
+  return [x, y];
+};
