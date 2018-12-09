@@ -1,11 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 
-import SlopesContainer from '../SlopesContainer';
+import Slopes from '../Slopes';
 
 class App extends Component {
   render() {
-    return <SlopesContainer />;
+    return <Slopes />;
   }
 }
 

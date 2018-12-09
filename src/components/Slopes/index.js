@@ -1,1 +1,1 @@
-export { default } from "./Slopes";
+export { default } from './SlopesContainer';

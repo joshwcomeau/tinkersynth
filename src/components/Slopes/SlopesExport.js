@@ -4,7 +4,26 @@ import styled from 'styled-components';
 
 import { polylinesToSVG } from '../../vendor/polylines';
 
-const SvgShortcutModal = ({ lines, width, height }) => {
+import generator from './Slopes.generator';
+import transformParameters from './Slopes.params';
+
+type Props = {
+  width: number,
+  height: number,
+  topMargin: number,
+  leftMargin: number,
+  perspective: number,
+  spikyness: number,
+};
+
+const SlopesExport = ({
+  width,
+  height,
+  topMargin,
+  leftMargin,
+  perspective,
+  spikyness,
+}: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -27,6 +46,20 @@ const SvgShortcutModal = ({ lines, width, height }) => {
   if (!showModal) {
     return null;
   }
+
+  const { distanceBetweenRows, perlinRatio } = transformParameters({
+    height,
+    perspective,
+    spikyness,
+  });
+
+  const lines = generator({
+    width,
+    height,
+    margins: [topMargin, leftMargin],
+    distanceBetweenRows,
+    perlinRatio,
+  });
 
   const svgMarkup = polylinesToSVG(lines, { width, height });
 
@@ -78,4 +111,4 @@ const Modal = styled.div`
 
 const Svg = styled.svg``;
 
-export default SvgShortcutModal;
+export default SlopesExport;

@@ -15,8 +15,6 @@ const transformParameters = ({ height, perspective, spikyness }) => {
 
   const perlinRatio = (100 - spikyness) / 100;
 
-  console.log(distanceBetweenRows);
-
   return { distanceBetweenRows, perlinRatio };
 };
 

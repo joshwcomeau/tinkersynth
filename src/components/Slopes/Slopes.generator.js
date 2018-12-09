@@ -1,6 +1,5 @@
 //
 import {
-  clipLinesWithMargin,
   groupPolylines,
   getValuesForBezierCurve,
 } from '../../helpers/line.helpers';
@@ -279,12 +278,12 @@ export default ({
 
   lines = lines.filter(line => !!line);
 
-  const linePrep = compose(
-    groupPolylines,
-    clipLinesWithMargin
-  );
+  // const linePrep = compose(
+  //   groupPolylines,
+  //   clipLinesWithMargin
+  // );
 
-  lines = linePrep({ lines, margins, width, height });
+  // lines = linePrep({ lines, margins, width, height });
 
   return lines;
 };
