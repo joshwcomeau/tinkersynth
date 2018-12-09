@@ -4,6 +4,7 @@
 // used in the logic.
 // `value` will always be from 0-1000
 import { normalize } from '../../utils';
+import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
 /**
  * PERSPECTIVE
@@ -11,8 +12,41 @@ import { normalize } from '../../utils';
  */
 
 const transformParameters = ({ height, perspective, spikyness }) => {
-  const distanceBetweenRows = normalize(perspective, 0, 100, 0, height * 0.1);
-  const rowHeightMultiplier = normalize(perspective, 0, 100, 0.05, 0.25);
+  // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
+  // values on a curve, because the values from 0 to 5 are _much_ more
+  // interesting than the values from 95 to 100.
+  //
+  // To do this, we need to normalize our values to 0-1, and then use a bezier
+  // curve to map the values onto.
+  const bezierCurve = {
+    startPoint: [0, 0],
+    endPoint: [1, 1],
+    controlPoint1: [1, 0],
+  };
+
+  const [, distanceBetweenRowsNormalized] = getValuesForBezierCurve({
+    ...bezierCurve,
+    t: perspective / 100,
+  });
+  const distanceBetweenRows = normalize(
+    distanceBetweenRowsNormalized,
+    0,
+    1,
+    0,
+    height * 0.1
+  );
+
+  const [, rowHeightMultiplierNormalized] = getValuesForBezierCurve({
+    ...bezierCurve,
+    t: perspective / 100,
+  });
+  const rowHeightMultiplier = normalize(
+    rowHeightMultiplierNormalized,
+    0,
+    1,
+    0.05,
+    0.25
+  );
 
   const rowHeight = 50 + height * rowHeightMultiplier;
 
