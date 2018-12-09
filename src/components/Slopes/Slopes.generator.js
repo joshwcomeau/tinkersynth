@@ -3,7 +3,7 @@ import {
   groupPolylines,
   getValuesForBezierCurve,
 } from '../../helpers/line.helpers';
-import { normalize, range, compose } from '../../utils';
+import { normalize, range, convertPolarToCartesian } from '../../utils';
 import { seed, perlin2 } from '../../vendor/noise';
 
 import {
@@ -178,7 +178,39 @@ export default ({
       distanceBetweenRows,
     });
 
+    // We can set each row to be a radius around a center point, instead of
+    // parallel lines :o
+    // Our old 'Y' values will now be the 'r', and the sampleIndex will become
+    // the degrees.
+
     range(samplesPerRow).forEach(sampleIndex => {
+      if (sampleIndex === 0) {
+        return;
+      }
+
+      // Get a value for theta going from 0 to 2π
+      const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
+      // Our radius, in polar coordinate style, will just be the distance
+      // between rows, times the rowIndex, plus some initial offset
+      const HOLE_RADIUS = 50;
+      const radius = rowIndex * distanceBetweenRows + HOLE_RADIUS;
+
+      const previousTheta = normalize(
+        sampleIndex - 1,
+        0,
+        samplesPerRow,
+        0,
+        2 * Math.PI
+      );
+
+      const pline = [
+        convertPolarToCartesian([radius, previousTheta]),
+        convertPolarToCartesian([radius, theta]),
+      ];
+
+      row.push(pline);
+      return;
+
       const value = getValueAtPoint(
         sampleIndex,
         rowIndex,
@@ -195,10 +227,6 @@ export default ({
 
       const distanceBetweenSamples =
         (width - horizontalMargin * 2) / samplesPerRow;
-
-      if (sampleIndex === 0) {
-        return;
-      }
 
       let samplePoint = getSampleCoordinates({
         sampleIndex,

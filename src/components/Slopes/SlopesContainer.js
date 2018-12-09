@@ -21,7 +21,7 @@ const SlopesContainer = () => {
   const exportWidth = exportHeight * (8.5 / 11);
 
   // High-level "Parameters", tweakable settings
-  const [perspective, setPerspective] = useState(3);
+  const [perspective, setPerspective] = useState(30);
   const [spikyness, setSpikyness] = useState(0);
 
   const params = { perspective, spikyness };
