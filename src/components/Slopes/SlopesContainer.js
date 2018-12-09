@@ -14,10 +14,11 @@ const SlopesContainer = () => {
 
   // We want our canvas to be an 8.5" x 11" piece of paper, with a 1" margin
   // all-around.
-  const canvasWidth = 8.5 * 50;
   const canvasHeight = 11 * 50;
-  const topMargin = (canvasHeight / 11) * 1;
-  const leftMargin = (canvasWidth / 8.5) * 1;
+  const canvasWidth = 8.5 * 50;
+
+  const exportHeight = windowDimensions.height;
+  const exportWidth = exportHeight * (8.5 / 11);
 
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(3);
@@ -28,26 +29,14 @@ const SlopesContainer = () => {
   return (
     <>
       <Wrapper>
-        <SlopesCanvas
-          {...params}
-          width={canvasWidth}
-          height={canvasHeight}
-          topMargin={topMargin}
-          leftMargin={leftMargin}
-        />
+        <SlopesCanvas {...params} width={canvasWidth} height={canvasHeight} />
         <SlopesControls
           {...params}
           setPerspective={setPerspective}
           setSpikyness={setSpikyness}
         />
       </Wrapper>
-      <SlopesExport
-        {...params}
-        width={canvasWidth}
-        height={canvasHeight}
-        topMargin={topMargin}
-        leftMargin={leftMargin}
-      />
+      <SlopesExport {...params} width={exportWidth} height={exportHeight} />
     </>
   );
 };

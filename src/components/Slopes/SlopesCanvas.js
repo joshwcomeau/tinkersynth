@@ -10,26 +10,21 @@ import transformParameters from './Slopes.params';
 type Props = {
   width: number,
   height: number,
-  topMargin: number,
-  leftMargin: number,
   perspective: number,
   spikyness: number,
 };
 
-const Slopes = ({
-  width,
-  height,
-  topMargin,
-  leftMargin,
-  perspective,
-  spikyness,
-}: Props) => {
+const Slopes = ({ width, height, perspective, spikyness }: Props) => {
+  const topMargin = (height / 11) * 1;
+  const leftMargin = (width / 8.5) * 1;
+  const samplesPerRow = Math.ceil(width * 0.5);
+
   // The user can tweak "high-level parameters" like spikyness, perspective,
   // etc. These values need to be reduced to low-level variables used in
   // calculation. There is not a 1:1 mapping between them: a single
   // high-level param might tweak several low-level vars, and the same
   // variable might be affected by multiple params.
-  const { distanceBetweenRows, perlinRatio } = transformParameters({
+  const { distanceBetweenRows, rowHeight, perlinRatio } = transformParameters({
     height,
     perspective,
     spikyness,
@@ -43,6 +38,8 @@ const Slopes = ({
     margins: [topMargin, leftMargin],
     distanceBetweenRows,
     perlinRatio,
+    rowHeight,
+    samplesPerRow,
   });
 
   useEffect(

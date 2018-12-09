@@ -150,14 +150,13 @@ export default ({
   margins,
   distanceBetweenRows,
   perlinRatio,
+  rowHeight,
   samplesPerRow = 250,
 }) => {
   const [verticalMargin, horizontalMargin] = margins;
 
   const numOfRows = 50;
   // const peakAmplitudeMultiplier = 1;
-
-  const rowHeight = height * 0.1;
 
   let lines = [];
 

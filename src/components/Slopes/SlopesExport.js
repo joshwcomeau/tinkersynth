@@ -16,14 +16,12 @@ type Props = {
   spikyness: number,
 };
 
-const SlopesExport = ({
-  width,
-  height,
-  topMargin,
-  leftMargin,
-  perspective,
-  spikyness,
-}: Props) => {
+const SlopesExport = ({ width, height, perspective, spikyness }: Props) => {
+  const topMargin = (height / 11) * 1;
+  const leftMargin = (width / 8.5) * 1;
+
+  const samplesPerRow = Math.ceil(width / 2);
+
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const SlopesExport = ({
     return null;
   }
 
-  const { distanceBetweenRows, perlinRatio } = transformParameters({
+  const { distanceBetweenRows, rowHeight, perlinRatio } = transformParameters({
     height,
     perspective,
     spikyness,
@@ -59,6 +57,8 @@ const SlopesExport = ({
     margins: [topMargin, leftMargin],
     distanceBetweenRows,
     perlinRatio,
+    rowHeight,
+    samplesPerRow,
   });
 
   const svgMarkup = polylinesToSVG(lines, { width, height });
@@ -68,8 +68,8 @@ const SlopesExport = ({
       <Backdrop onClick={() => setShowModal(false)} />
       <Modal>
         <Svg
-          width={width / 2}
-          height={height / 2}
+          width={width}
+          height={height}
           viewBox={`0 0 ${width} ${height}`}
           dangerouslySetInnerHTML={{ __html: svgMarkup }}
         />
@@ -104,7 +104,6 @@ const Backdrop = styled.div`
 const Modal = styled.div`
   position: relative;
   z-index: 2;
-  max-width: 600px;
   background: #fff;
   box-shadow: 0px 10px 75px rgba(0, 0, 0, 0.1);
 `;
