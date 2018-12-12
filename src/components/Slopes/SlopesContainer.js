@@ -23,8 +23,9 @@ const SlopesContainer = () => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(30);
   const [spikyness, setSpikyness] = useState(0);
+  const [polarAmount, setPolarAmount] = useState(0);
 
-  const params = { perspective, spikyness };
+  const params = { perspective, spikyness, polarAmount };
 
   return (
     <>
@@ -34,6 +35,7 @@ const SlopesContainer = () => {
           {...params}
           setPerspective={setPerspective}
           setSpikyness={setSpikyness}
+          setPolarAmount={setPolarAmount}
         />
       </Wrapper>
       <SlopesExport {...params} width={exportWidth} height={exportHeight} />

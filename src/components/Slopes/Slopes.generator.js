@@ -2,8 +2,15 @@
 import {
   groupPolylines,
   getValuesForBezierCurve,
+  clipLinesWithMargin,
 } from '../../helpers/line.helpers';
-import { normalize, range, convertPolarToCartesian } from '../../utils';
+import {
+  normalize,
+  range,
+  compose,
+  convertPolarToCartesian,
+  mix,
+} from '../../utils';
 import { seed, perlin2 } from '../../vendor/noise';
 
 import {
@@ -11,7 +18,7 @@ import {
   getPossiblyOccludingRowIndices,
 } from './Slopes.helpers';
 
-seed(20);
+seed(Math.random());
 
 /**
  *
@@ -35,10 +42,22 @@ const PERLIN_RANGE_PER_ROW = 10;
  */
 const getRowOffset = (
   rowIndex,
-  pageHeight,
+  width,
+  height,
   verticalMargin,
-  distanceBetweenRows
-) => pageHeight - verticalMargin * 2 - rowIndex * distanceBetweenRows;
+  distanceBetweenRows,
+  polarRatio
+) => {
+  // TODO: variable?
+  const POLAR_HOLE = 50;
+
+  const cartesianValue =
+    height - verticalMargin * 2 - rowIndex * distanceBetweenRows;
+
+  const polarValue = POLAR_HOLE + rowIndex * distanceBetweenRows;
+
+  return mix(polarValue, cartesianValue, polarRatio);
+};
 
 const getSampleCoordinates = ({
   value,
@@ -144,7 +163,7 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
  *
  *
  */
-export default ({
+const sketch = ({
   width,
   height,
   margins,
@@ -152,10 +171,11 @@ export default ({
   perlinRatio,
   rowHeight,
   samplesPerRow = 250,
+  polarRatio,
 }) => {
   const [verticalMargin, horizontalMargin] = margins;
 
-  const numOfRows = 50;
+  const numOfRows = 25;
   // const peakAmplitudeMultiplier = 1;
 
   let lines = [];
@@ -188,29 +208,6 @@ export default ({
         return;
       }
 
-      // Get a value for theta going from 0 to 2π
-      const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
-      // Our radius, in polar coordinate style, will just be the distance
-      // between rows, times the rowIndex, plus some initial offset
-      const HOLE_RADIUS = 50;
-      const radius = rowIndex * distanceBetweenRows + HOLE_RADIUS;
-
-      const previousTheta = normalize(
-        sampleIndex - 1,
-        0,
-        samplesPerRow,
-        0,
-        2 * Math.PI
-      );
-
-      const pline = [
-        convertPolarToCartesian([radius, previousTheta]),
-        convertPolarToCartesian([radius, theta]),
-      ];
-
-      row.push(pline);
-      return;
-
       const value = getValueAtPoint(
         sampleIndex,
         rowIndex,
@@ -220,9 +217,11 @@ export default ({
 
       const rowOffset = getRowOffset(
         rowIndex,
+        width,
         height,
         verticalMargin,
-        distanceBetweenRows
+        distanceBetweenRows,
+        polarRatio
       );
 
       const distanceBetweenSamples =
@@ -259,9 +258,11 @@ export default ({
       const previousLines = previousRowIndices.map(previousRowIndex => {
         const previousRowOffset = getRowOffset(
           previousRowIndex,
+          width,
           height,
           verticalMargin,
-          distanceBetweenRows
+          distanceBetweenRows,
+          polarRatio
         );
 
         return [
@@ -296,8 +297,52 @@ export default ({
         ];
       });
 
-      const occludedLine = occludeLineIfNecessary(line, previousLines);
-      row.push(occludedLine);
+      let occludedLine = occludeLineIfNecessary(line, previousLines);
+
+      if (!occludedLine) {
+        return;
+      }
+
+      let outputLine = occludedLine;
+
+      if (polarRatio > 0) {
+        // Get a value for theta going from 0 to 2π
+        const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
+
+        const radius = rowHeight - occludedLine[1][1];
+
+        const previousTheta = normalize(
+          sampleIndex - 1,
+          0,
+          samplesPerRow,
+          0,
+          2 * Math.PI
+        );
+
+        const previousRadius = rowHeight - occludedLine[0][1];
+
+        let polarLine = [
+          convertPolarToCartesian([previousRadius, previousTheta]),
+          convertPolarToCartesian([radius, theta]),
+        ];
+
+        polarLine = polarLine.map(point => [
+          point[0] + width / 2,
+          point[1] + height / 2,
+        ]);
+
+        outputLine[0][0] = mix(polarLine[0][0], occludedLine[0][0], polarRatio);
+        outputLine[0][1] = mix(polarLine[0][1], occludedLine[0][1], polarRatio);
+        outputLine[1][0] = mix(polarLine[1][0], occludedLine[1][0], polarRatio);
+        outputLine[1][1] = mix(polarLine[1][1], occludedLine[1][1], polarRatio);
+      }
+
+      // If this line is TOTALLY occluded, it will be `null`.
+      // We do want to push this onto
+
+      // if (occludedLine) {
+
+      row.push(outputLine);
     });
 
     lines.push(...row);
@@ -312,5 +357,9 @@ export default ({
 
   // lines = linePrep({ lines, margins, width, height });
 
+  console.log(lines[0]);
+
   return lines;
 };
+
+export default sketch;

@@ -187,3 +187,5 @@ export const convertPolarToCartesian = ([radius, θ]) => {
 
   return [x, y];
 };
+
+export const mix = (v1, v2, ratio) => v1 * ratio + v2 * (1 - ratio);
