@@ -30,10 +30,10 @@ const Slopes = ({
   const samplesPerRow = Math.ceil(width * 0.5);
 
   useEffect(() => {
-    worker.onmessage = function(event) {
+    worker.onmessage = function({ data }) {
       const context = ctxRef.current;
 
-      renderPolylines(event.lines, {
+      renderPolylines(data.lines, {
         width,
         height,
         context,
