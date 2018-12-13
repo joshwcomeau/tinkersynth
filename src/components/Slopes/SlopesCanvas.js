@@ -4,8 +4,11 @@ import React, { useRef, useEffect, useMemo } from 'react';
 import { renderPolylines } from '../../vendor/polylines';
 import Canvas from '../Canvas';
 
-import generator from './Slopes.generator';
 import transformParameters from './Slopes.params';
+
+import Worker from './Slopes.worker.js';
+
+const worker = new Worker();
 
 type Props = {
   width: number,
@@ -26,6 +29,22 @@ const Slopes = ({
   const leftMargin = (width / 8.5) * 1;
   const samplesPerRow = Math.ceil(width * 0.5);
 
+  useEffect(() => {
+    worker.onmessage = function(event) {
+      const context = ctxRef.current;
+
+      renderPolylines(event.lines, {
+        width,
+        height,
+        context,
+      });
+    };
+
+    return () => {
+      // TODO: cleanup
+    };
+  }, []);
+
   // The user can tweak "high-level parameters" like spikyness, perspective,
   // etc. These values need to be reduced to low-level variables used in
   // calculation. There is not a 1:1 mapping between them: a single
@@ -45,25 +64,17 @@ const Slopes = ({
 
   const ctxRef = useRef(null);
 
-  const lines = generator({
-    width,
-    height,
-    margins: [topMargin, leftMargin],
-    distanceBetweenRows,
-    perlinRatio,
-    rowHeight,
-    samplesPerRow,
-    polarRatio,
-  });
-
   useEffect(
     () => {
-      const context = ctxRef.current;
-
-      renderPolylines(lines, {
+      worker.postMessage({
         width,
         height,
-        context,
+        margins: [topMargin, leftMargin],
+        distanceBetweenRows,
+        perlinRatio,
+        rowHeight,
+        samplesPerRow,
+        polarRatio,
       });
     },
     [perspective, perlinRatio, polarRatio]
