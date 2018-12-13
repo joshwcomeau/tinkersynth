@@ -1,5 +1,11 @@
+import { throttle } from '../../utils';
+
 import generator from './Slopes.generator';
 
-onmessage = function({ data }) {
-  postMessage({ lines: generator(data) });
-};
+const generateLines = data => generator(data);
+
+onmessage = throttle(function({ data }) {
+  const lines = generateLines(data);
+
+  postMessage({ lines });
+}, 60);

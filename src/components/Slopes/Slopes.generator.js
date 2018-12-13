@@ -337,11 +337,6 @@ const sketch = ({
         outputLine[1][1] = mix(polarLine[1][1], occludedLine[1][1], polarRatio);
       }
 
-      // If this line is TOTALLY occluded, it will be `null`.
-      // We do want to push this onto
-
-      // if (occludedLine) {
-
       row.push(outputLine);
     });
 
@@ -350,12 +345,7 @@ const sketch = ({
 
   lines = lines.filter(line => !!line);
 
-  // const linePrep = compose(
-  //   groupPolylines,
-  //   clipLinesWithMargin
-  // );
-
-  // lines = linePrep({ lines, margins, width, height });
+  lines = groupPolylines(lines);
 
   return lines;
 };

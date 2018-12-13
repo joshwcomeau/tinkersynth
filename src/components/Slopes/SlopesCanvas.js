@@ -33,6 +33,10 @@ const Slopes = ({
     worker.onmessage = function({ data }) {
       const context = ctxRef.current;
 
+      if (!data.lines) {
+        return;
+      }
+
       renderPolylines(data.lines, {
         width,
         height,
