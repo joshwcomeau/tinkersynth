@@ -20,35 +20,28 @@ const SlopesControls = ({
 }: Props) => {
   return (
     <div>
-      {/* TODO: Better sliders */}
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={perspective}
-        onChange={ev => setPerspective(Number(ev.target.value))}
-      />
-      <br />
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={spikyness}
-        onChange={ev => setSpikyness(Number(ev.target.value))}
-      />
-      <br />
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={polarAmount}
-        onChange={ev => setPolarAmount(Number(ev.target.value))}
-      />
-
       <div style={{ padding: '2rem' }}>
         <Slider
           value={perspective}
           updateValue={setPerspective}
+          min={0}
+          max={100}
+        />
+      </div>
+
+      <div style={{ padding: '2rem' }}>
+        <Slider
+          value={spikyness}
+          updateValue={setSpikyness}
+          min={0}
+          max={100}
+        />
+      </div>
+
+      <div style={{ padding: '2rem' }}>
+        <Slider
+          value={polarAmount}
+          updateValue={setPolarAmount}
           min={0}
           max={100}
         />

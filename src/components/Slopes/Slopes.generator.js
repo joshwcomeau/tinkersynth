@@ -357,8 +357,6 @@ const sketch = ({
 
   // lines = linePrep({ lines, margins, width, height });
 
-  console.log(lines[0]);
-
   return lines;
 };
 

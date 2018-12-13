@@ -26,8 +26,6 @@ const Slopes = ({
   const leftMargin = (width / 8.5) * 1;
   const samplesPerRow = Math.ceil(width * 0.5);
 
-  return null;
-
   // The user can tweak "high-level parameters" like spikyness, perspective,
   // etc. These values need to be reduced to low-level variables used in
   // calculation. There is not a 1:1 mapping between them: a single

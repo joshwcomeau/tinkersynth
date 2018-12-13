@@ -1,11 +1,12 @@
 // @flow
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { clamp, normalize } from '../../utils';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import Handle from './Handle';
+import Notches from './Notches';
 
 type Props = {
   // Sliders work on a scale of 0-1
@@ -18,7 +19,7 @@ type Props = {
   orientation?: 'vertical',
   width?: number,
   height?: number,
-  numOfTicks?: number,
+  numOfNotches?: number,
   background?: string,
 };
 
@@ -29,8 +30,8 @@ const Slider = ({
   max = 1,
   orientation = 'vertical',
   width = 14,
-  height = 88,
-  numOfTicks = 24,
+  height = 90,
+  numOfNotches = 15,
   handleWidth = 21,
   handleHeight = 14,
   background = '#DEDEDE',
@@ -76,8 +77,6 @@ const Slider = ({
   const handleMarginLeft = (width - handleWidth) / 2;
   const handleMarginTop = -handleHeight / 2;
 
-  console.log(handleMarginTop);
-
   const handleMouseDown = ev => {
     setDragging(true);
   };
@@ -86,6 +85,7 @@ const Slider = ({
 
   return (
     <Wrapper ref={sliderRef} style={{ width, height, background }}>
+      <Notches num={numOfNotches} />
       <Handle
         displacement={handleDisplacement}
         width={handleWidth}
@@ -100,6 +100,7 @@ const Slider = ({
 
 const Wrapper = styled.div`
   position: relative;
+  border-radius: 3px;
 `;
 
-export default Slider;
+export default React.memo(Slider);
