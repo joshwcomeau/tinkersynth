@@ -29,20 +29,25 @@ const Slopes = ({
   const leftMargin = (width / 8.5) * 1;
   const samplesPerRow = Math.ceil(width * 0.5);
 
+  // On mount, set up the worker message-handling
   useEffect(() => {
-    worker.onmessage = function({ data }) {
-      const context = ctxRef.current;
+    // If the browser supports it, we want to allow the canvas to be painted
+    // off of the main thread.
+    canvasRef.current = canvasRef.current.transferControlToOffscreen();
 
-      if (!data.lines) {
-        return;
-      }
+    // worker.onmessage = function({ data }) {
+    //   const context = canvasRef.current;
 
-      renderPolylines(data.lines, {
-        width,
-        height,
-        context,
-      });
-    };
+    //   if (!data.lines) {
+    //     return;
+    //   }
+
+    //   renderPolylines(data.lines, {
+    //     width,
+    //     height,
+    //     context,
+    //   });
+    // };
 
     return () => {
       // TODO: cleanup
@@ -66,27 +71,54 @@ const Slopes = ({
     polarAmount,
   });
 
-  const ctxRef = useRef(null);
+  const canvasRef = useRef(null);
+
+  const hasSentCanvas = useRef(false);
 
   useEffect(
     () => {
-      worker.postMessage({
-        width,
-        height,
-        margins: [topMargin, leftMargin],
-        distanceBetweenRows,
-        perlinRatio,
-        rowHeight,
-        samplesPerRow,
-        polarRatio,
-      });
+      if (hasSentCanvas.current) {
+        worker.postMessage({
+          width,
+          height,
+          margins: [topMargin, leftMargin],
+          distanceBetweenRows,
+          perlinRatio,
+          rowHeight,
+          samplesPerRow,
+          polarRatio,
+        });
+      } else {
+        worker.postMessage(
+          {
+            width,
+            height,
+            margins: [topMargin, leftMargin],
+            distanceBetweenRows,
+            perlinRatio,
+            rowHeight,
+            samplesPerRow,
+            polarRatio,
+            canvas: canvasRef.current,
+            devicePixelRatio: window.devicePixelRatio,
+          },
+          [canvasRef.current]
+        );
+
+        hasSentCanvas.current = true;
+      }
     },
     [perspective, perlinRatio, polarRatio]
   );
 
   return (
     <>
-      <Canvas width={width} height={height} innerRef={ctxRef} />
+      <canvas
+        width={width * 2}
+        height={height * 2}
+        style={{ width, height }}
+        ref={canvasRef}
+      />
     </>
   );
 };
