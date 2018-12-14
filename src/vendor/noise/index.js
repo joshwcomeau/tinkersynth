@@ -15,13 +15,17 @@
  * Originally written by Joseph Gentle
  * https://github.com/josephg/noisejs
  *
- * @exports seed - Seed the noise
- * @exports perlin2 - 2D noise
- * @exports perlin3 - 3D noise
- * @exports simplex2 - 2D noise
- * @exports simplex3 - 3D noise
+ * @exports createNoiseGenerator - Factory function with the following methods:
+ * @method seed - Seed the noise
+ * @method perlin2 - 2D noise
+ * @method perlin3 - 3D noise
+ * @method simplex2 - 2D noise
+ * @method simplex3 - 3D noise
  *
  */
+
+
+export default (seed) => {
 
 function Grad(x, y, z) {
   this.x = x;
@@ -316,7 +320,7 @@ var gradP = new Array(512);
 
 // This isn't a very good seeding function, but it works ok. It supports 2^16
 // different seed values. Write something better if you need more seeds.
-module.exports.seed = function(seed) {
+const applySeed = function(seed) {
   if (seed > 0 && seed < 1) {
     // Scale the seed out
     seed *= 65536;
@@ -340,7 +344,7 @@ module.exports.seed = function(seed) {
   }
 };
 
-module.exports.seed(0);
+applySeed(seed);
 
 /*
   for(var i=0; i<256; i++) {
@@ -356,7 +360,7 @@ var F3 = 1 / 3;
 var G3 = 1 / 6;
 
 // 2D simplex noise
-module.exports.simplex2 = function(xin, yin) {
+const simplex2 = function(xin, yin) {
   var n0, n1, n2; // Noise contributions from the three corners
   // Skew the input space to determine which simplex cell we're in
   var s = (xin + yin) * F2; // Hairy factor for 2D
@@ -418,7 +422,7 @@ module.exports.simplex2 = function(xin, yin) {
 };
 
 // 3D simplex noise
-module.exports.simplex3 = function(xin, yin, zin) {
+const simplex3 = function(xin, yin, zin) {
   var n0, n1, n2, n3; // Noise contributions from the four corners
 
   // Skew the input space to determine which simplex cell we're in
@@ -553,7 +557,7 @@ function lerp(a, b, t) {
 }
 
 // 2D Perlin Noise
-module.exports.perlin2 = function(x, y) {
+const perlin2 = function(x, y) {
   // Find unit grid cell containing point
   var X = Math.floor(x),
     Y = Math.floor(y);
@@ -578,7 +582,7 @@ module.exports.perlin2 = function(x, y) {
 };
 
 // 3D Perlin Noise
-module.exports.perlin3 = function(x, y, z) {
+const perlin3 = function(x, y, z) {
   // Find unit grid cell containing point
   var X = Math.floor(x),
     Y = Math.floor(y),
@@ -614,3 +618,7 @@ module.exports.perlin3 = function(x, y, z) {
     v
   );
 };
+
+return {perlin2, perlin3, simplex2, simplex3}
+
+}

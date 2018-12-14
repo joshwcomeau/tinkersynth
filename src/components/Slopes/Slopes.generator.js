@@ -11,14 +11,15 @@ import {
   convertPolarToCartesian,
   mix,
 } from '../../utils';
-import { seed, perlin2 } from '../../vendor/noise';
+import createNoiseGenerator from '../../vendor/noise';
 
 import {
   occludeLineIfNecessary,
   getPossiblyOccludingRowIndices,
 } from './Slopes.helpers';
 
-seed(Math.random());
+const { perlin2 } = createNoiseGenerator(Math.random());
+
 
 /**
  *
