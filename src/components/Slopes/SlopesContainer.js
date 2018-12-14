@@ -1,6 +1,7 @@
 // @flow
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Spring } from 'react-spring';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 
@@ -28,18 +29,26 @@ const SlopesContainer = () => {
   const params = { perspective, spikyness, polarAmount };
 
   return (
-    <>
-      <Wrapper>
-        <SlopesCanvas {...params} width={canvasWidth} height={canvasHeight} />
-        <SlopesControls
-          {...params}
-          setPerspective={setPerspective}
-          setSpikyness={setSpikyness}
-          setPolarAmount={setPolarAmount}
-        />
-      </Wrapper>
-      <SlopesExport {...params} width={exportWidth} height={exportHeight} />
-    </>
+    <Spring to={params}>
+      {interpolatedParams => (
+        <>
+          <Wrapper>
+            <SlopesCanvas
+              {...interpolatedParams}
+              width={canvasWidth}
+              height={canvasHeight}
+            />
+            <SlopesControls
+              {...params}
+              setPerspective={setPerspective}
+              setSpikyness={setSpikyness}
+              setPolarAmount={setPolarAmount}
+            />
+          </Wrapper>
+          <SlopesExport {...params} width={exportWidth} height={exportHeight} />
+        </>
+      )}
+    </Spring>
   );
 };
 

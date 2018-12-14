@@ -16,6 +16,8 @@ type Props = {
   renderVisualization: (value: number) => React$Element,
 };
 
+const BORDER_RADIUS = 3;
+
 const SliderControl = ({
   value,
   updateValue,
@@ -55,7 +57,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   background: #2b2b2b;
-  border-radius: 4px;
+  border-radius: ${BORDER_RADIUS}px;
 `;
 
 const VisualizationWrapper = styled.div`
@@ -65,7 +67,7 @@ const VisualizationWrapper = styled.div`
 
 const SliderWrapper = styled.div`
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 ${BORDER_RADIUS}px ${BORDER_RADIUS}px 0;
 `;
 
 export default SliderControl;
