@@ -1,6 +1,10 @@
 import { checkIntersection } from 'line-intersect';
 
-import { getSlopeAndInterceptForLine } from '../../helpers/line.helpers';
+import {
+  getSlopeAndInterceptForLine,
+  getValuesForBezierCurve,
+} from '../../helpers/line.helpers';
+import { normalize } from '../../utils';
 
 export const occludeLineIfNecessary = (line, previousLines) => {
   if (previousLines.length === 0) {
@@ -129,4 +133,38 @@ export const getPossiblyOccludingRowIndices = ({
   }
 
   return possiblyOccludingRowIndices;
+};
+
+export const getDampingAmountForSlopes = ({ sampleIndex, samplesPerRow }) => {
+  const ratio = sampleIndex / samplesPerRow;
+  const isInFirstHalf = ratio < 0.5;
+
+  let bezierArgs = {};
+  if (isInFirstHalf) {
+    bezierArgs = {
+      startPoint: [0, 0],
+      controlPoint1: [1, 0],
+      controlPoint2: [1, 1],
+      endPoint: [1, 1],
+      t: ratio * 2,
+    };
+  } else {
+    bezierArgs = {
+      startPoint: [0, 1],
+      controlPoint1: [0, 1],
+      controlPoint2: [1, 0],
+      endPoint: [1, 0],
+      t: normalize(ratio, 0.5, 1),
+    };
+  }
+
+  const [, heightDampingAmount] = getValuesForBezierCurve(bezierArgs);
+
+  // By default, our bezier curve damping has a relatively modest effect.
+  // If we want to truly isolate the peaks to the center of the page, we need
+  // to raise that effect exponentially.
+  // 4 seems to do a good job imitating the harsh curve I was using before.
+  const DAMPING_STRENGTH = 4;
+
+  return heightDampingAmount ** DAMPING_STRENGTH;
 };

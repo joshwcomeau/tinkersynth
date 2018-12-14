@@ -1,7 +1,5 @@
-//
 import {
   groupPolylines,
-  getValuesForBezierCurve,
   clipLinesWithMargin,
 } from '../../helpers/line.helpers';
 import {
@@ -16,10 +14,10 @@ import createNoiseGenerator from '../../vendor/noise';
 import {
   occludeLineIfNecessary,
   getPossiblyOccludingRowIndices,
+  getDampingAmountForSlopes,
 } from './Slopes.helpers';
 
 const { perlin2 } = createNoiseGenerator(Math.random());
-
 
 /**
  *
@@ -80,11 +78,11 @@ const getSampleCoordinates = ({
 ];
 
 const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
-  // Calculate the noise value for this point in space.
-  // We need to do linear interpolation, because while we might have 50 or
-  // 500 or 5000 samples per row, we only want to use a standard perlin range
-  // of 0 to PERLIN_RANGE_PER_ROW.
-  const noiseX = normalize(
+  // Perlin noise is a range of values. We need to find the value at this
+  // particular point in the range.
+  // Our sampleIndex ranges from, say, 0 to 500. We need to normalize that to
+  // fit in with our perlin scale.
+  const perlinIndex = normalize(
     sampleIndex,
     0,
     samplesPerRow,
@@ -92,65 +90,28 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
     PERLIN_RANGE_PER_ROW
   );
 
-  const p2 = perlin2(noiseX, rowIndex * 1.5);
+  // We mix between two possible values: our normal slopy value, and a random
+  // noise value.
+  const perlinValue = perlin2(perlinIndex, rowIndex * 1.5);
   const rnd = (Math.random() - 0.5) * 0.5;
 
-  let noiseVal = p2 * perlinRatio + rnd * (1 - perlinRatio);
+  let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
 
   // Different rows have different damping amounts
+  // TODO: use Perlin noise to come up with a different value!
   const damping = rowIndex % 2 === 0 ? 0.85 : 1;
-  noiseVal *= damping;
+  mixedValue *= damping;
 
-  // If we were to just return `noiseVal`, we'd have mountains all over the
-  // page. Instead, though, we want to dampen the effect of the randomization,
-  // so that it starts subtle, peaks in the center, and then drops off at the
-  // end. Like a bell curve.
-  //
-  // My not-the-smartest way to do this is to consider it as 2 bezier curves:
-  /*
+  // To achieve a Joy Division like effect, where the peaks are all in the
+  // center, we'll want to apply a damping effect based on the position along
+  // the X axis. `slopeDampingAmount` is a multiplier between 0 and 1.
 
-  For the first half, use a cubic bezier curve to produce a curve that eases
-  in and out, to ramp from 0 to 1:
-  o         ____o
-          /
-        |
-  _____|
-  o             o
+  const slopeDampingAmount = getDampingAmountForSlopes({
+    sampleIndex,
+    samplesPerRow,
+  });
 
-  The second half will be the mirror image, starting high and dropping low.
-  */
-
-  const ratio = sampleIndex / samplesPerRow;
-  const isInFirstHalf = ratio < 0.5;
-
-  let bezierArgs = {};
-  if (isInFirstHalf) {
-    bezierArgs = {
-      startPoint: [0, 0],
-      controlPoint1: [1, 0],
-      controlPoint2: [1, 1],
-      endPoint: [1, 1],
-      t: ratio * 2,
-    };
-  } else {
-    bezierArgs = {
-      startPoint: [0, 1],
-      controlPoint1: [0, 1],
-      controlPoint2: [1, 0],
-      endPoint: [1, 0],
-      t: normalize(ratio, 0.5, 1),
-    };
-  }
-
-  const [, heightDampingAmount] = getValuesForBezierCurve(bezierArgs);
-
-  // By default, our bezier curve damping has a relatively modest effect.
-  // If we want to truly isolate the peaks to the center of the page, we need
-  // to raise that effect exponentially.
-  // 4 seems to do a good job imitating the harsh curve I was using before.
-  const DAMPING_STRENGTH = 4;
-
-  return noiseVal * heightDampingAmount ** DAMPING_STRENGTH;
+  return mixedValue * slopeDampingAmount;
 };
 
 /**
