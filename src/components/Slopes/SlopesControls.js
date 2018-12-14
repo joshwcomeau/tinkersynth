@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import Slider from '../Slider';
+import SliderControl from '../SliderControl';
 
 type Props = {
   perspective: number,
@@ -21,29 +21,38 @@ const SlopesControls = ({
   return (
     <div>
       <div style={{ padding: '2rem' }}>
-        <Slider
+        <SliderControl
           value={perspective}
           updateValue={setPerspective}
           min={0}
           max={100}
+          width={152}
+          height={96}
+          renderVisualization={value => <div>{Math.round(value)}</div>}
         />
       </div>
 
       <div style={{ padding: '2rem' }}>
-        <Slider
+        <SliderControl
           value={spikyness}
           updateValue={setSpikyness}
           min={0}
           max={100}
+          width={152}
+          height={96}
+          renderVisualization={value => <div>{Math.round(value)}</div>}
         />
       </div>
 
       <div style={{ padding: '2rem' }}>
-        <Slider
+        <SliderControl
           value={polarAmount}
           updateValue={setPolarAmount}
           min={0}
           max={100}
+          width={152}
+          height={96}
+          renderVisualization={value => <div>{Math.round(value)}</div>}
         />
       </div>
     </div>
