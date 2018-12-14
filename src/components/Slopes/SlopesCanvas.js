@@ -29,6 +29,7 @@ const useCanvasDrawing = (
   const leftMargin = (width / 8.5) * 1;
   const samplesPerRow = Math.ceil(width * 0.5);
 
+  const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
 
   // The user can tweak "high-level parameters" like spikyness, perspective,
@@ -36,12 +37,7 @@ const useCanvasDrawing = (
   // calculation. There is not a 1:1 mapping between them: a single
   // high-level param might tweak several low-level vars, and the same
   // variable might be affected by multiple params.
-  const {
-    distanceBetweenRows,
-    rowHeight,
-    perlinRatio,
-    polarRatio,
-  } = transformParameters({
+  const drawingVariables = transformParameters({
     height,
     ...params,
   });
@@ -50,7 +46,29 @@ const useCanvasDrawing = (
   useEffect(() => {
     // If the browser supports it, we want to allow the canvas to be painted
     // off of the main thread.
-    canvasRef.current = canvasRef.current.transferControlToOffscreen();
+
+    if (supportsOffscreenCanvas) {
+      canvasRef.current = canvasRef.current.transferControlToOffscreen();
+    } else {
+      const context = canvasRef.current.getContext('2d');
+      context.scale(devicePixelRatio, devicePixelRatio);
+
+      worker.onmessage = function({ data }) {
+        if (!data.lines) {
+          return;
+        }
+
+        renderPolylines(data.lines, {
+          width,
+          height,
+          context,
+        });
+      };
+
+      return () => {
+        // TODO: cleanup
+      };
+    }
   }, []);
 
   // NOTE: Right now, I'm allowing the canvas to redraw whenever it rerenders.
@@ -66,26 +84,24 @@ const useCanvasDrawing = (
       width,
       height,
       margins: [topMargin, leftMargin],
-      distanceBetweenRows,
-      perlinRatio,
-      rowHeight,
       samplesPerRow,
-      polarRatio,
+      supportsOffscreenCanvas,
+      ...drawingVariables,
     };
-    let transferable = undefined;
+    let transfer = undefined;
 
     // If this is the very first time we're painting to the canvas, we need
     // to send it along, using the cumbersome "data and transfer" API.
     // More info: https://developers.google.com/web/updates/2018/08/offscreen-canvas
-    if (!hasSentCanvas.current) {
+    if (supportsOffscreenCanvas && !hasSentCanvas.current) {
       messageData.canvas = canvasRef.current;
       messageData.devicePixelRatio = devicePixelRatio;
-      transferable = [canvasRef.current];
+      transfer = [canvasRef.current];
 
       hasSentCanvas.current = true;
     }
 
-    worker.postMessage(messageData, transferable);
+    worker.postMessage(messageData, transfer);
   }, triggerUpdateOn);
 };
 
