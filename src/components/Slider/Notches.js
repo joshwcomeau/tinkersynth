@@ -6,11 +6,12 @@ import { range } from '../../utils';
 
 type Props = {
   num: number,
+  position: 'left' | 'right',
 };
 
-const Notches = ({ num }: Props) => {
+const Notches = ({ num, position }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper position={position}>
       {range(num).map(i => (
         <Notch key={i} />
       ))}
@@ -19,22 +20,20 @@ const Notches = ({ num }: Props) => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
+  flex: 1;
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: ${props =>
+    props.position === 'left' ? 'flex-start' : 'flex-end'};
 `;
 
 const Notch = styled.div`
-  width: 25%;
+  width: 4px;
   height: 1px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 1px;
 `;
 

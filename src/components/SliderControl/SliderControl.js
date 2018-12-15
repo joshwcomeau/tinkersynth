@@ -66,7 +66,7 @@ const VisualizationWrapper = styled.div`
 `;
 
 const SliderWrapper = styled.div`
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 0 ${BORDER_RADIUS}px ${BORDER_RADIUS}px 0;
 `;
 

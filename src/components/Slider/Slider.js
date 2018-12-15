@@ -20,7 +20,6 @@ type Props = {
   width?: number,
   height?: number,
   numOfNotches?: number,
-  background?: string,
 };
 
 const Slider = ({
@@ -34,7 +33,6 @@ const Slider = ({
   numOfNotches = 15,
   handleWidth = 21,
   handleHeight = 14,
-  background = '#DEDEDE',
 }: Props) => {
   const [dragging, setDragging] = useState(false);
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
@@ -84,8 +82,12 @@ const Slider = ({
   const handleDisplacement = normalize(value, min, max, height, 0);
 
   return (
-    <Wrapper ref={sliderRef} style={{ width, height, background }}>
-      <Notches num={numOfNotches} />
+    <Wrapper ref={sliderRef} style={{ width, height }}>
+      <Decorations>
+        <Notches num={numOfNotches} position="left" />
+        <Track />
+        <Notches num={numOfNotches} position="right" />
+      </Decorations>
       <Handle
         displacement={handleDisplacement}
         width={handleWidth}
@@ -101,6 +103,27 @@ const Slider = ({
 const Wrapper = styled.div`
   position: relative;
   border-radius: 3px;
+`;
+
+const Decorations = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Track = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
 `;
 
 export default React.memo(Slider);

@@ -86,5 +86,9 @@ const Wrapper = styled.button`
   border: none;
   background: transparent;
   padding: 0;
+
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 `;
 export default Handle;
