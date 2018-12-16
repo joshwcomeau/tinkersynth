@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 
+import ControlPanel from '../ControlPanel';
 import SliderControl from '../SliderControl';
 
 type Props = {
@@ -19,7 +20,7 @@ const SlopesControls = ({
   setPolarAmount,
 }: Props) => {
   return (
-    <div>
+    <ControlPanel>
       <div style={{ padding: '2rem' }}>
         <SliderControl
           value={perspective}
@@ -55,7 +56,7 @@ const SlopesControls = ({
           renderVisualization={value => <div>{Math.round(value)}</div>}
         />
       </div>
-    </div>
+    </ControlPanel>
   );
 };
 
