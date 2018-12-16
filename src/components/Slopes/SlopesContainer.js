@@ -8,6 +8,7 @@ import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import SlopesCanvas from './SlopesCanvas';
 import SlopesControls from './SlopesControls';
 import SlopesExport from './SlopesExport';
+import { COLORS } from '../../constants';
 
 const SlopesContainer = () => {
   // TODO: Use these for something
@@ -33,11 +34,13 @@ const SlopesContainer = () => {
       {interpolatedParams => (
         <>
           <Wrapper>
-            <SlopesCanvas
-              {...interpolatedParams}
-              width={canvasWidth}
-              height={canvasHeight}
-            />
+            <CanvasWrapper>
+              <SlopesCanvas
+                {...interpolatedParams}
+                width={canvasWidth}
+                height={canvasHeight}
+              />
+            </CanvasWrapper>
             <SlopesControls
               {...params}
               setPerspective={setPerspective}
@@ -54,6 +57,14 @@ const SlopesContainer = () => {
 
 const Wrapper = styled.div`
   display: flex;
+  padding: 0 4rem;
+  background: ${COLORS.gray[700]};
+`;
+
+const CanvasWrapper = styled.div`
+  padding: 2rem;
+  flex: 1;
+  text-align: center;
 `;
 
 export default SlopesContainer;

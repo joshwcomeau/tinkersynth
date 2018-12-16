@@ -176,7 +176,7 @@ export const convertDegreesToRadians = angle => (angle * Math.PI) / 180;
 
 export const convertCartesianToPolar = ([x, y]) => {
   const radius = Math.sqrt(x ** 2 + y ** 2);
-  const theta = Math.atan(y / x);
+  const theta = Math.atan2(y / x);
 
   return [radius, theta];
 };

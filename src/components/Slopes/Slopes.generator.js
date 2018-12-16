@@ -1,23 +1,16 @@
-import {
-  groupPolylines,
-  clipLinesWithMargin,
-} from '../../helpers/line.helpers';
-import {
-  normalize,
-  range,
-  compose,
-  convertPolarToCartesian,
-  mix,
-} from '../../utils';
+import { groupPolylines } from '../../helpers/line.helpers';
+import { normalize, range, mix } from '../../utils';
 import createNoiseGenerator from '../../vendor/noise';
 
 import {
   occludeLineIfNecessary,
   getPossiblyOccludingRowIndices,
   getDampingAmountForSlopes,
+  getPolarValues,
 } from './Slopes.helpers';
 
-const { perlin2 } = createNoiseGenerator(Math.random());
+const seed = 5; // Math.random()
+const { perlin2 } = createNoiseGenerator(seed);
 
 /**
  *
@@ -33,6 +26,7 @@ const { perlin2 } = createNoiseGenerator(Math.random());
 // without chaging the appearance of the design, only the # of dots that the
 // plotter has to worry about.
 const PERLIN_RANGE_PER_ROW = 10;
+const DEFAULT_NUM_OF_ROWS = 10;
 
 /**
  *
@@ -152,8 +146,8 @@ const sketch = ({
 }) => {
   const [verticalMargin, horizontalMargin] = margins;
 
-  const numOfRows = 25;
-  // const peakAmplitudeMultiplier = 1;
+  // TODO: Make this a prop
+  const numOfRows = DEFAULT_NUM_OF_ROWS;
 
   let lines = [];
 
@@ -232,95 +226,98 @@ const sketch = ({
 
       let line = [previousSamplePoint, samplePoint];
 
-      const previousLines = previousRowIndices.map(previousRowIndex => {
-        const previousRowOffset = getRowOffset(
-          previousRowIndex,
-          width,
-          height,
-          verticalMargin,
-          distanceBetweenRows,
-          polarRatio
-        );
-
-        return [
-          getSampleCoordinates({
-            value: getValueAtPoint(
-              sampleIndex - 1,
-              previousRowIndex,
-              samplesPerRow,
-              perlinRatio
-            ),
-            sampleIndex: sampleIndex - 1,
-            distanceBetweenSamples,
-            rowHeight,
-            rowOffset: previousRowOffset,
-            horizontalMargin,
-            peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
-          }),
-          getSampleCoordinates({
-            value: getValueAtPoint(
-              sampleIndex,
-              previousRowIndex,
-              samplesPerRow,
-              perlinRatio
-            ),
-            sampleIndex: sampleIndex,
-            distanceBetweenSamples,
-            rowHeight,
-            rowOffset: previousRowOffset,
-            horizontalMargin,
-            peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
-          }),
-        ];
-      });
-
-      let occludedLine = occludeLineIfNecessary(line, previousLines);
-
-      if (!occludedLine) {
-        return;
-      }
-
-      let outputLine = occludedLine;
+      let outputLine = line;
 
       if (polarRatio > 0) {
-        // Get a value for theta going from 0 to 2π
-        const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
-
-        const radius = rowHeight - occludedLine[1][1];
-
-        const previousTheta = normalize(
-          sampleIndex - 1,
-          0,
+        outputLine = getPolarValues({
+          line,
+          width,
+          height,
+          sampleIndex,
           samplesPerRow,
-          0,
-          2 * Math.PI
-        );
-
-        const previousRadius = rowHeight - occludedLine[0][1];
-
-        let polarLine = [
-          convertPolarToCartesian([previousRadius, previousTheta]),
-          convertPolarToCartesian([radius, theta]),
-        ];
-
-        polarLine = polarLine.map(point => [
-          point[0] + width / 2,
-          point[1] + height / 2,
-        ]);
-
-        outputLine[0][0] = mix(polarLine[0][0], occludedLine[0][0], polarRatio);
-        outputLine[0][1] = mix(polarLine[0][1], occludedLine[0][1], polarRatio);
-        outputLine[1][0] = mix(polarLine[1][0], occludedLine[1][0], polarRatio);
-        outputLine[1][1] = mix(polarLine[1][1], occludedLine[1][1], polarRatio);
+          rowHeight,
+          polarRatio,
+        });
       }
+
+      // OCCLUSION.
+      // For doing occlusion, we need to examine the same segment in previous
+      // rows. There are multiple ways to do this.
+      // My initial "naive" way was to simply recalculate the values for the
+      // segments on previous rows. That originally didn't take the cartesian/
+      // polar split into account (since it uses `getValueAtPoint`, which is
+      // purely cartesian.
+      //
+      // It turns out this mistake produces interesting effects, however, so
+      // I'd like to keep that as an option
+      //
+      // TODO: Is this really that interesting? If I can roll up the polar
+      // coordinate stuff into `getValueAtPoint`, code gets simpler, and maybe
+      // it's not sacrificing much. Plus, the recomputing method is slower!
+      const USE_CARTESIAN_VALUES_FOR_OCCLUSION = false;
+
+      let previousLines;
+      if (USE_CARTESIAN_VALUES_FOR_OCCLUSION) {
+        previousLines = previousRowIndices.map(previousRowIndex => {
+          const previousRowOffset = getRowOffset(
+            previousRowIndex,
+            width,
+            height,
+            verticalMargin,
+            distanceBetweenRows,
+            polarRatio
+          );
+
+          return [
+            getSampleCoordinates({
+              value: getValueAtPoint(
+                sampleIndex - 1,
+                previousRowIndex,
+                samplesPerRow,
+                perlinRatio
+              ),
+              sampleIndex: sampleIndex - 1,
+              distanceBetweenSamples,
+              rowHeight,
+              rowOffset: previousRowOffset,
+              horizontalMargin,
+              peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
+            }),
+            getSampleCoordinates({
+              value: getValueAtPoint(
+                sampleIndex,
+                previousRowIndex,
+                samplesPerRow,
+                perlinRatio
+              ),
+              sampleIndex: sampleIndex,
+              distanceBetweenSamples,
+              rowHeight,
+              rowOffset: previousRowOffset,
+              horizontalMargin,
+              peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
+            }),
+          ];
+        });
+      } else {
+        previousLines = previousRowIndices
+          .map(previousRowIndex =>
+            lines[previousRowIndex]
+              ? lines[previousRowIndex][sampleIndex - 1]
+              : null
+          )
+          .filter(line => !!line);
+      }
+
+      outputLine = occludeLineIfNecessary(outputLine, previousLines);
 
       row.push(outputLine);
     });
 
-    lines.push(...row);
+    lines.push(row);
   });
 
-  lines = lines.filter(line => !!line);
+  lines = lines.flat().filter(line => !!line);
 
   lines = groupPolylines(lines);
 

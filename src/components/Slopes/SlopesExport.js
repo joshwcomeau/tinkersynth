@@ -16,7 +16,13 @@ type Props = {
   spikyness: number,
 };
 
-const SlopesExport = ({ width, height, perspective, spikyness }: Props) => {
+const SlopesExport = ({
+  width,
+  height,
+  perspective,
+  spikyness,
+  polarAmount,
+}: Props) => {
   const topMargin = (height / 11) * 1;
   const leftMargin = (width / 8.5) * 1;
 
@@ -45,10 +51,16 @@ const SlopesExport = ({ width, height, perspective, spikyness }: Props) => {
     return null;
   }
 
-  const { distanceBetweenRows, rowHeight, perlinRatio } = transformParameters({
+  const {
+    distanceBetweenRows,
+    rowHeight,
+    perlinRatio,
+    polarRatio,
+  } = transformParameters({
     height,
     perspective,
     spikyness,
+    polarAmount,
   });
 
   const lines = generator({
@@ -59,6 +71,7 @@ const SlopesExport = ({ width, height, perspective, spikyness }: Props) => {
     perlinRatio,
     rowHeight,
     samplesPerRow,
+    polarRatio,
   });
 
   const svgMarkup = polylinesToSVG(lines, { width, height });

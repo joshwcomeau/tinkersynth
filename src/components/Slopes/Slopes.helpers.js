@@ -4,7 +4,7 @@ import {
   getSlopeAndInterceptForLine,
   getValuesForBezierCurve,
 } from '../../helpers/line.helpers';
-import { normalize } from '../../utils';
+import { normalize, convertPolarToCartesian, mix } from '../../utils';
 
 export const occludeLineIfNecessary = (line, previousLines) => {
   if (previousLines.length === 0) {
@@ -167,4 +167,51 @@ export const getDampingAmountForSlopes = ({ sampleIndex, samplesPerRow }) => {
   const DAMPING_STRENGTH = 4;
 
   return heightDampingAmount ** DAMPING_STRENGTH;
+};
+
+export const getPolarValues = ({
+  line,
+  width,
+  height,
+  sampleIndex,
+  samplesPerRow,
+  rowHeight,
+  polarRatio,
+}) => {
+  // Get a value for theta going from 0 to 2π
+  const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
+
+  const radius = rowHeight - line[1][1];
+
+  const previousTheta = normalize(
+    sampleIndex - 1,
+    0,
+    samplesPerRow,
+    0,
+    2 * Math.PI
+  );
+
+  const previousRadius = rowHeight - line[0][1];
+
+  let polarLine = [
+    convertPolarToCartesian([previousRadius, previousTheta]),
+    convertPolarToCartesian([radius, theta]),
+  ];
+
+  polarLine = polarLine.map(point => [
+    point[0] + width / 2,
+    point[1] + height / 2,
+  ]);
+
+  const p1 = [
+    mix(polarLine[0][0], line[0][0], polarRatio),
+    mix(polarLine[0][1], line[0][1], polarRatio),
+  ];
+
+  const p2 = [
+    mix(polarLine[1][0], line[1][0], polarRatio),
+    mix(polarLine[1][1], line[1][1], polarRatio),
+  ];
+
+  return [p1, p2];
 };
