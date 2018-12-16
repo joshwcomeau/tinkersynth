@@ -98,8 +98,23 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
 
   // Different rows have different damping amounts
-  // TODO: use Perlin noise to come up with a different value!
-  const damping = rowIndex % 2 === 0 ? 0.85 : 1;
+  let damping;
+  switch (rowIndex) {
+    case 0:
+    case 1:
+      damping = 0.05;
+      break;
+    case 2:
+    case 3:
+      damping = 0.1;
+      break;
+    case 4:
+    case 5:
+      damping = 0.25;
+      break;
+    default:
+      damping = Math.abs(perlin2(rowIndex + 0.1234, rowIndex * 1.5)) + 0.5;
+  }
   mixedValue *= damping;
 
   // To achieve a Joy Division like effect, where the peaks are all in the
