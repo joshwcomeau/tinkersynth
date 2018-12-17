@@ -1,5 +1,5 @@
 import { groupPolylines } from '../../helpers/line.helpers';
-import { normalize, range, mix } from '../../utils';
+import { normalize, range, flatten, mix } from '../../utils';
 import createNoiseGenerator from '../../vendor/noise';
 
 import {
@@ -282,7 +282,7 @@ const sketch = ({
     lines.push(row);
   });
 
-  lines = lines.flat().filter(line => !!line);
+  lines = flatten(lines).filter(line => !!line);
 
   lines = groupPolylines(lines);
 

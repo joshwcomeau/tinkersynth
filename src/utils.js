@@ -109,6 +109,25 @@ export const omit = function(obj, key) {
   return newObj;
 };
 
+/**
+ * 1D flatten. Uses native Array#flat when available.
+ */
+export const flatten = list => {
+  if (typeof list.flat === 'function') {
+    return list.flat();
+  }
+
+  return list.reduce((acc, item) => {
+    if (Array.isArray(item)) {
+      acc.push(...item);
+    } else {
+      acc.push(item);
+    }
+
+    return acc;
+  }, []);
+};
+
 export const convertArrayToMap = list =>
   list.reduce(
     (acc, item) => ({
