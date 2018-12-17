@@ -1,8 +1,7 @@
 // @flow
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import { renderPolylines } from '../../vendor/polylines';
-import Canvas from '../Canvas';
 
 import transformParameters from './Slopes.params';
 
@@ -16,6 +15,7 @@ type Props = {
   perspective: number,
   spikyness: number,
   polarAmount: number,
+  omega: number,
 };
 
 const useCanvasDrawing = (
@@ -111,6 +111,7 @@ const Slopes = ({
   perspective,
   spikyness,
   polarAmount,
+  omega,
 }: Props) => {
   const canvasRef = useRef(null);
 
@@ -118,6 +119,7 @@ const Slopes = ({
     perspective,
     spikyness,
     polarAmount,
+    omega,
   };
 
   const devicePixelRatio = window.devicePixelRatio || 1;

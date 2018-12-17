@@ -23,31 +23,35 @@ const SlopesContainer = () => {
   const exportWidth = exportHeight * (8.5 / 11);
 
   // High-level "Parameters", tweakable settings
-  const [perspective, setPerspective] = useState(30);
+  const [perspective, setPerspective] = useState(33);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(0);
+  const [polarAmount, setPolarAmount] = useState(71);
+  const [omega, setOmega] = useState(0);
 
-  const params = { perspective, spikyness, polarAmount };
+  const params = { perspective, spikyness, polarAmount, omega };
 
   return (
     <Spring to={params}>
       {interpolatedParams => (
         <>
-          <Wrapper>
-            <CanvasWrapper>
-              <SlopesCanvas
-                {...interpolatedParams}
-                width={canvasWidth}
-                height={canvasHeight}
+          <OuterWrapper>
+            <InnerWrapper>
+              <CanvasWrapper>
+                <SlopesCanvas
+                  {...interpolatedParams}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                />
+              </CanvasWrapper>
+              <SlopesControls
+                {...params}
+                setPerspective={setPerspective}
+                setSpikyness={setSpikyness}
+                setPolarAmount={setPolarAmount}
+                setOmega={setOmega}
               />
-            </CanvasWrapper>
-            <SlopesControls
-              {...params}
-              setPerspective={setPerspective}
-              setSpikyness={setSpikyness}
-              setPolarAmount={setPolarAmount}
-            />
-          </Wrapper>
+            </InnerWrapper>
+          </OuterWrapper>
           <SlopesExport {...params} width={exportWidth} height={exportHeight} />
         </>
       )}
@@ -55,10 +59,14 @@ const SlopesContainer = () => {
   );
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  padding: 0 4rem;
+const OuterWrapper = styled.div`
   background: ${COLORS.gray[700]};
+`;
+
+const InnerWrapper = styled.div`
+  display: flex;
+  max-width: 1400px;
+  margin: auto;
 `;
 
 const CanvasWrapper = styled.div`

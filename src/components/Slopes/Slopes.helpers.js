@@ -4,12 +4,34 @@ import {
   getSlopeAndInterceptForLine,
   getValuesForBezierCurve,
 } from '../../helpers/line.helpers';
-import { normalize, convertPolarToCartesian, mix } from '../../utils';
+import {
+  normalize,
+  convertPolarToCartesian,
+  convertCartesianToPolar,
+  mix,
+} from '../../utils';
 
-export const occludeLineIfNecessary = (line, previousLines) => {
+export const occludeLineIfNecessary = (
+  line,
+  previousLines,
+  polarRatio,
+  centerPoint
+) => {
+  // TODO: Instead of just using the lowest number as the target, use an
+  // 'occlusionPoint'. It'll be [x, pageHeight] in cartesian, [0r, 0] in polar,
+  // and I can mix between them for the midpoints.
   if (previousLines.length === 0) {
     return line;
   }
+
+  const polarLine = line.map(point =>
+    convertCartesianToPolar(point, centerPoint)
+  );
+
+  // In cartesian coordinates, we want to use the Y axis as the measure of
+  // whether a line is below another line. In polar-land, though, we instead
+  // need to use the distance from the center.
+  const usePolarCoordinates = polarRatio > 0.5;
 
   const { slope } = getSlopeAndInterceptForLine(line);
 
@@ -17,7 +39,12 @@ export const occludeLineIfNecessary = (line, previousLines) => {
   // In this case, we want to return `null`. We don't want to render anything
   // for this line.
   const isTotallyBelow = previousLines.some(previousLine => {
-    return previousLine[0][1] < line[0][1] && previousLine[1][1] < line[1][1];
+    let comparableLine = usePolarCoordinates ? polarLine : line;
+
+    return (
+      previousLine[0][1] < comparableLine[0][1] &&
+      previousLine[1][1] < comparableLine[1][1]
+    );
   });
 
   if (isTotallyBelow) {
@@ -169,49 +196,50 @@ export const getDampingAmountForSlopes = ({ sampleIndex, samplesPerRow }) => {
   return heightDampingAmount ** DAMPING_STRENGTH;
 };
 
-export const getPolarValues = ({
-  line,
+/** Given a cartesian point, figure out what that point would be in polar
+ * coordinates, and then convert it back to cartesian coordinates.
+ *
+ * This is super confusing (sorry, future-Josh!), but essentially we want to
+ * convert our cartesian coordinates to be circular, while still returning
+ * X/y values so it can be plotted.
+ *
+ * For example, `sampleIndex` is our defacto `x` in cartesian-land, but we can
+ * also think of it as the degrees in polar coordinates. Let's say we have 500
+ * samplesPerRow:
+ *   - 125/500 is 1/4 of the canvas width, but it can also be 90-degrees (out of
+ *     the 360 degrees we want for a circular effect).
+ *   - 250/500 is 1/2 the width, or 180-degrees.
+ *
+ * Meanwhile, our Y values represent how far away we are from the top of the
+ * canvas, but it could also be the `radius` of our polar coordinate!
+ **/
+export const plotAsPolarCoordinate = ({
+  point,
   width,
   height,
   sampleIndex,
   samplesPerRow,
-  rowHeight,
-  polarRatio,
+  omegaRatio,
+  omegaRadiusSubtractAmount,
 }) => {
-  // Get a value for theta going from 0 to 2π
-  const theta = normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI);
+  const [, y] = point;
 
-  const radius = rowHeight - line[1][1];
+  // Normalize the value from 0π to 2π, and then add 0.5π.
+  // The added 0.5π is so that the slopes point upwards, instead of to the left.
+  // It's effectively a way to rotate by 90deg.
+  const theta =
+    normalize(sampleIndex, 0, samplesPerRow, 0, 2 * Math.PI) + Math.PI * 0.5;
 
-  const previousTheta = normalize(
-    sampleIndex - 1,
-    0,
-    samplesPerRow,
-    0,
-    2 * Math.PI
-  );
+  const radius = mix(omegaRadiusSubtractAmount - y, y, omegaRatio);
 
-  const previousRadius = rowHeight - line[0][1];
+  const polarPoint = [theta, radius];
 
-  let polarLine = [
-    convertPolarToCartesian([previousRadius, previousTheta]),
-    convertPolarToCartesian([radius, theta]),
+  let mappedPolarPoint = convertPolarToCartesian(polarPoint);
+
+  mappedPolarPoint = [
+    mappedPolarPoint[0] + width / 2,
+    mappedPolarPoint[1] + height / 2,
   ];
 
-  polarLine = polarLine.map(point => [
-    point[0] + width / 2,
-    point[1] + height / 2,
-  ]);
-
-  const p1 = [
-    mix(polarLine[0][0], line[0][0], polarRatio),
-    mix(polarLine[0][1], line[0][1], polarRatio),
-  ];
-
-  const p2 = [
-    mix(polarLine[1][0], line[1][0], polarRatio),
-    mix(polarLine[1][1], line[1][1], polarRatio),
-  ];
-
-  return [p1, p2];
+  return mappedPolarPoint;
 };

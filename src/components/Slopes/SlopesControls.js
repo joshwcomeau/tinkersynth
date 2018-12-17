@@ -15,9 +15,11 @@ const SlopesControls = ({
   perspective,
   spikyness,
   polarAmount,
+  omega,
   setPerspective,
   setSpikyness,
   setPolarAmount,
+  setOmega,
 }: Props) => {
   return (
     <ControlPanel>
@@ -49,6 +51,18 @@ const SlopesControls = ({
         <SliderControl
           value={polarAmount}
           updateValue={setPolarAmount}
+          min={0}
+          max={100}
+          width={152}
+          height={96}
+          renderVisualization={value => <div>{Math.round(value)}</div>}
+        />
+      </div>
+
+      <div style={{ padding: '2rem' }}>
+        <SliderControl
+          value={omega}
+          updateValue={setOmega}
           min={0}
           max={100}
           width={152}

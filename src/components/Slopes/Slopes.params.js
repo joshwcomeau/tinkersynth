@@ -1,3 +1,5 @@
+// @flow
+
 // The user can tweak "high-level" params like perspective, spikyness, etc.
 // These values are not used directly in the generator.
 // This file specifies the mapping from high-level params to actual variables
@@ -6,16 +8,14 @@
 import { normalize } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
-/**
- * PERSPECTIVE
- * represents the angle the user is looking at the hills
- */
+type InputParameters = {};
 
 const transformParameters = ({
   height,
   perspective,
   spikyness,
   polarAmount,
+  omega,
 }) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -59,7 +59,17 @@ const transformParameters = ({
 
   const polarRatio = polarAmount / 100;
 
-  return { distanceBetweenRows, perlinRatio, rowHeight, polarRatio };
+  const omegaRatio = omega / 100;
+  const omegaRadiusSubtractAmount = rowHeight;
+
+  return {
+    distanceBetweenRows,
+    perlinRatio,
+    rowHeight,
+    polarRatio,
+    omegaRatio,
+    omegaRadiusSubtractAmount,
+  };
 };
 
 export default transformParameters;

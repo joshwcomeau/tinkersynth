@@ -6,11 +6,15 @@ import {
   occludeLineIfNecessary,
   getPossiblyOccludingRowIndices,
   getDampingAmountForSlopes,
-  getPolarValues,
+  plotAsPolarCoordinate,
 } from './Slopes.helpers';
 
-const seed = 5; // Math.random()
+const seed = Math.random();
 const { perlin2 } = createNoiseGenerator(seed);
+
+// This flag allows us to log out how long each cycle takes, to compare perf
+// of multiple approaches.
+const DEBUG_PERF = false;
 
 /**
  *
@@ -26,7 +30,7 @@ const { perlin2 } = createNoiseGenerator(seed);
 // without chaging the appearance of the design, only the # of dots that the
 // plotter has to worry about.
 const PERLIN_RANGE_PER_ROW = 10;
-const DEFAULT_NUM_OF_ROWS = 10;
+const DEFAULT_NUM_OF_ROWS = 25;
 
 /**
  *
@@ -55,21 +59,41 @@ const getRowOffset = (
 const getSampleCoordinates = ({
   value,
   sampleIndex,
+  width,
+  height,
+  samplesPerRow,
   distanceBetweenSamples,
   rowOffset,
   rowHeight,
   horizontalMargin,
-  peakAmplitudeMultiplier,
-}) => [
-  sampleIndex * distanceBetweenSamples + horizontalMargin,
-  normalize(
-    value,
-    -1,
-    1,
-    -rowHeight * peakAmplitudeMultiplier,
-    rowHeight * peakAmplitudeMultiplier
-  ) + rowOffset,
-];
+  polarRatio,
+  omegaRatio,
+  omegaRadiusSubtractAmount,
+}) => {
+  const cartesianPoint = [
+    sampleIndex * distanceBetweenSamples + horizontalMargin,
+    normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset,
+  ];
+
+  if (polarRatio === 0) {
+    return cartesianPoint;
+  }
+
+  const polarPoint = plotAsPolarCoordinate({
+    point: cartesianPoint,
+    width,
+    height,
+    sampleIndex,
+    samplesPerRow,
+    omegaRatio,
+    omegaRadiusSubtractAmount,
+  });
+
+  return [
+    mix(polarPoint[0], cartesianPoint[0], polarRatio),
+    mix(polarPoint[1], cartesianPoint[1], polarRatio),
+  ];
+};
 
 const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   // Perlin noise is a range of values. We need to find the value at this
@@ -94,18 +118,18 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   // Different rows have different damping amounts
   let damping;
   switch (rowIndex) {
-    case 0:
-    case 1:
-      damping = 0.05;
-      break;
-    case 2:
-    case 3:
-      damping = 0.1;
-      break;
-    case 4:
-    case 5:
-      damping = 0.25;
-      break;
+    // case 0:
+    // case 1:
+    //   damping = 0.05;
+    //   break;
+    // case 2:
+    // case 3:
+    //   damping = 0.1;
+    //   break;
+    // case 4:
+    // case 5:
+    //   damping = 0.25;
+    //   break;
     default:
       damping = Math.abs(perlin2(rowIndex + 0.1234, rowIndex * 1.5)) + 0.5;
   }
@@ -143,7 +167,14 @@ const sketch = ({
   rowHeight,
   samplesPerRow = 250,
   polarRatio,
+  omegaRatio,
+  omegaRadiusSubtractAmount,
 }) => {
+  let start;
+  if (DEBUG_PERF) {
+    start = performance.now();
+  }
+
   const [verticalMargin, horizontalMargin] = margins;
 
   // TODO: Make this a prop
@@ -151,17 +182,9 @@ const sketch = ({
 
   let lines = [];
 
-  let peakAmplitudeMultiplier;
-  let rowAmplifications = [];
-
   // Generate some data!
   range(numOfRows).forEach(rowIndex => {
     let row = [];
-
-    // TODO: Randomize this per row. Seed it somehow.
-    peakAmplitudeMultiplier = 1;
-
-    rowAmplifications.push(peakAmplitudeMultiplier);
 
     const previousRowIndices = getPossiblyOccludingRowIndices({
       rowIndex,
@@ -199,13 +222,18 @@ const sketch = ({
         (width - horizontalMargin * 2) / samplesPerRow;
 
       let samplePoint = getSampleCoordinates({
-        sampleIndex,
         value,
+        sampleIndex,
+        width,
+        height,
+        samplesPerRow,
         distanceBetweenSamples,
-        rowHeight,
         rowOffset,
+        rowHeight,
         horizontalMargin,
-        peakAmplitudeMultiplier,
+        polarRatio,
+        omegaRatio,
+        omegaRadiusSubtractAmount,
       });
 
       const previousValue = getValueAtPoint(
@@ -215,103 +243,40 @@ const sketch = ({
         perlinRatio
       );
       const previousSamplePoint = getSampleCoordinates({
-        sampleIndex: sampleIndex - 1,
         value: previousValue,
+        sampleIndex: sampleIndex - 1,
+        width,
+        height,
+        samplesPerRow,
         distanceBetweenSamples,
-        rowHeight,
         rowOffset,
+        rowHeight,
         horizontalMargin,
-        peakAmplitudeMultiplier,
+        polarRatio,
+        omegaRatio,
+        omegaRadiusSubtractAmount,
       });
 
       let line = [previousSamplePoint, samplePoint];
 
-      let outputLine = line;
+      const previousLines = previousRowIndices
+        .map(previousRowIndex =>
+          lines[previousRowIndex]
+            ? lines[previousRowIndex][sampleIndex - 1]
+            : null
+        )
+        .filter(line => !!line);
 
-      if (polarRatio > 0) {
-        outputLine = getPolarValues({
-          line,
-          width,
-          height,
-          sampleIndex,
-          samplesPerRow,
-          rowHeight,
-          polarRatio,
-        });
-      }
+      const centerPoint = [width / 2, height / 2];
 
-      // OCCLUSION.
-      // For doing occlusion, we need to examine the same segment in previous
-      // rows. There are multiple ways to do this.
-      // My initial "naive" way was to simply recalculate the values for the
-      // segments on previous rows. That originally didn't take the cartesian/
-      // polar split into account (since it uses `getValueAtPoint`, which is
-      // purely cartesian.
-      //
-      // It turns out this mistake produces interesting effects, however, so
-      // I'd like to keep that as an option
-      //
-      // TODO: Is this really that interesting? If I can roll up the polar
-      // coordinate stuff into `getValueAtPoint`, code gets simpler, and maybe
-      // it's not sacrificing much. Plus, the recomputing method is slower!
-      const USE_CARTESIAN_VALUES_FOR_OCCLUSION = false;
+      line = occludeLineIfNecessary(
+        line,
+        previousLines,
+        polarRatio,
+        centerPoint
+      );
 
-      let previousLines;
-      if (USE_CARTESIAN_VALUES_FOR_OCCLUSION) {
-        previousLines = previousRowIndices.map(previousRowIndex => {
-          const previousRowOffset = getRowOffset(
-            previousRowIndex,
-            width,
-            height,
-            verticalMargin,
-            distanceBetweenRows,
-            polarRatio
-          );
-
-          return [
-            getSampleCoordinates({
-              value: getValueAtPoint(
-                sampleIndex - 1,
-                previousRowIndex,
-                samplesPerRow,
-                perlinRatio
-              ),
-              sampleIndex: sampleIndex - 1,
-              distanceBetweenSamples,
-              rowHeight,
-              rowOffset: previousRowOffset,
-              horizontalMargin,
-              peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
-            }),
-            getSampleCoordinates({
-              value: getValueAtPoint(
-                sampleIndex,
-                previousRowIndex,
-                samplesPerRow,
-                perlinRatio
-              ),
-              sampleIndex: sampleIndex,
-              distanceBetweenSamples,
-              rowHeight,
-              rowOffset: previousRowOffset,
-              horizontalMargin,
-              peakAmplitudeMultiplier: rowAmplifications[previousRowIndex],
-            }),
-          ];
-        });
-      } else {
-        previousLines = previousRowIndices
-          .map(previousRowIndex =>
-            lines[previousRowIndex]
-              ? lines[previousRowIndex][sampleIndex - 1]
-              : null
-          )
-          .filter(line => !!line);
-      }
-
-      outputLine = occludeLineIfNecessary(outputLine, previousLines);
-
-      row.push(outputLine);
+      row.push(line);
     });
 
     lines.push(row);
@@ -320,6 +285,10 @@ const sketch = ({
   lines = lines.flat().filter(line => !!line);
 
   lines = groupPolylines(lines);
+
+  if (DEBUG_PERF) {
+    console.info(performance.now() - start);
+  }
 
   return lines;
 };
