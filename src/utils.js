@@ -174,14 +174,43 @@ export const getDistanceBetweenPoints = (p1, p2) => {
 export const convertRadiansToDegrees = angle => (angle * 180) / Math.PI;
 export const convertDegreesToRadians = angle => (angle * Math.PI) / 180;
 
-export const convertCartesianToPolar = ([x, y]) => {
-  const radius = Math.sqrt(x ** 2 + y ** 2);
-  const theta = Math.atan2(y / x);
-
-  return [radius, theta];
+export const getQuadrantForPoint = ([x, y]) => {
+  if (x > 0 && y > 0) {
+    return 1;
+  } else if (x < 0 && y > 0) {
+    return 2;
+  } else if (x < 0 && y < 0) {
+    return 3;
+  } else {
+    return 4;
+  }
 };
 
-export const convertPolarToCartesian = ([radius, θ]) => {
+export const convertCartesianToPolar = (point, centerPoint = [0, 0]) => {
+  const pointRelativeToCenter = [
+    point[0] - centerPoint[0],
+    point[1] - centerPoint[1],
+  ];
+
+  const [x, y] = pointRelativeToCenter;
+
+  // When going from cartesian to polar, it struggles with negative numbers.
+  // We need to take quadrants into account!
+  const quadrant = getQuadrantForPoint(pointRelativeToCenter);
+  let radiansOffset = 0;
+  if (quadrant === 2 || quadrant === 3) {
+    radiansOffset += Math.PI;
+  } else if (quadrant === 4) {
+    radiansOffset += 2 * Math.PI;
+  }
+
+  const theta = Math.atan(y / x) + radiansOffset;
+  const radius = Math.sqrt(x ** 2 + y ** 2);
+
+  return [theta, radius];
+};
+
+export const convertPolarToCartesian = ([θ, radius]) => {
   const x = radius * Math.cos(θ);
   const y = radius * Math.sin(θ);
 

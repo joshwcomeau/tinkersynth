@@ -9,10 +9,32 @@ describe('utils', () => {
       const x = 10;
       const y = 5;
 
-      const [radius, theta] = convertCartesianToPolar([x, y]);
-      const converted = convertPolarToCartesian([radius, theta]);
+      const [theta, radius] = convertCartesianToPolar([x, y]);
+      const converted = convertPolarToCartesian([theta, radius]);
 
-      expect(converted).toEqual([x, y]);
+      // Stupid floating-points
+      const roundedConverted = [
+        Math.round(converted[0]),
+        Math.round(converted[1]),
+      ];
+
+      expect(roundedConverted).toEqual([x, y]);
+    });
+
+    it('handles negative cartesian values', () => {
+      const x = -10;
+      const y = -5;
+
+      const [theta, radius] = convertCartesianToPolar([x, y]);
+      const converted = convertPolarToCartesian([theta, radius]);
+
+      // Stupid floating-points
+      const roundedConverted = [
+        Math.round(converted[0]),
+        Math.round(converted[1]),
+      ];
+
+      expect(roundedConverted).toEqual([x, y]);
     });
   });
 });
