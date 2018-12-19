@@ -184,8 +184,14 @@ export const delay = duration =>
   new Promise(resolve => window.setTimeout(resolve, duration));
 
 export const getDistanceBetweenPoints = (p1, p2) => {
-  const deltaX = Math.abs(p2.x - p1.x);
-  const deltaY = Math.abs(p2.y - p1.y);
+  // Support both object form {x: x, y: y} and array form [x, y]
+  const x1 = Array.isArray(p1) ? p1[0] : p1.x;
+  const y1 = Array.isArray(p1) ? p1[1] : p1.y;
+  const x2 = Array.isArray(p2) ? p2[0] : p2.x;
+  const y2 = Array.isArray(p2) ? p2[1] : p2.y;
+
+  const deltaX = Math.abs(x2 - x1);
+  const deltaY = Math.abs(y2 - y1);
 
   return Math.sqrt(deltaX ** 2 + deltaY ** 2);
 };

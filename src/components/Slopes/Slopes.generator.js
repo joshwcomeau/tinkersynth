@@ -10,7 +10,7 @@ import {
 } from './Slopes.helpers';
 
 const seed = Math.random();
-const { perlin2 } = createNoiseGenerator(seed);
+const { perlin2 } = createNoiseGenerator(5);
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
@@ -30,7 +30,9 @@ const DEBUG_PERF = false;
 // without chaging the appearance of the design, only the # of dots that the
 // plotter has to worry about.
 const PERLIN_RANGE_PER_ROW = 10;
-const DEFAULT_NUM_OF_ROWS = 25;
+
+const DEFAULT_SAMPLES_PER_ROW = 250;
+const DEFAULT_NUM_OF_ROWS = 3;
 
 /**
  *
@@ -67,6 +69,8 @@ const getSampleCoordinates = ({
   rowHeight,
   horizontalMargin,
   polarRatio,
+  polarTanRatio,
+  polarTanMultiplier,
   omegaRatio,
   omegaRadiusSubtractAmount,
 }) => {
@@ -87,6 +91,8 @@ const getSampleCoordinates = ({
     samplesPerRow,
     omegaRatio,
     omegaRadiusSubtractAmount,
+    polarTanRatio,
+    polarTanMultiplier,
   });
 
   return [
@@ -165,10 +171,13 @@ const sketch = ({
   distanceBetweenRows,
   perlinRatio,
   rowHeight,
-  samplesPerRow = 250,
   polarRatio,
+  polarTanRatio,
+  polarTanMultiplier,
   omegaRatio,
   omegaRadiusSubtractAmount,
+  numOfRows = DEFAULT_NUM_OF_ROWS,
+  samplesPerRow = DEFAULT_SAMPLES_PER_ROW,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -176,9 +185,6 @@ const sketch = ({
   }
 
   const [verticalMargin, horizontalMargin] = margins;
-
-  // TODO: Make this a prop
-  const numOfRows = DEFAULT_NUM_OF_ROWS;
 
   let lines = [];
 
@@ -232,6 +238,8 @@ const sketch = ({
         rowHeight,
         horizontalMargin,
         polarRatio,
+        polarTanRatio,
+        polarTanMultiplier,
         omegaRatio,
         omegaRadiusSubtractAmount,
       });
@@ -253,6 +261,8 @@ const sketch = ({
         rowHeight,
         horizontalMargin,
         polarRatio,
+        polarTanRatio,
+        polarTanMultiplier,
         omegaRatio,
         omegaRadiusSubtractAmount,
       });
@@ -267,13 +277,12 @@ const sketch = ({
         )
         .filter(line => !!line);
 
-      const centerPoint = [width / 2, height / 2];
-
       line = occludeLineIfNecessary(
         line,
         previousLines,
-        polarRatio,
-        centerPoint
+        width,
+        height,
+        polarRatio
       );
 
       row.push(line);

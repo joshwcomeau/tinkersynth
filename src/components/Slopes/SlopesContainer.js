@@ -23,12 +23,13 @@ const SlopesContainer = () => {
   const exportWidth = exportHeight * (8.5 / 11);
 
   // High-level "Parameters", tweakable settings
-  const [perspective, setPerspective] = useState(33);
+  const [perspective, setPerspective] = useState(69);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(71);
+  const [polarAmount, setPolarAmount] = useState(100);
   const [omega, setOmega] = useState(0);
+  const [splitUniverse, setSplitUniverse] = useState(0);
 
-  const params = { perspective, spikyness, polarAmount, omega };
+  const params = { perspective, spikyness, polarAmount, omega, splitUniverse };
 
   return (
     <Spring to={params}>
@@ -48,6 +49,7 @@ const SlopesContainer = () => {
                 setPerspective={setPerspective}
                 setSpikyness={setSpikyness}
                 setPolarAmount={setPolarAmount}
+                setSplitUniverse={setSplitUniverse}
                 setOmega={setOmega}
               />
             </InnerWrapper>

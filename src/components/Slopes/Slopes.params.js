@@ -16,6 +16,7 @@ const transformParameters = ({
   spikyness,
   polarAmount,
   omega,
+  splitUniverse,
 }) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -59,6 +60,10 @@ const transformParameters = ({
 
   const polarRatio = polarAmount / 100;
 
+  const polarTanRatio = splitUniverse / 100;
+  // TODO: experiment with making this a different value
+  const polarTanMultiplier = polarTanRatio;
+
   const omegaRatio = omega / 100;
   const omegaRadiusSubtractAmount = rowHeight;
 
@@ -67,6 +72,8 @@ const transformParameters = ({
     perlinRatio,
     rowHeight,
     polarRatio,
+    polarTanRatio,
+    polarTanMultiplier,
     omegaRatio,
     omegaRadiusSubtractAmount,
   };

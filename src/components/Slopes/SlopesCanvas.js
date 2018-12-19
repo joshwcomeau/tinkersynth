@@ -16,6 +16,7 @@ type Props = {
   spikyness: number,
   polarAmount: number,
   omega: number,
+  splitUniverse: number,
 };
 
 const useCanvasDrawing = (
@@ -112,6 +113,7 @@ const Slopes = ({
   spikyness,
   polarAmount,
   omega,
+  splitUniverse,
 }: Props) => {
   const canvasRef = useRef(null);
 
@@ -120,6 +122,7 @@ const Slopes = ({
     spikyness,
     polarAmount,
     omega,
+    splitUniverse,
   };
 
   const devicePixelRatio = window.devicePixelRatio || 1;

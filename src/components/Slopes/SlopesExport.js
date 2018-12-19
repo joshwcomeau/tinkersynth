@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { clipLinesWithMargin } from '../../helpers/line.helpers';
 import { polylinesToSVG } from '../../vendor/polylines';
 
 import generator from './Slopes.generator';
@@ -14,17 +15,14 @@ type Props = {
   leftMargin: number,
   perspective: number,
   spikyness: number,
+  polarAmount: number,
+  omega: number,
 };
 
-const SlopesExport = ({
-  width,
-  height,
-  perspective,
-  spikyness,
-  polarAmount,
-}: Props) => {
+const SlopesExport = ({ width, height, ...params }: Props) => {
   const topMargin = (height / 11) * 1;
   const leftMargin = (width / 8.5) * 1;
+  const margins = [topMargin, leftMargin];
 
   const samplesPerRow = Math.ceil(width / 2);
 
@@ -51,28 +49,20 @@ const SlopesExport = ({
     return null;
   }
 
-  const {
-    distanceBetweenRows,
-    rowHeight,
-    perlinRatio,
-    polarRatio,
-  } = transformParameters({
+  const drawingVariables = transformParameters({
     height,
-    perspective,
-    spikyness,
-    polarAmount,
+    ...params,
   });
 
-  const lines = generator({
+  let lines = generator({
     width,
     height,
-    margins: [topMargin, leftMargin],
-    distanceBetweenRows,
-    perlinRatio,
-    rowHeight,
+    margins,
     samplesPerRow,
-    polarRatio,
+    ...drawingVariables,
   });
+
+  lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
 
   const svgMarkup = polylinesToSVG(lines, { width, height });
 

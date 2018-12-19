@@ -16,10 +16,12 @@ const SlopesControls = ({
   spikyness,
   polarAmount,
   omega,
+  splitUniverse,
   setPerspective,
   setSpikyness,
   setPolarAmount,
   setOmega,
+  setSplitUniverse,
 }: Props) => {
   return (
     <ControlPanel>
@@ -63,6 +65,18 @@ const SlopesControls = ({
         <SliderControl
           value={omega}
           updateValue={setOmega}
+          min={0}
+          max={100}
+          width={152}
+          height={96}
+          renderVisualization={value => <div>{Math.round(value)}</div>}
+        />
+      </div>
+
+      <div style={{ padding: '2rem' }}>
+        <SliderControl
+          value={splitUniverse}
+          updateValue={setSplitUniverse}
           min={0}
           max={100}
           width={152}
