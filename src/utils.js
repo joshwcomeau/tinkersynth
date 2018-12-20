@@ -222,6 +222,7 @@ export const convertCartesianToPolar = (point, centerPoint = [0, 0]) => {
   // When going from cartesian to polar, it struggles with negative numbers.
   // We need to take quadrants into account!
   const quadrant = getQuadrantForPoint(pointRelativeToCenter);
+
   let radiansOffset = 0;
   if (quadrant === 2 || quadrant === 3) {
     radiansOffset += Math.PI;
@@ -229,8 +230,14 @@ export const convertCartesianToPolar = (point, centerPoint = [0, 0]) => {
     radiansOffset += 2 * Math.PI;
   }
 
-  const theta = Math.atan(y / x) + radiansOffset;
   const radius = Math.sqrt(x ** 2 + y ** 2);
+  let theta = Math.atan(y / x) + radiansOffset;
+
+  // If this point IS our center point, theta will be NaN.
+  // Instead let's just make it 0.
+  if (isNaN(theta)) {
+    theta = 0;
+  }
 
   return [theta, radius];
 };

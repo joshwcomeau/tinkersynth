@@ -45,16 +45,17 @@ export const occludeLineIfNecessary = (
     height,
   ];
 
-  const polarOcclusionPoint = [width / 2, height / 2];
+  const centerPoint = [width / 2, height / 2];
 
   const occlusionPoint = [
-    mix(polarOcclusionPoint[0], cartesianOcclusionPoint[0], polarRatio),
-    mix(polarOcclusionPoint[1], cartesianOcclusionPoint[1], polarRatio),
+    mix(centerPoint[0], cartesianOcclusionPoint[0], polarRatio),
+    mix(centerPoint[1], cartesianOcclusionPoint[1], polarRatio),
   ];
 
   const polarLine = line.map(point =>
     convertCartesianToPolar(point, occlusionPoint)
   );
+
   const polarSlope = polarLine[1][1] - polarLine[0][1];
 
   const previousPolarLines = previousLines.map(line =>
@@ -100,8 +101,8 @@ export const occludeLineIfNecessary = (
    * segment if so. We'll need to keep track of the intersections, as the same
    * segment might intersect with multiple lines.
    */
-  let becomeOccludedAt = null;
-  let breakFreeAt = null;
+  let becomeOccludedAt;
+  let breakFreeAt;
 
   previousPolarLines.forEach((previousPolarLine, i) => {
     // See if our two lines intersect, in the segments given.
@@ -140,7 +141,6 @@ export const occludeLineIfNecessary = (
       // that our line is currently occluded and breaking free.
       // If the current slope is < the previous, it means our line is currently
       // free, but is about to dip behind the previous line.
-      console.log(polarSlope, previousPolarSlope);
       const isBecomingOccludedByThisLine = polarSlope < previousPolarSlope;
       const isBreakingFreeFromThisLine = !isBecomingOccludedByThisLine;
 
@@ -161,8 +161,6 @@ export const occludeLineIfNecessary = (
       }
     }
   });
-
-  console.log({ becomeOccludedAt, breakFreeAt });
 
   // If we didn't find any intersections, our job is done. The line is totally
   // unobscured.
@@ -189,25 +187,28 @@ export const occludeLineIfNecessary = (
   // coordinates, now that we've done all calculations.
   if (becomeOccludedAt) {
     becomeOccludedAt = convertPolarToCartesian(becomeOccludedAt);
+
     becomeOccludedAt = [
-      becomeOccludedAt[0] + width / 2,
-      becomeOccludedAt[1] + height / 2,
+      becomeOccludedAt[0] + occlusionPoint[0],
+      becomeOccludedAt[1] + occlusionPoint[1],
     ];
   }
   if (breakFreeAt) {
     breakFreeAt = convertPolarToCartesian(breakFreeAt);
-    breakFreeAt = [breakFreeAt[0] + width / 2, breakFreeAt[1] + height / 2];
+
+    breakFreeAt = [
+      breakFreeAt[0] + occlusionPoint[0],
+      breakFreeAt[1] + occlusionPoint[1],
+    ];
   }
 
   let [start, end] = line;
 
   if (becomeOccludedAt) {
-    console.log({ becomeOccludedAt });
     end = becomeOccludedAt;
   }
 
   if (breakFreeAt) {
-    console.log({ breakFreeAt });
     start = breakFreeAt;
   }
 

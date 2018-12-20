@@ -36,20 +36,35 @@ describe('occludeLineIfNecessary', () => {
     });
   });
 
-  describe('with polarRatio 0', () => {
+  it.skip('handles a line being obscured with polarRatio 1', () => {
+    const polarRatio = 1;
+
+    const previousLines = [[[3, 6], [4, 8]]];
+    const line = [[3, 7], [4, 7]];
+
+    // NOTE: I actually expected this to be [3.5, 7]. I should figure out if
+    // this approximation is a problem.
+    const intersection = [3.2309250580160516, 7.037898372795851];
+
+    const expectedTruncatedLine = [line[0], intersection];
+
+    expect(
+      occludeLineIfNecessary(line, previousLines, width, height, polarRatio)
+    ).toEqual(expectedTruncatedLine);
+  });
+
+  it('handles a line being obscured with polarRatio 0', () => {
     const polarRatio = 0;
 
-    it('handles a line being obscured', () => {
-      const previousLines = [[[3, 6], [4, 8]]];
-      const line = [[3, 7], [4, 7]];
+    const previousLines = [[[3, 6], [4, 8]]];
+    const line = [[3, 7], [4, 7]];
 
-      const intersection = [3.5, 7];
+    const intersection = [3.5, 7];
 
-      const expectedTruncatedLine = [line[0], intersection];
+    const expectedTruncatedLine = [intersection, line[1]];
 
-      expect(
-        occludeLineIfNecessary(line, previousLines, width, height, polarRatio)
-      ).toEqual(expectedTruncatedLine);
-    });
+    expect(
+      occludeLineIfNecessary(line, previousLines, width, height, polarRatio)
+    ).toEqual(expectedTruncatedLine);
   });
 });
