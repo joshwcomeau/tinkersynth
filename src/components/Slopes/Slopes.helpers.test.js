@@ -36,6 +36,21 @@ describe('occludeLineIfNecessary', () => {
     });
   });
 
+  it.skip('handles a line being obscured with polarRatio 0', () => {
+    const polarRatio = 0;
+
+    const previousLines = [[[3, 6], [4, 8]]];
+    const line = [[3, 7], [4, 7]];
+
+    const intersection = [3.5, 7];
+
+    const expectedTruncatedLine = [intersection, line[1]];
+
+    expect(
+      occludeLineIfNecessary(line, previousLines, width, height, polarRatio)
+    ).toEqual(expectedTruncatedLine);
+  });
+
   it.skip('handles a line being obscured with polarRatio 1', () => {
     const polarRatio = 1;
 
@@ -53,13 +68,13 @@ describe('occludeLineIfNecessary', () => {
     ).toEqual(expectedTruncatedLine);
   });
 
-  it('handles a line being obscured with polarRatio 0', () => {
+  it('handles a line that crosses polar quadrants', () => {
     const polarRatio = 0;
 
-    const previousLines = [[[3, 6], [4, 8]]];
-    const line = [[3, 7], [4, 7]];
+    const previousLines = [[[3, 6], [4, 4]]];
+    const line = [[3, 4], [4, 6]];
 
-    const intersection = [3.5, 7];
+    const intersection = [3.5, 5];
 
     const expectedTruncatedLine = [intersection, line[1]];
 

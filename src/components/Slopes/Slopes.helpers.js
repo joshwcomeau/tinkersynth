@@ -9,6 +9,8 @@ import {
   getDistanceBetweenPoints,
   convertPolarToCartesian,
   convertCartesianToPolar,
+  convertCartesianLineToPolar,
+  getQuadrantForPoint,
   mix,
 } from '../../utils';
 
@@ -52,14 +54,12 @@ export const occludeLineIfNecessary = (
     mix(centerPoint[1], cartesianOcclusionPoint[1], polarRatio),
   ];
 
-  const polarLine = line.map(point =>
-    convertCartesianToPolar(point, occlusionPoint)
-  );
+  const polarLine = convertCartesianLineToPolar(line, occlusionPoint);
 
   const polarSlope = polarLine[1][1] - polarLine[0][1];
 
   const previousPolarLines = previousLines.map(line =>
-    line.map(point => convertCartesianToPolar(point, occlusionPoint))
+    convertCartesianLineToPolar(line, occlusionPoint)
   );
 
   const lineDistances = line.map(point =>
@@ -103,6 +103,8 @@ export const occludeLineIfNecessary = (
    */
   let becomeOccludedAt;
   let breakFreeAt;
+  let becomeOccludedFromIndex;
+  let breakFreeFromIndex;
 
   previousPolarLines.forEach((previousPolarLine, i) => {
     // See if our two lines intersect, in the segments given.
@@ -151,12 +153,14 @@ export const occludeLineIfNecessary = (
 
         if (typeof currentRecord === 'undefined' || currentRecord > point[0]) {
           becomeOccludedAt = point;
+          becomeOccludedFromIndex = i;
         }
       } else if (isBreakingFreeFromThisLine) {
         const currentRecord = breakFreeAt && breakFreeAt[0];
 
         if (typeof currentRecord === 'undefined' || currentRecord < point[0]) {
           breakFreeAt = point;
+          breakFreeFromIndex = i;
         }
       }
     }
@@ -183,6 +187,8 @@ export const occludeLineIfNecessary = (
     return null;
   }
 
+  let [start, end] = line;
+
   // Convert our becomeOccludedAt and breakFreeAt points to cartesian
   // coordinates, now that we've done all calculations.
   if (becomeOccludedAt) {
@@ -192,7 +198,38 @@ export const occludeLineIfNecessary = (
       becomeOccludedAt[0] + occlusionPoint[0],
       becomeOccludedAt[1] + occlusionPoint[1],
     ];
+
+    // in polar lines, we don't know which of the two line points is first.
+    // eg. `/` or `\` are both possible.
+    const earliestPointIndex = line[0][0] < line[1][0] ? 0 : 1;
+
+    const earliestPoint = line[earliestPointIndex];
+    const latestPoint = line[1 - earliestPointIndex];
+
+    const isWildlyOutsideRange =
+      becomeOccludedAt[0] > latestPoint[0] ||
+      becomeOccludedAt[0] < earliestPoint[0];
+
+    if (isWildlyOutsideRange) {
+      const intersectingLine = previousLines[becomeOccludedFromIndex];
+
+      let { point } = checkIntersection(
+        line[0][0],
+        line[0][1],
+        line[1][0],
+        line[1][1],
+        intersectingLine[0][0],
+        intersectingLine[0][1],
+        intersectingLine[1][0],
+        intersectingLine[1][1]
+      );
+
+      becomeOccludedAt = [point.x, point.y];
+    }
+
+    end = becomeOccludedAt;
   }
+
   if (breakFreeAt) {
     breakFreeAt = convertPolarToCartesian(breakFreeAt);
 
@@ -200,185 +237,34 @@ export const occludeLineIfNecessary = (
       breakFreeAt[0] + occlusionPoint[0],
       breakFreeAt[1] + occlusionPoint[1],
     ];
-  }
 
-  let [start, end] = line;
+    // in polar lines, we don't know which of the two line points is first.
+    // eg. `/` or `\` are both possible.
+    const earliestPointIndex = line[0][0] < line[1][0] ? 0 : 1;
 
-  if (becomeOccludedAt) {
-    end = becomeOccludedAt;
-  }
+    const earliestPoint = line[earliestPointIndex];
+    const latestPoint = line[1 - earliestPointIndex];
 
-  if (breakFreeAt) {
-    start = breakFreeAt;
-  }
+    const isWildlyOutsideRange =
+      breakFreeAt[0] > latestPoint[0] || breakFreeAt[0] < earliestPoint[0];
 
-  return [start, end];
-};
+    if (isWildlyOutsideRange) {
+      const intersectingLine = previousLines[breakFreeFromIndex];
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-export const occludeLineIfNecessary_OLD = (
-  line,
-  previousLines,
-  height,
-  centerPoint,
-  polarRatio
-) => {
-  if (previousLines.length === 0) {
-    return line;
-  }
-
-  // TODO: Mix the two values based on polarRatio
-  const occlusionPoint = polarRatio > 0.5 ? centerPoint : [line[0], 0];
-
-  const getDistanceFromOcclusionPoint = point => {
-    const deltaX = point[0] - occlusionPoint[0];
-    const deltaY = point[1] - occlusionPoint[1];
-
-    return Math.sqrt(deltaX ** 2 + deltaY ** 2);
-  };
-
-  const lineDistances = line.map(getDistanceFromOcclusionPoint);
-
-  const polarLine = line.map(point =>
-    convertCartesianToPolar(point, occlusionPoint)
-  );
-
-  const { slope: polarSlope } = getSlopeAndInterceptForLine(polarLine);
-
-  // const { slope } = getSlopeAndInterceptForLine(line);
-
-  // First case: This line segment is totally below at least 1 previous line
-  // In this case, we want to return `null`. We don't want to render anything
-  // for this line.
-  const isTotallyBelow = previousLines.some(previousLine => {
-    const previousLineDistances = previousLine.map(
-      getDistanceFromOcclusionPoint
-    );
-
-    return (
-      lineDistances[0] < previousLineDistances[0] &&
-      lineDistances[1] < previousLineDistances[1]
-    );
-  });
-
-  if (isTotallyBelow) {
-    return null;
-  }
-
-  // Next case: the line is partially occluded.
-  // In the case that our line goes from not-occluded to occluded, we expect to
-  // see a line with a slope above our current line's
-  // if the slope is negative, we care about the _latest_ intersection:
-  /*
-
-  \    /
-   \ /                < negative slope in front of our line
-    \                   If there are multiple, the larger `x` intersection
-     \                  value wins
-
-
-        /
-  ----/               < positive slope in front of our line
-    /                   If there are multiple, the smaller `x` intersection
-  /                     value wins.
-
-  */
-
-  let becomeOccludedAt = null;
-  let breakFreeAt = null;
-  previousLines.forEach((previousLine, i) => {
-    // See if our two lines intersect, in the segments given.
-    let { type, point } = checkIntersection(
-      line[0][0],
-      line[0][1],
-      line[1][0],
-      line[1][1],
-      previousLine[0][0],
-      previousLine[0][1],
-      previousLine[1][0],
-      previousLine[1][1]
-    );
-
-    // `checkIntersection` returns a point in {x, y} format, instead of [x, y].
-    // Convert it, for consistency with our points
-    point = point && [point.x, point.y];
-
-    if (type === 'intersecting') {
-      const previousPolarLine = line.map(point =>
-        convertCartesianToPolar(point, occlusionPoint)
+      let { point } = checkIntersection(
+        line[0][0],
+        line[0][1],
+        line[1][0],
+        line[1][1],
+        intersectingLine[0][0],
+        intersectingLine[0][1],
+        intersectingLine[1][0],
+        intersectingLine[1][1]
       );
 
-      const { slope: previousPolarSlope } = getSlopeAndInterceptForLine(
-        previousPolarLine
-      );
-
-      // If our current slope is greater than the previous slope, it means
-      // that our line is currently occluded and breaking free.
-      // If the current slope is < the previous, it means our line is currently
-      // free, but is about to dip behind the previous line.
-      const isBecomingOccludedByThisLine = polarSlope > previousPolarSlope;
-      const isBreakingFreeFromThisLine = !isBecomingOccludedByThisLine;
-
-      const previousLineDistances = previousLine.map(
-        getDistanceFromOcclusionPoint
-      );
-
-      if (isBecomingOccludedByThisLine) {
-        if (!becomeOccludedAt || becomeOccludedAt[0] > point[0]) {
-          becomeOccludedAt = point;
-        }
-      } else if (isBreakingFreeFromThisLine) {
-        if (!breakFreeAt || breakFreeAt[0] < point[0]) {
-          breakFreeAt = point;
-        }
-      }
+      breakFreeAt = [point.x, point.y];
     }
-  });
 
-  let start = line[0];
-  let end = line[1];
-
-  // In rare cases, the line might be occluded BEFORE it breaks free.
-  // In this case, we don't want to render it at all.
-  /*
-
-  \        /
-    \    /
-      \/
-  ---X--X--------   < Our line, which is occluded at the first X, and breaks
-   /      \           free at the second X, is hidden because the occlusion
- /          \         happens first.
-
- */
-  if (becomeOccludedAt && breakFreeAt && becomeOccludedAt[0] < breakFreeAt[0]) {
-    return null;
-  }
-
-  if (becomeOccludedAt) {
-    end = becomeOccludedAt;
-  }
-
-  if (breakFreeAt) {
     start = breakFreeAt;
   }
 

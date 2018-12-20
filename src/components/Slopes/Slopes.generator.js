@@ -32,7 +32,7 @@ const DEBUG_PERF = false;
 const PERLIN_RANGE_PER_ROW = 10;
 
 const DEFAULT_SAMPLES_PER_ROW = 250;
-const DEFAULT_NUM_OF_ROWS = 3;
+const DEFAULT_NUM_OF_ROWS = 30;
 
 /**
  *

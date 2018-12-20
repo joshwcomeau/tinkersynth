@@ -137,6 +137,9 @@ export const convertArrayToMap = list =>
     {}
   );
 
+const uniqPredicate = (value, index, self) => self.indexOf(value) === index;
+export const uniq = arr => arr.filter(uniqPredicate);
+
 // Either removes or adds an item to an array
 // EXAMPLE: toggleInArray([1, 2], 3) -> [1, 2, 3]
 // EXAMPLE: toggleInArray([1, 2], 2) -> [1]
@@ -200,47 +203,93 @@ export const convertRadiansToDegrees = angle => (angle * 180) / Math.PI;
 export const convertDegreesToRadians = angle => (angle * Math.PI) / 180;
 
 export const getQuadrantForPoint = ([x, y]) => {
-  if (x > 0 && y > 0) {
+  if (x >= 0 && y >= 0) {
     return 1;
-  } else if (x < 0 && y > 0) {
+  } else if (x < 0 && y >= 0) {
     return 2;
   } else if (x < 0 && y < 0) {
     return 3;
-  } else {
+  } else if (x >= 0 && y < 0) {
     return 4;
+  } else {
+    throw new Error(`Invalid coordinates: ${x} and ${y}`);
   }
 };
 
-export const convertCartesianToPolar = (point, centerPoint = [0, 0]) => {
-  const pointRelativeToCenter = [
-    point[0] - centerPoint[0],
-    point[1] - centerPoint[1],
-  ];
+export const convertCartesianToPolar = (point, centerPoint = [0, 0]) => {};
 
-  const [x, y] = pointRelativeToCenter;
+export const convertCartesianLineToPolar = (line, centerPoint) => {
+  const [p1, p2] = line;
 
-  // When going from cartesian to polar, it struggles with negative numbers.
-  // We need to take quadrants into account!
-  const quadrant = getQuadrantForPoint(pointRelativeToCenter);
+  let p1quadrant, p2quadrant;
 
-  let radiansOffset = 0;
-  if (quadrant === 2 || quadrant === 3) {
-    radiansOffset += Math.PI;
-  } else if (quadrant === 4) {
-    radiansOffset += 2 * Math.PI;
+  let results = [];
+
+  if (true) {
+    const pointRelativeToCenter = [
+      p1[0] - centerPoint[0],
+      p1[1] - centerPoint[1],
+    ];
+
+    const [x, y] = pointRelativeToCenter;
+
+    // When going from cartesian to polar, it struggles with negative numbers.
+    // We need to take quadrants into account!
+    const quadrant = getQuadrantForPoint(pointRelativeToCenter);
+
+    p1quadrant = quadrant;
+
+    let radiansOffset = 0;
+    if (quadrant === 2 || quadrant === 3) {
+      radiansOffset += Math.PI;
+    } else if (quadrant === 4) {
+      radiansOffset += 2 * Math.PI;
+    }
+
+    const radius = Math.sqrt(x ** 2 + y ** 2);
+    let theta = Math.atan(y / x) + radiansOffset;
+
+    results.push([theta, radius]);
   }
 
-  const radius = Math.sqrt(x ** 2 + y ** 2);
-  let theta = Math.atan(y / x) + radiansOffset;
+  if (true) {
+    const pointRelativeToCenter = [
+      p2[0] - centerPoint[0],
+      p2[1] - centerPoint[1],
+    ];
 
-  // If this point IS our center point, theta will be NaN.
-  // Instead let's just make it 0.
-  if (isNaN(theta)) {
-    theta = 0;
+    const [x, y] = pointRelativeToCenter;
+
+    // When going from cartesian to polar, it struggles with negative numbers.
+    // We need to take quadrants into account!
+    const quadrant = getQuadrantForPoint(pointRelativeToCenter);
+
+    p2quadrant = quadrant;
+
+    let radiansOffset = 0;
+    if (quadrant === 2 || quadrant === 3) {
+      radiansOffset += Math.PI;
+    } else if (quadrant === 4) {
+      radiansOffset += 2 * Math.PI;
+    }
+
+    const radius = Math.sqrt(x ** 2 + y ** 2);
+    let theta = Math.atan(y / x) + radiansOffset;
+
+    results.push([theta, radius]);
   }
 
-  return [theta, radius];
+  return results;
 };
+
+// export const convertCartesianLineToPolar = (line, centerPoint) => {
+//   const [p1, p2] = line;
+
+//   return [
+//     convertCartesianToPolar(p1, centerPoint),
+//     convertCartesianToPolar(p2, centerPoint, false),
+//   ];
+// };
 
 export const convertPolarToCartesian = ([θ, radius]) => {
   const x = radius * Math.cos(θ);
