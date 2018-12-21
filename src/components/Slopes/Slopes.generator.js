@@ -48,7 +48,7 @@ const getRowOffset = (
   polarRatio
 ) => {
   // TODO: variable?
-  const POLAR_HOLE = 50;
+  const POLAR_HOLE = 30;
 
   const cartesianValue =
     height - verticalMargin * 2 - rowIndex * distanceBetweenRows;
@@ -74,9 +74,16 @@ const getSampleCoordinates = ({
   omegaRatio,
   omegaRadiusSubtractAmount,
 }) => {
+  const cartesianY = normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset;
+
   const cartesianPoint = [
     sampleIndex * distanceBetweenSamples + horizontalMargin,
-    normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset,
+
+    mix(
+      cartesianY,
+      Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2) * rowOffset,
+      (1 - polarTanRatio) * (1 - polarRatio)
+    ),
   ];
 
   if (polarRatio === 0) {
@@ -124,18 +131,18 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   // Different rows have different damping amounts
   let damping;
   switch (rowIndex) {
-    // case 0:
-    // case 1:
-    //   damping = 0.05;
-    //   break;
-    // case 2:
-    // case 3:
-    //   damping = 0.1;
-    //   break;
-    // case 4:
-    // case 5:
-    //   damping = 0.25;
-    //   break;
+    case 0:
+    case 1:
+      damping = 0.05;
+      break;
+    case 2:
+    case 3:
+      damping = 0.1;
+      break;
+    case 4:
+    case 5:
+      damping = 0.25;
+      break;
     default:
       damping = Math.abs(perlin2(rowIndex + 0.1234, rowIndex * 1.5)) + 0.5;
   }
@@ -292,8 +299,6 @@ const sketch = ({
   });
 
   lines = flatten(lines).filter(line => !!line);
-
-  lines = groupPolylines(lines);
 
   if (DEBUG_PERF) {
     console.info(performance.now() - start);

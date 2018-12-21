@@ -23,11 +23,11 @@ const SlopesContainer = () => {
   const exportWidth = exportHeight * (8.5 / 11);
 
   // High-level "Parameters", tweakable settings
-  const [perspective, setPerspective] = useState(69);
+  const [perspective, setPerspective] = useState(100);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(100);
+  const [polarAmount, setPolarAmount] = useState(62);
   const [omega, setOmega] = useState(0);
-  const [splitUniverse, setSplitUniverse] = useState(0);
+  const [splitUniverse, setSplitUniverse] = useState(1);
 
   const params = { perspective, spikyness, polarAmount, omega, splitUniverse };
 

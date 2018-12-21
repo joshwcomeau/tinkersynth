@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { clipLinesWithMargin } from '../../helpers/line.helpers';
+import {
+  clipLinesWithMargin,
+  groupPolylines,
+  retraceLines,
+} from '../../helpers/line.helpers';
 import { polylinesToSVG } from '../../vendor/polylines';
 
 import generator from './Slopes.generator';
@@ -62,8 +66,15 @@ const SlopesExport = ({ width, height, ...params }: Props) => {
     ...drawingVariables,
   });
 
+  lines = groupPolylines(lines);
+
   lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
 
+  console.log(lines.length);
+
+  lines = retraceLines(lines, 4);
+
+  console.log(lines.length);
   const svgMarkup = polylinesToSVG(lines, { width, height });
 
   return (

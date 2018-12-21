@@ -138,6 +138,23 @@ export const groupPolylines = lines => {
   }, []);
 };
 
+export const retraceLines = (polylines, numOfStrokes = 4) => {
+  return polylines.reduce((acc, polyline) => {
+    for (let i = 0; i < numOfStrokes; i++) {
+      // Every 2nd stroke should be reversed, to provide a back-and-forth
+      // motion.
+      const reverseStep = i % 2 !== 0;
+
+      if (reverseStep) {
+        acc.push([...polyline].reverse());
+      } else {
+        acc.push(polyline);
+      }
+    }
+    return acc;
+  }, []);
+};
+
 /**
  * Given 4 points for a cubic bezier curve, figure out the X/Y values for
  * `t`, a number from 0-1 representing progress.

@@ -49,9 +49,11 @@ export const occludeLineIfNecessary = (
 
   const centerPoint = [width / 2, height / 2];
 
+  const mixRatio = polarRatio > 0.5 ? 1 : polarRatio * 2;
+
   const occlusionPoint = [
-    mix(centerPoint[0], cartesianOcclusionPoint[0], polarRatio),
-    mix(centerPoint[1], cartesianOcclusionPoint[1], polarRatio),
+    mix(centerPoint[0], cartesianOcclusionPoint[0], mixRatio),
+    mix(centerPoint[1], cartesianOcclusionPoint[1], mixRatio),
   ];
 
   const polarLine = convertCartesianLineToPolar(line, occlusionPoint);
@@ -224,7 +226,9 @@ export const occludeLineIfNecessary = (
         intersectingLine[1][1]
       );
 
-      becomeOccludedAt = [point.x, point.y];
+      if (point) {
+        becomeOccludedAt = [point.x, point.y];
+      }
     }
 
     end = becomeOccludedAt;
@@ -262,7 +266,9 @@ export const occludeLineIfNecessary = (
         intersectingLine[1][1]
       );
 
-      breakFreeAt = [point.x, point.y];
+      if (point) {
+        breakFreeAt = [point.x, point.y];
+      }
     }
 
     start = breakFreeAt;
@@ -324,7 +330,7 @@ export const getDampingAmountForSlopes = ({ sampleIndex, samplesPerRow }) => {
   // If we want to truly isolate the peaks to the center of the page, we need
   // to raise that effect exponentially.
   // 4 seems to do a good job imitating the harsh curve I was using before.
-  const DAMPING_STRENGTH = 1;
+  const DAMPING_STRENGTH = 2;
 
   return heightDampingAmount ** DAMPING_STRENGTH;
 };
