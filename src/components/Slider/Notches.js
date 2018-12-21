@@ -26,14 +26,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: ${props =>
-    props.position === 'left' ? 'flex-start' : 'flex-end'};
+  align-items: center;
 `;
 
 const Notch = styled.div`
-  width: 4px;
+  width: 6px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 1px;
 `;
 

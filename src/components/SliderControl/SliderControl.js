@@ -25,12 +25,11 @@ const SliderControl = ({
   max = 1,
   width,
   height,
-  spacing = 5,
+  spacing = 4,
   renderVisualization,
 }: Props) => {
   // The `width` provided is for the whole unit.
-  // Assume for now that our slider will always be 14px wide.
-  const sliderWidth = 14;
+  const sliderWidth = 28;
   const sliderHeight = height - spacing * 2;
 
   return (

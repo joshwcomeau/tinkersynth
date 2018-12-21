@@ -28,11 +28,11 @@ const Slider = ({
   min = 0,
   max = 1,
   orientation = 'vertical',
-  width = 14,
-  height = 90,
-  numOfNotches = 15,
-  handleWidth = 21,
-  handleHeight = 14,
+  width,
+  height,
+  numOfNotches = 18,
+  handleWidth = 30,
+  handleHeight = 21,
 }: Props) => {
   const [dragging, setDragging] = useState(false);
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
