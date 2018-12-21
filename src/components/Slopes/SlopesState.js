@@ -7,9 +7,9 @@ export const SlopesProvider = ({ children }) => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(100);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(62);
+  const [polarAmount, setPolarAmount] = useState(0);
   const [omega, setOmega] = useState(0);
-  const [splitUniverse, setSplitUniverse] = useState(1);
+  const [splitUniverse, setSplitUniverse] = useState(0);
 
   return (
     <SlopesContext.Provider

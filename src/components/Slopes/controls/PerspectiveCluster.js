@@ -5,10 +5,10 @@ import { InstrumentCluster } from '../../ControlPanel';
 import SliderControl from '../../SliderControl';
 import { SlopesContext } from '../SlopesState';
 
+import PerspectiveVisualization from './PerspectiveVisualization';
+
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
-
-  console.log(width);
 
   return (
     <InstrumentCluster>
@@ -19,7 +19,7 @@ const PerspectiveCluster = ({ width }) => {
         max={100}
         width={width}
         height={140}
-        renderVisualization={value => <div>{value}</div>}
+        renderVisualization={props => <PerspectiveVisualization {...props} />}
       />
     </InstrumentCluster>
   );

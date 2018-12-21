@@ -32,10 +32,17 @@ const SliderControl = ({
   const sliderWidth = 28;
   const sliderHeight = height - spacing * 2;
 
+  const visualizationWidth = width - sliderWidth - spacing * 4;
+  const visualizationHeight = height - spacing * 2;
+
   return (
     <Wrapper style={{ width, height }}>
       <VisualizationWrapper style={{ padding: spacing }}>
-        {renderVisualization(value)}
+        {renderVisualization({
+          value,
+          width: visualizationWidth,
+          height: visualizationHeight,
+        })}
       </VisualizationWrapper>
 
       <SliderWrapper style={{ padding: spacing }}>
