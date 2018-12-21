@@ -11,6 +11,66 @@ const prepColor = compose(
 );
 
 export const COLORS = {
+  red: {
+    300: prepColor({
+      hue: 5,
+      saturation: 90,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 0,
+      saturation: 100,
+      brightness: 85,
+    }),
+  },
+  yellow: {
+    300: prepColor({
+      hue: 54,
+      saturation: 80,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 44,
+      saturation: 100,
+      brightness: 100,
+    }),
+  },
+  green: {
+    300: prepColor({
+      hue: 150,
+      saturation: 80,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 160,
+      saturation: 100,
+      brightness: 80,
+    }),
+  },
+  blue: {
+    300: prepColor({
+      hue: 241,
+      saturation: 70,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 248,
+      saturation: 85,
+      brightness: 90,
+    }),
+  },
+  violet: {
+    300: prepColor({
+      hue: 300,
+      saturation: 85,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 315,
+      saturation: 90,
+      brightness: 95,
+    }),
+  },
   gray: {
     100: prepColor({
       hue: 0,
