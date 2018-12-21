@@ -2,30 +2,33 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { COLORS } from '../../constants';
+import { COLORS, UNIT } from '../../constants';
 
 import ScrewRow from './ScrewRow';
 
 type Props = {
+  width: number,
+  padding: number,
   children: React$Node,
 };
 
-const ControlPanel = ({ children }: Props) => {
+const ControlPanel = ({ width, padding, children }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper style={{ width }}>
       <TopPanel>
         <ScrewRow />
       </TopPanel>
-      <MainPanel>
-        <ScrewRow />
-        {children}
+
+      <ScrewRow />
+
+      <MainPanel style={{ padding }}>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
       </MainPanel>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  width: 600px;
   background: ${COLORS.gray[100]};
   box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.25);
 `;
@@ -35,9 +38,13 @@ const TopPanel = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
 `;
 
 const MainPanel = styled.div``;
+
+const ChildrenWrapper = styled.div`
+  display: flex;
+`;
 
 export default ControlPanel;

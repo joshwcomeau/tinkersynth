@@ -1,10 +1,11 @@
 // @flow
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
+import { Spring } from 'react-spring';
 
 import { renderPolylines } from '../../vendor/polylines';
 
 import transformParameters from './Slopes.params';
-
+import { SlopesContext } from './SlopesState';
 import Worker from './SlopesCanvas.worker.js';
 
 const worker = new Worker();
@@ -12,11 +13,6 @@ const worker = new Worker();
 type Props = {
   width: number,
   height: number,
-  perspective: number,
-  spikyness: number,
-  polarAmount: number,
-  omega: number,
-  splitUniverse: number,
 };
 
 const useCanvasDrawing = (
@@ -106,7 +102,7 @@ const useCanvasDrawing = (
   }, triggerUpdateOn);
 };
 
-const Slopes = ({
+const SlopesCanvas = ({
   width,
   height,
   perspective,
@@ -127,8 +123,6 @@ const Slopes = ({
 
   const devicePixelRatio = window.devicePixelRatio || 1;
 
-  useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
-
   // HACK: We need to scale our canvas by our devicePixelRatio. This is a 2-step
   // process:
   //  - Change the width/height/style.width/style.height
@@ -138,15 +132,32 @@ const Slopes = ({
   // using an offscreenCanvas, we don't have access to the canvas context here.
   // So I need to do that first step inline, and trust that the ctx.scale call
   // will exist in `SlopesCanvas.worker.js`.
+  const scaledWidth = width * devicePixelRatio;
+  const scaledHeight = height * devicePixelRatio;
+  const style = { width, height };
+
+  useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
 
   return (
     <canvas
-      width={width * devicePixelRatio}
-      height={height * devicePixelRatio}
-      style={{ width, height, boxShadow: '0px 4px 50px rgba(0, 0, 0, 0.25)' }}
+      width={scaledWidth}
+      height={scaledHeight}
+      style={style}
       ref={canvasRef}
     />
   );
 };
 
-export default React.memo(Slopes);
+const SlopesCanvasContainer = props => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <Spring to={slopesParams}>
+      {interpolatedParams => (
+        <SlopesCanvas {...interpolatedParams} {...props} />
+      )}
+    </Spring>
+  );
+};
+
+export default React.memo(SlopesCanvasContainer);

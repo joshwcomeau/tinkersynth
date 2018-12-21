@@ -1,5 +1,6 @@
 // @flow
-import { range } from '../utils';
+import { range, mix } from '../utils';
+
 const { clipPolylinesToBox } = require('canvas-sketch-util/geometry');
 const { lerp } = require('canvas-sketch-util/math');
 
@@ -194,3 +195,8 @@ export const getValuesForBezierCurve = ({
 
   return [x, y];
 };
+
+export const mixPoints = (p1, p2, ratio) => [
+  mix(p1[0], p2[0], ratio),
+  mix(p1[1], p2[1], ratio),
+];

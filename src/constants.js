@@ -54,6 +54,8 @@ export const COLORS = {
   }),
 };
 
+export const UNIT = 8;
+
 export const PRIMARY_BACKGROUND = COLORS.gray[100];
 
 export const FONT_WEIGHTS = {

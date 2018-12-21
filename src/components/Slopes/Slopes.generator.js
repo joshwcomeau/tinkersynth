@@ -1,4 +1,4 @@
-import { groupPolylines } from '../../helpers/line.helpers';
+import { mixPoints } from '../../helpers/line.helpers';
 import { normalize, range, flatten, mix } from '../../utils';
 import createNoiseGenerator from '../../vendor/noise';
 
@@ -59,7 +59,7 @@ const getRowOffset = (
 };
 
 const getSampleCoordinates = ({
-  value,
+  rowIndex,
   sampleIndex,
   width,
   height,
@@ -68,47 +68,13 @@ const getSampleCoordinates = ({
   rowOffset,
   rowHeight,
   horizontalMargin,
+  perlinRatio,
   polarRatio,
   polarTanRatio,
   polarTanMultiplier,
   omegaRatio,
   omegaRadiusSubtractAmount,
 }) => {
-  const cartesianY = normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset;
-
-  const cartesianPoint = [
-    sampleIndex * distanceBetweenSamples + horizontalMargin,
-
-    mix(
-      cartesianY,
-      Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2) * rowOffset,
-      (1 - polarTanRatio) * (1 - polarRatio)
-    ),
-  ];
-
-  if (polarRatio === 0) {
-    return cartesianPoint;
-  }
-
-  const polarPoint = plotAsPolarCoordinate({
-    point: cartesianPoint,
-    width,
-    height,
-    sampleIndex,
-    samplesPerRow,
-    omegaRatio,
-    omegaRadiusSubtractAmount,
-    polarTanRatio,
-    polarTanMultiplier,
-  });
-
-  return [
-    mix(polarPoint[0], cartesianPoint[0], polarRatio),
-    mix(polarPoint[1], cartesianPoint[1], polarRatio),
-  ];
-};
-
-const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
   // Perlin noise is a range of values. We need to find the value at this
   // particular point in the range.
   // Our sampleIndex ranges from, say, 0 to 500. We need to normalize that to
@@ -157,8 +123,47 @@ const getValueAtPoint = (sampleIndex, rowIndex, samplesPerRow, perlinRatio) => {
     samplesPerRow,
   });
 
-  return mixedValue * slopeDampingAmount;
+  // `value` is a number between -1 and 1, representing how far away from
+  // baseline this point is.
+  // Our next step is to convert that to cartesian coordinates, and take polar
+  // ratio into account.
+  let value = mixedValue * slopeDampingAmount;
+
+  const cartesianY = normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset;
+  const tangentY =
+    Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2) * rowOffset;
+
+  const cartesianPoint = [
+    sampleIndex * distanceBetweenSamples + horizontalMargin,
+
+    mix(tangentY, cartesianY, polarTanRatio),
+  ];
+
+  if (polarRatio === 0) {
+    return cartesianPoint;
+  }
+
+  const polarPoint = plotAsPolarCoordinate({
+    point: cartesianPoint,
+    width,
+    height,
+    sampleIndex,
+    samplesPerRow,
+    omegaRatio,
+    omegaRadiusSubtractAmount,
+    polarTanRatio,
+    polarTanMultiplier,
+  });
+
+  return mixPoints(polarPoint, cartesianPoint, polarRatio);
 };
+
+const getValueAtPoint = (
+  sampleIndex,
+  rowIndex,
+  samplesPerRow,
+  perlinRatio
+) => {};
 
 /**
  *
@@ -215,13 +220,6 @@ const sketch = ({
         return;
       }
 
-      const value = getValueAtPoint(
-        sampleIndex,
-        rowIndex,
-        samplesPerRow,
-        perlinRatio
-      );
-
       const rowOffset = getRowOffset(
         rowIndex,
         width,
@@ -235,8 +233,8 @@ const sketch = ({
         (width - horizontalMargin * 2) / samplesPerRow;
 
       let samplePoint = getSampleCoordinates({
-        value,
         sampleIndex,
+        rowIndex,
         width,
         height,
         samplesPerRow,
@@ -244,6 +242,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         horizontalMargin,
+        perlinRatio,
         polarRatio,
         polarTanRatio,
         polarTanMultiplier,
@@ -251,15 +250,9 @@ const sketch = ({
         omegaRadiusSubtractAmount,
       });
 
-      const previousValue = getValueAtPoint(
-        sampleIndex - 1,
-        rowIndex,
-        samplesPerRow,
-        perlinRatio
-      );
       const previousSamplePoint = getSampleCoordinates({
-        value: previousValue,
         sampleIndex: sampleIndex - 1,
+        rowIndex,
         width,
         height,
         samplesPerRow,
@@ -267,6 +260,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         horizontalMargin,
+        perlinRatio,
         polarRatio,
         polarTanRatio,
         polarTanMultiplier,
