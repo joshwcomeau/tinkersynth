@@ -9,7 +9,7 @@ import Grid from './Grid';
 const PerspectiveVisualization = ({ width, height, value }) => {
   const ratio = 1 - value / 100;
 
-  const gridHeight = height / 2;
+  const gridHeight = height * 0.75;
   const gridWidth = gridHeight * (4 / 3);
 
   const gridRotation = ratio * 75;
@@ -37,7 +37,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           style={{
             top: gridHeight * (1.5 / 6),
             left: gridWidth * (3 / 8),
-            transform: `rotateX(${-gridRotation}deg)`,
+            transform: `translateZ(1px) rotateX(${-gridRotation}deg)`,
           }}
         >
           <path
@@ -55,7 +55,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           style={{
             top: gridHeight * (1 / 6),
             left: gridWidth * (1 / 8),
-            transform: `rotateX(${-gridRotation}deg)`,
+            transform: `translateZ(1px) rotateX(${-gridRotation}deg)`,
           }}
         >
           <path
@@ -68,14 +68,13 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           />
         </Mountain>
         <Sun
-          width="16"
-          height="16"
+          width={gridWidth * 0.2}
           viewBox="0 0 16 16"
           style={{
             top: gridHeight * (2 / 6),
             left: gridWidth * (3 / 8),
-            transform: `translate3d(${ratio * 40}px, ${ratio * -90}px, ${ratio *
-              30 -
+            transform: `translate3d(${ratio * 60}px, ${ratio * -90}px, ${ratio *
+              40 -
               1}px) rotateX(${-gridRotation}deg) `,
           }}
         >
