@@ -14,7 +14,6 @@ type Props = {
 
 const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
   const handleSize = height;
-  const trackHoleSize = 4;
 
   const trackWidth = width * 0.35;
 
@@ -25,13 +24,6 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
     >
       <InnerWrapper width={trackWidth}>
         <Track />
-
-        <TrackEdge size={trackHoleSize} style={{ left: -trackHoleSize / 2 }} />
-        <TrackEdge
-          size={trackHoleSize}
-          style={{ left: trackWidth - trackHoleSize / 2 }}
-        />
-
         <HandleWrapper
           size={handleSize}
           style={{
@@ -76,18 +68,6 @@ const Track = styled.div`
   margin: auto;
   background: ${COLORS.gray[100]};
   border-radius: 2px;
-`;
-
-const TrackEdge = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  margin: auto;
-  background: ${COLORS.gray[100]};
-  border-radius: 50%;
-  /* transform: translate(-50%, -50%); */
 `;
 
 const HandleWrapper = styled.div`
