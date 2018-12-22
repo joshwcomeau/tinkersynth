@@ -2,6 +2,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { COLORS } from '../../constants';
+
 import Slider from '../Slider';
 
 type Props = {
@@ -62,7 +64,7 @@ const SliderControl = ({
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  background: #2b2b2b;
+  background: ${COLORS.gray[900]};
   border-radius: ${BORDER_RADIUS}px;
 `;
 

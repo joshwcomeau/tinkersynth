@@ -5,22 +5,30 @@ import { range } from '../../../utils';
 const Grid = ({ width, height, rows, cols, ...lineProps }) => {
   return (
     <svg width={width} height={height} style={{ overflow: 'visible' }}>
-      {range(rows + 1).map(i => (
+      <rect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill="none"
+        {...lineProps}
+      />
+      {range(rows - 1).map(i => (
         <line
           key={i}
           x1={0}
-          y1={(i / rows) * height}
+          y1={((i + 1) / rows) * height}
           x2={width}
-          y2={(i / rows) * height}
+          y2={((i + 1) / rows) * height}
           {...lineProps}
         />
       ))}
-      {range(cols + 1).map(i => (
+      {range(cols - 1).map(i => (
         <line
           key={i}
-          x1={(i / cols) * width}
+          x1={((i + 1) / cols) * width}
           y1={0}
-          x2={(i / cols) * width}
+          x2={((i + 1) / cols) * width}
           y2={height}
           {...lineProps}
         />

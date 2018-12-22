@@ -12,7 +12,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
   const gridHeight = height / 2;
   const gridWidth = gridHeight * (4 / 3);
 
-  const gridRotation = ratio * 80;
+  const gridRotation = ratio * 75;
 
   return (
     <Wrapper style={{ width, height }}>
@@ -28,11 +28,66 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           width={gridWidth}
           rows={6}
           cols={8}
-          stroke={COLORS.blue[300]}
-          strokeOpacity={0.5}
+          stroke={COLORS.blue[700]}
           strokeWidth={2}
         />
-        <svg width={gridWidth} height={gridHeight} />
+        <Mountain
+          width={gridWidth * 0.5}
+          viewBox="0 0 46 30"
+          style={{
+            top: gridHeight * (1.5 / 6),
+            left: gridWidth * (3 / 8),
+            transform: `rotateX(${-gridRotation}deg)`,
+          }}
+        >
+          <path
+            d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1Z"
+            fill={COLORS.gray[900]}
+            stroke={COLORS.green[500]}
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </Mountain>
+        <Mountain
+          width={gridWidth * 0.5}
+          viewBox="0 0 46 46"
+          style={{
+            top: gridHeight * (1 / 6),
+            left: gridWidth * (1 / 8),
+            transform: `rotateX(${-gridRotation}deg)`,
+          }}
+        >
+          <path
+            d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1Z"
+            fill={COLORS.gray[900]}
+            stroke={COLORS.green[300]}
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </Mountain>
+        <Sun
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          style={{
+            top: gridHeight * (2 / 6),
+            left: gridWidth * (3 / 8),
+            transform: `translate3d(${ratio * 40}px, ${ratio * -90}px, ${ratio *
+              30 -
+              1}px) rotateX(${-gridRotation}deg) `,
+          }}
+        >
+          <circle
+            cx="8"
+            cy="8"
+            r="5"
+            stroke={COLORS.yellow[300]}
+            fill={COLORS.gray[900]}
+            strokeWidth={3}
+          />
+        </Sun>
       </GridWrapper>
     </Wrapper>
   );
@@ -53,6 +108,21 @@ const GridWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+`;
+
+const Mountain = styled.svg`
+  position: absolute;
+  z-index: 2;
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+  overflow: visible;
+`;
+
+const Sun = styled.svg`
+  position: absolute;
+  z-index: 1;
   transform-origin: bottom center;
   transform-style: preserve-3d;
 `;
