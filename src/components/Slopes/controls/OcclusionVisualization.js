@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { COLORS } from '../../../constants';
 
 import EndlessRotation from '../../EndlessRotation';
-import { Line1, Line2 } from './OcclusionLines';
+import OcclusionLine from './OcclusionLine';
 
 type Props = {
   width: number,
@@ -24,18 +24,27 @@ const OcclusionVisualization = ({ width, height, value }: Props) => {
     <Wrapper style={{ width, height }}>
       <InnerWrapper style={{ width: scaledLineWidth }}>
         <EndlessRotation
-          duration={10000}
-          repeatAfter={80}
-          style={{ position: 'absolute', top: -2 }}
+          duration={12500}
+          repeatAfter={100 * (4 / 5)}
+          style={{ position: 'absolute', top: 2 }}
         >
-          <Line2 height={height} color={COLORS.yellow[500]} />
+          <OcclusionLine
+            version={2}
+            height={height}
+            color={COLORS.yellow[500]}
+          />
         </EndlessRotation>
         <EndlessRotation
           duration={7500}
-          repeatAfter={80}
+          repeatAfter={100 * (4 / 5)}
           style={{ position: 'absolute' }}
         >
-          <Line1 height={height} color={COLORS.violet[500]} occluded={value} />
+          <OcclusionLine
+            version={1}
+            height={height}
+            color={COLORS.yellow[300]}
+            occluded={value}
+          />
         </EndlessRotation>
       </InnerWrapper>
     </Wrapper>

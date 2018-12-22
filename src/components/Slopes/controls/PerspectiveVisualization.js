@@ -41,8 +41,12 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           }}
         >
           <path
-            d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1Z"
+            d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1"
             fill={COLORS.gray[900]}
+          />
+          <path
+            d="M23 1C11.5 1 1 29 1 29 M45 29 C45 29 34.5 1 23 1"
+            fill="none"
             stroke={COLORS.green[500]}
             strokeWidth={2}
             strokeLinecap="round"
@@ -59,8 +63,12 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           }}
         >
           <path
-            d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1Z"
+            d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1"
             fill={COLORS.gray[900]}
+          />
+          <path
+            d="M23 1C15 1 1 45 1 45 M 45 45 C45 45 31 1 23 1"
+            fill="none"
             stroke={COLORS.green[300]}
             strokeWidth={2}
             strokeLinecap="round"

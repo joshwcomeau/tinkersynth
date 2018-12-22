@@ -2,9 +2,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { COLORS } from '../../constants';
+import { COLORS, UNIT } from '../../constants';
 
 import Toggle from '../Toggle';
+import useHoverElement from '../../hooks/hover-element';
 
 type RenderProps = {
   width: number,
@@ -28,14 +29,27 @@ const ToggleControl = ({
   updateValue,
   renderVisualization,
 }: Props) => {
-  const halfHeight = height / 2;
+  const visualizationRatio = 0.6;
+
+  const visualizationSpacing = UNIT / 2;
+  const visualizationWidth = width - visualizationSpacing * 2;
+  const visualizationHeight =
+    height * visualizationRatio - visualizationSpacing * 2;
+
+  const [ref, isHovering] = useHoverElement();
+
+  console.log(isHovering);
 
   return (
-    <Wrapper style={{ width, height }}>
-      <SubWrapper style={{ height: halfHeight }}>
-        {renderVisualization({ width, height: halfHeight, value })}
-      </SubWrapper>
-      <ToggleWrapper style={{ height: halfHeight }}>
+    <Wrapper ref={ref} style={{ width, height }}>
+      <VisualizationWrapper style={{ height: height * visualizationRatio }}>
+        {renderVisualization({
+          width: visualizationWidth,
+          height: visualizationHeight,
+          value,
+        })}
+      </VisualizationWrapper>
+      <ToggleWrapper style={{ height: height - height * visualizationRatio }}>
         <Toggle
           width={60}
           height={20}
@@ -54,13 +68,18 @@ const Wrapper = styled.div`
   border-radius: ${BORDER_RADIUS}px;
 `;
 
-const SubWrapper = styled.div`
+const VisualizationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: ${UNIT / 2}px;
 `;
 
-const ToggleWrapper = styled(SubWrapper)`
+const ToggleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: rgba(255, 255, 255, 0.1);
   border-radius: 0 ${BORDER_RADIUS}px ${BORDER_RADIUS}px 0;
 `;
