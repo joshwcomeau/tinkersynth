@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { COLORS } from '../../constants';
 import { clamp, normalize } from '../../utils';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
@@ -122,7 +123,7 @@ const Track = styled.div`
   margin: auto;
   width: 2px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: ${COLORS.gray[100]};
   border-radius: 2px;
 `;
 

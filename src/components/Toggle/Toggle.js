@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Handle from './Handle';
-import { UNIT } from '../../constants';
+import { COLORS } from '../../constants';
 
 type Props = {
   width: number,
@@ -14,6 +14,7 @@ type Props = {
 
 const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
   const handleSize = height;
+  const trackHoleSize = 4;
 
   const trackWidth = width * 0.35;
 
@@ -25,12 +26,18 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
       <InnerWrapper width={trackWidth}>
         <Track />
 
+        <TrackEdge size={trackHoleSize} style={{ left: -trackHoleSize / 2 }} />
+        <TrackEdge
+          size={trackHoleSize}
+          style={{ left: trackWidth - trackHoleSize / 2 }}
+        />
+
         <HandleWrapper
           size={handleSize}
           style={{
             transform: isToggled
-              ? `translateX(${trackWidth}px)`
-              : 'translateX(0px)',
+              ? `translateY(-1px) translateX(${trackWidth}px)`
+              : 'translateY(-1px) translateX(0px)',
           }}
         >
           <Handle size={handleSize} />
@@ -45,6 +52,7 @@ const Button = styled.button`
   border: none;
   padding: 0;
   margin: 0;
+  cursor: pointer;
 
   &:focus:not(.focus-visible) {
     outline: none;
@@ -63,11 +71,23 @@ const Track = styled.div`
   z-index: 0;
   top: 0;
   bottom: 0;
-  margin: auto;
   width: 100%;
   height: 2px;
-  background: rgba(255, 255, 255, 0.8);
+  margin: auto;
+  background: ${COLORS.gray[100]};
   border-radius: 2px;
+`;
+
+const TrackEdge = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  margin: auto;
+  background: ${COLORS.gray[100]};
+  border-radius: 50%;
+  /* transform: translate(-50%, -50%); */
 `;
 
 const HandleWrapper = styled.div`
