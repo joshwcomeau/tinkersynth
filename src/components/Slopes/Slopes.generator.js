@@ -32,7 +32,7 @@ const DEBUG_PERF = false;
 const PERLIN_RANGE_PER_ROW = 10;
 
 const DEFAULT_SAMPLES_PER_ROW = 250;
-const DEFAULT_NUM_OF_ROWS = 30;
+const DEFAULT_NUM_OF_ROWS = 40;
 
 /**
  *
@@ -191,6 +191,7 @@ const sketch = ({
   numOfRows = DEFAULT_NUM_OF_ROWS,
   samplesPerRow = DEFAULT_SAMPLES_PER_ROW,
 }) => {
+  console.log(numOfRows);
   let start;
   if (DEBUG_PERF) {
     start = performance.now();

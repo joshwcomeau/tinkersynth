@@ -279,6 +279,7 @@ describe('retraceLines', () => {
       [[0, 0], [2, 2]],
       [[2, 2], [0, 0]],
     ];
+
     expect(actualValue).toEqual(expectedValue);
   });
 });

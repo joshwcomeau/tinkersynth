@@ -8,7 +8,14 @@
 import { normalize } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
-type InputParameters = {};
+type InputParameters = {
+  height: number,
+  perspective: number,
+  spikyness: number,
+  polarAmount: number,
+  omega: number,
+  splitUniverse: number,
+};
 
 const transformParameters = ({
   height,
@@ -17,7 +24,7 @@ const transformParameters = ({
   polarAmount,
   omega,
   splitUniverse,
-}) => {
+}: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
   // interesting than the values from 95 to 100.
@@ -30,29 +37,19 @@ const transformParameters = ({
     controlPoint1: [1, 0],
   };
 
-  const [, distanceBetweenRowsNormalized] = getValuesForBezierCurve({
+  const [, perspectiveCurved] = getValuesForBezierCurve({
     ...bezierCurve,
     t: perspective / 100,
   });
+
   const distanceBetweenRows = normalize(
-    distanceBetweenRowsNormalized,
+    perspectiveCurved,
     0,
     1,
     0,
     height * 0.1
   );
-
-  const [, rowHeightMultiplierNormalized] = getValuesForBezierCurve({
-    ...bezierCurve,
-    t: perspective / 100,
-  });
-  const rowHeightMultiplier = normalize(
-    rowHeightMultiplierNormalized,
-    0,
-    1,
-    0.05,
-    0.25
-  );
+  const rowHeightMultiplier = normalize(perspectiveCurved, 0, 1, 0.05, 0.25);
 
   const rowHeight = 50 + height * rowHeightMultiplier;
 

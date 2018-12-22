@@ -44,7 +44,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
             d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1Z"
             fill={COLORS.gray[900]}
             stroke={COLORS.green[500]}
-            strokeWidth={3}
+            strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -62,7 +62,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
             d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1Z"
             fill={COLORS.gray[900]}
             stroke={COLORS.green[300]}
-            strokeWidth={3}
+            strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -73,9 +73,14 @@ const PerspectiveVisualization = ({ width, height, value }) => {
           style={{
             top: gridHeight * (2 / 6),
             left: gridWidth * (3 / 8),
-            transform: `translate3d(${ratio * 60}px, ${ratio * -90}px, ${ratio *
-              40 -
-              1}px) rotateX(${-gridRotation}deg) `,
+            transform: `
+              translate3d(
+                ${ratio * 60}px,
+                ${ratio * -90}px,
+                ${ratio * 40 - 1}px
+              )
+              rotateX(${-gridRotation}deg)
+            `,
           }}
         >
           <circle
@@ -84,7 +89,7 @@ const PerspectiveVisualization = ({ width, height, value }) => {
             r="5"
             stroke={COLORS.yellow[300]}
             fill={COLORS.gray[900]}
-            strokeWidth={3}
+            strokeWidth={2}
           />
         </Sun>
       </GridWrapper>

@@ -60,8 +60,8 @@ export const COLORS = {
     }),
     700: prepColor({
       hue: 248,
-      saturation: 70,
-      brightness: 60,
+      saturation: 50,
+      brightness: 50,
     }),
   },
   violet: {
