@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import { Spring } from 'react-spring';
 
+import { extractTypeFromObject } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
 
@@ -103,24 +104,8 @@ const useCanvasDrawing = (
   }, triggerUpdateOn);
 };
 
-const SlopesCanvas = ({
-  width,
-  height,
-  perspective,
-  spikyness,
-  polarAmount,
-  omega,
-  splitUniverse,
-}: Props) => {
+const SlopesCanvas = ({ width, height, ...params }: Props) => {
   const canvasRef = useRef(null);
-
-  const params = {
-    perspective,
-    spikyness,
-    polarAmount,
-    omega,
-    splitUniverse,
-  };
 
   const scaledCanvasProps = getScaledCanvasProps(width, height);
 
@@ -133,10 +118,12 @@ const SlopesCanvas = ({
 const SlopesCanvasContainer = props => {
   const slopesParams = useContext(SlopesContext);
 
+  const springParams = extractTypeFromObject(slopesParams, 'number');
+
   return (
-    <Spring to={slopesParams}>
+    <Spring to={springParams}>
       {interpolatedParams => (
-        <SlopesCanvas {...interpolatedParams} {...props} />
+        <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
       )}
     </Spring>
   );

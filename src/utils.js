@@ -253,3 +253,13 @@ export const convertPolarToCartesian = ([θ, radius]) => {
 };
 
 export const mix = (v1, v2, ratio) => v1 * ratio + v2 * (1 - ratio);
+
+export const extractTypeFromObject = (obj, type) => {
+  return Object.entries(obj).reduce((acc, [key, val]) => {
+    if (typeof val === type) {
+      acc[key] = val;
+    }
+
+    return acc;
+  }, {});
+};

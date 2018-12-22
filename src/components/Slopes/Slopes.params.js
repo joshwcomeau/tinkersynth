@@ -15,6 +15,7 @@ type InputParameters = {
   polarAmount: number,
   omega: number,
   splitUniverse: number,
+  enableOcclusion: boolean,
 };
 
 const transformParameters = ({
@@ -24,6 +25,7 @@ const transformParameters = ({
   polarAmount,
   omega,
   splitUniverse,
+  enableOcclusion,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -73,6 +75,7 @@ const transformParameters = ({
     polarTanMultiplier,
     omegaRatio,
     omegaRadiusSubtractAmount,
+    enableOcclusion,
   };
 };
 

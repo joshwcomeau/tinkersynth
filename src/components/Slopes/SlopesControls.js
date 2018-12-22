@@ -42,6 +42,7 @@ const SlopesControls = ({
       <Column>
         <PerspectiveCluster width={columnWidth} />
       </Column>
+
       <Column>
         <AvailableWidth>
           {columnWidth => (

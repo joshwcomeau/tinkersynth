@@ -74,6 +74,7 @@ const getSampleCoordinates = ({
   polarTanMultiplier,
   omegaRatio,
   omegaRadiusSubtractAmount,
+  enableOcclusion,
 }) => {
   // Perlin noise is a range of values. We need to find the value at this
   // particular point in the range.
@@ -188,10 +189,10 @@ const sketch = ({
   polarTanMultiplier,
   omegaRatio,
   omegaRadiusSubtractAmount,
+  enableOcclusion,
   numOfRows = DEFAULT_NUM_OF_ROWS,
   samplesPerRow = DEFAULT_SAMPLES_PER_ROW,
 }) => {
-  console.log(numOfRows);
   let start;
   if (DEBUG_PERF) {
     start = performance.now();
@@ -279,13 +280,15 @@ const sketch = ({
         )
         .filter(line => !!line);
 
-      line = occludeLineIfNecessary(
-        line,
-        previousLines,
-        width,
-        height,
-        polarRatio
-      );
+      if (enableOcclusion) {
+        line = occludeLineIfNecessary(
+          line,
+          previousLines,
+          width,
+          height,
+          polarRatio
+        );
+      }
 
       row.push(line);
     });
