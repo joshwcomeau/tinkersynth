@@ -1,15 +1,16 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
 type Props = {
   duration: number,
   delay: number,
   repeatAfter: number,
+  run: boolean,
   children: React$Node,
 };
 
-class PlanetCloud extends Component<Props> {
+class EndlessRotation extends PureComponent<Props> {
   static defaultProps = {
     duration: 5000,
     delay: 0,
@@ -19,7 +20,7 @@ class PlanetCloud extends Component<Props> {
   node: ?HTMLElement;
 
   componentDidMount() {
-    const { duration, delay, repeatAfter } = this.props;
+    const { duration, delay, run, repeatAfter } = this.props;
     const { node } = this;
 
     if (!node) {
@@ -38,7 +39,22 @@ class PlanetCloud extends Component<Props> {
     };
 
     // $FlowFixMe
-    node.animate(orbitAnimationFrames, orbitAnimationTiming);
+    this.nodeAnimation = node.animate(
+      orbitAnimationFrames,
+      orbitAnimationTiming
+    );
+
+    if (!run) {
+      this.nodeAnimation.pause();
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.props.run) {
+      this.nodeAnimation.pause();
+    } else {
+      this.nodeAnimation.play();
+    }
   }
 
   render() {
@@ -61,4 +77,4 @@ const Orbiter = styled.div`
   display: inline-block;
 `;
 
-export default PlanetCloud;
+export default EndlessRotation;

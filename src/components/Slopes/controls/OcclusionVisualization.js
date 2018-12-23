@@ -10,10 +10,16 @@ import OcclusionLine from './OcclusionLine';
 type Props = {
   width: number,
   height: number,
+  runAnimation: boolean,
   value: number,
 };
 
-const OcclusionVisualization = ({ width, height, value }: Props) => {
+const OcclusionVisualization = ({
+  width,
+  height,
+  runAnimation,
+  value,
+}: Props) => {
   const LINES_WIDTH = 193;
   const LINES_HEIGHT = 16;
 
@@ -26,6 +32,7 @@ const OcclusionVisualization = ({ width, height, value }: Props) => {
         <EndlessRotation
           duration={12500}
           repeatAfter={100 * (4 / 5)}
+          run={runAnimation}
           style={{ position: 'absolute', top: 2 }}
         >
           <OcclusionLine
@@ -37,6 +44,7 @@ const OcclusionVisualization = ({ width, height, value }: Props) => {
         <EndlessRotation
           duration={7500}
           repeatAfter={100 * (4 / 5)}
+          run={runAnimation}
           style={{ position: 'absolute' }}
         >
           <OcclusionLine

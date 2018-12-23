@@ -38,14 +38,13 @@ const ToggleControl = ({
 
   const [ref, isHovering] = useHoverElement();
 
-  console.log(isHovering);
-
   return (
     <Wrapper ref={ref} style={{ width, height }}>
       <VisualizationWrapper style={{ height: height * visualizationRatio }}>
         {renderVisualization({
           width: visualizationWidth,
           height: visualizationHeight,
+          runAnimation: isHovering,
           value,
         })}
       </VisualizationWrapper>
