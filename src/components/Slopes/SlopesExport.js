@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -11,6 +11,7 @@ import { polylinesToSVG } from '../../vendor/polylines';
 
 import generator from './Slopes.generator';
 import transformParameters from './Slopes.params';
+import { SlopesContext } from './SlopesState';
 
 type Props = {
   width: number,
@@ -23,12 +24,14 @@ type Props = {
   omega: number,
 };
 
-const SlopesExport = ({ width, height, ...params }: Props) => {
+const SlopesExport = ({ width, height }: Props) => {
+  const slopesParams = useContext(SlopesContext);
+
   const topMargin = (height / 11) * 1;
   const leftMargin = (width / 8.5) * 1;
   const margins = [topMargin, leftMargin];
 
-  const samplesPerRow = Math.ceil(width / 2);
+  const samplesPerRow = Math.ceil(width);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -55,7 +58,7 @@ const SlopesExport = ({ width, height, ...params }: Props) => {
 
   const drawingVariables = transformParameters({
     height,
-    ...params,
+    ...slopesParams,
   });
 
   let lines = generator({
