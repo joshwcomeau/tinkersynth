@@ -46,16 +46,10 @@ const transformParameters = ({
     t: perspective / 100,
   });
 
-  const distanceBetweenRows = normalize(
-    perspectiveCurved,
-    0,
-    1,
-    0,
-    height * 0.1
-  );
+  let distanceBetweenRows = normalize(perspectiveCurved, 0, 1, 0, height * 0.1);
   const rowHeightMultiplier = normalize(perspectiveCurved, 0, 1, 0.05, 0.25);
 
-  const rowHeight = 50 + height * rowHeightMultiplier;
+  let rowHeight = 50 + height * rowHeightMultiplier;
 
   const perlinRatio = (100 - spikyness) / 100;
 
@@ -68,10 +62,12 @@ const transformParameters = ({
   const omegaRatio = omega / 100;
   const omegaRadiusSubtractAmount = rowHeight;
 
-  const DEFAULT_NUM_OF_ROWS = 35;
-  const numOfRows = enableLineBoost
-    ? DEFAULT_NUM_OF_ROWS * 2
-    : DEFAULT_NUM_OF_ROWS;
+  let numOfRows = 35;
+  if (enableLineBoost) {
+    numOfRows = numOfRows * 2 - 1;
+    // rowHeight /= 2;÷
+    distanceBetweenRows /= 2;
+  }
 
   return {
     distanceBetweenRows,

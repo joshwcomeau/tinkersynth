@@ -32,8 +32,9 @@ const ToggleControl = ({
 
   const visualizationSpacing = UNIT / 2;
   const visualizationWidth = width - visualizationSpacing * 2;
-  const visualizationHeight =
-    height * visualizationRatio - visualizationSpacing * 2;
+  const visualizationHeight = Math.floor(
+    height * visualizationRatio - visualizationSpacing * 2
+  );
 
   return (
     <Wrapper style={{ width, height }}>
@@ -44,6 +45,7 @@ const ToggleControl = ({
           value,
         })}
       </VisualizationWrapper>
+
       <ToggleWrapper style={{ height: height - height * visualizationRatio }}>
         <Toggle
           width={60}

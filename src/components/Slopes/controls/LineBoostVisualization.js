@@ -1,6 +1,9 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { useSpring, animated } from 'react-spring/hooks';
+
+import { COLORS } from '../../../constants';
 
 type Props = {
   width: number,
@@ -8,8 +11,75 @@ type Props = {
   value: number,
 };
 
-const LineBoostVisualization = ({ width, height, value }: Props) => {
-  return null;
+const LineBoostVisualization = ({ width, value }: Props) => {
+  // NOTE: For this to be pixel-perfect, height should be a multiple of 23.
+  // I'm going to hard-set this value instead of using the prop, although if
+  // the layout changes this will need to be revisited.
+  const height = 23;
+
+  const isBoosted = value;
+
+  const outerConfig = { tension: 180, friction: 10 };
+  const innerConfig = { tension: 180, friction: 20 };
+
+  const sharedValues = {
+    x1: 1,
+    x2: width - 1,
+    strokeWidth: 2,
+    strokeLinecap: 'round',
+    style: {
+      transition: 'all 300ms',
+    },
+  };
+
+  const lineData = [
+    useSpring({
+      stroke: COLORS.red[300],
+      y1: isBoosted ? 1 : 4,
+      y2: isBoosted ? 1 : 4,
+      config: outerConfig,
+      ...sharedValues,
+    }),
+    useSpring({
+      stroke: COLORS.yellow[500],
+      y1: isBoosted ? 6 : 11,
+      y2: isBoosted ? 6 : 11,
+      config: innerConfig,
+      ...sharedValues,
+    }),
+    useSpring({
+      stroke: COLORS.blue[300],
+      y1: isBoosted ? 16 : 11,
+      y2: isBoosted ? 16 : 11,
+      ...sharedValues,
+    }),
+    useSpring({
+      stroke: COLORS.green[500],
+      y1: 11,
+      y2: 11,
+      config: innerConfig,
+      ...sharedValues,
+    }),
+
+    useSpring({
+      stroke: COLORS.violet[500],
+      y1: isBoosted ? 21 : 18,
+      y2: isBoosted ? 21 : 18,
+      config: outerConfig,
+      ...sharedValues,
+    }),
+  ];
+
+  // We have 5 lines, some of which will be animated.
+  // To make life easier, let's just use a spring for each one.
+
+  return (
+    <svg width={width} height={height} style={{ overflow: 'visible' }}>
+      {lineData.map((lineDatum, index) => (
+        <animated.line key={index} {...lineDatum} />
+      ))}
+    </svg>
+  );
 };
 
 export default LineBoostVisualization;
