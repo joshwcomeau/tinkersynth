@@ -13,23 +13,32 @@ type Props = {
 };
 
 const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
-  const handleSize = height;
+  const controlBorder = 2;
+  const controlPadding = 2;
+  const handleSize = height - controlPadding * 2 - controlBorder;
 
-  const trackWidth = width * 0.35;
+  const controlWidth = handleSize * 2 + controlPadding * 2;
+  const maxHandleTranslate = handleSize - controlPadding;
 
   return (
     <Button
       style={{ width, height }}
       onMouseDown={() => handleToggle(!isToggled)}
     >
-      <InnerWrapper width={trackWidth}>
-        <Track />
+      <InnerWrapper
+        style={{
+          width: controlWidth,
+          padding: controlPadding,
+          borderWidth: controlBorder,
+        }}
+      >
         <HandleWrapper
-          size={handleSize}
           style={{
+            width: handleSize,
+            height: handleSize,
             transform: isToggled
-              ? `translateY(-1px) translateX(${trackWidth}px)`
-              : 'translateY(-1px) translateX(0px)',
+              ? `translateX(${maxHandleTranslate}px)`
+              : 'translateX(0px)',
           }}
         >
           <Handle size={handleSize} />
@@ -53,28 +62,14 @@ const Button = styled.button`
 
 const InnerWrapper = styled.div`
   position: relative;
-  width: ${props => props.width}px;
   height: 100%;
   margin: auto;
-`;
-
-const Track = styled.div`
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-  margin: auto;
-  background: ${COLORS.gray[100]};
-  border-radius: 2px;
+  border-style: solid;
+  border-color: ${COLORS.gray[300]};
+  border-radius: 100px;
 `;
 
 const HandleWrapper = styled.div`
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: ${props => -props.size / 2}px;
   transition: transform 300ms;
 `;
 
