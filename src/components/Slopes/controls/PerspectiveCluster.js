@@ -11,6 +11,7 @@ import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
 import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
+import LineBoostVisualization from './LineBoostVisualization';
 
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
@@ -40,7 +41,13 @@ const PerspectiveCluster = ({ width }) => {
           updateValue={slopesParams.setEnableOcclusion}
           renderVisualization={props => <OcclusionVisualization {...props} />}
         />
-        <button style={{ width: buttonSize, height: buttonSize }}>?</button>
+        <ToggleControl
+          width={buttonSize}
+          height={buttonSize}
+          value={slopesParams.enableLineBoost}
+          updateValue={slopesParams.setEnableLineBoost}
+          renderVisualization={props => <LineBoostVisualization {...props} />}
+        />
       </Column>
     </InstrumentCluster>
   );

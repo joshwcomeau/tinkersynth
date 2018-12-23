@@ -12,6 +12,7 @@ export const SlopesProvider = ({ children }) => {
   const [splitUniverse, setSplitUniverse] = useState(0);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
+  const [enableLineBoost, setEnableLineBoost] = useState(false);
 
   return (
     <SlopesContext.Provider
@@ -28,6 +29,8 @@ export const SlopesProvider = ({ children }) => {
         setSplitUniverse,
         enableOcclusion,
         setEnableOcclusion,
+        enableLineBoost,
+        setEnableLineBoost,
       }}
     >
       {children}

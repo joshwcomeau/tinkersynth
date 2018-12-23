@@ -20,9 +20,9 @@ const OcclusionVisualization = ({ width, height, value }: Props) => {
   const scaledLineWidth =
     (OcclusionLine.viewboxWidth * height) / OcclusionLine.viewboxHeight;
 
-  const frontLineOffset = isOccluded ? -85 : -100;
+  const frontLineOffset = isOccluded ? -90 : -100;
 
-  const backLineOffset = isOccluded ? -40 : -70;
+  const backLineOffset = isOccluded ? -55 : -70;
 
   return (
     <Wrapper style={{ width, height }}>

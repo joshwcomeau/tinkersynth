@@ -16,6 +16,7 @@ type InputParameters = {
   omega: number,
   splitUniverse: number,
   enableOcclusion: boolean,
+  enableLineBoost: boolean,
 };
 
 const transformParameters = ({
@@ -26,6 +27,7 @@ const transformParameters = ({
   omega,
   splitUniverse,
   enableOcclusion,
+  enableLineBoost,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -66,6 +68,11 @@ const transformParameters = ({
   const omegaRatio = omega / 100;
   const omegaRadiusSubtractAmount = rowHeight;
 
+  const DEFAULT_NUM_OF_ROWS = 35;
+  const numOfRows = enableLineBoost
+    ? DEFAULT_NUM_OF_ROWS * 2
+    : DEFAULT_NUM_OF_ROWS;
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -76,6 +83,7 @@ const transformParameters = ({
     omegaRatio,
     omegaRadiusSubtractAmount,
     enableOcclusion,
+    numOfRows,
   };
 };
 

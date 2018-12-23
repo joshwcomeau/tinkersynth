@@ -32,7 +32,6 @@ const DEBUG_PERF = false;
 const PERLIN_RANGE_PER_ROW = 10;
 
 const DEFAULT_SAMPLES_PER_ROW = 250;
-const DEFAULT_NUM_OF_ROWS = 40;
 
 /**
  *
@@ -159,13 +158,6 @@ const getSampleCoordinates = ({
   return mixPoints(polarPoint, cartesianPoint, polarRatio);
 };
 
-const getValueAtPoint = (
-  sampleIndex,
-  rowIndex,
-  samplesPerRow,
-  perlinRatio
-) => {};
-
 /**
  *
  *
@@ -190,7 +182,7 @@ const sketch = ({
   omegaRatio,
   omegaRadiusSubtractAmount,
   enableOcclusion,
-  numOfRows = DEFAULT_NUM_OF_ROWS,
+  numOfRows,
   samplesPerRow = DEFAULT_SAMPLES_PER_ROW,
 }) => {
   let start;
