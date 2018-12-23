@@ -301,28 +301,54 @@ export const getPossiblyOccludingRowIndices = ({
   return possiblyOccludingRowIndices;
 };
 
-export const getDampingAmountForSlopes = ({ sampleIndex, samplesPerRow }) => {
-  const ratio = sampleIndex / samplesPerRow;
-  const isInFirstHalf = ratio < 0.5;
+export const getDampingAmountForSlopes = ({
+  sampleIndex,
+  samplesPerRow,
+  // TODO: Pass a % of the available canvas height instead of using rowIndex
+  // and numOfRows.
+  rowIndex,
+  numOfRows,
+  curve,
+}) => {
+  const horizontalRatio = sampleIndex / samplesPerRow;
+  const verticalRatio = rowIndex / numOfRows;
 
-  let bezierArgs = {};
-  if (isInFirstHalf) {
-    bezierArgs = {
-      startPoint: [0, 0],
-      controlPoint1: [1, 0],
-      controlPoint2: [1, 1],
-      endPoint: [1, 1],
-      t: ratio * 2,
-    };
-  } else {
-    bezierArgs = {
-      startPoint: [0, 1],
-      controlPoint1: [0, 1],
-      controlPoint2: [1, 0],
-      endPoint: [1, 0],
-      t: normalize(ratio, 0.5, 1),
-    };
-  }
+  const bezierArgs = {
+    ...curve,
+    t: horizontalRatio,
+  };
+
+  const [xVal, yVal] = getValuesForBezierCurve(bezierArgs);
+
+  const verticalDelta = Math.abs(verticalRatio - yVal);
+  const horizontalDelta = Math.abs(horizontalRatio - xVal);
+
+  // We want to return a number that signifies how much we want to dampen
+  // this point in the row.
+  // 0 means no damping, it can be its full self.
+  // 1 means it's a straight line.
+  // console.log(verticalDelta, horizontalDelta);
+
+  // const isInFirstHalf = ratio < 0.5;
+
+  // let bezierArgs = {};
+  // if (isInFirstHalf) {
+  //   bezierArgs = {
+  //     startPoint: [0, 0],
+  //     controlPoint1: [1, 0],
+  //     controlPoint2: [1, 1],
+  //     endPoint: [1, 1],
+  //     t: ratio * 2,
+  //   };
+  // } else {
+  //   bezierArgs = {
+  //     startPoint: [0, 1],
+  //     controlPoint1: [0, 1],
+  //     controlPoint2: [1, 0],
+  //     endPoint: [1, 0],
+  //     t: normalize(ratio, 0.5, 1),
+  //   };
+  // }
 
   const [, heightDampingAmount] = getValuesForBezierCurve(bezierArgs);
 

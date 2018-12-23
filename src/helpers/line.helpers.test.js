@@ -7,6 +7,7 @@ import {
   groupPolylines,
   getValuesForBezierCurve,
   retraceLines,
+  getDistanceToBezierCurve,
 } from './line.helpers';
 
 describe('isPointValid', () => {
@@ -178,87 +179,87 @@ describe('groupPolylines', () => {
 
 describe('getValuesForBezierCurve', () => {
   it('Finds the initial value for a quadratic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
-      t: 0,
     };
+    const ratio = 0;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [0, 0];
 
     expect(actualValue).toEqual(expectedValue);
   });
 
   it('Finds the final value for a quadratic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
-      t: 1,
     };
+    const ratio = 1;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [1, 1];
 
     expect(actualValue).toEqual(expectedValue);
   });
 
   it('Finds a midpoint value for a quadratic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
-      t: 0.5,
     };
+    const ratio = 0.5;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [0.75, 0.25];
 
     expect(actualValue).toEqual(expectedValue);
   });
 
   it('Finds the initial value for a cubic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
       controlPoint2: [0, 1],
-      t: 0,
     };
+    const ratio = 0;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [0, 0];
 
     expect(actualValue).toEqual(expectedValue);
   });
 
   it('Finds the final value for a cubic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
       controlPoint2: [0, 1],
-      t: 1,
     };
+    const ratio = 1;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [1, 1];
 
     expect(actualValue).toEqual(expectedValue);
   });
 
   it('Finds a midpoint value for a cubic bezier curve', () => {
-    const args = {
+    const curve = {
       startPoint: [0, 0],
       endPoint: [1, 1],
       controlPoint1: [1, 0],
       controlPoint2: [1, 0],
-      t: 0.25,
     };
+    const ratio = 0.25;
 
-    const actualValue = getValuesForBezierCurve(args);
+    const actualValue = getValuesForBezierCurve(curve, ratio);
     const expectedValue = [0.578125, 0.015625];
 
     expect(actualValue).toEqual(expectedValue);
@@ -281,5 +282,60 @@ describe('retraceLines', () => {
     ];
 
     expect(actualValue).toEqual(expectedValue);
+  });
+});
+
+describe('getDistanceToBezierCurve', () => {
+  it('finds a point on a straight line quadratic bezier', () => {
+    const curve = {
+      startPoint: [0.5, 0],
+      controlPoint1: [0.5, 0.5],
+      endPoint: [0.5, 1],
+    };
+
+    const point = [0, 0];
+
+    const expectedResult = 0.5;
+    const actualResult = getDistanceToBezierCurve({ point, curve });
+
+    expect(actualResult).toEqual(expectedResult);
+  });
+
+  it('finds a point on a straight line cubic bezier', () => {
+    const curve = {
+      startPoint: [0.5, 0],
+      controlPoint1: [0.5, 0.33],
+      controlPoint2: [0.5, 0.66],
+      endPoint: [0.5, 1],
+    };
+
+    const point = [0, 0];
+
+    const expectedResult = 0.5;
+    const actualResult = getDistanceToBezierCurve({
+      point,
+      curve,
+    });
+
+    expect(actualResult).toEqual(expectedResult);
+  });
+
+  it('finds a point on a curved cubic bezier', () => {
+    const curve = {
+      startPoint: [0, 0],
+      controlPoint1: [1, 0],
+      controlPoint2: [0, 1],
+      endPoint: [1, 1],
+    };
+
+    const point = [0.25, 0.25];
+
+    const expectedResult = 0.20366639388961552;
+    const actualResult = getDistanceToBezierCurve({
+      point,
+      curve,
+    });
+
+    expect(actualResult).toEqual(expectedResult);
   });
 });

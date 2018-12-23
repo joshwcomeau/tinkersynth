@@ -73,7 +73,7 @@ const SlopesExport = ({ width, height }: Props) => {
 
   lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
 
-  lines = retraceLines(lines, 3);
+  // lines = retraceLines(lines, 3);
 
   const svgMarkup = polylinesToSVG(lines, { width, height });
 

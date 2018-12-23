@@ -160,13 +160,10 @@ export const retraceLines = (polylines, numOfStrokes = 4) => {
  * Given 4 points for a cubic bezier curve, figure out the X/Y values for
  * `t`, a number from 0-1 representing progress.
  */
-export const getValuesForBezierCurve = ({
-  startPoint,
-  endPoint,
-  controlPoint1,
-  controlPoint2,
-  t,
-}) => {
+export const getValuesForBezierCurve = (
+  { startPoint, endPoint, controlPoint1, controlPoint2 },
+  t
+) => {
   let x, y;
   if (controlPoint2) {
     // Cubic Bezier curve
@@ -194,6 +191,27 @@ export const getValuesForBezierCurve = ({
   }
 
   return [x, y];
+};
+
+export const getDistanceToBezierCurve = ({ point, curve, resolution = 25 }) => {
+  let i = 0;
+  let closestDistance = Infinity;
+
+  while (i <= resolution) {
+    const ratio = i / resolution;
+
+    const bezierPoint = getValuesForBezierCurve(curve, ratio);
+
+    const distance = getDistanceBetweenPoints(point, bezierPoint);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+    }
+
+    i++;
+  }
+
+  return closestDistance;
 };
 
 export const mixPoints = (p1, p2, ratio) => [

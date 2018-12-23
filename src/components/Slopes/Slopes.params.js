@@ -41,10 +41,10 @@ const transformParameters = ({
     controlPoint1: [1, 0],
   };
 
-  const [, perspectiveCurved] = getValuesForBezierCurve({
-    ...bezierCurve,
-    t: perspective / 100,
-  });
+  const [, perspectiveCurved] = getValuesForBezierCurve(
+    bezierCurve,
+    perspective / 100
+  );
 
   let distanceBetweenRows = normalize(perspectiveCurved, 0, 1, 0, height * 0.1);
   const rowHeightMultiplier = normalize(perspectiveCurved, 0, 1, 0.05, 0.25);

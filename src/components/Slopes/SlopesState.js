@@ -5,14 +5,14 @@ export const SlopesContext = React.createContext({});
 
 export const SlopesProvider = ({ children }) => {
   // High-level "Parameters", tweakable settings
-  const [perspective, setPerspective] = useState(100);
+  const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(0);
+  const [polarAmount, setPolarAmount] = useState(100);
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
-  const [enableLineBoost, setEnableLineBoost] = useState(false);
+  const [enableLineBoost, setEnableLineBoost] = useState(true);
 
   return (
     <SlopesContext.Provider
