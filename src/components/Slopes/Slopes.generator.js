@@ -64,6 +64,7 @@ const getSampleCoordinates = ({
   height,
   samplesPerRow,
   distanceBetweenSamples,
+  numOfRows,
   rowOffset,
   rowHeight,
   horizontalMargin,
@@ -74,6 +75,7 @@ const getSampleCoordinates = ({
   omegaRatio,
   omegaRadiusSubtractAmount,
   enableOcclusion,
+  rowSimilarity = 1.5,
 }) => {
   // Perlin noise is a range of values. We need to find the value at this
   // particular point in the range.
@@ -89,7 +91,7 @@ const getSampleCoordinates = ({
 
   // We mix between two possible values: our normal slopy value, and a random
   // noise value.
-  const perlinValue = perlin2(perlinIndex, rowIndex * 1.5);
+  const perlinValue = perlin2(perlinIndex, (rowIndex / numOfRows) * 15);
   const rnd = (Math.random() - 0.5) * 0.5;
 
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
@@ -233,6 +235,7 @@ const sketch = ({
         height,
         samplesPerRow,
         distanceBetweenSamples,
+        numOfRows,
         rowOffset,
         rowHeight,
         horizontalMargin,
@@ -251,6 +254,7 @@ const sketch = ({
         height,
         samplesPerRow,
         distanceBetweenSamples,
+        numOfRows,
         rowOffset,
         rowHeight,
         horizontalMargin,

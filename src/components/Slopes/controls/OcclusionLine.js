@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import styled from 'styled-components';
+import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 
@@ -32,29 +32,31 @@ const OcclusionLine = ({
 }: Props) => {
   const path = PATHS[version];
 
+  const springProps = useSpring({
+    offset,
+    occludeOpacity: isOccluded ? 1 : 0,
+    config: { tension: 180, friction: 18 },
+  });
+
   return (
-    <svg
+    <animated.svg
       height={height}
       viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
       fill="none"
       style={{
-        transform: `translateX(${offset}px)`,
-        transition: `transform ${duration}ms`,
-        willChange: 'transform',
+        transform: springProps.offset.interpolate(o => `translateX(${o}px)`),
       }}
     >
-      <path
+      <animated.path
         d={path}
         fill={COLORS.gray[900]}
         style={{
-          opacity: isOccluded ? 1 : 0,
-          transition: `opacity ${duration}ms`,
-          willChange: 'opacity',
+          opacity: springProps.occludeOpacity,
         }}
       />
 
       <path d={path} stroke={color} />
-    </svg>
+    </animated.svg>
   );
 };
 

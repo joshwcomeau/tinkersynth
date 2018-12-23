@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
@@ -69,9 +68,6 @@ const LineBoostVisualization = ({ width, value }: Props) => {
       ...sharedValues,
     }),
   ];
-
-  // We have 5 lines, some of which will be animated.
-  // To make life easier, let's just use a spring for each one.
 
   return (
     <svg width={width} height={height} style={{ overflow: 'visible' }}>
