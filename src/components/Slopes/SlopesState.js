@@ -12,7 +12,7 @@ export const SlopesProvider = ({ children }) => {
   const [splitUniverse, setSplitUniverse] = useState(0);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
-  const [enableLineBoost, setEnableLineBoost] = useState(true);
+  const [enableLineBoost, setEnableLineBoost] = useState(false);
 
   const defaultPeaksCurve = {
     startPoint: [0.5, 0],

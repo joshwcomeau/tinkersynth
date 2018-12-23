@@ -4,11 +4,11 @@ import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
 
+import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SliderControl from '../../SliderControl';
 import ToggleControl from '../../ToggleControl';
 import Spacer from '../../Spacer';
-import { SlopesContext } from '../SlopesState';
 import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
 import LineBoostVisualization from './LineBoostVisualization';

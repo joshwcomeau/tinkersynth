@@ -1,8 +1,5 @@
 // @flow
 import React, { useContext } from 'react';
-import styled from 'styled-components';
-
-import { UNIT } from '../../../constants';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -17,22 +14,15 @@ const PerspectiveCluster = ({ width }) => {
   return (
     <InstrumentCluster>
       <BezierControl
-        value={slopesParams.perspective}
-        updateValue={slopesParams.setPerspective}
+        points={slopesParams.peaksCurve}
+        updatePoint={slopesParams.updatePointInPeaksCurve}
         min={0}
         max={100}
-        width={videoSliderWidth}
-        height={videoSliderHeight}
-        renderVisualization={props => <PerspectiveVisualization {...props} />}
+        width={bezierControlWidth}
+        height={bezierControlHeight}
       />
     </InstrumentCluster>
   );
 };
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
 
 export default PerspectiveCluster;

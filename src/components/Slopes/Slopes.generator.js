@@ -14,12 +14,12 @@ const { perlin2 } = createNoiseGenerator(5);
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = true;
+const DEBUG_PERF = false;
 
 const BEZIER = {
-  startPoint: [0.7, 0.7],
-  controlPoint1: [0.8, 0.8],
-  endPoint: [1, 1],
+  startPoint: [0, 1],
+  controlPoint1: [1, 1],
+  endPoint: [1, 0],
 };
 
 /**
@@ -48,6 +48,7 @@ const sketch = ({
   enableOcclusion,
   numOfRows,
   samplesPerRow,
+  peaksCurve,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -107,6 +108,7 @@ const sketch = ({
         polarTanMultiplier,
         omegaRatio,
         omegaRadiusSubtractAmount,
+        peaksCurve,
       });
 
       const previousSamplePoint = getSampleCoordinates({
@@ -126,6 +128,7 @@ const sketch = ({
         polarTanMultiplier,
         omegaRatio,
         omegaRadiusSubtractAmount,
+        peaksCurve,
       });
 
       let line = [previousSamplePoint, samplePoint];
@@ -205,6 +208,7 @@ const getSampleCoordinates = ({
   omegaRatio,
   omegaRadiusSubtractAmount,
   enableOcclusion,
+  peaksCurve,
   rowSimilarity = 1.5,
 }) => {
   // The avg. number of peaks per row depends on the `samplesPerRow`.
@@ -236,26 +240,6 @@ const getSampleCoordinates = ({
 
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
 
-  // Different rows have different damping amounts
-  let damping;
-  switch (rowIndex) {
-    case 0:
-    case 1:
-      damping = 0.05;
-      break;
-    case 2:
-    case 3:
-      damping = 0.1;
-      break;
-    case 4:
-    case 5:
-      damping = 0.25;
-      break;
-    default:
-      damping = Math.abs(perlin2(rowIndex + 0.1234, rowIndex * 1.5)) + 0.5;
-  }
-  mixedValue *= damping;
-
   // Unless explicitly disabled, we want the peak strength to follow a bezier
   // curve. For example, the classic Joy Division cover would have a straight
   // line down the middle where the peaks are strongest.
@@ -265,7 +249,7 @@ const getSampleCoordinates = ({
     samplesPerRow,
     rowIndex,
     numOfRows,
-    curve: BEZIER,
+    curve: peaksCurve,
   });
 
   // `value` is a number between -1 and 1, representing how far away from

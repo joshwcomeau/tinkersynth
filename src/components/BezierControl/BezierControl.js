@@ -27,24 +27,34 @@ const BezierControl = ({ points, updatePoint, width, height }: Props) => {
   return (
     <Wrapper style={{ width, height }}>
       <BezierCurve
-        viewBoxWidth={width}
-        viewBoxHeight={height}
+        viewBoxWidth={1}
+        viewBoxHeight={1}
         points={[points.startPoint, points.controlPoint1, points.endPoint]}
         updatePoint={(id, point) => {
+          // The BezierCurve returns a point based on ID, and the coordinates
+          // assume a top/left origin.
+          // Our curves are named differently, and are based from the
+          // bottom-left corner.
+          //
+          // TODO: It would be much nicer to just update the BezierCurve
+          // component to match this project.
           let name;
+
+          point = [point[0], 1 - point[1]];
+
           switch (id) {
-            case 0:
+            case 'p1':
               name = 'startPoint';
               break;
 
-            case 1:
+            case 'p2':
               name = 'controlPoint1';
               break;
-            case 2:
+            case 'p3':
               name = 'endPoint';
               break;
             default:
-              throw new Error('unsupported ID');
+              throw new Error('unsupported ID: ' + id);
           }
 
           updatePoint(name, point);
@@ -59,16 +69,6 @@ const Wrapper = styled.div`
   display: flex;
   background: ${COLORS.gray[900]};
   border-radius: ${CONTROL_RADIUS}px;
-`;
-
-const VisualizationWrapper = styled.div`
-  flex: 1;
-  height: 100%;
-`;
-
-const SliderWrapper = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
 export default BezierControl;

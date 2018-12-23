@@ -317,7 +317,7 @@ export const getDampingAmountForSlopes = ({
   const distanceToBezier = getDistanceToBezierCurve({
     point: [horizontalRatio, verticalRatio],
     curve,
-    resolution: 1,
+    resolution: 15,
   });
 
   const dampingAmount = 1 - distanceToBezier;

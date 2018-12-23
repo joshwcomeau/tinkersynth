@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { COLORS } from '../../constants';
 
-type Point = [number, number];
+type PointData = [number, number];
 
 type Props = {
   points: Array<[number, number]>,
@@ -13,7 +13,7 @@ type Props = {
   strokeColor?: string,
   strokeWidth?: number,
   grabbable?: boolean,
-  updatePoint: (id: number, point: Point) => void,
+  updatePoint: (id: number, point: PointData) => void,
 };
 
 class BezierCurve extends PureComponent<Props> {
@@ -34,7 +34,7 @@ class BezierCurve extends PureComponent<Props> {
     viewBoxWidth: 1000,
     viewBoxHeight: 250,
     strokeColor: COLORS.violet[500],
-    strokeWidth: 6,
+    strokeWidth: 0.025,
     grabbable: true,
   };
 
@@ -52,14 +52,7 @@ class BezierCurve extends PureComponent<Props> {
 
   handleDrag = ev => {
     // This event handles both mouseMove and touchMove.
-    let x, y;
-    if (ev.touches) {
-      ev.preventDefault();
-      const touch = ev.touches[0];
-      [x, y] = [touch.clientX, touch.clientY];
-    } else {
-      [x, y] = [ev.clientX, ev.clientY];
-    }
+    const [x, y] = [ev.clientX, ev.clientY];
 
     const { viewBoxWidth, viewBoxHeight, updatePoint, grabbable } = this.props;
     const { draggingPointId } = this.state;
@@ -88,7 +81,7 @@ class BezierCurve extends PureComponent<Props> {
       strokeWidth,
       grabbable,
     } = this.props;
-    const [p1, p2, p3, p4] = points;
+    const [p1, p2, p3, p4] = points.map(([x, y]) => [x, viewBoxHeight - y]);
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
 
@@ -110,8 +103,8 @@ class BezierCurve extends PureComponent<Props> {
 
     return (
       <Svg
+        ref={node => (this.node = node)}
         viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-        innerRef={node => (this.node = node)}
         onMouseMove={this.handleDrag}
         onTouchMove={this.handleDrag}
         onMouseUp={this.handleRelease}
@@ -124,7 +117,6 @@ class BezierCurve extends PureComponent<Props> {
         {curveType === 'cubic' && (
           <ControlLine x1={p3[0]} y1={p3[1]} x2={p4[0]} y2={p4[1]} />
         )}
-
         <path
           d={instructions}
           fill="none"
@@ -133,6 +125,8 @@ class BezierCurve extends PureComponent<Props> {
         />
 
         <EndPoint
+          rx={0.04}
+          ry={0.04}
           cx={p1[0]}
           cy={p1[1]}
           onMouseDown={this.handleSelectPoint('p1')}
@@ -142,6 +136,8 @@ class BezierCurve extends PureComponent<Props> {
         />
 
         <ControlPoint
+          rx={0.04}
+          ry={0.04}
           cx={p2[0]}
           cy={p2[1]}
           onMouseDown={this.handleSelectPoint('p2')}
@@ -152,6 +148,8 @@ class BezierCurve extends PureComponent<Props> {
 
         {curveType === 'cubic' && (
           <ControlPoint
+            rx={0.04}
+            ry={0.04}
             cx={p3[0]}
             cy={p3[1]}
             onMouseDown={this.handleSelectPoint('p3')}
@@ -162,6 +160,8 @@ class BezierCurve extends PureComponent<Props> {
         )}
 
         <EndPoint
+          rx={0.04}
+          ry={0.04}
           cx={lastPoint[0]}
           cy={lastPoint[1]}
           onMouseDown={this.handleSelectPoint(lastPointId)}
@@ -175,6 +175,8 @@ class BezierCurve extends PureComponent<Props> {
 }
 
 const ControlPoint = ({
+  rx,
+  ry,
   cx,
   cy,
   onMouseDown,
@@ -184,23 +186,21 @@ const ControlPoint = ({
 }) => (
   <g>
     <VisibleControlPoint
+      rx={rx}
+      ry={ry}
       cx={cx}
       cy={cy}
       grabbable={grabbable}
       isMobile={isMobile}
-    />
-    <InvisibleHandle
-      cx={cx}
-      cy={cy}
-      grabbable={grabbable}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
-      isMobile={isMobile}
     />
   </g>
 );
 
 const Svg = styled.svg`
+  width: 100%;
+  height: 100%;
   position: relative;
   overflow: visible;
   touch-action: none;
@@ -214,34 +214,19 @@ const Point = styled.ellipse`
   }
 `;
 
-const EndPoint = styled(Point).attrs({
-  rx: props => (props.isMobile ? 40 : 15),
-  ry: props => (props.isMobile ? 40 : 15),
-})`
+const EndPoint = styled(Point)`
   fill: ${props => (props.grabbable ? COLORS.pink[500] : COLORS.violet[500])};
 `;
 
-const VisibleControlPoint = styled(Point).attrs({
-  rx: props => (props.isMobile ? 20 : 8),
-  ry: props => (props.isMobile ? 20 : 8),
-})`
+const VisibleControlPoint = styled(Point)`
   fill: white;
   stroke: ${props => (props.grabbable ? COLORS.pink[500] : COLORS.violet[500])};
-  stroke-width: 3;
-`;
-
-const InvisibleHandle = styled(Point).attrs({
-  rx: props => (props.isMobile ? 40 : 25),
-  ry: props => (props.isMobile ? 40 : 25),
-})`
-  fill: transparent;
-  stroke: transparent;
+  stroke-width: 0.01;
 `;
 
 const ControlLine = styled.line`
   stroke: ${COLORS.gray[300]};
-  stroke-dasharray: 5, 5;
-  stroke-width: 2;
+  stroke-width: 0.005;
 `;
 
 export default BezierCurve;

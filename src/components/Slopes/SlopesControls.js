@@ -9,6 +9,7 @@ import SliderControl from '../SliderControl';
 import AvailableWidth from '../AvailableWidth';
 
 import PerspectiveCluster from './controls/PerspectiveCluster';
+import PeaksCluster from './controls/PeaksCluster';
 
 type Props = {
   perspective: number,
@@ -41,6 +42,7 @@ const SlopesControls = ({
     <ControlPanel width={width} padding={padding}>
       <Column>
         <PerspectiveCluster width={columnWidth} />
+        <PeaksCluster width={columnWidth} />
       </Column>
 
       <Column>
