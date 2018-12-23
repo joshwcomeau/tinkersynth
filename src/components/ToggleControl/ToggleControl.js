@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { COLORS, UNIT } from '../../constants';
 
 import Toggle from '../Toggle';
-import useHoverElement from '../../hooks/hover-element';
 
 type RenderProps = {
   width: number,
@@ -36,15 +35,12 @@ const ToggleControl = ({
   const visualizationHeight =
     height * visualizationRatio - visualizationSpacing * 2;
 
-  const [ref, isHovering] = useHoverElement();
-
   return (
-    <Wrapper ref={ref} style={{ width, height }}>
+    <Wrapper style={{ width, height }}>
       <VisualizationWrapper style={{ height: height * visualizationRatio }}>
         {renderVisualization({
           width: visualizationWidth,
           height: visualizationHeight,
-          runAnimation: isHovering,
           value,
         })}
       </VisualizationWrapper>

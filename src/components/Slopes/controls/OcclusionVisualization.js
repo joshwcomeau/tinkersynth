@@ -9,23 +9,16 @@ import OcclusionLine from './OcclusionLine';
 type Props = {
   width: number,
   height: number,
-  runAnimation: boolean,
   value: number,
 };
 
-const OcclusionVisualization = ({
-  width,
-  height,
-  runAnimation,
-  value,
-}: Props) => {
-  const LINES_WIDTH = 193;
-  const LINES_HEIGHT = 16;
-
+const OcclusionVisualization = ({ width, height, value }: Props) => {
   const isOccluded = value;
 
-  // Scale that to match the available height.
-  const scaledLineWidth = (LINES_WIDTH * height) / LINES_HEIGHT;
+  // Our SVG might be something like 200x10. We want to scale that width to
+  // match the provided height (eg. get `400` when our height is `20`).
+  const scaledLineWidth =
+    (OcclusionLine.viewboxWidth * height) / OcclusionLine.viewboxHeight;
 
   const frontLineOffset = isOccluded ? -85 : -100;
 

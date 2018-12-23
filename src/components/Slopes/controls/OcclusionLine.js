@@ -19,6 +19,9 @@ type Props = {
   duration?: number,
 };
 
+const VIEWBOX_WIDTH = 193;
+const VIEWBOX_HEIGHT = 16;
+
 const OcclusionLine = ({
   color,
   height,
@@ -32,7 +35,7 @@ const OcclusionLine = ({
   return (
     <svg
       height={height}
-      viewBox="0 0 193 16"
+      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
       fill="none"
       style={{
         transform: `translateX(${offset}px)`,
@@ -54,5 +57,8 @@ const OcclusionLine = ({
     </svg>
   );
 };
+
+OcclusionLine.viewboxWidth = VIEWBOX_WIDTH;
+OcclusionLine.viewboxHeight = VIEWBOX_HEIGHT;
 
 export default OcclusionLine;
