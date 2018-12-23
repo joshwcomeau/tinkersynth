@@ -66,6 +66,18 @@ export const COLORS = {
   },
   violet: {
     300: prepColor({
+      hue: 270,
+      saturation: 90,
+      brightness: 100,
+    }),
+    500: prepColor({
+      hue: 265,
+      saturation: 90,
+      brightness: 90,
+    }),
+  },
+  pink: {
+    300: prepColor({
       hue: 300,
       saturation: 85,
       brightness: 100,
@@ -120,6 +132,7 @@ export const COLORS = {
 };
 
 export const UNIT = 8;
+export const CONTROL_RADIUS = 3;
 
 export const PRIMARY_BACKGROUND = COLORS.gray[100];
 

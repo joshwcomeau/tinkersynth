@@ -7,12 +7,25 @@ export const SlopesProvider = ({ children }) => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
-  const [polarAmount, setPolarAmount] = useState(100);
+  const [polarAmount, setPolarAmount] = useState(0);
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
   const [enableLineBoost, setEnableLineBoost] = useState(true);
+
+  const defaultPeaksCurve = {
+    startPoint: [0.5, 0],
+    controlPoint1: [0.5, 0.5],
+    endPoint: [0.5, 1],
+  };
+  const [peaksCurve, setPeaksCurve] = useState(defaultPeaksCurve);
+  const updatePointInPeaksCurve = (name, point) => {
+    setPeaksCurve({
+      ...peaksCurve,
+      [name]: point,
+    });
+  };
 
   return (
     <SlopesContext.Provider
@@ -31,6 +44,8 @@ export const SlopesProvider = ({ children }) => {
         setEnableOcclusion,
         enableLineBoost,
         setEnableLineBoost,
+        peaksCurve,
+        updatePointInPeaksCurve,
       }}
     >
       {children}

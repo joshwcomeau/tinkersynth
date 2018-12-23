@@ -76,6 +76,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "flow-bin": "^0.89.0",
     "worker-loader": "^2.0.0"
   },
   "jest": {

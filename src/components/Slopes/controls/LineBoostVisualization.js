@@ -61,7 +61,7 @@ const LineBoostVisualization = ({ width, value }: Props) => {
     }),
 
     useSpring({
-      stroke: COLORS.violet[500],
+      stroke: COLORS.violet[300],
       y1: isBoosted ? 21 : 18,
       y2: isBoosted ? 21 : 18,
       config: outerConfig,

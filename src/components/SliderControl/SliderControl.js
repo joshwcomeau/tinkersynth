@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { COLORS } from '../../constants';
+import { COLORS, CONTROL_RADIUS } from '../../constants';
 
 import Slider from '../Slider';
 
@@ -17,8 +17,6 @@ type Props = {
   spacing?: number,
   renderVisualization: (value: number) => React$Element,
 };
-
-const BORDER_RADIUS = 3;
 
 const SliderControl = ({
   value,
@@ -65,7 +63,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   background: ${COLORS.gray[900]};
-  border-radius: ${BORDER_RADIUS}px;
+  border-radius: ${CONTROL_RADIUS}px;
 `;
 
 const VisualizationWrapper = styled.div`
@@ -75,7 +73,7 @@ const VisualizationWrapper = styled.div`
 
 const SliderWrapper = styled.div`
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 ${BORDER_RADIUS}px ${BORDER_RADIUS}px 0;
+  border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
 export default SliderControl;

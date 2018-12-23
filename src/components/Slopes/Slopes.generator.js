@@ -14,12 +14,12 @@ const { perlin2 } = createNoiseGenerator(5);
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = false;
+const DEBUG_PERF = true;
 
 const BEZIER = {
-  startPoint: [0.5, 0],
-  controlPoint1: [0.5, 0.5],
-  endPoint: [0.5, 1],
+  startPoint: [0.7, 0.7],
+  controlPoint1: [0.8, 0.8],
+  endPoint: [1, 1],
 };
 
 /**

@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { COLORS, UNIT } from '../../constants';
+import { COLORS, UNIT, CONTROL_RADIUS } from '../../constants';
 
 import Toggle from '../Toggle';
 
@@ -17,9 +17,6 @@ type Props = {
   updateValue: (isToggled: boolean) => void,
   renderVisualization: (props: RenderProps) => React$Element,
 };
-
-// TODO: Make me a shared constant with SliderControl
-const BORDER_RADIUS = 3;
 
 const ToggleControl = ({
   width,
@@ -62,7 +59,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   background: ${COLORS.gray[900]};
-  border-radius: ${BORDER_RADIUS}px;
+  border-radius: ${CONTROL_RADIUS}px;
 `;
 
 const VisualizationWrapper = styled.div`
@@ -78,7 +75,7 @@ const ToggleWrapper = styled.div`
   justify-content: center;
 
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 ${BORDER_RADIUS}px ${BORDER_RADIUS}px 0;
+  border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
 export default ToggleControl;

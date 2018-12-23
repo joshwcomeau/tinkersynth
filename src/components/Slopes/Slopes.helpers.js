@@ -3,6 +3,7 @@ import { checkIntersection } from 'line-intersect';
 import {
   getSlopeAndInterceptForLine,
   getValuesForBezierCurve,
+  getDistanceToBezierCurve,
 } from '../../helpers/line.helpers';
 import {
   normalize,
@@ -313,52 +314,21 @@ export const getDampingAmountForSlopes = ({
   const horizontalRatio = sampleIndex / samplesPerRow;
   const verticalRatio = rowIndex / numOfRows;
 
-  const bezierArgs = {
-    ...curve,
-    t: horizontalRatio,
-  };
+  const distanceToBezier = getDistanceToBezierCurve({
+    point: [horizontalRatio, verticalRatio],
+    curve,
+    resolution: 1,
+  });
 
-  const [xVal, yVal] = getValuesForBezierCurve(bezierArgs);
-
-  const verticalDelta = Math.abs(verticalRatio - yVal);
-  const horizontalDelta = Math.abs(horizontalRatio - xVal);
-
-  // We want to return a number that signifies how much we want to dampen
-  // this point in the row.
-  // 0 means no damping, it can be its full self.
-  // 1 means it's a straight line.
-  // console.log(verticalDelta, horizontalDelta);
-
-  // const isInFirstHalf = ratio < 0.5;
-
-  // let bezierArgs = {};
-  // if (isInFirstHalf) {
-  //   bezierArgs = {
-  //     startPoint: [0, 0],
-  //     controlPoint1: [1, 0],
-  //     controlPoint2: [1, 1],
-  //     endPoint: [1, 1],
-  //     t: ratio * 2,
-  //   };
-  // } else {
-  //   bezierArgs = {
-  //     startPoint: [0, 1],
-  //     controlPoint1: [0, 1],
-  //     controlPoint2: [1, 0],
-  //     endPoint: [1, 0],
-  //     t: normalize(ratio, 0.5, 1),
-  //   };
-  // }
-
-  const [, heightDampingAmount] = getValuesForBezierCurve(bezierArgs);
+  const dampingAmount = 1 - distanceToBezier;
 
   // By default, our bezier curve damping has a relatively modest effect.
   // If we want to truly isolate the peaks to the center of the page, we need
   // to raise that effect exponentially.
   // 4 seems to do a good job imitating the harsh curve I was using before.
-  const DAMPING_STRENGTH = 2;
+  const DAMPING_STRENGTH = 5;
 
-  return heightDampingAmount ** DAMPING_STRENGTH;
+  return dampingAmount ** DAMPING_STRENGTH;
 };
 
 /** Given a cartesian point, figure out what that point would be in polar

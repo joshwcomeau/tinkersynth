@@ -193,7 +193,7 @@ export const getValuesForBezierCurve = (
   return [x, y];
 };
 
-export const getDistanceToBezierCurve = ({ point, curve, resolution = 25 }) => {
+export const getDistanceToBezierCurve = ({ point, curve, resolution = 1 }) => {
   let i = 0;
   let closestDistance = Infinity;
 
