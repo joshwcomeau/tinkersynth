@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { COLORS } from '../../../constants';
 
-import EndlessRotation from '../../EndlessRotation';
 import OcclusionLine from './OcclusionLine';
 
 type Props = {
@@ -23,37 +22,35 @@ const OcclusionVisualization = ({
   const LINES_WIDTH = 193;
   const LINES_HEIGHT = 16;
 
+  const isOccluded = value;
+
   // Scale that to match the available height.
   const scaledLineWidth = (LINES_WIDTH * height) / LINES_HEIGHT;
+
+  const frontLineOffset = isOccluded ? -85 : -100;
+
+  const backLineOffset = isOccluded ? -40 : -70;
 
   return (
     <Wrapper style={{ width, height }}>
       <InnerWrapper style={{ width: scaledLineWidth }}>
-        <EndlessRotation
-          duration={12500}
-          repeatAfter={100 * (4 / 5)}
-          run={runAnimation}
-          style={{ position: 'absolute', top: 2 }}
-        >
+        <div style={{ position: 'absolute', top: 2 }}>
           <OcclusionLine
             version={2}
             height={height}
             color={COLORS.yellow[500]}
+            offset={frontLineOffset}
           />
-        </EndlessRotation>
-        <EndlessRotation
-          duration={7500}
-          repeatAfter={100 * (4 / 5)}
-          run={runAnimation}
-          style={{ position: 'absolute' }}
-        >
+        </div>
+        <div style={{ position: 'absolute' }}>
           <OcclusionLine
             version={1}
             height={height}
             color={COLORS.yellow[300]}
-            occluded={value}
+            isOccluded={isOccluded}
+            offset={backLineOffset}
           />
-        </EndlessRotation>
+        </div>
       </InnerWrapper>
     </Wrapper>
   );

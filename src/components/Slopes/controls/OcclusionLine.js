@@ -14,21 +14,41 @@ type Props = {
   color: string,
   height: number,
   version: 1 | 2,
-  occluded: boolean,
+  isOccluded: boolean,
+  offset: number,
+  duration?: number,
 };
 
 const OcclusionLine = ({
   color,
   height,
   version,
-  occluded,
-  ...delegated
+  isOccluded,
+  offset,
+  duration = 250,
 }: Props) => {
   const path = PATHS[version];
 
   return (
-    <svg height={height} viewBox="0 0 193 16" fill="none" {...delegated}>
-      {occluded && <path d={path} fill={COLORS.gray[900]} />}
+    <svg
+      height={height}
+      viewBox="0 0 193 16"
+      fill="none"
+      style={{
+        transform: `translateX(${offset}px)`,
+        transition: `transform ${duration}ms`,
+        willChange: 'transform',
+      }}
+    >
+      <path
+        d={path}
+        fill={COLORS.gray[900]}
+        style={{
+          opacity: isOccluded ? 1 : 0,
+          transition: `opacity ${duration}ms`,
+          willChange: 'opacity',
+        }}
+      />
 
       <path d={path} stroke={color} />
     </svg>

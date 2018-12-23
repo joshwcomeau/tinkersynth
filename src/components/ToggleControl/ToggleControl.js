@@ -51,7 +51,7 @@ const ToggleControl = ({
       <ToggleWrapper style={{ height: height - height * visualizationRatio }}>
         <Toggle
           width={60}
-          height={24}
+          height={22}
           isToggled={value}
           handleToggle={updateValue}
         />

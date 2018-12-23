@@ -13,8 +13,8 @@ type Props = {
 };
 
 const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
-  const controlBorder = 2;
-  const controlPadding = 2;
+  const controlBorder = 1;
+  const controlPadding = 1;
   const handleSize = height - controlPadding * 2 - controlBorder;
 
   const controlWidth = handleSize * 2 + controlPadding * 2;
@@ -65,8 +65,9 @@ const InnerWrapper = styled.div`
   height: 100%;
   margin: auto;
   border-style: solid;
-  border-color: ${COLORS.gray[300]};
+  border-color: ${COLORS.gray[500]};
   border-radius: 100px;
+  background: rgba(0, 0, 0, 0.2);
 `;
 
 const HandleWrapper = styled.div`
