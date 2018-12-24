@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { UNIT } from '../../constants';
 
 import ControlPanel from '../ControlPanel';
-import SliderControl from '../SliderControl';
+import SliderVideoControl from '../SliderVideoControl';
 import AvailableWidth from '../AvailableWidth';
 
 import PerspectiveCluster from './controls/PerspectiveCluster';
@@ -50,7 +50,7 @@ const SlopesControls = ({
           {columnWidth => (
             <>
               <div style={{ padding: '2rem' }}>
-                <SliderControl
+                <SliderVideoControl
                   value={spikyness}
                   updateValue={setSpikyness}
                   min={0}
@@ -62,7 +62,7 @@ const SlopesControls = ({
               </div>
 
               <div style={{ padding: '2rem' }}>
-                <SliderControl
+                <SliderVideoControl
                   value={polarAmount}
                   updateValue={setPolarAmount}
                   min={0}
@@ -74,7 +74,7 @@ const SlopesControls = ({
               </div>
 
               <div style={{ padding: '2rem' }}>
-                <SliderControl
+                <SliderVideoControl
                   value={omega}
                   updateValue={setOmega}
                   min={0}
@@ -86,7 +86,7 @@ const SlopesControls = ({
               </div>
 
               <div style={{ padding: '2rem' }}>
-                <SliderControl
+                <SliderVideoControl
                   value={splitUniverse}
                   updateValue={setSplitUniverse}
                   min={0}

@@ -23,7 +23,8 @@ type Props = {
   numOfNotches?: number,
 };
 
-const HANDLE_BUFFER = 6;
+// TODO: Either use or remove HANDLE_BUFFER
+const HANDLE_BUFFER = 0;
 
 const Slider = ({
   value,

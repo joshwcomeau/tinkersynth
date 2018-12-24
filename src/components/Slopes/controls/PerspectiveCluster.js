@@ -6,7 +6,7 @@ import { UNIT } from '../../../constants';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
-import SliderControl from '../../SliderControl';
+import SliderVideoControl from '../../SliderVideoControl';
 import ToggleControl from '../../ToggleControl';
 import Spacer from '../../Spacer';
 import Column from '../../Column';
@@ -24,7 +24,7 @@ const PerspectiveCluster = ({ width }) => {
 
   return (
     <InstrumentCluster>
-      <SliderControl
+      <SliderVideoControl
         value={slopesParams.perspective}
         updateValue={slopesParams.setPerspective}
         min={0}

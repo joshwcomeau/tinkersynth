@@ -18,7 +18,7 @@ type Props = {
   renderVisualization: (value: number) => React$Element,
 };
 
-const SliderControl = ({
+const SliderVideoControl = ({
   value,
   updateValue,
   min = 0,
@@ -76,4 +76,4 @@ const SliderWrapper = styled.div`
   border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
-export default SliderControl;
+export default SliderVideoControl;
