@@ -1,8 +1,19 @@
 // @flow
 import React from 'react';
-import styled from 'styled-components';
 
-const Handle = ({ size }) => (
+import { COLORS } from '../../constants';
+
+type Props = {
+  size: number,
+  innerColor?: string,
+  outerColor?: string,
+};
+
+const RoundHandle = ({
+  size,
+  innerColor = COLORS.pink[300],
+  outerColor = COLORS.pink[300],
+}: Props) => (
   <svg
     height={size}
     viewBox="0 0 22 22"
@@ -10,12 +21,12 @@ const Handle = ({ size }) => (
     style={{ display: 'block' }}
   >
     <circle cx="11.2272" cy="11.4802" r="10" fill="#000000" fillOpacity="0.4" />
-    <circle cx="10" cy="10" r="10" fill="url(#toggle-handle-0)" />
+    <circle cx="10" cy="10" r="10" fill="url(#round-handle-0)" />
     <circle
       cx="9.5"
       cy="8.5"
       r="7.5"
-      fill="url(#toggle-handle-1)"
+      fill="url(#round-handle-1)"
       fillOpacity="0.5"
     />
     <circle
@@ -23,24 +34,24 @@ const Handle = ({ size }) => (
       cy="10"
       r="10"
       transform="rotate(-90 10 10)"
-      fill="url(#toggle-handle-2)"
+      fill="url(#round-handle-2)"
       fillOpacity="0.5"
       style={{ mixBlendMode: 'hard-light' }}
     />
     <defs>
       <radialGradient
-        id="toggle-handle-0"
+        id="round-handle-0"
         cx="0"
         cy="0"
         r="1"
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(10 10) rotate(90) scale(10)"
       >
-        <stop stopColor="#FF27FF" />
-        <stop offset="1" stopColor="#F218BC" />
+        <stop stopColor={innerColor} />
+        <stop offset="1" stopColor={outerColor} />
       </radialGradient>
       <linearGradient
-        id="toggle-handle-1"
+        id="round-handle-1"
         x1="4.14286"
         y1="-0.730769"
         x2="11.3164"
@@ -51,7 +62,7 @@ const Handle = ({ size }) => (
         <stop offset="0.684545" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
-        id="toggle-handle-2"
+        id="round-handle-2"
         x1="6"
         y1="30.6667"
         x2="12.9067"
@@ -65,4 +76,4 @@ const Handle = ({ size }) => (
   </svg>
 );
 
-export default Handle;
+export default RoundHandle;

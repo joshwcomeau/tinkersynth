@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Handle from './Handle';
+import RoundHandle from '../RoundHandle';
 import { COLORS } from '../../constants';
 
 type Props = {
@@ -41,7 +41,7 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
               : 'translateX(0px)',
           }}
         >
-          <Handle size={handleSize} />
+          <RoundHandle size={handleSize} />
         </HandleWrapper>
       </InnerWrapper>
     </Button>

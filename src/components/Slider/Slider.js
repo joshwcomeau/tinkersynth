@@ -6,7 +6,7 @@ import { COLORS } from '../../constants';
 import { clamp, normalize } from '../../utils';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
-import Handle from './Handle';
+import RectangularHandle from '../RectangularHandle';
 import Notches from './Notches';
 
 type Props = {
@@ -22,6 +22,8 @@ type Props = {
   height?: number,
   numOfNotches?: number,
 };
+
+const HANDLE_BUFFER = 6;
 
 const Slider = ({
   value,
@@ -76,10 +78,6 @@ const Slider = ({
   const handleMarginLeft = (width - handleWidth) / 2;
   const handleMarginTop = -handleHeight / 2;
 
-  const handleMouseDown = ev => {
-    setDragging(true);
-  };
-
   const handleDisplacement = normalize(value, min, max, height, 0);
 
   return (
@@ -89,14 +87,31 @@ const Slider = ({
         <Track />
         <Notches num={numOfNotches} position="right" />
       </Decorations>
-      <Handle
-        displacement={handleDisplacement}
-        width={handleWidth}
-        height={handleHeight}
-        style={{ left: handleMarginLeft, top: handleMarginTop }}
-        onMouseDown={handleMouseDown}
-        dragging={dragging}
-      />
+
+      <HandleWrapper
+        onMouseDown={ev => setDragging(true)}
+        style={{
+          width: handleWidth,
+          height: handleHeight,
+          left: handleMarginLeft,
+          top: handleMarginTop,
+          // Invisible padding, to make it easier to click
+          padding: HANDLE_BUFFER,
+          // We have to undo that padding in transform: translate, as well as apply
+          // the displacement.
+          transform: `translate(
+              ${-HANDLE_BUFFER}px,
+              ${handleDisplacement - HANDLE_BUFFER}px
+            )`,
+          cursor: dragging ? 'grabbing' : 'grab',
+        }}
+      >
+        <RectangularHandle
+          width={handleWidth}
+          height={handleHeight}
+          color={COLORS.pink[300]}
+        />
+      </HandleWrapper>
     </Wrapper>
   );
 };
@@ -104,6 +119,23 @@ const Slider = ({
 const Wrapper = styled.div`
   position: relative;
   border-radius: 3px;
+`;
+
+const HandleWrapper = styled.button`
+  position: absolute;
+  border: none;
+  background: transparent;
+  /*
+    The wrapper is given some padding, so that user clicks don't have to be
+    perfect. It's an invisible barrier around the handle.
+    We want this barrier to be considered as part of the width, otherwise it'll
+    shrink the actual handle! So we need to ditch border-box
+  */
+  box-sizing: content-box;
+
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 `;
 
 const Decorations = styled.div`
