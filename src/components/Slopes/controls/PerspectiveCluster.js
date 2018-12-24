@@ -9,6 +9,7 @@ import { InstrumentCluster } from '../../ControlPanel';
 import SliderControl from '../../SliderControl';
 import ToggleControl from '../../ToggleControl';
 import Spacer from '../../Spacer';
+import Column from '../../Column';
 import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
 import LineBoostVisualization from './LineBoostVisualization';
@@ -52,11 +53,5 @@ const PerspectiveCluster = ({ width }) => {
     </InstrumentCluster>
   );
 };
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
 
 export default PerspectiveCluster;
