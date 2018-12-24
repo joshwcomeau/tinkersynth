@@ -18,7 +18,7 @@ const Background = ({ width, height, squareSize }) => {
         cx={width * ((colIndex + 1) / numOfCols)}
         cy={height * ((rowIndex + 1) / numOfRows)}
         r={1}
-        fill={COLORS.gray[700]}
+        fill="rgba(255, 255, 255, 0.25)"
         fillOpacity={0.5}
         stroke={null}
       />
@@ -34,8 +34,8 @@ const Background = ({ width, height, squareSize }) => {
         ry={CONTROL_RADIUS}
         width={width}
         height={height}
-        fill="none"
-        stroke={COLORS.gray[700]}
+        fill="rgba(255, 255, 255, 0.05)"
+        stroke="rgba(255, 255, 255, 0.15)"
         strokeWidth={1}
       />
       {dots}
