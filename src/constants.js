@@ -65,6 +65,11 @@ export const COLORS = {
     }),
   },
   violet: {
+    100: prepColor({
+      hue: 275,
+      saturation: 80,
+      brightness: 100,
+    }),
     300: prepColor({
       hue: 270,
       saturation: 90,
@@ -86,6 +91,11 @@ export const COLORS = {
       hue: 315,
       saturation: 90,
       brightness: 95,
+    }),
+    700: prepColor({
+      hue: 320,
+      saturation: 90,
+      brightness: 85,
     }),
   },
   gray: {

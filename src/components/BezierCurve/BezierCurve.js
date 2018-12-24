@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { COLORS } from '../../constants';
+import { clamp, normalize } from '../../utils';
+
+import RoundHandle from '../RoundHandle';
 
 type PointData = [number, number];
 
 type Props = {
   points: Array<[number, number]>,
-  viewBoxWidth?: number,
-  viewBoxHeight?: number,
+  width: number,
+  height: number,
   strokeColor?: string,
   strokeWidth?: number,
-  grabbable?: boolean,
   updatePoint: (id: number, point: PointData) => void,
 };
 
@@ -21,43 +22,39 @@ class BezierCurve extends PureComponent<Props> {
     draggingPointId: null,
   };
 
-  static propTypes = {
-    points: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    viewBoxWidth: PropTypes.number,
-    viewBoxHeight: PropTypes.number,
-    strokeColor: PropTypes.string,
-    strokeWidth: PropTypes.number,
-    updatePoint: PropTypes.func,
-  };
-
   static defaultProps = {
-    viewBoxWidth: 1000,
-    viewBoxHeight: 250,
-    strokeColor: COLORS.violet[500],
-    strokeWidth: 0.025,
-    grabbable: true,
+    strokeColor: COLORS.pink[700],
+    strokeWidth: 6,
   };
 
   handleSelectPoint = pointId => () => {
-    if (this.props.grabbable) {
-      // TODO: Get distance from point center, so that clicking and dragging a
-      // new point doesn't center it on the cursor.
-      this.setState({ draggingPointId: pointId });
-    }
+    // TODO: Get distance from point center, so that clicking and dragging a
+    // new point doesn't center it on the cursor.
+    this.setState({ draggingPointId: pointId }, () => {
+      window.addEventListener('mousemove', this.handleDrag);
+      window.addEventListener('mouseup', this.handleRelease);
+
+      document.body.style.cursor = 'grabbing';
+    });
   };
 
   handleRelease = () => {
     this.setState({ draggingPointId: null });
+
+    window.removeEventListener('mousemove', this.handleDrag);
+    window.removeEventListener('mouseup', this.handleRelease);
+
+    document.body.style.cursor = null;
   };
 
   handleDrag = ev => {
     // This event handles both mouseMove and touchMove.
     const [x, y] = [ev.clientX, ev.clientY];
 
-    const { viewBoxWidth, viewBoxHeight, updatePoint, grabbable } = this.props;
+    const { width, height, updatePoint } = this.props;
     const { draggingPointId } = this.state;
 
-    if (!draggingPointId || !grabbable || !updatePoint) {
+    if (!draggingPointId || !updatePoint) {
       return;
     }
 
@@ -65,23 +62,33 @@ class BezierCurve extends PureComponent<Props> {
     const positionRelativeToSvg = [x - svgBB.left, y - svgBB.top];
 
     const positionWithinViewBox = [
-      (positionRelativeToSvg[0] * viewBoxWidth) / svgBB.width,
-      (positionRelativeToSvg[1] * viewBoxHeight) / svgBB.height,
+      (positionRelativeToSvg[0] * width) / svgBB.width,
+      (positionRelativeToSvg[1] * height) / svgBB.height,
     ];
 
-    updatePoint(draggingPointId, positionWithinViewBox);
+    const rawValue = [
+      normalize(positionWithinViewBox[0], 0, width),
+      1 - normalize(positionWithinViewBox[1], 0, height),
+    ];
+
+    rawValue[0] = clamp(rawValue[0], 0, 1);
+    rawValue[1] = clamp(rawValue[1], 0, 1);
+
+    updatePoint(draggingPointId, rawValue);
   };
 
   render() {
-    const {
-      points,
-      viewBoxWidth,
-      viewBoxHeight,
-      strokeColor,
-      strokeWidth,
-      grabbable,
-    } = this.props;
-    const [p1, p2, p3, p4] = points.map(([x, y]) => [x, viewBoxHeight - y]);
+    const { points, width, height, strokeColor, strokeWidth } = this.props;
+
+    // The data we receive is in "raw" form: values range from 0-1, and the
+    // coordinate system is inverted (the origin corner is bottom-left, not
+    // top-left).
+    //
+    // Transform this data to be usable in our SVG.
+    const [p1, p2, p3, p4] = points.map(([x, y]) => [
+      x * width,
+      (1 - y) * height,
+    ]);
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
 
@@ -101,15 +108,10 @@ class BezierCurve extends PureComponent<Props> {
 
     const isMobile = false;
 
+    const HANDLE_RADIUS = 10;
+
     return (
-      <Svg
-        ref={node => (this.node = node)}
-        viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-        onMouseMove={this.handleDrag}
-        onTouchMove={this.handleDrag}
-        onMouseUp={this.handleRelease}
-        onTouchEnd={this.handleRelease}
-      >
+      <Svg width={width} height={height} ref={node => (this.node = node)}>
         <ControlLine x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} />
         {curveType === 'quadratic' && (
           <ControlLine x1={p2[0]} y1={p2[1]} x2={p3[0]} y2={p3[1]} />
@@ -124,79 +126,52 @@ class BezierCurve extends PureComponent<Props> {
           strokeWidth={strokeWidth}
         />
 
-        <EndPoint
-          rx={0.04}
-          ry={0.04}
-          cx={p1[0]}
-          cy={p1[1]}
+        {/* Start point */}
+        <PointWrapper
           onMouseDown={this.handleSelectPoint('p1')}
-          onTouchStart={this.handleSelectPoint('p1')}
-          grabbable={grabbable}
-          isMobile={isMobile}
-        />
+          transform={`translate(${p1[0] - width / 2}, ${p1[1] -
+            HANDLE_RADIUS})`}
+        >
+          <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
+        </PointWrapper>
 
-        <ControlPoint
-          rx={0.04}
-          ry={0.04}
-          cx={p2[0]}
-          cy={p2[1]}
+        {/* Control point 1 */}
+        <PointWrapper
           onMouseDown={this.handleSelectPoint('p2')}
-          onTouchStart={this.handleSelectPoint('p2')}
-          grabbable={grabbable}
-          isMobile={isMobile}
-        />
-
-        {curveType === 'cubic' && (
-          <ControlPoint
-            rx={0.04}
-            ry={0.04}
-            cx={p3[0]}
-            cy={p3[1]}
-            onMouseDown={this.handleSelectPoint('p3')}
-            onTouchStart={this.handleSelectPoint('p3')}
-            grabbable={grabbable}
-            isMobile={isMobile}
+          transform={`translate(${p2[0] - width / 2}, ${p2[1] -
+            HANDLE_RADIUS})`}
+        >
+          <RoundHandle
+            id="bezier-control"
+            size={HANDLE_RADIUS * 2}
+            innerColor={COLORS.violet[100]}
+            outerColor={COLORS.violet[300]}
           />
+        </PointWrapper>
+
+        {/* Control point 2 - currently unused */}
+        {curveType === 'cubic' && (
+          <PointWrapper
+            onMouseDown={this.handleSelectPoint('p3')}
+            transform={`translate(${p3[0] - width / 2}, ${p3[1] -
+              HANDLE_RADIUS})`}
+          >
+            <RoundHandle size={HANDLE_RADIUS * 2} />
+          </PointWrapper>
         )}
 
-        <EndPoint
-          rx={0.04}
-          ry={0.04}
-          cx={lastPoint[0]}
-          cy={lastPoint[1]}
+        {/* End point */}
+        <PointWrapper
           onMouseDown={this.handleSelectPoint(lastPointId)}
-          onTouchStart={this.handleSelectPoint(lastPointId)}
-          grabbable={grabbable}
-          isMobile={isMobile}
-        />
+          transform={`translate(${lastPoint[0] - width / 2}, ${lastPoint[1] -
+            HANDLE_RADIUS})`}
+        >
+          <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+        </PointWrapper>
       </Svg>
     );
   }
 }
-
-const ControlPoint = ({
-  rx,
-  ry,
-  cx,
-  cy,
-  onMouseDown,
-  onTouchStart,
-  grabbable,
-  isMobile,
-}) => (
-  <g>
-    <VisibleControlPoint
-      rx={rx}
-      ry={ry}
-      cx={cx}
-      cy={cy}
-      grabbable={grabbable}
-      isMobile={isMobile}
-      onMouseDown={onMouseDown}
-      onTouchStart={onTouchStart}
-    />
-  </g>
-);
 
 const Svg = styled.svg`
   width: 100%;
@@ -206,27 +181,17 @@ const Svg = styled.svg`
   touch-action: none;
 `;
 
-const Point = styled.ellipse`
-  cursor: ${props => (props.grabbable ? '-webkit-grab' : 'not-allowed')};
+const PointWrapper = styled.g`
+  cursor: grab;
 
   &:active {
-    cursor: ${props => (props.grabbable ? '-webkit-grabbing' : 'not-allowed')};
+    cursor: grabbing;
   }
 `;
 
-const EndPoint = styled(Point)`
-  fill: ${props => (props.grabbable ? COLORS.pink[500] : COLORS.violet[500])};
-`;
-
-const VisibleControlPoint = styled(Point)`
-  fill: white;
-  stroke: ${props => (props.grabbable ? COLORS.pink[500] : COLORS.violet[500])};
-  stroke-width: 0.01;
-`;
-
 const ControlLine = styled.line`
-  stroke: ${COLORS.gray[300]};
-  stroke-width: 0.005;
+  stroke: ${COLORS.gray[700]};
+  stroke-width: 1;
 `;
 
 export default BezierCurve;

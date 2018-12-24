@@ -27,8 +27,8 @@ const BezierControl = ({ points, updatePoint, width, height }: Props) => {
   return (
     <Wrapper style={{ width, height }}>
       <BezierCurve
-        viewBoxWidth={1}
-        viewBoxHeight={1}
+        width={width}
+        height={height}
         points={[points.startPoint, points.controlPoint1, points.endPoint]}
         updatePoint={(id, point) => {
           // The BezierCurve returns a point based on ID, and the coordinates
@@ -39,8 +39,6 @@ const BezierControl = ({ points, updatePoint, width, height }: Props) => {
           // TODO: It would be much nicer to just update the BezierCurve
           // component to match this project.
           let name;
-
-          point = [point[0], 1 - point[1]];
 
           switch (id) {
             case 'p1':
