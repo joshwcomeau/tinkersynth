@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
-import { COLORS } from '../../constants';
+import { COLORS, CONTROL_RADIUS } from '../../constants';
 import { clamp, normalize } from '../../utils';
 
 import RoundHandle from '../RoundHandle';
+import Background from './Background';
 
 type PointData = [number, number];
 
@@ -16,6 +17,10 @@ type Props = {
   strokeWidth?: number,
   updatePoint: (id: number, point: PointData) => void,
 };
+
+const HANDLE_RADIUS = 10;
+const BORDER_WIDTH = 12;
+const DOT_SPACING = 15;
 
 class BezierCurve extends PureComponent<Props> {
   state = {
@@ -54,6 +59,9 @@ class BezierCurve extends PureComponent<Props> {
     const { width, height, updatePoint } = this.props;
     const { draggingPointId } = this.state;
 
+    const svgWidth = width - BORDER_WIDTH * 2;
+    const svgHeight = height - BORDER_WIDTH * 2;
+
     if (!draggingPointId || !updatePoint) {
       return;
     }
@@ -62,13 +70,13 @@ class BezierCurve extends PureComponent<Props> {
     const positionRelativeToSvg = [x - svgBB.left, y - svgBB.top];
 
     const positionWithinViewBox = [
-      (positionRelativeToSvg[0] * width) / svgBB.width,
-      (positionRelativeToSvg[1] * height) / svgBB.height,
+      (positionRelativeToSvg[0] * svgWidth) / svgBB.width,
+      (positionRelativeToSvg[1] * svgHeight) / svgBB.height,
     ];
 
     const rawValue = [
-      normalize(positionWithinViewBox[0], 0, width),
-      1 - normalize(positionWithinViewBox[1], 0, height),
+      normalize(positionWithinViewBox[0], 0, svgWidth),
+      1 - normalize(positionWithinViewBox[1], 0, svgHeight),
     ];
 
     rawValue[0] = clamp(rawValue[0], 0, 1);
@@ -80,14 +88,17 @@ class BezierCurve extends PureComponent<Props> {
   render() {
     const { points, width, height, strokeColor, strokeWidth } = this.props;
 
+    const svgWidth = width - BORDER_WIDTH * 2;
+    const svgHeight = height - BORDER_WIDTH * 2;
+
     // The data we receive is in "raw" form: values range from 0-1, and the
     // coordinate system is inverted (the origin corner is bottom-left, not
     // top-left).
     //
     // Transform this data to be usable in our SVG.
     const [p1, p2, p3, p4] = points.map(([x, y]) => [
-      x * width,
-      (1 - y) * height,
+      x * svgWidth,
+      (1 - y) * svgHeight,
     ]);
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
@@ -106,77 +117,91 @@ class BezierCurve extends PureComponent<Props> {
     const lastPoint = curveType === 'cubic' ? p4 : p3;
     const lastPointId = curveType === 'cubic' ? 'p4' : 'p3';
 
-    const isMobile = false;
-
-    const HANDLE_RADIUS = 10;
-
     return (
-      <Svg width={width} height={height} ref={node => (this.node = node)}>
-        <ControlLine x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} />
-        {curveType === 'quadratic' && (
-          <ControlLine x1={p2[0]} y1={p2[1]} x2={p3[0]} y2={p3[1]} />
-        )}
-        {curveType === 'cubic' && (
-          <ControlLine x1={p3[0]} y1={p3[1]} x2={p4[0]} y2={p4[1]} />
-        )}
-        <path
-          d={instructions}
-          fill="none"
-          stroke={strokeColor}
-          strokeWidth={strokeWidth}
-        />
-
-        {/* Start point */}
-        <PointWrapper
-          onMouseDown={this.handleSelectPoint('p1')}
-          transform={`translate(${p1[0] - width / 2}, ${p1[1] -
-            HANDLE_RADIUS})`}
+      <Wrapper style={{ width, height }}>
+        <Svg
+          width={svgWidth}
+          height={svgHeight}
+          ref={node => (this.node = node)}
         >
-          <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
-        </PointWrapper>
-
-        {/* Control point 1 */}
-        <PointWrapper
-          onMouseDown={this.handleSelectPoint('p2')}
-          transform={`translate(${p2[0] - width / 2}, ${p2[1] -
-            HANDLE_RADIUS})`}
-        >
-          <RoundHandle
-            id="bezier-control"
-            size={HANDLE_RADIUS * 2}
-            innerColor={COLORS.violet[100]}
-            outerColor={COLORS.violet[300]}
+          <Background
+            width={svgWidth}
+            height={svgHeight}
+            squareSize={DOT_SPACING}
           />
-        </PointWrapper>
 
-        {/* Control point 2 - currently unused */}
-        {curveType === 'cubic' && (
+          <ControlLine x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} />
+          {curveType === 'quadratic' && (
+            <ControlLine x1={p2[0]} y1={p2[1]} x2={p3[0]} y2={p3[1]} />
+          )}
+          {curveType === 'cubic' && (
+            <ControlLine x1={p3[0]} y1={p3[1]} x2={p4[0]} y2={p4[1]} />
+          )}
+          <path
+            d={instructions}
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth={strokeWidth}
+          />
+
+          {/* Start point */}
           <PointWrapper
-            onMouseDown={this.handleSelectPoint('p3')}
-            transform={`translate(${p3[0] - width / 2}, ${p3[1] -
+            onMouseDown={this.handleSelectPoint('p1')}
+            transform={`translate(${p1[0] - svgWidth / 2}, ${p1[1] -
               HANDLE_RADIUS})`}
           >
-            <RoundHandle size={HANDLE_RADIUS * 2} />
+            <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
           </PointWrapper>
-        )}
 
-        {/* End point */}
-        <PointWrapper
-          onMouseDown={this.handleSelectPoint(lastPointId)}
-          transform={`translate(${lastPoint[0] - width / 2}, ${lastPoint[1] -
-            HANDLE_RADIUS})`}
-        >
-          <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
-        </PointWrapper>
-      </Svg>
+          {/* End point */}
+          <PointWrapper
+            onMouseDown={this.handleSelectPoint(lastPointId)}
+            transform={`translate(${lastPoint[0] -
+              svgWidth / 2}, ${lastPoint[1] - HANDLE_RADIUS})`}
+          >
+            <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+          </PointWrapper>
+
+          {/* Control point 1 */}
+          <PointWrapper
+            onMouseDown={this.handleSelectPoint('p2')}
+            transform={`translate(${p2[0] - svgWidth / 2}, ${p2[1] -
+              HANDLE_RADIUS})`}
+          >
+            <RoundHandle
+              id="bezier-control"
+              size={HANDLE_RADIUS * 2}
+              innerColor={COLORS.violet[100]}
+              outerColor={COLORS.violet[300]}
+            />
+          </PointWrapper>
+
+          {/* Control point 2 - currently unused */}
+          {curveType === 'cubic' && (
+            <PointWrapper
+              onMouseDown={this.handleSelectPoint('p3')}
+              transform={`translate(${p3[0] - svgWidth / 2}, ${p3[1] -
+                HANDLE_RADIUS})`}
+            >
+              <RoundHandle size={HANDLE_RADIUS * 2} />
+            </PointWrapper>
+          )}
+        </Svg>
+      </Wrapper>
     );
   }
 }
 
+const Wrapper = styled.div`
+  border-width: ${BORDER_WIDTH}px;
+  border-style: solid;
+  border-color: ${COLORS.gray[900]};
+  border-radius: ${CONTROL_RADIUS}px;
+`;
+
 const Svg = styled.svg`
-  width: 100%;
-  height: 100%;
   position: relative;
+  display: block;
   overflow: visible;
   touch-action: none;
 `;

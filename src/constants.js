@@ -126,7 +126,7 @@ export const COLORS = {
     900: prepColor({
       hue: 0,
       saturation: 0,
-      brightness: 17,
+      brightness: 15,
     }),
   },
   white: prepColor({

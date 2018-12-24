@@ -1,0 +1,46 @@
+// @flow
+import React from 'react';
+
+import { range } from '../../utils';
+import { COLORS, CONTROL_RADIUS } from '../../constants';
+
+const Background = ({ width, height, squareSize }) => {
+  // We want to create a dotted backdrop. Ideally, we'd do this every 25px,
+  // but we want them to be evenly spaced, including at the edges... so we
+  // should choose a specific cell size that fits within our grid.
+  const numOfCols = Math.round(width / squareSize);
+  const numOfRows = Math.round(height / squareSize);
+
+  const dots = range(numOfRows - 1).map(rowIndex =>
+    range(numOfCols - 1).map(colIndex => (
+      <circle
+        key={colIndex}
+        cx={width * ((colIndex + 1) / numOfCols)}
+        cy={height * ((rowIndex + 1) / numOfRows)}
+        r={1}
+        fill={COLORS.gray[700]}
+        fillOpacity={0.5}
+        stroke={null}
+      />
+    ))
+  );
+
+  return (
+    <g>
+      <rect
+        x={0}
+        y={0}
+        rx={CONTROL_RADIUS}
+        ry={CONTROL_RADIUS}
+        width={width}
+        height={height}
+        fill="none"
+        stroke={COLORS.gray[700]}
+        strokeWidth={1}
+      />
+      {dots}
+    </g>
+  );
+};
+
+export default React.memo(Background);
