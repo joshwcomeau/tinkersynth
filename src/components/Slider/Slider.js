@@ -30,7 +30,7 @@ const Slider = ({
   value,
   updateValue,
   min = 0,
-  max = 1,
+  max = 100,
   orientation = 'vertical',
   width,
   height,

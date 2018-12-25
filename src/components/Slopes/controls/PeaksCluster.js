@@ -1,14 +1,15 @@
 // @flow
 import React, { useContext } from 'react';
 
-import { COLORS, CONTROL_RADIUS, UNIT } from '../../../constants';
+import { UNIT } from '../../../constants';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
-import Column from '../../Column';
+
+import PeaksCurveStrengthVisualization from './PeaksCurveStrengthVisualization';
 
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
@@ -28,8 +29,6 @@ const PerspectiveCluster = ({ width }) => {
       <BezierControl
         points={slopesParams.peaksCurve}
         updatePoint={slopesParams.updatePointInPeaksCurve}
-        min={0}
-        max={100}
         width={bezierControlWidth}
         height={bezierControlHeight}
       />
@@ -40,6 +39,13 @@ const PerspectiveCluster = ({ width }) => {
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
+        value={slopesParams.peaksCurveStrength}
+        updateValue={value => {
+          slopesParams.setPeaksCurveStrength(value);
+        }}
+        renderIcon={({ value, size }) => (
+          <PeaksCurveStrengthVisualization value={value} size={size} />
+        )}
       />
 
       <Spacer size={UNIT} />
@@ -48,6 +54,9 @@ const PerspectiveCluster = ({ width }) => {
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
+        renderIcon={({ value, size }) => (
+          <PeaksCurveStrengthVisualization value={value} size={size} />
+        )}
       />
     </InstrumentCluster>
   );

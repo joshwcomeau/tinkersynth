@@ -310,6 +310,7 @@ export const getDampingAmountForSlopes = ({
   rowIndex,
   numOfRows,
   curve,
+  curveStrength,
 }) => {
   const horizontalRatio = sampleIndex / samplesPerRow;
   const verticalRatio = rowIndex / numOfRows;
@@ -325,10 +326,7 @@ export const getDampingAmountForSlopes = ({
   // By default, our bezier curve damping has a relatively modest effect.
   // If we want to truly isolate the peaks to the center of the page, we need
   // to raise that effect exponentially.
-  // 4 seems to do a good job imitating the harsh curve I was using before.
-  const DAMPING_STRENGTH = 5;
-
-  return dampingAmount ** DAMPING_STRENGTH;
+  return dampingAmount ** curveStrength;
 };
 
 /** Given a cartesian point, figure out what that point would be in polar

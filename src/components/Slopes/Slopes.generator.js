@@ -16,12 +16,6 @@ const { perlin2 } = createNoiseGenerator(5);
 // of multiple approaches.
 const DEBUG_PERF = false;
 
-const BEZIER = {
-  startPoint: [0, 1],
-  controlPoint1: [1, 1],
-  endPoint: [1, 0],
-};
-
 /**
  *
  *
@@ -49,6 +43,7 @@ const sketch = ({
   numOfRows,
   samplesPerRow,
   peaksCurve,
+  peaksCurveStrength,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -109,6 +104,7 @@ const sketch = ({
         omegaRatio,
         omegaRadiusSubtractAmount,
         peaksCurve,
+        peaksCurveStrength,
       });
 
       const previousSamplePoint = getSampleCoordinates({
@@ -129,6 +125,7 @@ const sketch = ({
         omegaRatio,
         omegaRadiusSubtractAmount,
         peaksCurve,
+        peaksCurveStrength,
       });
 
       let line = [previousSamplePoint, samplePoint];
@@ -209,6 +206,7 @@ const getSampleCoordinates = ({
   omegaRadiusSubtractAmount,
   enableOcclusion,
   peaksCurve,
+  peaksCurveStrength,
   rowSimilarity = 1.5,
 }) => {
   // The avg. number of peaks per row depends on the `samplesPerRow`.
@@ -250,6 +248,7 @@ const getSampleCoordinates = ({
     rowIndex,
     numOfRows,
     curve: peaksCurve,
+    curveStrength: peaksCurveStrength,
   });
 
   // `value` is a number between -1 and 1, representing how far away from

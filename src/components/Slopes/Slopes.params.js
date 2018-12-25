@@ -29,6 +29,7 @@ const transformParameters = ({
   enableOcclusion,
   enableLineBoost,
   peaksCurve,
+  peaksCurveStrength,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -70,6 +71,19 @@ const transformParameters = ({
     distanceBetweenRows /= 2;
   }
 
+  peaksCurveStrength = normalize(peaksCurveStrength, 0, 100, 5, 0);
+  // We also want to plot this on a curve - we're essentially undoing the
+  // fact that this value is used as an exponent. There is definitely a better
+  // way to do this, but I can't think of it.
+  [, peaksCurveStrength] = getValuesForBezierCurve(
+    {
+      startPoint: [1, 0],
+      endPoint: [1, 1],
+      controlPoint1: [0, 0],
+    },
+    peaksCurveStrength
+  );
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -79,6 +93,7 @@ const transformParameters = ({
     polarTanMultiplier,
     numOfRows,
     omegaRatio,
+    peaksCurveStrength,
     // Some fields are just passed right through, no macros:
     omegaRadiusSubtractAmount,
     enableOcclusion,
