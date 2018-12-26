@@ -9,7 +9,7 @@ import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
-import PeaksCurveStrengthVisualization from './PeaksCurveStrengthVisualization';
+import PersonInflateVisualization from './PersonInflateVisualization';
 
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
@@ -44,20 +44,20 @@ const PerspectiveCluster = ({ width }) => {
           slopesParams.setPersonInflateAmount(value);
         }}
         renderIcon={({ value, size }) => (
-          <PeaksCurveStrengthVisualization value={value} size={size} />
+          <PersonInflateVisualization value={value} size={size} />
         )}
       />
 
       <Spacer size={UNIT} />
 
-      <SliderIconControl
+      {/* <SliderIconControl
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
         renderIcon={({ value, size }) => (
-          <PeaksCurveStrengthVisualization value={value} size={size} />
+          <PersonInflateVisualization value={value} size={size} />
         )}
-      />
+      /> */}
     </InstrumentCluster>
   );
 };

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { COLORS } from '../../../constants';
 import { normalize } from '../../../utils';
 
-const PeaksCurveStrengthVisualization = ({ value, size }) => {
+const PersonInflateVisualization = ({ value, size }) => {
   const bodyRx = normalize(value, 0, 100, 0.5, 8);
   const bodyRy = normalize(value, 0, 100, 5, 8.5);
 
@@ -43,30 +43,30 @@ const PeaksCurveStrengthVisualization = ({ value, size }) => {
         <line
           {...leftLegPoints}
           stroke={COLORS.green[300]}
-          stroke-width="2"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeLinecap="round"
         />
         {/* Right leg */}
         <line
           {...rightLegPoints}
           stroke={COLORS.green[300]}
-          stroke-width="2"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeLinecap="round"
         />
 
         {/* Left arm */}
         <line
           {...leftArmPoints}
           stroke={COLORS.green[300]}
-          stroke-width="2"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeLinecap="round"
         />
         {/* Right arm */}
         <line
           {...rightArmPoints}
           stroke={COLORS.green[300]}
-          stroke-width="2"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeLinecap="round"
         />
 
         {/* Body */}
@@ -96,7 +96,7 @@ const PeaksCurveStrengthVisualization = ({ value, size }) => {
           d="M20.6643 11.5275C18.5522 13.0041 15.8999 12.5663 14.6844 10.8275C13.4688 9.08867 13.9685 6.44741 16.0807 4.97084C18.1928 3.49428 20.8451 3.93207 22.0606 5.67089C23.2762 7.40971 22.7765 10.051 20.6643 11.5275Z"
           fill={COLORS.gray[900]}
           stroke={COLORS.green[300]}
-          stroke-width="2"
+          strokeWidth="2"
           transform={`translate(0 ${(value / 100) * -3})`}
         />
       </svg>
@@ -110,4 +110,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default PeaksCurveStrengthVisualization;
+export default PersonInflateVisualization;
