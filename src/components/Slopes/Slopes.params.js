@@ -29,7 +29,7 @@ const transformParameters = ({
   enableOcclusion,
   enableLineBoost,
   peaksCurve,
-  peaksCurveStrength,
+  personInflateAmount,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -71,17 +71,31 @@ const transformParameters = ({
     distanceBetweenRows /= 2;
   }
 
-  peaksCurveStrength = normalize(peaksCurveStrength, 0, 100, 5, 0);
-  // We also want to plot this on a curve - we're essentially undoing the
-  // fact that this value is used as an exponent. There is definitely a better
-  // way to do this, but I can't think of it.
-  [, peaksCurveStrength] = getValuesForBezierCurve(
+  // Transform our `personInflateAmount` to control how wide the effect of the
+  // peaks curve is.
+  //
+  // HACK: So, `peaksCurveStrength` is used as an exponent,
+  // `value ** peaksCurveStrength`. Because of that, having a linear scale
+  // for this value produces an exponential result:
+  //
+  // peaksCurveStrength     equation      result
+  // 1                      5 ** 1        5
+  // 2                      5 ** 2        25
+  // 3                      5 ** 3        125
+  //
+  // I want it to appear mostly linear, though, so I'm going to plot that
+  // input value on a curve. To offset this.
+  //
+  // Clearly a better solution would be to not use an exponent, and just scale
+  // this as I need... but whenever I try that i get wacky results, which
+  // makes me think I'm misunderstanding something... but anyway, it works?
+  const [, peaksCurveStrength] = getValuesForBezierCurve(
     {
       startPoint: [1, 0],
       endPoint: [1, 1],
       controlPoint1: [0, 0],
     },
-    peaksCurveStrength
+    normalize(personInflateAmount, 0, 100, 5, 0)
   );
 
   return {

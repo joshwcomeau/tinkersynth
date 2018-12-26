@@ -39,9 +39,9 @@ const PerspectiveCluster = ({ width }) => {
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
-        value={slopesParams.peaksCurveStrength}
+        value={slopesParams.personInflateAmount}
         updateValue={value => {
-          slopesParams.setPeaksCurveStrength(value);
+          slopesParams.setPersonInflateAmount(value);
         }}
         renderIcon={({ value, size }) => (
           <PeaksCurveStrengthVisualization value={value} size={size} />
