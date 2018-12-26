@@ -1,17 +1,12 @@
 import { checkIntersection } from 'line-intersect';
 
+import { getDistanceToBezierCurve } from '../../helpers/line.helpers';
 import {
-  getSlopeAndInterceptForLine,
-  getValuesForBezierCurve,
-  getDistanceToBezierCurve,
-} from '../../helpers/line.helpers';
-import {
+  clamp,
   normalize,
   getDistanceBetweenPoints,
   convertPolarToCartesian,
-  convertCartesianToPolar,
   convertCartesianLineToPolar,
-  getQuadrantForPoint,
   mix,
 } from '../../utils';
 
@@ -321,7 +316,11 @@ export const getDampingAmountForSlopes = ({
     resolution: 15,
   });
 
-  const dampingAmount = 1 - distanceToBezier;
+  // For some reason, `distanceToBezier` is capable of being juuuust over `1`.
+  // Like, 1.00004. Because of that, 'dampingAmount' could be negative, which
+  // doesn't make sense. Rather than continue digging, I'm taking the lazy way
+  // out, and just clamping it in the expected range.
+  const dampingAmount = clamp(1 - distanceToBezier, 0, 1);
 
   // By default, our bezier curve damping has a relatively modest effect.
   // If we want to truly isolate the peaks to the center of the page, we need
