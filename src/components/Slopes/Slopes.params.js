@@ -73,7 +73,15 @@ const transformParameters = ({
   }
 
   // Wavelength -> perlinRangePerRow & peak height
-  const perlinRangePerRow = normalize(wavelength, 0, 100, 0.5, 16);
+  const MAX_PERLIN_RANGE = 16;
+  const perlinRangePerRow = normalize(
+    wavelength,
+    0,
+    100,
+    0.5,
+    MAX_PERLIN_RANGE
+  );
+  const amplitude = 1 - (perlinRangePerRow / MAX_PERLIN_RANGE) * 0.4;
 
   // Transform our `personInflateAmount` to control how wide the effect of the
   // peaks curve is.
@@ -114,6 +122,7 @@ const transformParameters = ({
     peaksCurveStrength,
     perlinRangePerRow,
     omegaRadiusSubtractAmount,
+    amplitude,
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,

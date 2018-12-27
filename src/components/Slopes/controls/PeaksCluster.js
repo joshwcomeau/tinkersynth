@@ -8,8 +8,8 @@ import { InstrumentCluster } from '../../ControlPanel';
 import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
-
 import PersonInflateVisualization from './PersonInflateVisualization';
+import WavelengthVisualization from './WavelengthVisualization';
 
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
@@ -59,7 +59,7 @@ const PerspectiveCluster = ({ width }) => {
           slopesParams.setWavelength(value);
         }}
         renderIcon={({ value, size }) => (
-          <PersonInflateVisualization value={value} size={size} />
+          <WavelengthVisualization value={value} size={size} />
         )}
       />
     </InstrumentCluster>

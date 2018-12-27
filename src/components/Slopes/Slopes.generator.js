@@ -45,6 +45,7 @@ const sketch = ({
   peaksCurve,
   peaksCurveStrength,
   perlinRangePerRow,
+  amplitude,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -107,6 +108,7 @@ const sketch = ({
         omegaRadiusSubtractAmount,
         peaksCurve,
         peaksCurveStrength,
+        amplitude,
       });
 
       const previousSamplePoint = getSampleCoordinates({
@@ -129,6 +131,7 @@ const sketch = ({
         omegaRadiusSubtractAmount,
         peaksCurve,
         peaksCurveStrength,
+        amplitude,
       });
 
       let line = [previousSamplePoint, samplePoint];
@@ -201,6 +204,7 @@ const getSampleCoordinates = ({
   rowOffset,
   rowHeight,
   horizontalMargin,
+  amplitude,
   perlinRangePerRow,
   perlinRatio,
   polarRatio,
@@ -221,14 +225,13 @@ const getSampleCoordinates = ({
     normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
     perlinRangePerRow;
 
-  const amplitude = perlinRangePerRow;
+  // TODO: make this an argument, controlled in the UI
+  const SELF_SIMILARITY = 15;
 
   // We mix between two possible values: our normal slopy value, and a random
   // noise value.
-  const perlinValue = perlin2(
-    perlinIndex,
-    (rowIndex / numOfRows) * perlinRangePerRow
-  );
+  const perlinValue =
+    perlin2(perlinIndex, (rowIndex / numOfRows) * SELF_SIMILARITY) * amplitude;
   const rnd = (Math.random() - 0.5) * 0.5;
 
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
