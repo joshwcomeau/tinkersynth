@@ -64,7 +64,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "sort-svg": "svgsort --repeat"
+    "sort-svg": "svgsort --repeat",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": "react-app"
