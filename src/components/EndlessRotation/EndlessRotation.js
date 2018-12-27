@@ -18,6 +18,7 @@ class EndlessRotation extends PureComponent<Props> {
   };
 
   node: ?HTMLElement;
+  nodeAnimation: any;
 
   componentDidMount() {
     const { duration, delay, run, repeatAfter } = this.props;
@@ -38,7 +39,7 @@ class EndlessRotation extends PureComponent<Props> {
       iterations: Infinity,
     };
 
-    // $FlowFixMe
+    // $FlowIgnore
     this.nodeAnimation = node.animate(
       orbitAnimationFrames,
       orbitAnimationTiming
@@ -58,7 +59,7 @@ class EndlessRotation extends PureComponent<Props> {
   }
 
   render() {
-    const { duration, delay, planetSize, children, ...delegated } = this.props;
+    const { duration, delay, children, ...delegated } = this.props;
 
     return (
       <Orbiter

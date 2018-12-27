@@ -1,21 +1,26 @@
 // @flow
 // $FlowFixMe
-import { useRef, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const useBoundingBox = () => {
   // Our `ref` is needed to be passed to the component's `ref` attribute.
+  // $FlowFixMe
   const ref = useRef(null);
+
   // We're using `useRef` for our boundingBox just as an instance variable.
   // Some bit of mutable state that doesn't require re-renders.
-  const boundingBox = useRef(null);
+  const [boundingBox, setBoundingBox] = useState(null);
 
-  useEffect(() => {
-    if (ref.current) {
-      boundingBox.current = ref.current.getBoundingClientRect();
-    }
-  });
+  useEffect(
+    () => {
+      if (ref.current) {
+        setBoundingBox(ref.current.getBoundingClientRect());
+      }
+    },
+    [ref.current]
+  );
 
-  return [ref, boundingBox.current];
+  return [ref, boundingBox];
 };
 
 export default useBoundingBox;

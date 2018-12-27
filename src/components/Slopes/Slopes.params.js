@@ -8,6 +8,8 @@
 import { normalize } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
+import type { Bezier } from '../../types';
+
 type InputParameters = {
   height: number,
   perspective: number,
@@ -17,6 +19,10 @@ type InputParameters = {
   splitUniverse: number,
   enableOcclusion: boolean,
   enableLineBoost: boolean,
+  peaksCurve: Bezier,
+  personInflateAmount: number,
+  wavelength: number,
+  selfSimilarity: number,
 };
 
 const transformParameters = ({

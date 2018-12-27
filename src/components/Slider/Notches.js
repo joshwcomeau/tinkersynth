@@ -36,4 +36,5 @@ const Notch = styled.div`
   border-radius: 1px;
 `;
 
+// $FlowIgnore
 export default React.memo(Notches);

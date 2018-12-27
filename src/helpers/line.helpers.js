@@ -1,8 +1,10 @@
 // @flow
+import { clipPolylinesToBox } from 'canvas-sketch-util/geometry';
+import { lerp } from 'canvas-sketch-util/math';
+
 import { range, mix } from '../utils';
 
-const { clipPolylinesToBox } = require('canvas-sketch-util/geometry');
-const { lerp } = require('canvas-sketch-util/math');
+import type { Point, Polyline, Bezier } from '../types';
 
 export const isPointValid = p1 => {
   return (
@@ -21,20 +23,27 @@ export const arePointsEqual = (p1, p2) => {
   return p1[0] === p2[0] && p1[1] === p2[1];
 };
 
-export const getDistanceBetweenPoints = (p1, p2) => {
+export const getDistanceBetweenPoints = (p1: Point, p2: Point) => {
   const deltaX = p2[0] - p1[0];
   const deltaY = p2[1] - p1[1];
 
   return Math.sqrt(deltaX ** 2 + deltaY ** 2);
 };
 
+type ClipLinesWithMarginArgs = {
+  lines: Array<Polyline>,
+  width: number,
+  height: number,
+  margins: [number, number],
+  withBorder: boolean,
+};
 export const clipLinesWithMargin = ({
   lines,
   width,
   height,
   margins,
   withBorder,
-}) => {
+}: ClipLinesWithMarginArgs) => {
   let [top, left] = margins;
 
   // Clip all the lines to a margin
@@ -161,8 +170,8 @@ export const retraceLines = (polylines, numOfStrokes = 4) => {
  * `t`, a number from 0-1 representing progress.
  */
 export const getValuesForBezierCurve = (
-  { startPoint, endPoint, controlPoint1, controlPoint2 },
-  t
+  { startPoint, endPoint, controlPoint1, controlPoint2 }: Bezier,
+  t: number
 ) => {
   let x, y;
   if (controlPoint2) {

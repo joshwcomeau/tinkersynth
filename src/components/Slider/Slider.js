@@ -12,14 +12,13 @@ import Notches from './Notches';
 type Props = {
   value: number,
   updateValue: (num: number) => void,
-  // Sliders work on a scale of 0-1
+  // Sliders work by default on a scale of 0-100
   min?: number,
   max?: number,
-
-  // Horizontal not yet supported
-  orientation?: 'vertical',
-  width?: number,
-  height?: number,
+  width: number,
+  height: number,
+  handleWidth?: number,
+  handleHeight?: number,
   numOfNotches?: number,
 };
 
@@ -31,7 +30,6 @@ const Slider = ({
   updateValue,
   min = 0,
   max = 100,
-  orientation = 'vertical',
   width,
   height,
   numOfNotches = 18,
@@ -43,7 +41,7 @@ const Slider = ({
 
   useEffect(
     () => {
-      if (!dragging) {
+      if (!dragging || !document.body || !sliderBoundingBox) {
         return;
       }
 
@@ -67,6 +65,7 @@ const Slider = ({
       window.addEventListener('mousemove', handleMouseMove);
 
       return () => {
+        // $FlowIgnore
         document.body.style.cursor = null;
 
         window.removeEventListener('mouseup', handleMouseUp);
@@ -160,4 +159,5 @@ const Track = styled.div`
   border-radius: 2px;
 `;
 
+// $FlowIgnore
 export default React.memo(Slider);

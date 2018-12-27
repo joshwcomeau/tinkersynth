@@ -6,6 +6,7 @@ import { COLORS } from '../../constants';
 import Svg from '../Svg';
 
 type Props = {
+  id: string,
   size: number,
   innerColor?: string,
   outerColor?: string,

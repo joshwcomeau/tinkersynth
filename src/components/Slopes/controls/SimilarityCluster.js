@@ -22,9 +22,11 @@ const SimilarityCluster = ({ width }: Props) => {
       <TouchSliderIconControl
         value={slopesParams.selfSimilarity}
         updateValue={slopesParams.setSelfSimilarity}
+        min={0}
+        max={40}
         width={innerWidth}
         height={32}
-        renderVisualization={(value, size) => `${value}${size}`}
+        renderVisualization={(value, size) => null}
       />
     </InstrumentCluster>
   );

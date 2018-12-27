@@ -43,4 +43,5 @@ const Background = ({ width, height, squareSize }) => {
   );
 };
 
+// $FlowIgnore
 export default React.memo(Background);

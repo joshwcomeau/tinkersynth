@@ -20,6 +20,8 @@ const TouchSliderIconControl = ({
   updateValue,
   width,
   height,
+  min,
+  max,
   dotSize,
   renderVisualization,
 }: Props) => {
@@ -44,6 +46,8 @@ const TouchSliderIconControl = ({
         updateValue={updateValue}
         width={touchSliderWidth}
         height={height}
+        min={min}
+        max={max}
       />
     </Wrapper>
   );
