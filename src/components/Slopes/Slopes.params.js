@@ -101,7 +101,7 @@ const transformParameters = ({
   // Clearly a better solution would be to not use an exponent, and just scale
   // this as I need... but whenever I try that i get wacky results, which
   // makes me think I'm misunderstanding something... but anyway, it works?
-  const [, peaksCurveStrength] = getValuesForBezierCurve(
+  let [, peaksCurveStrength] = getValuesForBezierCurve(
     {
       startPoint: [1, 0],
       endPoint: [1, 1],
@@ -109,6 +109,8 @@ const transformParameters = ({
     },
     normalize(personInflateAmount, 0, 100, 5, 0)
   );
+
+  peaksCurveStrength *= Math.max(wavelength / 100, 0.05);
 
   return {
     distanceBetweenRows,

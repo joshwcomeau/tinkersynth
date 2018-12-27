@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { COLORS } from '../../../constants';
 import { normalize } from '../../../utils';
 
+import Svg from '../../Svg';
+
 const PersonInflateVisualization = ({ value, size }) => {
   const bodyRx = normalize(value, 0, 100, 0.5, 8);
   const bodyRy = normalize(value, 0, 100, 5, 8.5);
@@ -38,7 +40,7 @@ const PersonInflateVisualization = ({ value, size }) => {
 
   return (
     <Wrapper style={{ width: size, height: size }}>
-      <svg width={size - 4} height={size - 4} viewBox="0 0 36 36" fill="none">
+      <Svg width={size - 4} height={size - 4} viewBox="0 0 36 36" fill="none">
         {/* Left leg */}
         <line
           {...leftLegPoints}
@@ -99,7 +101,7 @@ const PersonInflateVisualization = ({ value, size }) => {
           strokeWidth="2"
           transform={`translate(0 ${(value / 100) * -3})`}
         />
-      </svg>
+      </Svg>
     </Wrapper>
   );
 };

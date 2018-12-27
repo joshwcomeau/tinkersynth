@@ -10,6 +10,7 @@ import AvailableWidth from '../AvailableWidth';
 
 import PerspectiveCluster from './controls/PerspectiveCluster';
 import PeaksCluster from './controls/PeaksCluster';
+import Spacer from '../Spacer';
 
 type Props = {
   perspective: number,
@@ -44,62 +45,9 @@ const SlopesControls = ({
         <PerspectiveCluster width={columnWidth} />
         <PeaksCluster width={columnWidth} />
       </Column>
+      <Spacer size={UNIT * 2} />
 
-      <Column>
-        <AvailableWidth>
-          {columnWidth => (
-            <>
-              <div style={{ padding: '2rem' }}>
-                <SliderVideoControl
-                  value={spikyness}
-                  updateValue={setSpikyness}
-                  min={0}
-                  max={100}
-                  width={152}
-                  height={96}
-                  renderVisualization={value => <div>{Math.round(value)}</div>}
-                />
-              </div>
-
-              <div style={{ padding: '2rem' }}>
-                <SliderVideoControl
-                  value={polarAmount}
-                  updateValue={setPolarAmount}
-                  min={0}
-                  max={100}
-                  width={152}
-                  height={96}
-                  renderVisualization={value => <div>{Math.round(value)}</div>}
-                />
-              </div>
-
-              <div style={{ padding: '2rem' }}>
-                <SliderVideoControl
-                  value={omega}
-                  updateValue={setOmega}
-                  min={0}
-                  max={100}
-                  width={152}
-                  height={96}
-                  renderVisualization={value => <div>{Math.round(value)}</div>}
-                />
-              </div>
-
-              <div style={{ padding: '2rem' }}>
-                <SliderVideoControl
-                  value={splitUniverse}
-                  updateValue={setSplitUniverse}
-                  min={0}
-                  max={100}
-                  width={152}
-                  height={96}
-                  renderVisualization={value => <div>{Math.round(value)}</div>}
-                />
-              </div>
-            </>
-          )}
-        </AvailableWidth>
-      </Column>
+      <Column>{/* TODO */}</Column>
     </ControlPanel>
   );
 };

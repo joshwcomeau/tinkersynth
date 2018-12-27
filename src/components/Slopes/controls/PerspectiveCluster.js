@@ -1,6 +1,5 @@
 // @flow
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
 
@@ -17,10 +16,14 @@ import LineBoostVisualization from './LineBoostVisualization';
 const PerspectiveCluster = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
+  const innerWidth = width - UNIT * 2 - 2;
+
   const videoSliderHeight = 130;
 
-  const buttonSize = (videoSliderHeight - UNIT) / 2;
-  const videoSliderWidth = width - buttonSize - UNIT * 2;
+  // Our toggleControl should use up half of the available vertical space,
+  // minus the UNIT of padding separating the two.
+  const toggleControlSize = (videoSliderHeight - UNIT) / 2;
+  const videoSliderWidth = innerWidth - toggleControlSize - UNIT;
 
   return (
     <InstrumentCluster>
@@ -36,15 +39,15 @@ const PerspectiveCluster = ({ width }) => {
       <Spacer size={UNIT} />
       <Column>
         <ToggleControl
-          width={buttonSize}
-          height={buttonSize}
+          width={toggleControlSize}
+          height={toggleControlSize}
           value={slopesParams.enableOcclusion}
           updateValue={slopesParams.setEnableOcclusion}
           renderVisualization={props => <OcclusionVisualization {...props} />}
         />
         <ToggleControl
-          width={buttonSize}
-          height={buttonSize}
+          width={toggleControlSize}
+          height={toggleControlSize}
           value={slopesParams.enableLineBoost}
           updateValue={slopesParams.setEnableLineBoost}
           renderVisualization={props => <LineBoostVisualization {...props} />}

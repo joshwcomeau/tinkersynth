@@ -4,6 +4,8 @@ import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 
+import Svg from '../../Svg';
+
 type Props = {
   width: number,
   height: number,
@@ -70,11 +72,11 @@ const LineBoostVisualization = ({ width, value }: Props) => {
   ];
 
   return (
-    <svg width={width} height={height} style={{ overflow: 'visible' }}>
+    <Svg width={width} height={height}>
       {lineData.map((lineDatum, index) => (
         <animated.line key={index} {...lineDatum} />
       ))}
-    </svg>
+    </Svg>
   );
 };
 

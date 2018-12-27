@@ -5,6 +5,8 @@ import { useSpring, animated } from 'react-spring/hooks';
 import { COLORS } from '../../../constants';
 import { range, normalize } from '../../../utils';
 
+import Svg from '../../Svg';
+
 // Increase to improve performance.
 const RESOLUTION = 1;
 
@@ -53,23 +55,18 @@ const WavelengthVisualization = ({ value, size, padding = 6 }) => {
 
   return (
     <Wrapper style={{ width: size, height: size }}>
-      <svg
-        width={innerSize}
-        height={innerSize}
-        fill="none"
-        style={{ display: 'block', overflow: 'visible' }}
-      >
+      <Svg width={innerSize} height={innerSize} fill="none">
         <animated.path
           d={spring.value.interpolate(v =>
             calculatePathFromValue(v, innerSize)
           )}
           fill="none"
-          stroke={COLORS.blue[300]}
+          stroke={COLORS.yellow[300]}
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"
         />
-      </svg>
+      </Svg>
     </Wrapper>
   );
 };

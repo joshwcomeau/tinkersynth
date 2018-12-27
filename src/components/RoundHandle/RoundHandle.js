@@ -3,6 +3,8 @@ import React from 'react';
 
 import { COLORS } from '../../constants';
 
+import Svg from '../Svg';
+
 type Props = {
   size: number,
   innerColor?: string,
@@ -17,7 +19,7 @@ const RoundHandle = ({
   innerColor = COLORS.pink[300],
   outerColor = COLORS.pink[500],
 }: Props) => (
-  <svg
+  <Svg
     height={size}
     viewBox="0 0 22 22"
     fill="none"
@@ -77,7 +79,7 @@ const RoundHandle = ({
         <stop offset="1" stopOpacity="0" />
       </linearGradient>
     </defs>
-  </svg>
+  </Svg>
 );
 
 export default RoundHandle;

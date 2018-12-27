@@ -55,7 +55,7 @@ const OcclusionLine = ({
         }}
       />
 
-      <path d={path} stroke={color} />
+      <path d={path} stroke={color} strokeWidth={1.5} />
     </animated.svg>
   );
 };
