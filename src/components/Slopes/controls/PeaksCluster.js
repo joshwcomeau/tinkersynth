@@ -50,14 +50,18 @@ const PerspectiveCluster = ({ width }) => {
 
       <Spacer size={UNIT} />
 
-      {/* <SliderIconControl
+      <SliderIconControl
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
+        value={slopesParams.wavelength}
+        updateValue={value => {
+          slopesParams.setWavelength(value);
+        }}
         renderIcon={({ value, size }) => (
           <PersonInflateVisualization value={value} size={size} />
         )}
-      /> */}
+      />
     </InstrumentCluster>
   );
 };

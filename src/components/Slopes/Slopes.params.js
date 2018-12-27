@@ -30,6 +30,7 @@ const transformParameters = ({
   enableLineBoost,
   peaksCurve,
   personInflateAmount,
+  wavelength,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -61,8 +62,8 @@ const transformParameters = ({
   // TODO: experiment with making this a different value
   const polarTanMultiplier = polarTanRatio;
 
-  const omegaRatio = omega / 100;
   const omegaRadiusSubtractAmount = rowHeight;
+  const omegaRatio = omega / 100;
 
   let numOfRows = 35;
   if (enableLineBoost) {
@@ -70,6 +71,9 @@ const transformParameters = ({
     // rowHeight /= 2;÷
     distanceBetweenRows /= 2;
   }
+
+  // Wavelength -> perlinRangePerRow & peak height
+  const perlinRangePerRow = normalize(wavelength, 0, 100, 0.5, 16);
 
   // Transform our `personInflateAmount` to control how wide the effect of the
   // peaks curve is.
@@ -108,8 +112,9 @@ const transformParameters = ({
     numOfRows,
     omegaRatio,
     peaksCurveStrength,
-    // Some fields are just passed right through, no macros:
+    perlinRangePerRow,
     omegaRadiusSubtractAmount,
+    // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,
   };

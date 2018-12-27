@@ -44,6 +44,7 @@ const sketch = ({
   samplesPerRow,
   peaksCurve,
   peaksCurveStrength,
+  perlinRangePerRow,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -96,6 +97,7 @@ const sketch = ({
         numOfRows,
         rowOffset,
         rowHeight,
+        perlinRangePerRow,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -117,6 +119,7 @@ const sketch = ({
         numOfRows,
         rowOffset,
         rowHeight,
+        perlinRangePerRow,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -198,6 +201,7 @@ const getSampleCoordinates = ({
   rowOffset,
   rowHeight,
   horizontalMargin,
+  perlinRangePerRow,
   perlinRatio,
   polarRatio,
   polarTanRatio,
@@ -209,31 +213,22 @@ const getSampleCoordinates = ({
   peaksCurveStrength,
   rowSimilarity = 1.5,
 }) => {
-  // The avg. number of peaks per row depends on the `samplesPerRow`.
-  // That value, though, is really just "print resolution", and we shouldn't
-  // be changing it for cosmetic effect (unless we want to do a low-poly one or
-  // something).
-  // Our `PERLIN_MULTIPLIER` value ensures that we can tweak `samplesPerRow`
-  // without chaging the appearance of the design, only the # of dots that the
-  // plotter has to worry about.
-  // TODO: Make this a prop!
-  const PERLIN_RANGE_PER_ROW = 10;
-
   // Perlin noise is a range of values. We need to find the value at this
   // particular point in the range.
   // Our sampleIndex ranges from, say, 0 to 500. We need to normalize that to
-  // fit in with our perlin scale.
-  const perlinIndex = normalize(
-    sampleIndex,
-    0,
-    samplesPerRow,
-    0,
-    PERLIN_RANGE_PER_ROW
-  );
+  // fit in with our scale, which is controlled by the perlinRangePerRow.
+  const perlinIndex =
+    normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
+    perlinRangePerRow;
+
+  const amplitude = perlinRangePerRow;
 
   // We mix between two possible values: our normal slopy value, and a random
   // noise value.
-  const perlinValue = perlin2(perlinIndex, (rowIndex / numOfRows) * 15);
+  const perlinValue = perlin2(
+    perlinIndex,
+    (rowIndex / numOfRows) * perlinRangePerRow
+  );
   const rnd = (Math.random() - 0.5) * 0.5;
 
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
@@ -258,6 +253,7 @@ const getSampleCoordinates = ({
   let value = mixedValue * slopeDampingAmount;
 
   const cartesianY = normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset;
+
   const tangentY =
     Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2) * rowOffset;
 

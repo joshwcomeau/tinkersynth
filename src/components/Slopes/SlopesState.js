@@ -11,6 +11,7 @@ export const SlopesProvider = ({ children }) => {
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
   const [personInflateAmount, setPersonInflateAmount] = useState(25);
+  const [wavelength, setWavelength] = useState(25);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
   const [enableLineBoost, setEnableLineBoost] = useState(false);
@@ -49,6 +50,8 @@ export const SlopesProvider = ({ children }) => {
         updatePointInPeaksCurve,
         personInflateAmount,
         setPersonInflateAmount,
+        wavelength,
+        setWavelength,
       }}
     >
       {children}
