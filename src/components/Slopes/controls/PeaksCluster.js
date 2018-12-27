@@ -11,7 +11,11 @@ import Spacer from '../../Spacer';
 import PersonInflateVisualization from './PersonInflateVisualization';
 import WavelengthVisualization from './WavelengthVisualization';
 
-const PerspectiveCluster = ({ width }) => {
+type Props = {
+  width: number,
+};
+
+const PerspectiveCluster = ({ width }: Props) => {
   const slopesParams = useContext(SlopesContext);
 
   const innerWidth = width - UNIT * 2 - 2;

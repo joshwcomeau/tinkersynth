@@ -1,3 +1,4 @@
+// @flow
 import { compose } from './utils';
 
 import { convertHSBToHSL, stringifyHSL } from './helpers/color.helpers';

@@ -10,9 +10,9 @@ import RectangularHandle from '../RectangularHandle';
 import Notches from './Notches';
 
 type Props = {
-  // Sliders work on a scale of 0-1
   value: number,
   updateValue: (num: number) => void,
+  // Sliders work on a scale of 0-1
   min?: number,
   max?: number,
 

@@ -46,6 +46,7 @@ const sketch = ({
   peaksCurveStrength,
   perlinRangePerRow,
   amplitude,
+  selfSimilarity,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -109,6 +110,7 @@ const sketch = ({
         peaksCurve,
         peaksCurveStrength,
         amplitude,
+        selfSimilarity,
       });
 
       const previousSamplePoint = getSampleCoordinates({
@@ -132,6 +134,7 @@ const sketch = ({
         peaksCurve,
         peaksCurveStrength,
         amplitude,
+        selfSimilarity,
       });
 
       let line = [previousSamplePoint, samplePoint];
@@ -215,25 +218,30 @@ const getSampleCoordinates = ({
   enableOcclusion,
   peaksCurve,
   peaksCurveStrength,
-  rowSimilarity = 1.5,
+  selfSimilarity,
 }) => {
-  // Perlin noise is a range of values. We need to find the value at this
-  // particular point in the range.
-  // Our sampleIndex ranges from, say, 0 to 500. We need to normalize that to
-  // fit in with our scale, which is controlled by the perlinRangePerRow.
+  // Our standard value is this curvy, swoopy slope thing, à la Joy Division.
+  // We use perlin noise for this: the sampleIndex forms the x axis value,
+  // while the rowIndex forms the y axis value.
+  // In some cases, the y-axis values will be close enough together that it
+  // looks cohesive, like a 2D map. Other times, the values are far enough
+  // apart that each row appears totally independent. This is controlled by
+  // `selfSimilarity`
+  //
+  // TODO: Should I apply the amplitude to `mixedValue` as well?
   const perlinIndex =
     normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
     perlinRangePerRow;
-
-  // TODO: make this an argument, controlled in the UI
-  const SELF_SIMILARITY = 15;
-
-  // We mix between two possible values: our normal slopy value, and a random
-  // noise value.
   const perlinValue =
-    perlin2(perlinIndex, (rowIndex / numOfRows) * SELF_SIMILARITY) * amplitude;
+    perlin2(perlinIndex, (rowIndex / numOfRows) * selfSimilarity) * amplitude;
+
+  // Another possible world is where each value is randomized. This creates a
+  // busy "noise" effect. Ranges from -0.25 to 0.25
+  // TODO: Should the multiplier be a param, to control how loud the noise is?
   const rnd = (Math.random() - 0.5) * 0.5;
 
+  // We mix between two possible values: our normal slopy value, and our random
+  // noise value.
   let mixedValue = perlinValue * perlinRatio + rnd * (1 - perlinRatio);
 
   // Unless explicitly disabled, we want the peak strength to follow a bezier

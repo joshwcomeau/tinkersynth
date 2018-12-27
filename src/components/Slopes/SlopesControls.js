@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { UNIT } from '../../constants';
 
 import ControlPanel from '../ControlPanel';
-import SliderVideoControl from '../SliderVideoControl';
-import AvailableWidth from '../AvailableWidth';
 
 import PerspectiveCluster from './controls/PerspectiveCluster';
 import PeaksCluster from './controls/PeaksCluster';
 import Spacer from '../Spacer';
+import SimilarityCluster from './controls/SimilarityCluster';
 
 type Props = {
+  width: number,
   perspective: number,
   setPerspective: (num: number) => void,
   spikyness: number,
@@ -47,7 +47,9 @@ const SlopesControls = ({
       </Column>
       <Spacer size={UNIT * 2} />
 
-      <Column>{/* TODO */}</Column>
+      <Column>
+        <SimilarityCluster width={columnWidth} />
+      </Column>
     </ControlPanel>
   );
 };

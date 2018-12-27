@@ -31,6 +31,7 @@ const transformParameters = ({
   peaksCurve,
   personInflateAmount,
   wavelength,
+  selfSimilarity,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -68,7 +69,6 @@ const transformParameters = ({
   let numOfRows = 35;
   if (enableLineBoost) {
     numOfRows = numOfRows * 2 - 1;
-    // rowHeight /= 2;÷
     distanceBetweenRows /= 2;
   }
 
@@ -128,6 +128,7 @@ const transformParameters = ({
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,
+    selfSimilarity,
   };
 };
 
