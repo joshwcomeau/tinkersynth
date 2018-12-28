@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { range } from '../../utils';
-import { COLORS, CONTROL_RADIUS } from '../../constants';
+import { CONTROL_RADIUS } from '../../constants';
 
 const Background = ({ width, height, squareSize }) => {
   // We want to create a dotted backdrop. Ideally, we'd do this every 25px,

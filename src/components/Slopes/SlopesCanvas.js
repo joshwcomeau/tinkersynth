@@ -43,9 +43,12 @@ const useCanvasDrawing = (
 
   // On mount, set up the worker message-handling
   useEffect(() => {
-    // If the browser supports it, we want to allow the canvas to be painted
-    // off of the main thread.
+    if (!canvasRef.current) {
+      return;
+    }
 
+    // If the browser supports it, all we need to do is transfer control.
+    // The actual calculating and updating will happen in SlopesCanvas.worker.
     if (supportsOffscreenCanvas) {
       canvasRef.current = canvasRef.current.transferControlToOffscreen();
     } else {
@@ -62,10 +65,6 @@ const useCanvasDrawing = (
           height,
           context,
         });
-      };
-
-      return () => {
-        // TODO: cleanup
       };
     }
   }, []);
@@ -109,7 +108,7 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
 
   const scaledCanvasProps = getScaledCanvasProps(width, height);
 
-  useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
+  useCanvasDrawing(canvasRef, window.devicePixelRatio, width, height, params);
 
   return <canvas ref={canvasRef} {...scaledCanvasProps} />;
 };
@@ -129,4 +128,5 @@ const SlopesCanvasContainer = props => {
   );
 };
 
+// $FlowIgnore
 export default React.memo(SlopesCanvasContainer);

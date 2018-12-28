@@ -39,6 +39,19 @@ const Slider = ({
   const [dragging, setDragging] = useState(false);
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
 
+  const updatePosition = ev => {
+    if (!sliderBoundingBox) {
+      return;
+    }
+
+    const deltaY = ev.clientY - sliderBoundingBox.top;
+    const value = clamp(deltaY / height, 0, 1);
+
+    const normalizedValue = normalize(value, 0, 1, max, min);
+
+    updateValue(normalizedValue);
+  };
+
   useEffect(
     () => {
       if (!dragging || !document.body || !sliderBoundingBox) {
@@ -53,23 +66,14 @@ const Slider = ({
 
       window.addEventListener('mouseup', handleMouseUp);
 
-      const handleMouseMove = ({ clientY }) => {
-        const deltaY = clientY - sliderBoundingBox.top;
-        const value = clamp(deltaY / height, 0, 1);
-
-        const normalizedValue = normalize(value, 0, 1, max, min);
-
-        updateValue(normalizedValue);
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', updatePosition);
 
       return () => {
         // $FlowIgnore
         document.body.style.cursor = null;
 
         window.removeEventListener('mouseup', handleMouseUp);
-        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mousemove', updatePosition);
       };
     },
     [dragging]
@@ -81,7 +85,7 @@ const Slider = ({
   const handleDisplacement = normalize(value, min, max, height, 0);
 
   return (
-    <Wrapper ref={sliderRef} style={{ width, height }}>
+    <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
       <Decorations>
         <Notches num={numOfNotches} position="left" />
         <Track />
@@ -89,7 +93,10 @@ const Slider = ({
       </Decorations>
 
       <HandleWrapper
-        onMouseDown={ev => setDragging(true)}
+        onMouseDown={ev => {
+          ev.stopPropagation();
+          setDragging(true);
+        }}
         style={{
           width: handleWidth,
           height: handleHeight,
@@ -100,9 +107,9 @@ const Slider = ({
           // We have to undo that padding in transform: translate, as well as apply
           // the displacement.
           transform: `translate(
-              ${-HANDLE_BUFFER}px,
-              ${handleDisplacement - HANDLE_BUFFER}px
-            )`,
+            ${-HANDLE_BUFFER}px,
+            ${handleDisplacement - HANDLE_BUFFER}px
+          )`,
           cursor: dragging ? 'grabbing' : 'grab',
         }}
       >

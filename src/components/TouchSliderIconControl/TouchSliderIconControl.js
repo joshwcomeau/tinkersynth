@@ -30,6 +30,7 @@ const TouchSliderIconControl = ({
   const iconInnerSize = iconSize - iconPadding * 2;
 
   const touchSliderWidth = width - iconSize - UNIT;
+  const touchSliderPadding = 3;
 
   return (
     <Wrapper style={{ width }}>
@@ -41,14 +42,16 @@ const TouchSliderIconControl = ({
 
       <Spacer size={UNIT} />
 
-      <TouchSlider
-        value={value}
-        updateValue={updateValue}
-        width={touchSliderWidth}
-        height={height}
-        min={min}
-        max={max}
-      />
+      <TouchSliderWrapper style={{ padding: touchSliderPadding }}>
+        <TouchSlider
+          value={value}
+          updateValue={updateValue}
+          width={touchSliderWidth}
+          height={height - touchSliderPadding * 2}
+          min={min}
+          max={max}
+        />
+      </TouchSliderWrapper>
     </Wrapper>
   );
 };
@@ -63,6 +66,10 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const TouchSliderWrapper = styled.div`
+  background: rgba(255, 255, 255, 0.05);
 `;
 
 export default TouchSliderIconControl;
