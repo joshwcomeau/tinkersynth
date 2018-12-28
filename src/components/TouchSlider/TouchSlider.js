@@ -1,10 +1,12 @@
 // @flow
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef } from 'react';
 
 import { COLORS } from '../../constants';
 import { clamp, normalize } from '../../utils';
+import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
+
+import { generateDotCoords } from './TouchSlider.helpers';
 
 type Props = {
   value: number,
@@ -18,6 +20,57 @@ type Props = {
   dotSize?: number,
 };
 
+const useOffscreenCanvasIfAvailable = (
+  canvasRef,
+  devicePixelRatio,
+  width,
+  height,
+  params
+) => {
+  console.log(height);
+  const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
+
+  const contextRef = useRef(null);
+
+  // On mount
+  useEffect(() => {
+    if (!canvasRef.current) {
+      return;
+    }
+
+    // If the browser supports it, we want to allow the canvas to be painted
+    // off of the main thread.
+    if (supportsOffscreenCanvas) {
+      canvasRef.current = canvasRef.current.transferControlToOffscreen();
+    }
+
+    contextRef.current = canvasRef.current.getContext('2d');
+    contextRef.current.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }, []);
+
+  // On every update
+  useEffect(() => {
+    const ctx = contextRef.current;
+
+    if (!ctx) {
+      console.error('No ref :(');
+      return;
+    }
+
+    const { dotSize } = params;
+
+    const dotCoords = generateDotCoords(width, height, dotSize);
+
+    dotCoords.forEach(([x, y]) => {
+      ctx.beginPath();
+      ctx.arc(x, y, dotSize / 2, 0, 2 * Math.PI);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      ctx.closePath();
+    });
+  });
+};
+
 const TouchSlider = ({
   value,
   updateValue,
@@ -25,11 +78,21 @@ const TouchSlider = ({
   max = 1,
   width,
   height,
-  dotSize = 4,
+  dotSize = 3,
 }: Props) => {
   const [ref, boundingBox] = useBoundingBox();
+  const canvasRef = useRef(null);
 
-  const dots = [];
+  const scaledCanvasProps = getScaledCanvasProps(width, height);
+
+  const params = { dotSize };
+  useOffscreenCanvasIfAvailable(
+    canvasRef,
+    window.devicePixelRatio,
+    width,
+    height,
+    params
+  );
 
   const handleClick = ev => {
     if (!boundingBox) {
@@ -53,8 +116,8 @@ const TouchSlider = ({
   };
 
   return (
-    <div ref={ref} style={{ width, height }} onClick={handleClick}>
-      Hello {dots}
+    <div ref={ref}>
+      <canvas ref={canvasRef} {...scaledCanvasProps} onClick={handleClick} />
     </div>
   );
 };
