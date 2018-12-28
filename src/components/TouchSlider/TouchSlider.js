@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { COLORS } from '../../constants';
@@ -26,6 +26,8 @@ const useOffscreenCanvasIfAvailable = (
   devicePixelRatio,
   width,
   height,
+  value,
+  hoveredValue,
   props
 ) => {
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
@@ -56,18 +58,37 @@ const useOffscreenCanvasIfAvailable = (
       return;
     }
 
-    const { value, max, dotSize } = props;
+    const { max, dotSize } = props;
 
     const dotCoords = generateDotCoords(width, height, dotSize);
 
-    const numToDisplay = Math.round(dotCoords.length * (value / max)) || 1;
+    const numOfSelectedDots = Math.round(dotCoords.length * (value / max)) || 1;
+
+    const numOfHoveredDots = hoveredValue
+      ? Math.round(dotCoords.length * (hoveredValue / max))
+      : null;
+
+    const numToDisplay = Math.max(numOfSelectedDots, numOfHoveredDots || 0);
 
     ctx.clearRect(0, 0, width, height);
 
-    dotCoords.slice(0, numToDisplay).forEach(([x, y]) => {
+    dotCoords.slice(0, numToDisplay).forEach(([x, y], index) => {
       ctx.beginPath();
       ctx.arc(x, y, dotSize / 2, 0, 2 * Math.PI);
       ctx.fillStyle = 'red';
+
+      let opacity = 1;
+      if (index + 1 > numOfSelectedDots) {
+        opacity = 0.25;
+      } else if (
+        typeof numOfHoveredDots === 'number' &&
+        numOfHoveredDots < numOfSelectedDots &&
+        index > numOfHoveredDots
+      ) {
+        opacity = 0.5;
+      }
+
+      ctx.globalAlpha = opacity;
       ctx.fill();
       ctx.closePath();
     });
@@ -75,7 +96,10 @@ const useOffscreenCanvasIfAvailable = (
 };
 
 const TouchSlider = (props: Props) => {
-  const { updateValue, min, max, width, height } = props;
+  const { value, updateValue, min, max, width, height } = props;
+
+  const [dragging, setDragging] = useState(false);
+  const [hoveredValue, setHoveredValue] = useState(null);
 
   const [ref, boundingBox] = useBoundingBox();
   const canvasRef = useRef(null);
@@ -87,10 +111,12 @@ const TouchSlider = (props: Props) => {
     window.devicePixelRatio,
     width,
     height,
+    value,
+    hoveredValue,
     props
   );
 
-  const calculateAndSetNewValue = ev => {
+  const calculateAndSetNewValue = (ev, setter = updateValue) => {
     if (!boundingBox) {
       return;
     }
@@ -108,19 +134,53 @@ const TouchSlider = (props: Props) => {
 
     const newValue = normalize(ratio, 0, 1, min, max);
 
-    updateValue(newValue);
+    setter(newValue);
   };
+
+  useEffect(
+    () => {
+      if (!dragging || !document.body) {
+        return;
+      }
+
+      document.body.style.cursor = 'pointer';
+
+      const handleMouseUp = () => {
+        setDragging(false);
+      };
+
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mousemove', calculateAndSetNewValue);
+
+      return () => {
+        // $FlowIgnore
+        document.body.style.cursor = null;
+
+        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('mousemove', calculateAndSetNewValue);
+      };
+    },
+    [dragging]
+  );
 
   return (
     <div ref={ref}>
       <Canvas
         ref={canvasRef}
         {...scaledCanvasProps}
-        onMouseDown={calculateAndSetNewValue}
+        onMouseDown={ev => {
+          setDragging(true);
+          setHoveredValue(null);
+          calculateAndSetNewValue(ev);
+        }}
         onMouseMove={ev => {
-          if (ev.buttons === 1) {
-            calculateAndSetNewValue(ev);
+          // When the user hovers over the space, set the hover value
+          if (ev.buttons === 0) {
+            calculateAndSetNewValue(ev, setHoveredValue);
           }
+        }}
+        onMouseLeave={() => {
+          setHoveredValue(null);
         }}
       />
     </div>
