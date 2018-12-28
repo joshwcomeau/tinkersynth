@@ -2,12 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { COLORS } from '../../constants';
 import { clamp, normalize } from '../../utils';
 import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
-import { generateDotCoords } from './TouchSlider.helpers';
+import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
 
 type Props = {
   value: number,
@@ -60,7 +59,7 @@ const useOffscreenCanvasIfAvailable = (
 
     const { max, dotSize } = props;
 
-    const dotCoords = generateDotCoords(width, height, dotSize);
+    const { dotCoords, numOfCols } = generateDotCoords(width, height, dotSize);
 
     const numOfSelectedDots = Math.round(dotCoords.length * (value / max)) || 1;
 
@@ -72,20 +71,14 @@ const useOffscreenCanvasIfAvailable = (
 
     ctx.clearRect(0, 0, width, height);
 
-    dotCoords.slice(0, numToDisplay).forEach(([x, y], index) => {
+    dotCoords.slice(0, numToDisplay).forEach(([x, y, colIndex], index) => {
       ctx.beginPath();
       ctx.arc(x, y, dotSize / 2, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = getColorForColIndex(colIndex, numOfCols);
 
       let opacity = 1;
       if (index + 1 > numOfSelectedDots) {
         opacity = 0.25;
-      } else if (
-        typeof numOfHoveredDots === 'number' &&
-        numOfHoveredDots < numOfSelectedDots &&
-        index > numOfHoveredDots
-      ) {
-        opacity = 0.5;
       }
 
       ctx.globalAlpha = opacity;

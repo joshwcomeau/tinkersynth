@@ -13,112 +13,124 @@ const prepColor = compose(
 
 export const COLORS = {
   red: {
-    300: prepColor({
+    '300': prepColor({
       hue: 5,
       saturation: 90,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 0,
       saturation: 100,
       brightness: 85,
     }),
   },
+  orange: {
+    '300': prepColor({
+      hue: 25,
+      saturation: 90,
+      brightness: 100,
+    }),
+    '500': prepColor({
+      hue: 27,
+      saturation: 100,
+      brightness: 90,
+    }),
+  },
   yellow: {
-    300: prepColor({
+    '300': prepColor({
       hue: 54,
       saturation: 80,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 44,
       saturation: 100,
       brightness: 100,
     }),
   },
   green: {
-    300: prepColor({
+    '300': prepColor({
       hue: 150,
       saturation: 80,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 160,
       saturation: 100,
       brightness: 80,
     }),
   },
   blue: {
-    300: prepColor({
+    '300': prepColor({
       hue: 241,
       saturation: 70,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 248,
       saturation: 85,
       brightness: 90,
     }),
-    700: prepColor({
+    '700': prepColor({
       hue: 248,
       saturation: 50,
       brightness: 50,
     }),
   },
   violet: {
-    100: prepColor({
+    '100': prepColor({
       hue: 275,
       saturation: 80,
       brightness: 100,
     }),
-    300: prepColor({
+    '300': prepColor({
       hue: 270,
       saturation: 90,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 265,
       saturation: 90,
       brightness: 90,
     }),
   },
   pink: {
-    300: prepColor({
+    '300': prepColor({
       hue: 300,
       saturation: 85,
       brightness: 100,
     }),
-    500: prepColor({
+    '500': prepColor({
       hue: 315,
       saturation: 90,
       brightness: 95,
     }),
-    700: prepColor({
+    '700': prepColor({
       hue: 320,
       saturation: 90,
       brightness: 85,
     }),
   },
   gray: {
-    100: prepColor({
+    '100': prepColor({
       hue: 0,
       saturation: 0,
       brightness: 95,
     }),
 
-    300: prepColor({
+    '300': prepColor({
       hue: 0,
       saturation: 0,
       brightness: 87,
     }),
 
-    500: prepColor({
+    '500': prepColor({
       hue: 0,
       saturation: 0,
       brightness: 62,
     }),
 
-    700: prepColor({
+    '700': prepColor({
       hue: 0,
       saturation: 0,
       brightness: 40,

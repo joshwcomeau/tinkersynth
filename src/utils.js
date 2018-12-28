@@ -16,6 +16,9 @@ export const clamp = (val, min = 0, max = 1) =>
 export const roundTo = (number, places = 0) =>
   Math.round(number * 10 ** places) / 10 ** places;
 
+export const roundToNearest = (number, nearest) =>
+  Math.round(number / nearest) * nearest;
+
 /**
  * I often find myself needing to normalize values.
  * Say I have a value, 15, out of a range between 0 and 30.
