@@ -118,6 +118,9 @@ const transformParameters = ({
 
   peaksCurveStrength *= Math.max(wavelength / 100, 0.05);
 
+  // TODO: Give this param a different name to avoid confusion
+  selfSimilarity = normalize(selfSimilarity, 0, 100, 30, 0);
+
   return {
     distanceBetweenRows,
     perlinRatio,

@@ -15,13 +15,15 @@ export const generateDotCoords = (
   const numOfCols = Math.floor(width / (dotSize + dotSpacing));
   const numOfRows = Math.floor(height / (dotSize + dotSpacing));
 
-  range(numOfRows).map(rowIndex =>
-    range(numOfCols).map(colIndex => {
-      const x = ((colIndex + 1) / (numOfCols + 1)) * width;
-      const y = ((rowIndex + 1) / (numOfRows + 1)) * height;
+  range(numOfCols).map(colIndex =>
+    range(numOfRows)
+      .reverse()
+      .map(rowIndex => {
+        const x = ((colIndex + 1) / (numOfCols + 1)) * width;
+        const y = ((rowIndex + 1) / (numOfRows + 1)) * height;
 
-      coords.push([x, y]);
-    })
+        coords.push([x, y]);
+      })
   );
 
   return coords;

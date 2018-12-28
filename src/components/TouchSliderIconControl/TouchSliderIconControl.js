@@ -22,7 +22,7 @@ const TouchSliderIconControl = ({
   height,
   min,
   max,
-  dotSize,
+  dotSize = 3,
   renderVisualization,
 }: Props) => {
   const iconSize = height;
@@ -30,7 +30,7 @@ const TouchSliderIconControl = ({
   const iconInnerSize = iconSize - iconPadding * 2;
 
   const touchSliderWidth = width - iconSize - UNIT;
-  const touchSliderPadding = 3;
+  const touchSliderPadding = 2;
 
   return (
     <Wrapper style={{ width }}>
@@ -50,6 +50,7 @@ const TouchSliderIconControl = ({
           height={height - touchSliderPadding * 2}
           min={min}
           max={max}
+          dotSize={dotSize}
         />
       </TouchSliderWrapper>
     </Wrapper>

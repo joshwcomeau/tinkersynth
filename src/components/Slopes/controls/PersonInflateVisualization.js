@@ -88,30 +88,32 @@ const PersonInflateVisualization = ({ value, size }) => {
           strokeLinecap="round"
         />
 
-        {/* Body */}
-        <animated.ellipse
-          cx="18"
-          cy="17"
-          {...bodyRadius}
-          fill={COLORS.gray[900]}
-          stroke={COLORS.green[300]}
-          strokeWidth={2}
-          style={{ opacity: value === 0 ? 0 : 1 }}
-        />
-
         {/*
-          When the body is TOTALLY uninflated, just show a simple line instead
-          of an ellipse. This is because the completely-flat ellipse doesn't
-          look as natural.
+          When the body is TOTALLY uninflated, it looks a bit funny on its own.
+          Add a straight line behind it, so that when it's totally uninflated,
+          we see this instead.
         */}
         <line
           x1={18}
-          y1={13}
+          y1={5}
           x2={18}
           y2={23}
           stroke={COLORS.green[300]}
           strokeWidth={2}
-          style={{ opacity: value === 0 ? 1 : 0 }}
+        />
+
+        {/* Body */}
+        <animated.ellipse
+          cx="18"
+          cy="17"
+          rx={bodyRadius.rx.interpolate(rx => clamp(rx, 0, 1000))}
+          ry={bodyRadius.ry.interpolate(ry => clamp(ry, 0, 1000))}
+          fill={COLORS.gray[900]}
+          stroke={COLORS.green[300]}
+          strokeWidth={2}
+          style={{
+            opacity: value ? 1 : 0,
+          }}
         />
 
         {/* Head */}
