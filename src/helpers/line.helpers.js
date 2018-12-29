@@ -223,7 +223,23 @@ export const getDistanceToBezierCurve = ({ point, curve, resolution = 25 }) => {
   return closestDistance;
 };
 
-export const mixPoints = (p1, p2, ratio) => [
+export const createSvgPathForCurve = (curve: Bezier) => {
+  const curveType = curve.controlPoint2 ? 'cubic' : 'quadratic';
+
+  return curveType === 'cubic'
+    ? `
+      M ${curve.startPoint[0]}, ${curve.startPoint[1]}
+      C ${curve.controlPoint1[0]}, ${curve.controlPoint1[1]}
+        ${curve.controlPoint2[0]}, ${curve.controlPoint2[1]}
+        ${curve.endPoint[0]}, ${curve.endPoint[1]}`
+    : `
+      M ${curve.startPoint[0]}, ${curve.startPoint[1]}
+      Q ${curve.controlPoint1[0]}, ${curve.controlPoint1[1]}
+        ${curve.endPoint[0]},${curve.endPoint[1]}
+    `;
+};
+
+export const mixPoints = (p1: Point, p2: Point, ratio: number) => [
   mix(p1[0], p2[0], ratio),
   mix(p1[1], p2[1], ratio),
 ];

@@ -2,7 +2,14 @@
 import React from 'react';
 import { range } from '../../../utils';
 
-const Grid = ({ width, height, rows, cols, ...lineProps }) => {
+type Props = {
+  width: number,
+  height: number,
+  rows: number,
+  cols: number,
+};
+
+const Grid = ({ width, height, rows, cols, ...lineProps }: Props) => {
   return (
     <svg width={width} height={height} style={{ overflow: 'visible' }}>
       <rect

@@ -186,6 +186,7 @@ TouchSlider.defaultProps = {
 };
 
 const Canvas = styled.canvas`
+  display: block;
   cursor: pointer;
 `;
 

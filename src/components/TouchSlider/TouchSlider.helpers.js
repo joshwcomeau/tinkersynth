@@ -20,14 +20,14 @@ export const generateDotCoords = (
   const dotSpacing = Math.round(dotSize);
 
   const numOfCols = Math.floor(width / (dotSize + dotSpacing)) - 1;
-  const numOfRows = Math.floor(height / (dotSize + dotSpacing));
+  const numOfRows = Math.floor(height / (dotSize + dotSpacing)) - 1;
 
   range(numOfCols).map(colIndex =>
     range(numOfRows)
       .reverse()
       .forEach(rowIndex => {
-        const x = colIndex * (dotSize + dotSpacing) + dotSize + dotSpacing;
-        const y = rowIndex * (dotSize + dotSpacing) + dotSize + dotSpacing;
+        const x = colIndex * (dotSize + dotSpacing) + 7;
+        const y = rowIndex * (dotSize + dotSpacing) + 7;
 
         dotCoords.push([x, y, colIndex, rowIndex]);
       })
@@ -42,8 +42,6 @@ export const getColorForColIndex = (colIndex: number, numOfCols: number) => {
   const hue = roundToNearest(normalize(colRatio, 0, 1, 210, 50), 20);
   const saturation = Math.round(normalize(colRatio, 0, 1, 80, 90));
   const brightness = Math.round(normalize(colRatio, 0, 1, 90, 100));
-
-  console.log(hue);
 
   return prepColor({ hue, saturation, brightness });
 };

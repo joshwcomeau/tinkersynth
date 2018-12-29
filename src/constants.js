@@ -60,6 +60,23 @@ export const COLORS = {
       brightness: 80,
     }),
   },
+  aqua: {
+    '300': prepColor({
+      hue: 190,
+      saturation: 90,
+      brightness: 100,
+    }),
+    '500': prepColor({
+      hue: 200,
+      saturation: 85,
+      brightness: 95,
+    }),
+    '700': prepColor({
+      hue: 205,
+      saturation: 75,
+      brightness: 70,
+    }),
+  },
   blue: {
     '300': prepColor({
       hue: 241,

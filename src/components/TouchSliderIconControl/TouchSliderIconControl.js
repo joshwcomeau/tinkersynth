@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import TouchSlider from '../TouchSlider';
-import { UNIT, COLORS, CONTROL_RADIUS } from '../../constants';
+import { COLORS, CONTROL_RADIUS } from '../../constants';
 import Spacer from '../Spacer';
 
 type Props = {
@@ -26,28 +26,23 @@ const TouchSliderIconControl = ({
   renderVisualization,
 }: Props) => {
   const iconSize = height;
-  const iconPadding = UNIT / 2;
-  const iconInnerSize = iconSize - iconPadding * 2;
 
-  const touchSliderWidth = width - iconSize - UNIT;
-  const touchSliderPadding = 2;
+  const touchSliderWidth = width - iconSize;
 
   return (
     <Wrapper style={{ width }}>
-      <IconWrapper
-        style={{ width: iconSize, height: iconSize, padding: iconPadding }}
-      >
-        {renderVisualization(value, iconInnerSize)}
+      <IconWrapper style={{ width: iconSize, height: iconSize }}>
+        {renderVisualization(value, iconSize)}
       </IconWrapper>
 
-      <Spacer size={UNIT} />
+      <Spacer size={0} />
 
-      <TouchSliderWrapper style={{ padding: touchSliderPadding }}>
+      <TouchSliderWrapper>
         <TouchSlider
           value={value}
           updateValue={updateValue}
           width={touchSliderWidth}
-          height={height - touchSliderPadding * 2}
+          height={height}
           min={min}
           max={max}
           dotSize={dotSize}

@@ -7,6 +7,8 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import TouchSliderIconControl from '../../TouchSliderIconControl';
 
+import SimilarityVisualization from './SimilarityVisualization';
+
 type Props = {
   width: number,
 };
@@ -24,7 +26,9 @@ const SimilarityCluster = ({ width }: Props) => {
         updateValue={slopesParams.setSelfSimilarity}
         width={innerWidth}
         height={32}
-        renderVisualization={(value, size) => null}
+        renderVisualization={(value, size) => (
+          <SimilarityVisualization value={value} size={size} />
+        )}
       />
     </InstrumentCluster>
   );
