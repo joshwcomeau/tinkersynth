@@ -27,6 +27,9 @@ const BoilingSteam = ({ value, strength = 0.01, offset }: Props) => {
 
   const spring = useSpring({
     config: SPRING_CONFIG,
+    after: {
+      style: 'border: 10px solid red',
+    },
     sx: normalize(
       perlin2(value * 0.02, offset + 0.25) * strength,
       -1,
