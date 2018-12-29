@@ -18,7 +18,7 @@ export const SlopesProvider = ({ children }) => {
   const [splitUniverse, setSplitUniverse] = useState(0);
   const [personInflateAmount, setPersonInflateAmount] = useState(25);
   const [wavelength, setWavelength] = useState(25);
-  const [selfSimilarity, setSelfSimilarity] = useState(100);
+  const [waterBoilAmount, setWaterBoilAmount] = useState(100);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
   const [enableLineBoost, setEnableLineBoost] = useState(false);
@@ -54,8 +54,8 @@ export const SlopesProvider = ({ children }) => {
         setPersonInflateAmount,
         wavelength,
         setWavelength,
-        selfSimilarity,
-        setSelfSimilarity,
+        waterBoilAmount,
+        setWaterBoilAmount,
       }}
     >
       {children}

@@ -22,7 +22,7 @@ type InputParameters = {
   peaksCurve: Bezier,
   personInflateAmount: number,
   wavelength: number,
-  selfSimilarity: number,
+  waterBoilAmount: number,
 };
 
 const transformParameters = ({
@@ -37,7 +37,7 @@ const transformParameters = ({
   peaksCurve,
   personInflateAmount,
   wavelength,
-  selfSimilarity,
+  waterBoilAmount,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -118,8 +118,7 @@ const transformParameters = ({
 
   peaksCurveStrength *= Math.max(wavelength / 100, 0.05);
 
-  // TODO: Give this param a different name to avoid confusion
-  selfSimilarity = normalize(selfSimilarity, 0, 100, 30, 0);
+  const selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
   return {
     distanceBetweenRows,
