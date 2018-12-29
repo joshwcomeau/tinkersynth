@@ -17,20 +17,26 @@ const FadeAfterChange = ({
   children,
 }: Props) => {
   const releaseTimeoutId = useRef(null);
+  const hasMounted = useRef(false);
 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(
     () => {
+      if (!hasMounted.current) {
+        hasMounted.current = true;
+        return;
+      }
+
       window.clearTimeout(releaseTimeoutId.current);
 
       if (!isVisible) {
         setIsVisible(true);
-      } else {
-        releaseTimeoutId.current = window.setTimeout(() => {
-          setIsVisible(false);
-        }, sustain);
       }
+
+      releaseTimeoutId.current = window.setTimeout(() => {
+        setIsVisible(false);
+      }, sustain);
     },
     [value]
   );
