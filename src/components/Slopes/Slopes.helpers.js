@@ -352,9 +352,9 @@ export const plotAsPolarCoordinate = ({
   sampleIndex,
   samplesPerRow,
   omegaRatio,
-  omegaRadiusSubtractAmount,
-  polarTanRatio,
-  polarTanMultiplier,
+  omegaRadiusSubtractAmount = 90,
+  polarTanRatio = 0,
+  polarTanMultiplier = 0,
 }) => {
   // Normalize the value from 0π to 2π, and then add 0.5π.
   // The added 0.5π is so that the slopes point upwards, instead of to the left.

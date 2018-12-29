@@ -30,7 +30,7 @@ const SliderVideoControl = ({
 }: Props) => {
   // The `width` provided is for the whole unit.
   const sliderWidth = 28;
-  const sliderHeight = height - spacing * 2;
+  const sliderHeight = height - 8;
 
   const visualizationWidth = width - sliderWidth - spacing * 4;
   const visualizationHeight = height - spacing * 2;
@@ -47,7 +47,7 @@ const SliderVideoControl = ({
         />
       </VisualizationWrapper>
 
-      <SliderWrapper style={{ padding: spacing }}>
+      <SliderWrapper style={{ padding: 4 }}>
         <Slider
           value={value}
           updateValue={updateValue}
@@ -71,6 +71,10 @@ const Wrapper = styled.div`
 const VisualizationWrapper = styled.div`
   flex: 1;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `;
 
 const SliderWrapper = styled.div`

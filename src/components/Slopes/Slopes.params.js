@@ -5,7 +5,7 @@
 // This file specifies the mapping from high-level params to actual variables
 // used in the logic.
 // `value` will always be from 0-1000
-import { normalize, shallowCompare } from '../../utils';
+import { normalize, mix, shallowCompare } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
 import type { Bezier } from '../../types';
@@ -116,7 +116,16 @@ const transformParameters = ({
     normalize(personInflateAmount, 0, 100, 5, 0)
   );
 
-  peaksCurveStrength *= Math.max(wavelength / 100, 0.05);
+  // When the wavelength is really low, we want to reduce the strength of the
+  // peaks curve. This is because at low wavelength, what should be long smooth
+  // slopes develop weird little points.
+  // NOTE: Unfortunately, we want to do the opposite thing when the polarRatio
+  // is >0, since in circular mode, we want the lines to line up, when the
+  // curve is in its default position.
+  if (polarRatio < 1) {
+    const wavelengthAdjustment = Math.max(wavelength / 100, 0.05);
+    peaksCurveStrength *= mix(wavelengthAdjustment, 1, 1 - polarRatio);
+  }
 
   const selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 

@@ -6,7 +6,13 @@ import { COLORS } from '../../../constants';
 
 import Grid from './Grid';
 
-const PerspectiveVisualization = ({ width, height, value }) => {
+type Props = {
+  width: number,
+  height: number,
+  value: number,
+};
+
+const PerspectiveVisualization = ({ width, height, value }: Props) => {
   const ratio = 1 - value / 100;
 
   const gridHeight = height * 0.75;

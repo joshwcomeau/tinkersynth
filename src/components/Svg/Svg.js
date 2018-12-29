@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Svg = styled.svg`
   display: block;
-  overflow: visible;
+  overflow: ${props => (props.hideOverflow ? 'hidden' : 'visible')};
   backface-visibility: hidden;
   fill: none;
 `;

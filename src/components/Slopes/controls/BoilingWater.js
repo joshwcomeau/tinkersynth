@@ -47,8 +47,8 @@ const BoilingWater = ({
         perlin2(value * PERLIN_MULTIPLE, perlinRow),
         -1,
         1,
-        top - 3 * ratio,
-        top + 3 * ratio
+        top - 5 * ratio,
+        top + 5 * ratio
       ) + boiledAwayOffset,
     c1x: normalize(
       perlin2(
@@ -58,7 +58,7 @@ const BoilingWater = ({
       -1,
       1,
       left + 2,
-      left + 5
+      left + 6
     ),
     c1y:
       normalize(
@@ -68,8 +68,8 @@ const BoilingWater = ({
         ),
         -1,
         1,
-        top - 6 * ratio,
-        top + 6 * ratio
+        top - 8 * ratio,
+        top + 8 * ratio
       ) + boiledAwayOffset,
     c2x: normalize(
       perlin2(
@@ -78,7 +78,7 @@ const BoilingWater = ({
       ),
       -1,
       1,
-      left + width - 5,
+      left + width - 8,
       left + width
     ),
     c2y: Math.min(
@@ -89,7 +89,7 @@ const BoilingWater = ({
         ),
         -1,
         1,
-        top - 2 * ratio,
+        top - 5 * ratio,
         top + 10 * ratio
       ) + boiledAwayOffset,
       top + height
