@@ -352,7 +352,7 @@ export const plotAsPolarCoordinate = ({
   sampleIndex,
   samplesPerRow,
   omegaRatio,
-  omegaRadiusSubtractAmount = 90,
+  omegaRadiusSubtractAmount,
   polarTanRatio = 0,
   polarTanMultiplier = 0,
 }) => {

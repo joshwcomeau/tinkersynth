@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import styled from 'styled-components';
+import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 import { plotAsPolarCoordinate } from '../../Slopes/Slopes.helpers';
-import { normalize, range, convertPolarToCartesian, mix } from '../../../utils';
+import { range, mix } from '../../../utils';
 
 import Svg from '../../Svg';
 
@@ -14,48 +14,38 @@ type Props = {
   value: number,
 };
 
-// TODO: Base this off window.devicePixelRatio?
-const MAX_DENSITY = 4;
+const MAX_DENSITY = (window.devicePixelRatio || 1) * 2;
+const SPRING_CONFIG = {
+  tension: 120,
+  friction: 18,
+};
 
-const calculateLinePoints = (value, width, height, numOfLines = 5) => {
+const calculatePointsForLine = (value, width, height, rowIndex, numOfLines) => {
   const omegaRatio = value / 100;
 
-  const lineIndexes = range(numOfLines);
-
-  // const numOfPointsPerLine = Math.floor(
-  //   mix(6, width / MAX_DENSITY, omegaRatio)
-  // );
   const numOfPointsPerLine = Math.round(width / MAX_DENSITY);
 
   const rowHeight = height / numOfLines;
 
-  const points = lineIndexes.map(rowIndex => {
-    const rowNum = rowIndex + 1;
-    // Our `y` value, to be used for cartesian coordinates
+  const rowNum = rowIndex + 1;
 
-    const y = height * (rowNum / numOfLines) - rowHeight / 2;
+  const y = height * (rowNum / numOfLines) - rowHeight / 2;
 
-    // // We also calculate polar coordinates, to mix between.
-    // const radius = (height / 2) * (rowNum / numOfLines);
+  return range(numOfPointsPerLine).map(colIndex => {
+    const x = colIndex * MAX_DENSITY;
 
-    return range(numOfPointsPerLine).map(colIndex => {
-      const x = colIndex * MAX_DENSITY;
-
-      const [polarX, polarY] = plotAsPolarCoordinate({
-        point: [x, y],
-        width,
-        height,
-        sampleIndex: colIndex,
-        samplesPerRow: numOfPointsPerLine,
-        omegaRatio: 1,
-        omegaRadiusSubtractAmount: height,
-      });
-
-      return [mix(polarX, x, omegaRatio), mix(polarY, y, omegaRatio)];
+    const [polarX, polarY] = plotAsPolarCoordinate({
+      point: [x, y],
+      width,
+      height,
+      sampleIndex: colIndex,
+      samplesPerRow: numOfPointsPerLine,
+      omegaRatio: 1,
+      omegaRadiusSubtractAmount: height,
     });
-  });
 
-  return points;
+    return [mix(polarX, x, omegaRatio), mix(polarY, y, omegaRatio)];
+  });
 };
 
 const getPolylinePointsAsString = points =>
@@ -79,16 +69,27 @@ const getColorForLineIndex = (index: number) => {
 const PolarAmountVisualization = ({ width, height, value }: Props) => {
   const innerWidth = width - 20;
   const innerHeight = height - 40;
-  const lines = calculateLinePoints(value, innerWidth, innerHeight);
-  const stringifiedLines = lines.map(line => getPolylinePointsAsString(line));
+
+  const numOfLines = 5;
+
+  const spring = useSpring({ value, config: SPRING_CONFIG });
 
   return (
     <Svg width={innerWidth} height={innerHeight}>
-      {stringifiedLines.map((pointsString, i) => (
-        <polyline
-          key={i}
-          points={pointsString}
-          stroke={getColorForLineIndex(i)}
+      {range(numOfLines).map(rowIndex => (
+        <animated.polyline
+          key={rowIndex}
+          points={spring.value.interpolate(value => {
+            const line = calculatePointsForLine(
+              value,
+              innerWidth,
+              innerHeight,
+              rowIndex,
+              numOfLines
+            );
+            return getPolylinePointsAsString(line);
+          })}
+          stroke={getColorForLineIndex(rowIndex)}
           strokeWidth={window.devicePixelRatio > 1 ? 2.5 : 2}
           strokeLinecap="round"
         />
