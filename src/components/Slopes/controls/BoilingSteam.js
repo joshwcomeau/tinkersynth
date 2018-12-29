@@ -23,8 +23,6 @@ const BoilingWater = ({ value, strength = 0.01, offset }: Props) => {
 
   const opacity = ratio;
 
-
-
   const spring = useSpring({
     config: SPRING_CONFIG,
     sx: normalize(
@@ -65,16 +63,16 @@ const BoilingWater = ({ value, strength = 0.01, offset }: Props) => {
     ),
   });
 
-  const renderPath = ;
+  const renderPath = (sx, c1x, c1y, c2x, c2y, ex) => `
+    M ${sx},0
+    C ${c1x},${c1y} ${c2x},${c2y} ${ex},18
+  `;
 
   return (
     <animated.path
       d={interpolate(
         [spring.sx, spring.c1x, spring.c1y, spring.c2x, spring.c2y, spring.ex],
-        (sx, c1x, c1y, c2x, c2y, ex) => `
-          M ${sx},0
-          C ${c1x},${c1y} ${c2x},${c2y} ${ex},18
-        `
+        renderPath
       )}
       fill="none"
       stroke="rgba(255, 255, 255, 0.2)"
