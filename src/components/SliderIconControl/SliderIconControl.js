@@ -7,22 +7,32 @@ import { COLORS, CONTROL_RADIUS, UNIT } from '../../constants';
 import Column from '../Column';
 import Slider from '../Slider';
 
+type Props = {
+  value: number,
+  width: number,
+  height: number,
+  spacing?: number,
+  visualizationComponent: any,
+};
+
 const SliderIconControl = ({
   value,
   width,
   height,
   spacing = 4,
-  renderIcon,
+  visualizationComponent,
   ...sliderProps
-}) => {
+}: Props) => {
   const sliderIconSize = width;
 
   const sliderWidth = width - spacing * 2;
   const sliderHeight = height - sliderIconSize - spacing * 2;
 
+  const Visualization = visualizationComponent;
+
   return (
     <Wrapper>
-      {renderIcon({ size: sliderIconSize, value })}
+      <Visualization size={sliderIconSize} value={value} />
 
       <SliderWrapper style={{ width, padding: spacing }}>
         <Slider
@@ -46,4 +56,5 @@ const SliderWrapper = styled.div`
   border-radius: 0 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px;
 `;
 
-export default SliderIconControl;
+// $FlowIgnore
+export default React.memo(SliderIconControl);

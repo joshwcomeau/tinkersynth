@@ -3,6 +3,12 @@ import React, { useState } from 'react';
 
 export const SlopesContext = React.createContext({});
 
+const DEFAULT_PEAKS_CURVE = {
+  startPoint: [0.5, 0],
+  controlPoint1: [0.5, 0.5],
+  endPoint: [0.5, 1],
+};
+
 export const SlopesProvider = ({ children }) => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(40);
@@ -17,12 +23,7 @@ export const SlopesProvider = ({ children }) => {
   const [enableOcclusion, setEnableOcclusion] = useState(true);
   const [enableLineBoost, setEnableLineBoost] = useState(false);
 
-  const defaultPeaksCurve = {
-    startPoint: [0.5, 0],
-    controlPoint1: [0.5, 0.5],
-    endPoint: [0.5, 1],
-  };
-  const [peaksCurve, setPeaksCurve] = useState(defaultPeaksCurve);
+  const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
   const updatePointInPeaksCurve = (name, point) => {
     setPeaksCurve({
       ...peaksCurve,
@@ -48,7 +49,7 @@ export const SlopesProvider = ({ children }) => {
         enableLineBoost,
         setEnableLineBoost,
         peaksCurve,
-        updatePointInPeaksCurve,
+        setPeaksCurve,
         personInflateAmount,
         setPersonInflateAmount,
         wavelength,

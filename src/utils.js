@@ -266,3 +266,9 @@ export const extractTypeFromObject = (obj, type) => {
     return acc;
   }, {});
 };
+
+export const shallowCompare = (o1, o2, keys) => {
+  return !keys.find(key => {
+    return o1[key] !== o2[key];
+  });
+};

@@ -15,7 +15,7 @@ type Props = {
   width: number,
   height: number,
   spacing?: number,
-  renderVisualization: (value: number) => React$Element,
+  visualizationComponent: any,
 };
 
 const SliderVideoControl = ({
@@ -26,7 +26,7 @@ const SliderVideoControl = ({
   width,
   height,
   spacing = 4,
-  renderVisualization,
+  visualizationComponent,
 }: Props) => {
   // The `width` provided is for the whole unit.
   const sliderWidth = 28;
@@ -35,14 +35,16 @@ const SliderVideoControl = ({
   const visualizationWidth = width - sliderWidth - spacing * 4;
   const visualizationHeight = height - spacing * 2;
 
+  const Visualization = visualizationComponent;
+
   return (
     <Wrapper style={{ width, height }}>
       <VisualizationWrapper style={{ padding: spacing }}>
-        {renderVisualization({
-          value,
-          width: visualizationWidth,
-          height: visualizationHeight,
-        })}
+        <Visualization
+          value={value}
+          width={visualizationWidth}
+          height={visualizationHeight}
+        />
       </VisualizationWrapper>
 
       <SliderWrapper style={{ padding: spacing }}>
@@ -76,4 +78,5 @@ const SliderWrapper = styled.div`
   border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
-export default SliderVideoControl;
+// $FlowIgnore
+export default React.memo(SliderVideoControl);

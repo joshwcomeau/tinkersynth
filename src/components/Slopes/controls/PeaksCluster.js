@@ -33,8 +33,8 @@ const PerspectiveCluster = ({ width }: Props) => {
   return (
     <InstrumentCluster>
       <BezierControl
-        points={slopesParams.peaksCurve}
-        updatePoint={slopesParams.updatePointInPeaksCurve}
+        curve={slopesParams.peaksCurve}
+        updateCurve={slopesParams.setPeaksCurve}
         width={bezierControlWidth}
         height={bezierControlHeight}
       />
@@ -46,12 +46,8 @@ const PerspectiveCluster = ({ width }: Props) => {
         height={sliderHeight}
         padding={sliderPadding}
         value={slopesParams.personInflateAmount}
-        updateValue={value => {
-          slopesParams.setPersonInflateAmount(value);
-        }}
-        renderIcon={({ value, size }) => (
-          <PersonInflateVisualization value={value} size={size} />
-        )}
+        updateValue={slopesParams.setPersonInflateAmount}
+        visualizationComponent={PersonInflateVisualization}
       />
 
       <Spacer size={UNIT} />
@@ -61,12 +57,8 @@ const PerspectiveCluster = ({ width }: Props) => {
         height={sliderHeight}
         padding={sliderPadding}
         value={slopesParams.wavelength}
-        updateValue={value => {
-          slopesParams.setWavelength(value);
-        }}
-        renderIcon={({ value, size }) => (
-          <WavelengthVisualization value={value} size={size} />
-        )}
+        updateValue={slopesParams.setWavelength}
+        visualizationComponent={WavelengthVisualization}
       />
     </InstrumentCluster>
   );

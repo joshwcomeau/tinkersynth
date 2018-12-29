@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import { useSpring, animated, interpolate } from 'react-spring/hooks';
 
 import { normalize } from '../../../utils';
@@ -18,8 +18,10 @@ const SPRING_CONFIG = {
   friction: 6,
 };
 
-const BoilingWater = ({ value, strength = 0.01, offset }: Props) => {
+const BoilingSteam = ({ value, strength = 0.01, offset }: Props) => {
   const ratio = value / 100;
+
+  const [isMidTransition, setIsMidTransition] = useState(false);
 
   const opacity = ratio;
 
@@ -85,4 +87,4 @@ const BoilingWater = ({ value, strength = 0.01, offset }: Props) => {
 };
 
 // $FlowIgnore
-export default React.memo(BoilingWater);
+export default React.memo(BoilingSteam);

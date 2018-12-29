@@ -26,8 +26,6 @@ const SPRING_CONFIG = {
   friction: 9,
 };
 
-const createCurveFromPoints = (sx, sy, c1x, c1y, c2x, c2y, ex, ey) => {};
-
 const BoilingWater = ({
   value,
   color,
@@ -150,4 +148,4 @@ const BoilingWater = ({
 };
 
 // $FlowIgnore
-export default React.memo(BoilingWater);
+export default BoilingWater;

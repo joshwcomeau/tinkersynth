@@ -13,7 +13,11 @@ import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
 import LineBoostVisualization from './LineBoostVisualization';
 
-const PerspectiveCluster = ({ width }) => {
+type Props = {
+  width: number,
+};
+
+const PerspectiveCluster = ({ width }: Props) => {
   const slopesParams = useContext(SlopesContext);
 
   const innerWidth = width - UNIT * 2 - 2;
@@ -34,7 +38,7 @@ const PerspectiveCluster = ({ width }) => {
         max={100}
         width={videoSliderWidth}
         height={videoSliderHeight}
-        renderVisualization={props => <PerspectiveVisualization {...props} />}
+        visualizationComponent={PerspectiveVisualization}
       />
       <Spacer size={UNIT} />
       <Column>
@@ -43,18 +47,19 @@ const PerspectiveCluster = ({ width }) => {
           height={toggleControlSize}
           value={slopesParams.enableOcclusion}
           updateValue={slopesParams.setEnableOcclusion}
-          renderVisualization={props => <OcclusionVisualization {...props} />}
+          visualizationComponent={OcclusionVisualization}
         />
         <ToggleControl
           width={toggleControlSize}
           height={toggleControlSize}
           value={slopesParams.enableLineBoost}
           updateValue={slopesParams.setEnableLineBoost}
-          renderVisualization={props => <LineBoostVisualization {...props} />}
+          visualizationComponent={LineBoostVisualization}
         />
       </Column>
     </InstrumentCluster>
   );
 };
 
-export default PerspectiveCluster;
+// $FlowIgnore
+export default React.memo(PerspectiveCluster);

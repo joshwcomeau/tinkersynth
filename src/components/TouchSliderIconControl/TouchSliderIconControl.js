@@ -8,11 +8,12 @@ import Spacer from '../Spacer';
 type Props = {
   value: number,
   updateValue: (num: number) => void,
-
   width: number,
   height: number,
+  min?: number,
+  max?: number,
   dotSize?: number,
-  renderVisualization: (value: number, size: number) => React$Element,
+  visualizationComponent: any,
 };
 
 const TouchSliderIconControl = ({
@@ -23,16 +24,18 @@ const TouchSliderIconControl = ({
   min,
   max,
   dotSize = 3,
-  renderVisualization,
+  visualizationComponent,
 }: Props) => {
   const iconSize = height;
 
   const touchSliderWidth = width - iconSize;
 
+  const Visualization = visualizationComponent;
+
   return (
     <Wrapper style={{ width }}>
       <IconWrapper style={{ width: iconSize, height: iconSize }}>
-        {renderVisualization(value, iconSize)}
+        <Visualization value={value} size={iconSize} />
       </IconWrapper>
 
       <Spacer size={0} />
@@ -68,4 +71,4 @@ const TouchSliderWrapper = styled.div`
   background: rgba(255, 255, 255, 0.05);
 `;
 
-export default TouchSliderIconControl;
+export default React.memo(TouchSliderIconControl);

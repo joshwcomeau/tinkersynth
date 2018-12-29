@@ -5,7 +5,7 @@
 // This file specifies the mapping from high-level params to actual variables
 // used in the logic.
 // `value` will always be from 0-1000
-import { normalize } from '../../utils';
+import { normalize, shallowCompare } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
 import type { Bezier } from '../../types';
@@ -45,14 +45,14 @@ const transformParameters = ({
   //
   // To do this, we need to normalize our values to 0-1, and then use a bezier
   // curve to map the values onto.
-  const bezierCurve = {
+  const perspectiveScaleCurve = {
     startPoint: [0, 0],
     endPoint: [1, 1],
     controlPoint1: [1, 0],
   };
 
   const [, perspectiveCurved] = getValuesForBezierCurve(
-    bezierCurve,
+    perspectiveScaleCurve,
     perspective / 100
   );
 

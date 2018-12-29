@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { clamp, normalize } from '../../utils';
+import { clamp, normalize, throttle } from '../../utils';
 import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
@@ -50,7 +50,7 @@ const useOffscreenCanvasIfAvailable = (
   }, []);
 
   // On every update
-  useEffect(() => {
+  const handleUpdate = () => {
     const ctx = contextRef.current;
 
     if (!ctx) {
@@ -85,7 +85,8 @@ const useOffscreenCanvasIfAvailable = (
       ctx.fill();
       ctx.closePath();
     });
-  });
+  };
+  useEffect(throttle(handleUpdate, 25));
 };
 
 const TouchSlider = (props: Props) => {

@@ -6,16 +6,12 @@ import { COLORS, UNIT, CONTROL_RADIUS } from '../../constants';
 
 import Toggle from '../Toggle';
 
-type RenderProps = {
+type Props = {
   width: number,
   height: number,
   value: number,
-};
-
-type Props = {
-  ...RenderProps,
   updateValue: (isToggled: boolean) => void,
-  renderVisualization: (props: RenderProps) => React$Element,
+  visualizationComponent: any,
 };
 
 const ToggleControl = ({
@@ -23,7 +19,7 @@ const ToggleControl = ({
   height,
   value,
   updateValue,
-  renderVisualization,
+  visualizationComponent,
 }: Props) => {
   const visualizationRatio = 0.5;
 
@@ -33,14 +29,16 @@ const ToggleControl = ({
     height * visualizationRatio - visualizationSpacing * 2
   );
 
+  const Visualization = visualizationComponent;
+
   return (
     <Wrapper style={{ width, height }}>
       <VisualizationWrapper style={{ height: height * visualizationRatio }}>
-        {renderVisualization({
-          width: visualizationWidth,
-          height: visualizationHeight,
-          value,
-        })}
+        <Visualization
+          value={value}
+          width={visualizationWidth}
+          height={visualizationHeight}
+        />
       </VisualizationWrapper>
 
       <ToggleWrapper style={{ height: height - height * visualizationRatio }}>
@@ -78,4 +76,5 @@ const ToggleWrapper = styled.div`
   border-radius: 0 ${CONTROL_RADIUS}px ${CONTROL_RADIUS}px 0;
 `;
 
-export default ToggleControl;
+// $FlowIgnore
+export default React.memo(ToggleControl);

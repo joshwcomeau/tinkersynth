@@ -26,9 +26,7 @@ const SimilarityCluster = ({ width }: Props) => {
         updateValue={slopesParams.setSelfSimilarity}
         width={innerWidth}
         height={32}
-        renderVisualization={(value, size) => (
-          <SimilarityVisualization value={value} size={size} />
-        )}
+        visualizationComponent={SimilarityVisualization}
       />
     </InstrumentCluster>
   );
