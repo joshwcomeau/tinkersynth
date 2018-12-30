@@ -22,7 +22,7 @@ const PolarCluster = ({ width }: Props) => {
 
   const sliderHeight = 150;
 
-  const polarHoleSliderWidth = 36;
+  const polarHoleSliderWidth = 32;
   const polarHoleSliderPadding = 4;
 
   const videoSliderWidth = innerWidth - polarHoleSliderWidth - UNIT;
