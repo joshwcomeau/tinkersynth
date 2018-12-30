@@ -5,7 +5,7 @@
 // This file specifies the mapping from high-level params to actual variables
 // used in the logic.
 // `value` will always be from 0-1000
-import { normalize, mix, shallowCompare } from '../../utils';
+import { normalize, mix } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
 import type { Bezier } from '../../types';
@@ -74,7 +74,7 @@ const transformParameters = ({
   const omegaRadiusSubtractAmount = rowHeight;
   const omegaRatio = omega / 100;
 
-  let numOfRows = 35;
+  let numOfRows = 60;
   if (enableLineBoost) {
     numOfRows = numOfRows * 2 - 1;
     distanceBetweenRows /= 2;

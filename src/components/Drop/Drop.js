@@ -13,14 +13,20 @@ type Props = {
   // Amount of downward acceleration.
   // Between 0 (space) and 1 (omg I can't move)
   gravity?: number,
+  squishiness: number,
   children: React$Node,
 };
 
 const PRECISION = 0.2;
 
-const useDropPhysics = ({ distance, bounciness, gravity = 0.2 }) => {
+const useDropPhysics = ({
+  distance,
+  bounciness,
+  squishiness = 1.4,
+  gravity = 0.2,
+}) => {
   const [amountFallen, setAmountFallen] = useState(0);
-  const [scaleX, setScaleX] = useState(0);
+  const [squash, setSquash] = useState(1);
   const velocity = useRef(1);
   const animationFrameId = useRef(null);
   const lastTickAt = useRef(null);
@@ -62,10 +68,10 @@ const useDropPhysics = ({ distance, bounciness, gravity = 0.2 }) => {
         const velocityDelta = originalVelocity - velocity.current;
 
         if (velocityDelta > 0) {
-          setScaleX(normalize(velocityDelta, 0, 5, 1, 1.5));
+          setSquash(normalize(velocityDelta, 0, 5, 1, squishiness));
         } else {
-          if (scaleX > 1) {
-            setScaleX(scaleX - 0.1);
+          if (squash > 1) {
+            setSquash(squash - 0.05);
           }
         }
       });
@@ -74,21 +80,24 @@ const useDropPhysics = ({ distance, bounciness, gravity = 0.2 }) => {
         window.cancelAnimationFrame(animationFrameId.current);
       };
     },
-    [amountFallen, scaleX, velocity]
+    [amountFallen, squash]
   );
 
-  return { amountFallen, scaleX };
+  return { amountFallen, squash };
 };
 
 const Drop = ({ children, ...physicsStuff }: Props) => {
-  const { amountFallen, scaleX } = useDropPhysics(physicsStuff);
+  const { amountFallen, squash } = useDropPhysics(physicsStuff);
 
   const offset = -physicsStuff.distance + amountFallen;
+
+  const scaleX = squash;
+  const scaleY = 1 + (1 - squash);
 
   return (
     <Wrapper
       style={{
-        transform: `translateY(${offset}px) scaleX(${scaleX})`,
+        transform: `translateY(${offset}px) scaleX(${scaleX}) scaleY(${scaleY})`,
       }}
     >
       {children}
@@ -98,7 +107,7 @@ const Drop = ({ children, ...physicsStuff }: Props) => {
 
 const Wrapper = styled.div`
   will-change: transform;
-  transform-origin: center center;
+  transform-origin: bottom center;
 `;
 
 export default Drop;

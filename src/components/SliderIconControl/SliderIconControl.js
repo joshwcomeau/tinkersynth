@@ -12,6 +12,7 @@ type Props = {
   width: number,
   height: number,
   spacing?: number,
+  isDisabled: boolean,
   visualizationComponent: any,
 };
 
@@ -20,6 +21,7 @@ const SliderIconControl = ({
   width,
   height,
   spacing = 4,
+  isDisabled,
   visualizationComponent,
   ...sliderProps
 }: Props) => {
@@ -43,6 +45,7 @@ const SliderIconControl = ({
           value={value}
           width={sliderWidth}
           height={sliderHeight}
+          isDisabled={isDisabled}
           {...sliderProps}
         />
       </SliderWrapper>

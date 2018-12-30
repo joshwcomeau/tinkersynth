@@ -17,9 +17,10 @@ type Props = {
   max?: number,
   width: number,
   height: number,
+  numOfNotches?: number,
   handleWidth?: number,
   handleHeight?: number,
-  numOfNotches?: number,
+  isDisabled: boolean,
 };
 
 // TODO: Either use or remove HANDLE_BUFFER
@@ -35,12 +36,13 @@ const Slider = ({
   numOfNotches = 18,
   handleWidth = 30,
   handleHeight = 21,
+  isDisabled,
 }: Props) => {
   const [dragging, setDragging] = useState(false);
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
 
   const updatePosition = ev => {
-    if (!sliderBoundingBox) {
+    if (!sliderBoundingBox || isDisabled) {
       return;
     }
 
@@ -83,6 +85,7 @@ const Slider = ({
   const handleMarginTop = -handleHeight / 2;
 
   const handleDisplacement = normalize(value, min, max, height, 0);
+  const handleColor = isDisabled ? COLORS.gray[300] : COLORS.pink[300];
 
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
@@ -95,6 +98,11 @@ const Slider = ({
       <HandleWrapper
         onMouseDown={ev => {
           ev.stopPropagation();
+
+          if (isDisabled) {
+            return;
+          }
+
           setDragging(true);
         }}
         style={{
@@ -110,13 +118,13 @@ const Slider = ({
             ${-HANDLE_BUFFER}px,
             ${handleDisplacement - HANDLE_BUFFER}px
           )`,
-          cursor: dragging ? 'grabbing' : 'grab',
+          cursor: isDisabled ? 'not-allowed' : dragging ? 'grabbing' : 'grab',
         }}
       >
         <RectangularHandle
           width={handleWidth}
           height={handleHeight}
-          color={COLORS.pink[300]}
+          color={handleColor}
         />
       </HandleWrapper>
     </Wrapper>

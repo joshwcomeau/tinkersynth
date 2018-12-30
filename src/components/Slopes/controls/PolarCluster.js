@@ -7,7 +7,7 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SliderVideoControl from '../../SliderVideoControl';
 import PolarAmountVisualization from './PolarAmountVisualization';
-import PolarHoleSizeVisualization from './PolarHoleSizeVisualization';
+import BallSizeVisualization from './BallSizeVisualization';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
@@ -48,7 +48,9 @@ const PolarCluster = ({ width }: Props) => {
         padding={polarHoleSliderPadding}
         value={slopesParams.ballSize}
         updateValue={slopesParams.setBallSize}
-        visualizationComponent={PolarHoleSizeVisualization}
+        visualizationComponent={BallSizeVisualization}
+        numOfNotches={14}
+        isDisabled={slopesParams.disabledParams.ballSize}
       />
     </InstrumentCluster>
   );

@@ -26,11 +26,12 @@ export const SlopesProvider = ({ children }) => {
   const [ballSize, setBallSize] = useState(50);
 
   const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
-  const updatePointInPeaksCurve = (name, point) => {
-    setPeaksCurve({
-      ...peaksCurve,
-      [name]: point,
-    });
+
+  // Sometimes, values in 1 parameter will disable others.
+  // For example, when polarRatio is 0, "ballSize" doesn't do anything, since
+  // it controls the size of the polar hole.
+  const disabledParams = {
+    ballSize: polarAmount === 0,
   };
 
   return (
@@ -60,6 +61,7 @@ export const SlopesProvider = ({ children }) => {
         setWaterBoilAmount,
         ballSize,
         setBallSize,
+        disabledParams,
       }}
     >
       {children}

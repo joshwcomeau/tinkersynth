@@ -6,12 +6,27 @@ import Drop from '../../Drop';
 type Props = {
   id: string,
   src: string,
+  bounciness: number,
+  squishiness: number,
+  gravity: number,
   dropFrom: number,
 };
 
-const Ball = ({ id, src, bounciness, dropFrom }: Props) => {
+const Ball = ({
+  id,
+  src,
+  bounciness,
+  gravity,
+  squishiness,
+  dropFrom,
+}: Props) => {
   return (
-    <Drop distance={dropFrom} bounciness={bounciness}>
+    <Drop
+      distance={dropFrom}
+      bounciness={bounciness}
+      squishiness={squishiness}
+      gravity={gravity}
+    >
       <img alt={id} src={src} />
     </Drop>
   );
