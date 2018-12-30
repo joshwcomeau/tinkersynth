@@ -32,7 +32,11 @@ const SliderIconControl = ({
 
   return (
     <Wrapper>
-      <Visualization size={sliderIconSize} value={value} />
+      <VisualizationWrapper
+        style={{ width: sliderIconSize, height: sliderIconSize }}
+      >
+        <Visualization size={sliderIconSize} value={value} />
+      </VisualizationWrapper>
 
       <SliderWrapper style={{ width, padding: spacing }}>
         <Slider
@@ -49,6 +53,10 @@ const SliderIconControl = ({
 const Wrapper = styled(Column)`
   background: ${COLORS.gray[900]};
   border-radius: ${CONTROL_RADIUS}px;
+`;
+
+const VisualizationWrapper = styled.div`
+  overflow: hidden;
 `;
 
 const SliderWrapper = styled.div`

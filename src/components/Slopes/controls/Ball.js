@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-import { useSpring, animated } from 'react-spring/hooks';
+
+import Drop from '../../Drop';
 
 type Props = {
   id: string,
@@ -8,20 +9,11 @@ type Props = {
   dropFrom: number,
 };
 
-const Ball = ({ id, src, dropFrom }: Props) => {
-  const spring = useSpring({
-    distance: 0,
-    from: { distance: dropFrom },
-  });
-
+const Ball = ({ id, src, bounciness, dropFrom }: Props) => {
   return (
-    <animated.img
-      alt={id}
-      src={src}
-      style={{
-        transform: spring.distance.interpolate(d => `translateY(-${d}px)`),
-      }}
-    />
+    <Drop distance={dropFrom} bounciness={bounciness}>
+      <img alt={id} src={src} />
+    </Drop>
   );
 };
 
