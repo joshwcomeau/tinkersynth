@@ -40,8 +40,11 @@ const calculatePointsForLine = (value, width, height, rowIndex, numOfLines) => {
       height,
       sampleIndex: colIndex,
       samplesPerRow: numOfPointsPerLine,
-      omegaRatio: 1,
+      omegaRatio,
       omegaRadiusSubtractAmount: height,
+      polarTanRatio: 0,
+      polarTanMultiplier: 0,
+      radiusMultiple: 0.7,
     });
 
     return [mix(polarX, x, omegaRatio), mix(polarY, y, omegaRatio)];

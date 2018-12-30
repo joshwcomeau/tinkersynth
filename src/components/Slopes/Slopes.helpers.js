@@ -355,6 +355,7 @@ export const plotAsPolarCoordinate = ({
   omegaRadiusSubtractAmount,
   polarTanRatio = 0,
   polarTanMultiplier = 0,
+  radiusMultiple = 1,
 }) => {
   // Normalize the value from 0π to 2π, and then add 0.5π.
   // The added 0.5π is so that the slopes point upwards, instead of to the left.
@@ -363,11 +364,9 @@ export const plotAsPolarCoordinate = ({
     normalize(sampleIndex, 0, samplesPerRow - 1, 0, 2 * Math.PI) +
     Math.PI * 0.5;
 
-  const radius = mix(
-    omegaRadiusSubtractAmount - point[1],
-    point[1],
-    omegaRatio
-  );
+  const radius =
+    mix(omegaRadiusSubtractAmount - point[1], point[1], omegaRatio) *
+    radiusMultiple;
 
   const polarPoint = [theta, radius];
 
