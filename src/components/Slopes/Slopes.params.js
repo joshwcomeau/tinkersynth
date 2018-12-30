@@ -23,6 +23,7 @@ type InputParameters = {
   personInflateAmount: number,
   wavelength: number,
   waterBoilAmount: number,
+  ballSize: number,
 };
 
 const transformParameters = ({
@@ -38,6 +39,7 @@ const transformParameters = ({
   personInflateAmount,
   wavelength,
   waterBoilAmount,
+  ballSize,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -129,6 +131,8 @@ const transformParameters = ({
 
   const selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
+  const polarHoleSize = normalize(ballSize, 0, 100, 5, 150);
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -142,6 +146,7 @@ const transformParameters = ({
     perlinRangePerRow,
     omegaRadiusSubtractAmount,
     amplitude,
+    polarHoleSize,
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,

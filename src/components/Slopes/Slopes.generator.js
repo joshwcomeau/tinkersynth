@@ -47,6 +47,7 @@ const sketch = ({
   perlinRangePerRow,
   amplitude,
   selfSimilarity,
+  polarHoleSize,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -83,7 +84,8 @@ const sketch = ({
         height,
         verticalMargin,
         distanceBetweenRows,
-        polarRatio
+        polarRatio,
+        polarHoleSize
       );
 
       const distanceBetweenSamples =
@@ -183,15 +185,13 @@ const getRowOffset = (
   height,
   verticalMargin,
   distanceBetweenRows,
-  polarRatio
+  polarRatio,
+  polarHoleSize
 ) => {
-  // TODO: variable?
-  const POLAR_HOLE = 30;
-
   const cartesianValue =
     height - verticalMargin * 2 - rowIndex * distanceBetweenRows;
 
-  const polarValue = POLAR_HOLE + rowIndex * distanceBetweenRows;
+  const polarValue = polarHoleSize + rowIndex * distanceBetweenRows;
 
   return mix(polarValue, cartesianValue, polarRatio);
 };

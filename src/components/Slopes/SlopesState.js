@@ -23,6 +23,8 @@ export const SlopesProvider = ({ children }) => {
   const [enableOcclusion, setEnableOcclusion] = useState(true);
   const [enableLineBoost, setEnableLineBoost] = useState(false);
 
+  const [ballSize, setBallSize] = useState(50);
+
   const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
   const updatePointInPeaksCurve = (name, point) => {
     setPeaksCurve({
@@ -56,6 +58,8 @@ export const SlopesProvider = ({ children }) => {
         setWavelength,
         waterBoilAmount,
         setWaterBoilAmount,
+        ballSize,
+        setBallSize,
       }}
     >
       {children}
