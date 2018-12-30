@@ -1,0 +1,15 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="baseballmask" mask-type="alpha" maskUnits="userSpaceOnUse" x="7" y="9" width="20" height="20">
+<circle cx="16.6713" cy="19.4788" r="8.5" fill="#C4C4C4" stroke="#32FF98" stroke-width="2"/>
+</mask>
+<g mask="url(#baseballmask)">
+<circle cx="16.5" cy="19.5" r="8.5" stroke="white" stroke-width="2"/>
+</g>
+<mask id="mask1" mask-type="alpha" maskUnits="userSpaceOnUse" x="10" y="13" width="13" height="13">
+<circle cx="16.6713" cy="19.4787" r="6.23333" fill="#C4C4C4"/>
+</mask>
+<g mask="url(#mask1)">
+<ellipse cx="26.8823" cy="24.203" rx="10.7667" ry="7.93333" transform="rotate(23.9509 26.8823 24.203)" stroke="#FF2D1A"/>
+<ellipse cx="3.06018" cy="13.621" rx="10.7667" ry="7.93333" transform="rotate(23.9509 3.06018 13.621)" stroke="#FF2D1A"/>
+</g>
+</svg>
