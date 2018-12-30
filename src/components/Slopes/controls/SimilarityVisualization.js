@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 

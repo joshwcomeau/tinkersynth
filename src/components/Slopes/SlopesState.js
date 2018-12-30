@@ -1,6 +1,7 @@
 // @flow
 import React, { useState } from 'react';
 
+// $FlowFixMe
 export const SlopesContext = React.createContext({});
 
 const DEFAULT_PEAKS_CURVE = {
@@ -9,7 +10,11 @@ const DEFAULT_PEAKS_CURVE = {
   endPoint: [0.5, 1],
 };
 
-export const SlopesProvider = ({ children }) => {
+type Props = {
+  children: React$Node,
+};
+
+export const SlopesProvider = ({ children }: Props) => {
   // High-level "Parameters", tweakable settings
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
