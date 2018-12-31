@@ -11,6 +11,7 @@ import TouchSliderIconControl from '../../TouchSliderIconControl';
 import PolarAmountVisualization from './PolarAmountVisualization';
 import BallSizeVisualization from './BallSizeVisualization';
 import OmegaVisualization from './OmegaVisualization';
+import SplitUniverseVisualization from './SplitUniverseVisualization';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
@@ -23,7 +24,7 @@ const PolarCluster = ({ width }: Props) => {
 
   const innerWidth = width - UNIT * 2 - 2;
 
-  const sliderHeight = 150;
+  const sliderHeight = 164;
 
   const polarHoleSliderWidth = 32;
   const polarHoleSliderPadding = 4;
@@ -65,8 +66,20 @@ const PolarCluster = ({ width }: Props) => {
           value={slopesParams.omega}
           updateValue={slopesParams.setOmega}
           width={innerWidth}
-          height={32}
+          height={40}
           visualizationComponent={OmegaVisualization}
+        />
+      </Row>
+
+      <Spacer size={UNIT} />
+
+      <Row>
+        <TouchSliderIconControl
+          value={slopesParams.splitUniverse}
+          updateValue={slopesParams.setSplitUniverse}
+          width={innerWidth}
+          height={40}
+          visualizationComponent={SplitUniverseVisualization}
         />
       </Row>
     </InstrumentCluster>
@@ -77,4 +90,5 @@ const Row = styled.div`
   display: flex;
 `;
 
+// $FlowIgnore
 export default React.memo(PolarCluster);

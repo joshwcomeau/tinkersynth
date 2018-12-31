@@ -11,7 +11,6 @@ import PeaksCluster from './controls/PeaksCluster';
 import Spacer from '../Spacer';
 import SimilarityCluster from './controls/SimilarityCluster';
 import PolarCluster from './controls/PolarCluster';
-import DestructionCluster from './controls/DestructionCluster';
 
 type Props = {
   width: number,
@@ -52,7 +51,6 @@ const SlopesControls = ({
       <Column>
         <SimilarityCluster width={columnWidth} />
         <PolarCluster width={columnWidth} />
-        <DestructionCluster width={columnWidth} />
       </Column>
     </ControlPanel>
   );

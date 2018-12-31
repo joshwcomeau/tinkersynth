@@ -25,7 +25,7 @@ const SimilarityCluster = ({ width }: Props) => {
         value={slopesParams.waterBoilAmount}
         updateValue={slopesParams.setWaterBoilAmount}
         width={innerWidth}
-        height={32}
+        height={40}
         visualizationComponent={SimilarityVisualization}
       />
     </InstrumentCluster>

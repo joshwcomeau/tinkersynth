@@ -1,9 +1,6 @@
 // @flow
-import { COLORS } from '../../constants';
 import { compose, range, normalize, roundToNearest } from '../../utils';
 import { convertHSBToHSL, stringifyHSL } from '../../helpers/color.helpers';
-
-import type { Point } from '../../types';
 
 const prepColor = compose(
   stringifyHSL,
@@ -19,15 +16,15 @@ export const generateDotCoords = (
 
   const dotSpacing = Math.round(dotSize);
 
-  const numOfCols = Math.floor(width / (dotSize + dotSpacing)) - 1;
+  const numOfCols = Math.floor(width / (dotSize + dotSpacing)) - 2;
   const numOfRows = Math.floor(height / (dotSize + dotSpacing)) - 1;
 
   range(numOfCols).map(colIndex =>
     range(numOfRows)
       .reverse()
       .forEach(rowIndex => {
-        const x = colIndex * (dotSize + dotSpacing) + 7;
-        const y = rowIndex * (dotSize + dotSpacing) + 7;
+        const x = colIndex * (dotSize + dotSpacing) + 10;
+        const y = rowIndex * (dotSize + dotSpacing) + 8;
 
         dotCoords.push([x, y, colIndex, rowIndex]);
       })
