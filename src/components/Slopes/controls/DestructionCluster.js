@@ -7,7 +7,7 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import TouchSliderIconControl from '../../TouchSliderIconControl';
 
-import OmegaVisualization from './OmegaVisualization';
+import SplitUniverseVisualization from './SplitUniverseVisualization';
 
 type Props = {
   width: number,
@@ -25,8 +25,8 @@ const DestructionCluster = ({ width }: Props) => {
         value={slopesParams.splitUniverse}
         updateValue={slopesParams.setSplitUniverse}
         width={innerWidth}
-        height={32}
-        visualizationComponent={OmegaVisualization}
+        height={40}
+        visualizationComponent={SplitUniverseVisualization}
       />
     </InstrumentCluster>
   );

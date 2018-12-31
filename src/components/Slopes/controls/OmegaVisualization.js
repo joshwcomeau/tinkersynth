@@ -33,10 +33,10 @@ const OmegaVisualization = ({ size, value }: Props) => {
   const baseMixValue = value / 100;
 
   const pathColors = [
-    COLORS.pink[300],
-    COLORS.blue[300],
-    COLORS.red[300],
-    COLORS.violet[300],
+    COLORS.yellow[500],
+    COLORS.aqua[300],
+    COLORS.green[300],
+    COLORS.yellow[300],
     COLORS.aqua[300],
   ];
 

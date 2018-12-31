@@ -6,6 +6,13 @@ import {
   getValuesForBezierCurve,
 } from '../../../helpers/line.helpers';
 
+type Props = {
+  color: string,
+  mix: number,
+};
+
+// This object holds the data for 2 bezier curves, that form an approximation
+// of a circle.
 const circleCurve = {
   start: [16, 24],
   curve1: {
@@ -21,6 +28,10 @@ const circleCurve = {
   },
 };
 
+// This object also holds the data for 2 bezier curves that form an
+// approximation of a circle, although the points are swapped with the previous
+// shape. This way, each shape represents a circle (ish), but you can mix
+// between them to create an inside-out effect.
 const twistCurve = {
   start: circleCurve.start,
   curve1: {
@@ -36,11 +47,12 @@ const twistCurve = {
   },
 };
 
-type Props = {
-  color: string,
-  mix: number,
-};
-
+// The transition features the top points of both bezier curves swapping places,
+// as well as the bottom points of both. In order to create a pleasant
+// asymmetry, I'm using a linear translation on the top points, but an eased
+// transition on the bottom, using a bezier curve. Not to be confused with the
+// curves above, which are actually drawn on-screen. This one is for transition
+// timing.
 const pathEasingCurve = {
   startPoint: [0, 0],
   endPoint: [1, 1],

@@ -61,7 +61,7 @@ const useOffscreenCanvasIfAvailable = (
 
     const { dotCoords, numOfCols } = generateDotCoords(width, height, dotSize);
 
-    const numOfSelectedDots = Math.round(dotCoords.length * (value / max)) || 1;
+    const numOfSelectedDots = Math.round(dotCoords.length * (value / max));
 
     const numOfHoveredDots = hoveredValue
       ? Math.round(dotCoords.length * (hoveredValue / max))
