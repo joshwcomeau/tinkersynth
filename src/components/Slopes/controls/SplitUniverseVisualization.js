@@ -1,64 +1,52 @@
 // @flow
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { normalize, clamp } from '../../../utils';
 
 import Svg from '../../Svg';
+import { useSpring, animated } from 'react-spring/hooks';
 
 type Props = {
   size: number,
   value: number,
 };
 
+const springConfig = {
+  tension: 120,
+  friction: 7,
+};
+
+const SPLIT_WITHIN = 0.2;
+
+const getWithinRange = (ratio, from, to) => {
+  const minMaxArr = [from, to].sort();
+  return clamp(normalize(ratio, SPLIT_WITHIN, 1, from, to), ...minMaxArr);
+};
+
 const SplitUniverseVisualization = ({ size, value }: Props) => {
   const ratio = value / 100;
 
-  const splitWithin = 0.2;
+  const spring = useSpring({
+    ratio,
+    config: springConfig,
+  });
 
   const tearNode = useRef(null);
-  const tearPathLength = useRef(null);
+  const [tearPathLength, setTearPathLength] = useState(null);
 
   useEffect(() => {
     if (!tearNode.current) {
       return;
     }
 
-    tearPathLength.current = tearNode.current.getTotalLength();
+    setTearPathLength(tearNode.current.getTotalLength());
   }, []);
 
-  let tearNodeDashOffset = tearPathLength.current
-    ? tearPathLength.current -
-      normalize(ratio, 0, splitWithin, 0, tearPathLength.current)
+  let tearNodeDashOffset = tearPathLength
+    ? tearPathLength - normalize(ratio, 0, SPLIT_WITHIN, 0, tearPathLength)
     : 0;
 
-  tearNodeDashOffset = clamp(tearNodeDashOffset, 0, tearPathLength.current);
-
-  const leftHalfTranslateX = clamp(
-    normalize(ratio, splitWithin, 1, 0, -20),
-    -20,
-    0
-  );
-  const leftHalfTranslateY = clamp(
-    normalize(ratio, splitWithin, 1, 0, 20),
-    0,
-    20
-  );
-  const leftHalfRotate = clamp(
-    normalize(ratio, splitWithin, 1, 0, -40),
-    -40,
-    0
-  );
-  const rightHalfTranslateX = clamp(
-    normalize(ratio, splitWithin, 1, 0, 30),
-    0,
-    30
-  );
-  const rightHalfTranslateY = clamp(
-    normalize(ratio, splitWithin, 1, 0, -10),
-    -10,
-    0
-  );
-  const rightHalfRotate = clamp(normalize(ratio, splitWithin, 1, 0, 45), 0, 45);
+  tearNodeDashOffset = clamp(tearNodeDashOffset, 0, tearPathLength);
 
   return (
     <Svg width={size} height={size} viewBox="0 0 40 40">
@@ -102,12 +90,16 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
         />
       </mask>
 
-      <g
+      <animated.g
         mask="url(#mask0)"
-        transform={`
-          translate(${rightHalfTranslateX}, ${rightHalfTranslateY})
-          rotate(${rightHalfRotate})
-        `}
+        transform={spring.ratio.interpolate(
+          ratio => `
+          translate(
+            ${getWithinRange(ratio, 0, 30)},
+            ${getWithinRange(ratio, 0, -10)})
+          rotate(${getWithinRange(ratio, 0, 45)})
+        `
+        )}
       >
         <circle cx="20" cy="20" r="12.5" stroke="#1AD9FF" strokeWidth="2" />
         <g mask="url(#mask1)">
@@ -133,17 +125,21 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
           stroke="white"
           strokeWidth="2"
           strokeLinecap="square"
-          strokeDasharray={tearPathLength.current}
+          strokeDasharray={tearPathLength}
           strokeDashoffset={tearNodeDashOffset}
         />
-      </g>
+      </animated.g>
 
-      <g
+      <animated.g
         mask="url(#mask2)"
-        transform={`
-          translate(${leftHalfTranslateX}, ${leftHalfTranslateY})
-          rotate(${leftHalfRotate})
-        `}
+        transform={spring.ratio.interpolate(
+          ratio => `
+          translate(
+            ${getWithinRange(ratio, 0, -20)},
+            ${getWithinRange(ratio, 0, 20)})
+          rotate(${getWithinRange(ratio, 0, -40)})
+        `
+        )}
       >
         <circle cx="20" cy="20" r="12.5" stroke="#1AD9FF" strokeWidth="2" />
         <mask
@@ -179,10 +175,10 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
           stroke="white"
           strokeWidth="2"
           strokeLinecap="square"
-          strokeDasharray={tearPathLength.current}
+          strokeDasharray={tearPathLength}
           strokeDashoffset={tearNodeDashOffset}
         />
-      </g>
+      </animated.g>
     </Svg>
   );
 };
