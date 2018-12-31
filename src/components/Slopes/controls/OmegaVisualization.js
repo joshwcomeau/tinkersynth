@@ -6,7 +6,6 @@ import {
   mixPoints,
   getValuesForBezierCurve,
 } from '../../../helpers/line.helpers';
-import { clamp, normalize } from '../../../utils';
 
 import Svg from '../../Svg';
 
@@ -50,7 +49,7 @@ type PathProps = {
   mix: number,
 };
 
-const easingCurve = {
+const pathEasingCurve = {
   startPoint: [0, 0],
   endPoint: [1, 1],
   controlPoint1: [-1, 0],
@@ -73,7 +72,7 @@ const Path = ({ color, mix }: PathProps) => {
 
   // our bottom curve gets eased on a bezier curve, to keep the whole transition
   // from seeing too artificial/inorganic.
-  const [, bottomCurveMix] = getValuesForBezierCurve(easingCurve, mix);
+  const [, bottomCurveMix] = getValuesForBezierCurve(pathEasingCurve, mix);
   const bottomCurve = [
     mixPoints(
       circleCurve.curve1.controlPoint1,
@@ -108,19 +107,40 @@ const Path = ({ color, mix }: PathProps) => {
   );
 };
 
-const offsetBy = (value: number, ratio: number) => {
-  return clamp(normalize(value, 0, 1, ratio, 1), 0, 1);
+const offsetCurves = [
+  { startPoint: [0, 0], endPoint: [1, 1], controlPoint1: [0, -1.5] },
+  { startPoint: [0, 0], endPoint: [1, 1], controlPoint1: [0, -0.5] },
+  { startPoint: [0, 0], endPoint: [1, 1], controlPoint1: [0, 0] },
+  { startPoint: [0, 0], endPoint: [1, 1], controlPoint1: [0, 0.5] },
+  { startPoint: [0, 0], endPoint: [1, 1], controlPoint1: [0, 1.5] },
+];
+
+const getValueOnCurve = (value, curve) => {
+  const [, curvedValue] = getValuesForBezierCurve(curve, value);
+
+  return curvedValue;
 };
 
 const OmegaVisualization = ({ size, value }: Props) => {
   const baseMixValue = value / 100;
 
+  const pathColors = [
+    COLORS.pink[300],
+    COLORS.blue[300],
+    COLORS.red[300],
+    COLORS.violet[300],
+    COLORS.aqua[300],
+  ];
+
   return (
     <Svg width={size} height={size} viewBox="0 0 32 32">
-      <Path color={COLORS.red[300]} mix={baseMixValue} />
-      <Path color={COLORS.yellow[300]} mix={offsetBy(baseMixValue, -0.5)} />
-      <Path color={COLORS.aqua[300]} mix={offsetBy(baseMixValue, -1)} />
-      <Path color={COLORS.green[300]} mix={offsetBy(baseMixValue, -1.6)} />
+      {pathColors.map((color, i) => (
+        <Path
+          key={color}
+          color={color}
+          mix={getValueOnCurve(baseMixValue, offsetCurves[i])}
+        />
+      ))}
     </Svg>
   );
 };
