@@ -3,7 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { clamp, normalize, throttle } from '../../utils';
-import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
+import {
+  getScaledCanvasProps,
+  getDevicePixelRatio,
+} from '../../helpers/canvas.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
@@ -29,6 +32,11 @@ const useOffscreenCanvasIfAvailable = (
   hoveredValue,
   props
 ) => {
+  // No SSR
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
 
   const contextRef = useRef(null);
@@ -46,7 +54,7 @@ const useOffscreenCanvasIfAvailable = (
     }
 
     contextRef.current = canvasRef.current.getContext('2d');
-    contextRef.current.scale(window.devicePixelRatio, window.devicePixelRatio);
+    contextRef.current.scale(devicePixelRatio, devicePixelRatio);
   }, []);
 
   // On every update
@@ -102,7 +110,7 @@ const TouchSlider = (props: Props) => {
 
   useOffscreenCanvasIfAvailable(
     canvasRef,
-    window.devicePixelRatio,
+    getDevicePixelRatio(),
     width,
     height,
     value,

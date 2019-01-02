@@ -4,13 +4,19 @@ import { Spring } from 'react-spring';
 
 import { extractTypeFromObject } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
-import { getScaledCanvasProps } from '../../helpers/canvas.helpers';
+import {
+  getScaledCanvasProps,
+  getDevicePixelRatio,
+} from '../../helpers/canvas.helpers';
 
 import transformParameters from './Slopes.params';
 import { SlopesContext } from './SlopesState';
-import Worker from './SlopesCanvas.worker.js';
+import Worker from './SlopesCanvas.worker';
 
-const worker = new Worker();
+let worker;
+if (typeof window !== 'undefined') {
+  worker = new Worker();
+}
 
 type Props = {
   width: number,
@@ -24,6 +30,11 @@ const useCanvasDrawing = (
   height,
   params
 ) => {
+  // In SSR mode, we don't want to try and do any of this.
+  if (!worker) {
+    return;
+  }
+
   const topMargin = (height / 11) * 1;
   const leftMargin = (width / 8.5) * 1;
   const samplesPerRow = Math.ceil(width * 0.5);
@@ -107,8 +118,9 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
   const canvasRef = useRef(null);
 
   const scaledCanvasProps = getScaledCanvasProps(width, height);
+  const devicePixelRatio = getDevicePixelRatio();
 
-  useCanvasDrawing(canvasRef, window.devicePixelRatio, width, height, params);
+  useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
 
   return <canvas ref={canvasRef} {...scaledCanvasProps} />;
 };

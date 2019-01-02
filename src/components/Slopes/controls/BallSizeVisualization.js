@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 
-import baseballSrc from '../../../assets/baseball.svg';
-import basketballSrc from '../../../assets/basketball.svg';
-import pingpongballSrc from '../../../assets/pingpongball.svg';
-import beachballSrc from '../../../assets/beachball.svg';
-import tennisballSrc from '../../../assets/tennisball.svg';
+import baseballSrc from '../../../images/baseball.svg';
+import basketballSrc from '../../../images/basketball.svg';
+import pingpongballSrc from '../../../images/pingpongball.svg';
+import beachballSrc from '../../../images/beachball.svg';
+import tennisballSrc from '../../../images/tennisball.svg';
 
 import Ball from './Ball';
 

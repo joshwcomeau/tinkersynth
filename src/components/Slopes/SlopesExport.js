@@ -16,12 +16,6 @@ import { SlopesContext } from './SlopesState';
 type Props = {
   width: number,
   height: number,
-  topMargin: number,
-  leftMargin: number,
-  perspective: number,
-  spikyness: number,
-  polarAmount: number,
-  omega: number,
 };
 
 const SlopesExport = ({ width, height }: Props) => {

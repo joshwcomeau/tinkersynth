@@ -3,8 +3,9 @@ import React from 'react';
 import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
-import { plotAsPolarCoordinate } from '../../Slopes/Slopes.helpers';
 import { range, mix } from '../../../utils';
+import { getDevicePixelRatio } from '../../../helpers/canvas.helpers';
+import { plotAsPolarCoordinate } from '../../Slopes/Slopes.helpers';
 
 import Svg from '../../Svg';
 
@@ -14,7 +15,9 @@ type Props = {
   value: number,
 };
 
-const MAX_DENSITY = (window.devicePixelRatio || 1) * 2;
+const devicePixelRatio = getDevicePixelRatio();
+
+const MAX_DENSITY = devicePixelRatio * 2;
 const SPRING_CONFIG = {
   tension: 120,
   friction: 18,
@@ -93,7 +96,7 @@ const PolarAmountVisualization = ({ width, height, value }: Props) => {
             return getPolylinePointsAsString(line);
           })}
           stroke={getColorForLineIndex(rowIndex)}
-          strokeWidth={window.devicePixelRatio > 1 ? 2.5 : 2}
+          strokeWidth={devicePixelRatio > 1 ? 2.5 : 2}
           strokeLinecap="round"
         />
       ))}

@@ -15,25 +15,9 @@ import NoiseCluster from './controls/NoiseCluster';
 
 type Props = {
   width: number,
-  perspective: number,
-  setPerspective: (num: number) => void,
-  spikyness: number,
-  setSpikyness: (num: number) => void,
 };
 
-const SlopesControls = ({
-  width,
-  perspective,
-  spikyness,
-  polarAmount,
-  omega,
-  splitUniverse,
-  setPerspective,
-  setSpikyness,
-  setPolarAmount,
-  setOmega,
-  setSplitUniverse,
-}: Props) => {
+const SlopesControls = ({ width }: Props) => {
   // We receive an outerWidth through props.
   // We want our control panel to have two columns, and to have equal spacing
   // on both sides (so 3 units of spacing total: left, between, right).

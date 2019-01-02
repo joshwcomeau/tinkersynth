@@ -1,10 +1,10 @@
 // @flow
 import { createGlobalStyle } from 'styled-components';
 
-import circularBook from '../../assets/fonts/CircularStd-Book.woff2';
-import circularMedium from '../../assets/fonts/CircularStd-Medium.woff2';
-import circularBold from '../../assets/fonts/CircularStd-Bold.woff2';
-import circularBlack from '../../assets/fonts/CircularStd-Black.woff2';
+import circularBook from '../../fonts/CircularStd-Book.woff2';
+import circularMedium from '../../fonts/CircularStd-Medium.woff2';
+import circularBold from '../../fonts/CircularStd-Bold.woff2';
+import circularBlack from '../../fonts/CircularStd-Black.woff2';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
