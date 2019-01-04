@@ -186,14 +186,22 @@ export const FONT_WEIGHTS = {
 export const BREAKPOINT_SIZES = {
   sm: 540,
   md: 900,
-  lg: 1200,
+  lg: 1275,
 };
 
 export const BREAKPOINTS = {
   sm: `(max-width: ${BREAKPOINT_SIZES.sm}px)`,
   md: `(max-width: ${BREAKPOINT_SIZES.md}px)`,
+  lg: `(max-width: ${BREAKPOINT_SIZES.lg}px)`,
   mdMin: `(min-width: ${BREAKPOINT_SIZES.sm + 1}px)`,
   lgMin: `(min-width: ${BREAKPOINT_SIZES.md + 1}px)`,
+};
+
+export const HEADER_HEIGHT = 75;
+export const MAX_WIDTH = {
+  sm: '100%',
+  md: BREAKPOINT_SIZES.md + 'px',
+  base: BREAKPOINT_SIZES.lg + 'px',
 };
 
 export const Z_INDICES = {

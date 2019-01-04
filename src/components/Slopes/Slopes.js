@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import { COLORS } from '../../constants';
 
+import MaxWidthWrapper from '../MaxWidthWrapper';
+
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvas from './SlopesCanvas';
 import SlopesControls from './SlopesControls';
@@ -39,13 +41,12 @@ const Slopes = () => {
 };
 
 const OuterWrapper = styled.div`
+  position: relative;
   background: ${COLORS.gray[700]};
 `;
 
-const InnerWrapper = styled.div`
+const InnerWrapper = styled(MaxWidthWrapper)`
   display: flex;
-  max-width: 1400px;
-  margin: auto;
 `;
 
 const CanvasWrapper = styled.div`

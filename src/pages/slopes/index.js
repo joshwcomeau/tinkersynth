@@ -4,11 +4,11 @@ import loadable from '@loadable/component';
 
 import Layout from '../../components/Layout';
 
-const LazySlopes = loadable(() => import('../../components/Slopes'));
+const Slopes = loadable(() => import('../../components/Slopes'));
 
 const SlopesIndex = () => (
   <Layout>
-    <LazySlopes
+    <Slopes
       fallback={
         // TODO: Custom spinner
         <p>Building the Machine</p>
