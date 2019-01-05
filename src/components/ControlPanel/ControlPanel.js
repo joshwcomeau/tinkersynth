@@ -21,9 +21,7 @@ const ControlPanel = ({ width, padding, children }: Props) => {
 
       <ScrewRow />
 
-      <MainPanel style={{ padding }}>
-        <ChildrenWrapper>{children}</ChildrenWrapper>
-      </MainPanel>
+      <MainPanel style={{ padding }}>{children}</MainPanel>
     </Wrapper>
   );
 };
@@ -42,10 +40,5 @@ const TopPanel = styled.div`
 `;
 
 const MainPanel = styled.div``;
-
-const ChildrenWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 
 export default ControlPanel;

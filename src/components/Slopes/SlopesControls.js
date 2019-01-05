@@ -27,19 +27,34 @@ const SlopesControls = ({ width }: Props) => {
 
   return (
     <ControlPanel width={width} padding={padding}>
-      <Column>
-        <PerspectiveCluster width={columnWidth} />
-        <PeaksCluster width={columnWidth} />
-      </Column>
-      <Spacer size={UNIT * 2} />
+      <Row>
+        <Column>
+          <PerspectiveCluster width={columnWidth} />
+          <PeaksCluster width={columnWidth} />
+        </Column>
+        <Spacer size={UNIT * 2} />
 
-      <Column>
-        <SimilarityCluster width={columnWidth} />
-        <PolarCluster width={columnWidth} />
-      </Column>
+        <Column>
+          <SimilarityCluster width={columnWidth} />
+          <PolarCluster width={columnWidth} />
+        </Column>
+      </Row>
+
+      <Row>
+        <Column>
+          <NoiseCluster width={columnWidth} />
+        </Column>
+
+        <Column />
+      </Row>
     </ControlPanel>
   );
 };
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const Column = styled.div`
   flex: 1;
