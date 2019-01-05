@@ -1,10 +1,13 @@
 // @flow
-import React from 'react';
+import React, { useRef } from 'react';
 import { Spring } from 'react-spring';
 
 import { COLORS } from '../../../constants';
-import { getValuesForBezierCurve } from '../../../helpers/line.helpers';
-import { range } from '../../../utils';
+import {
+  getValuesForBezierCurve,
+  mixPoints,
+} from '../../../helpers/line.helpers';
+import { range, clamp } from '../../../utils';
 
 import Svg from '../../Svg';
 
@@ -13,6 +16,22 @@ type Props = {
   height: number,
   value: number,
 };
+
+const generateRandomLines = (width, height, numOfPoints) =>
+  range(numOfPoints).map(i => {
+    const p1 = [width * (i / numOfPoints), Math.round(Math.random() * height)];
+
+    const p2 = [
+      width * ((i + 1) / numOfPoints),
+      clamp(
+        Math.round((Math.random() - 0.5) * (height * 0.75) + p1[1]),
+        0,
+        height
+      ),
+    ];
+
+    return [p1, p2];
+  });
 
 const NoiseVisualization = ({ width, height, value }: Props) => {
   const ratio = value / 100;
@@ -27,19 +46,61 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     endPoint: [innerWidth, innerHeight / 2],
   };
 
-  const numOfPoints = innerWidth / 2 + 1;
-  const data = range(numOfPoints)
-    .map(i => {
-      const t = i / numOfPoints;
+  const numOfPoints = Math.round(innerWidth / 3) + 1;
 
-      const [x, y] = getValuesForBezierCurve(curve, t);
+  const randomLines1 = useRef(
+    generateRandomLines(innerWidth, innerHeight, numOfPoints)
+  );
+  const randomLines2 = useRef(
+    generateRandomLines(innerWidth, innerHeight, numOfPoints)
+  );
 
-      // Depending on the ratio, we want to mix between a random set of values
-      // and this
+  const rawPointData = range(numOfPoints).map(i => {
+    const t = i / numOfPoints;
+    return getValuesForBezierCurve(curve, t);
+  });
 
-      return `${x},${y}`;
-    })
-    .join(', ');
+  const points1 = rawPointData
+    .reduce((acc, point, i) => {
+      if (i === 0) {
+        return acc;
+      }
+
+      const randomLine = randomLines1.current[i];
+
+      const previousPoint = mixPoints(
+        rawPointData[i - 1],
+        randomLine[0],
+        1 - ratio
+      );
+
+      const currentPoint = mixPoints(point, randomLine[1], 1 - ratio);
+
+      acc.push(`M ${previousPoint.join(',')} L ${currentPoint.join(',')}`);
+      return acc;
+    }, [])
+    .join('\n');
+
+  const points2 = rawPointData
+    .reduce((acc, point, i) => {
+      if (i === 0) {
+        return acc;
+      }
+
+      const randomLine = randomLines2.current[i];
+
+      const previousPoint = mixPoints(
+        rawPointData[i - 1],
+        randomLine[0],
+        1 - ratio
+      );
+
+      const currentPoint = mixPoints(point, randomLine[1], 1 - ratio);
+
+      acc.push(`M ${previousPoint.join(',')} L ${currentPoint.join(',')}`);
+      return acc;
+    }, [])
+    .join('\n');
 
   return (
     <Svg width={innerWidth} height={innerHeight}>
@@ -57,11 +118,19 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
         strokeWidth={5}
         strokeLinecap="round"
       /> */}
-      <polyline
-        points={points}
+      <path
+        d={points1}
         stroke={COLORS.aqua[500]}
-        strokeWidth={5}
+        strokeWidth={4}
         strokeLinecap="round"
+        style={{ mixBlendMode: 'color-dodge' }}
+      />
+      <path
+        d={points2}
+        stroke={COLORS.yellow[300]}
+        strokeWidth={4}
+        strokeLinecap="round"
+        style={{ mixBlendMode: 'color-dodge' }}
       />
     </Svg>
   );
