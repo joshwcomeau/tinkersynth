@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from '@reach/router';
 
 import { COLORS, HEADER_HEIGHT, UNIT } from '../../constants';
 
@@ -14,17 +15,19 @@ import LogoParticles from '../LogoParticles';
 const Header = () => {
   return (
     <Wrapper>
-      <SiteTitleWrapper>
-        <Logo height={28} />
-        <LogoParticles />
+      <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
+        <SiteTitleWrapper>
+          <Logo height={28} />
+          <LogoParticles />
 
-        <Spacer size={UNIT} />
-        <SiteTitle>
-          Tinker·S<span style={{ letterSpacing: 1 }}>y</span>
-          <span style={{ letterSpacing: 1.5 }}>n</span>
-          <span style={{ letterSpacing: 1.5 }}>t</span>h
-        </SiteTitle>
-      </SiteTitleWrapper>
+          <Spacer size={UNIT} />
+          <SiteTitle>
+            Tinker·S<span style={{ letterSpacing: 1 }}>y</span>
+            <span style={{ letterSpacing: 1.5 }}>n</span>
+            <span style={{ letterSpacing: 1.5 }}>t</span>h
+          </SiteTitle>
+        </SiteTitleWrapper>
+      </Link>
 
       <Navigation>
         <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>

@@ -1,6 +1,8 @@
 // @flow
 import React, { useState, useRef, useEffect } from 'react';
 
+import { random } from '../../utils';
+
 type Props = {
   minDelay: number,
   maxDelay: number,
@@ -9,10 +11,9 @@ type Props = {
 
 const MountAfterDelay = ({ minDelay, maxDelay, children }: Props) => {
   const timeoutRef = useRef(null);
-  const pathRef = useRef(null);
   const [hasBegun, setBegin] = useState(false);
 
-  const delay = 1000 + Math.random() * 3000;
+  const delay = random(minDelay, maxDelay);
 
   useEffect(() => {
     // A lot of stuff happens when the app mounts. Delay the logo particle

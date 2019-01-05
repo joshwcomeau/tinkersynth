@@ -5,44 +5,25 @@ import styled from 'styled-components';
 import { COLORS } from '../../constants';
 
 import Particle from '../Particle';
+import MountAfterDelay from '../MountAfterDelay';
 
-type Props = {
-  delay?: number,
-};
+type Props = {};
 
-const LogoParticles = ({ delay = 150 }: Props) => {
-  const timeoutRef = useRef(null);
-  const pathRef = useRef(null);
-  const [hasBegun, setBegin] = useState(false);
-
-  useEffect(() => {
-    // A lot of stuff happens when the app mounts. Delay the logo particle
-    // effects a bit
-    timeoutRef.current = window.setTimeout(() => {
-      setBegin(true);
-    }, delay);
-
-    return () => {
-      window.clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  if (!hasBegun) {
-    return null;
-  }
-
+const LogoParticles = () => {
   return (
     <>
-      <ParticleWrapper style={{ top: 8, left: -5 }}>
-        <Particle
-          color={COLORS.aqua[500]}
-          angle={160}
-          distance={10}
-          rotation={-25}
-          shape="Squiggle"
-        />
-      </ParticleWrapper>
-      <ParticleWrapper style={{ top: 0, left: 32 }}>
+      <MountAfterDelay minDelay={1000} maxDelay={3000}>
+        <ParticleWrapper style={{ top: 8, left: -5 }}>
+          <Particle
+            color={COLORS.aqua[500]}
+            angle={160}
+            distance={10}
+            rotation={-25}
+            shape="Squiggle"
+          />
+        </ParticleWrapper>
+      </MountAfterDelay>
+      {/* <ParticleWrapper style={{ top: 0, left: 32 }}>
         <Particle
           color={COLORS.yellow[500]}
           angle={-25}
@@ -59,7 +40,7 @@ const LogoParticles = ({ delay = 150 }: Props) => {
           rotation={10}
           shape="X"
         />
-      </ParticleWrapper>
+      </ParticleWrapper> */}
     </>
   );
 };

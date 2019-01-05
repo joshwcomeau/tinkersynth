@@ -26,7 +26,7 @@ const useSelfDrawing = () => {
 
     window.requestAnimationFrame(() => {
       setStrokeDashOffset(0);
-      const transitionLength = Math.random() * 4000 + 500;
+      const transitionLength = 1000;
       setTransitionLength(transitionLength);
     });
   }, []);

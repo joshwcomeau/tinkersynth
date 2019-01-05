@@ -23,68 +23,30 @@ type Props = {
   shape: 'OpenCircle' | 'Squiggle' | 'Star' | 'Swirl' | 'X',
 };
 
-const getFinalPosition = (angle, distance) => {
-  const angleInRads = (angle * Math.PI) / 180;
-
-  const deltaY = Math.sin(angleInRads) * distance;
-  const deltaX = Math.cos(angleInRads) * distance;
-
-  return [deltaX, deltaY];
-};
-
 const Particle = ({ angle, distance, rotation, color, shape }: Props) => {
-  const timeoutRef = useRef(null);
-  const pathRef = useRef(null);
-  const [hasBegun, setBegin] = useState(false);
-
-  const delay = 1000 + Math.random() * 3000;
-
-  useEffect(() => {
-    // A lot of stuff happens when the app mounts. Delay the logo particle
-    // effects a bit
-    timeoutRef.current = window.setTimeout(() => {
-      setBegin(true);
-    }, delay);
-
-    return () => {
-      window.clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  if (!hasBegun) {
-    return null;
-  }
-
-  const [deltaX, deltaY] = getFinalPosition(angle, distance);
-
-  const translateSpringSettings = {
-    tension: 20 + distance * 0.5,
-    friction: 5,
-  };
-
-  const translateSpring = useSpring({
-    x: deltaX,
-    y: deltaY,
+  const spring = useSpring({
+    rotation,
     from: {
-      x: 0,
-      y: 0,
+      rotation: 0,
     },
-    config: translateSpringSettings,
+    config: {
+      tension: 100,
+      friction: 10,
+    },
   });
 
   const Shape = shapeMap[shape];
 
   return (
-    <animated.div
+    <div
       style={{
-        transform: interpolate(
-          [translateSpring.x, translateSpring.y],
-          (x, y) => `translate(${x}px, ${y}px) rotate(${rotation}deg)`
+        transform: spring.rotation.interpolate(
+          rotation => `rotate(${rotation}deg)`
         ),
       }}
     >
       <Shape color={color} />
-    </animated.div>
+    </div>
   );
 };
 
