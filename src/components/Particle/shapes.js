@@ -26,7 +26,8 @@ const useSelfDrawing = () => {
 
     window.requestAnimationFrame(() => {
       setStrokeDashOffset(0);
-      setTransitionLength(1000);
+      const transitionLength = Math.random() * 4000 + 500;
+      setTransitionLength(transitionLength);
     });
   }, []);
 
@@ -41,7 +42,7 @@ const useSelfDrawing = () => {
 };
 
 export const OpenCircle = ({ width = 8, height = 8, color }: Props) => {
-  const [ref, pathLength] = useSelfDrawing();
+  const [ref, styles] = useSelfDrawing();
 
   return (
     <svg width={width} height={height} viewBox="0 0 8 8" fill="none">
@@ -52,11 +53,7 @@ export const OpenCircle = ({ width = 8, height = 8, color }: Props) => {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{
-          strokeDasharray: pathLength,
-          strokeDashoffset: pathLength,
-          transition: 'stroke-dashoffset 1000ms',
-        }}
+        style={styles}
       />
     </svg>
   );
@@ -81,39 +78,51 @@ export const Squiggle = ({ width = 14, height = 5, color }: Props) => {
 };
 
 export const Star = ({ width = 12, height = 12, color }: Props) => {
+  const [ref, styles] = useSelfDrawing();
+
   return (
     <svg width={width} height={height} viewBox="0 0 12 12" fill="none">
-      <path
+      <animated.path
+        ref={ref}
         d="M6 1L7.46946 3.97746L10.7553 4.45492L8.37764 6.77254L8.93893 10.0451L6 8.5L3.06107 10.0451L3.62236 6.77254L1.24472 4.45492L4.53054 3.97746L6 1Z"
         stroke={color}
         strokeWidth="2"
         strokeLinejoin="round"
+        style={styles}
       />
     </svg>
   );
 };
 
 export const Swirl = ({ width = 13, height = 12, color }: Props) => {
+  const [ref, styles] = useSelfDrawing();
+
   return (
     <svg width={width} height={height} viewBox="0 0 13 12" fill="none">
-      <path
+      <animated.path
+        ref={ref}
         d="M7 4C7 4 9 6.17154 9 6.99997C9 8.17154 5.82838 7.82839 4.99995 6.99997C4 6.00002 4 4.5 4.99995 3C6.08303 1.37529 8.49996 1.24992 10 2.49997C13 5 12 8.5 11 9.50001C9.06702 11.433 4.49845 11.3652 2.49999 9.50001C0.358775 7.50155 1.49996 2.00001 1.49996 2.00001"
         stroke={color}
         strokeWidth="2"
+        style={styles}
       />
     </svg>
   );
 };
 
 export const X = ({ width = 6, height = 6, color }: Props) => {
+  const [ref, styles] = useSelfDrawing();
+
   return (
     <svg width={width} height={height} viewBox="0 0 6 6" fill="none">
-      <path
+      <animated.path
+        ref={ref}
         d="M1 5L5 1M1 1L3 3L5 5"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        style={styles}
       />
     </svg>
   );
