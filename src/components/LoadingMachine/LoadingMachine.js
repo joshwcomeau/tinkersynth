@@ -26,16 +26,22 @@ const useBouncyMountains = () => {
   const [curve, setCurve] = useState(defaultCurve);
 
   useEffect(() => {
-    const intervalId = window.setInterval(() => {
+    let timeoutId;
+
+    const update = () => {
       setCurve({
         startPoint: [random(15, 20), 54],
-        controlPoint1: [random(25, 47), random(10, 26)],
+        controlPoint1: [random(15, 50), random(0, 50)],
         endPoint: [random(50, 54), 54],
       });
-    }, 1000);
+
+      timeoutId = window.setTimeout(update, random(250, 1500));
+    };
+
+    update();
 
     return () => {
-      window.clearInterval(intervalId);
+      window.clearTimeout(timeoutId);
     };
   }, []);
 
@@ -102,7 +108,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
           strokeLinecap="round"
           style={{
-            transition: '500ms',
+            transition: '1500ms cubic-bezier(0.08, 1, 0.2, 1)',
           }}
         />
       </g>
