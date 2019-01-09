@@ -9,12 +9,12 @@ const Slopes = loadable(() => import('../../components/Slopes'));
 
 const SlopesIndex = () => (
   <Layout>
-    {/* <Slopes
+    <Slopes
       fallback={
         // TODO: Custom spinner
         <LoadingMachine />
       }
-    /> */}
+    />
     <LoadingMachine />
   </Layout>
 );

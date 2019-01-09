@@ -10,6 +10,7 @@ import PerspectiveCluster from './controls/PerspectiveCluster';
 import PeaksCluster from './controls/PeaksCluster';
 import Spacer from '../Spacer';
 import SimilarityCluster from './controls/SimilarityCluster';
+import SettingsCluster from './controls/SettingsCluster';
 import PolarCluster from './controls/PolarCluster';
 import NoiseCluster from './controls/NoiseCluster';
 
@@ -28,6 +29,9 @@ const SlopesControls = ({ width }: Props) => {
   return (
     <ControlPanel width={width} padding={padding}>
       <Row>
+        <SettingsCluster width={width} />
+      </Row>
+      <Row>
         <Column>
           <PerspectiveCluster width={columnWidth} />
           <PeaksCluster width={columnWidth} />
@@ -41,11 +45,10 @@ const SlopesControls = ({ width }: Props) => {
       </Row>
 
       <Row>
+        <Column />
         <Column>
           <NoiseCluster width={columnWidth} />
         </Column>
-
-        <Column />
       </Row>
     </ControlPanel>
   );

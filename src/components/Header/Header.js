@@ -10,38 +10,45 @@ import Spacer from '../Spacer';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
-import LogoParticles from '../LogoParticles';
 
 const Header = () => {
   return (
-    <Wrapper>
-      <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-        <SiteTitleWrapper>
-          <Logo height={28} />
-          <LogoParticles />
+    <OuterWrapper>
+      <InnerWrapper>
+        <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
+          <SiteTitleWrapper>
+            <Logo height={28} />
 
-          <Spacer size={UNIT} />
-          <SiteTitle>
-            Tinker·S<span style={{ letterSpacing: 1 }}>y</span>
-            <span style={{ letterSpacing: 1.5 }}>n</span>
-            <span style={{ letterSpacing: 1.5 }}>t</span>h
-          </SiteTitle>
-        </SiteTitleWrapper>
-      </Link>
+            <Spacer size={UNIT} />
+            <SiteTitle>
+              Tinker·S<span style={{ letterSpacing: 1 }}>y</span>
+              <span style={{ letterSpacing: 1.5 }}>n</span>
+              <span style={{ letterSpacing: 1.5 }}>t</span>h
+            </SiteTitle>
+          </SiteTitleWrapper>
+        </Link>
 
-      <Navigation>
-        <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>
-        <HeaderNavigationItem to="/about">About</HeaderNavigationItem>
-        <HeaderNavigationItem to="/buy">Buy</HeaderNavigationItem>
-        <HeaderNavigationItem to="/build">Build</HeaderNavigationItem>
-      </Navigation>
-    </Wrapper>
+        <Navigation>
+          <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>
+          <HeaderNavigationItem to="/about">About</HeaderNavigationItem>
+          <HeaderNavigationItem to="/buy">Buy</HeaderNavigationItem>
+          <HeaderNavigationItem to="/build">Build</HeaderNavigationItem>
+        </Navigation>
+      </InnerWrapper>
+    </OuterWrapper>
   );
 };
 
-const Wrapper = styled(MaxWidthWrapper)`
-  position: relative;
+const OuterWrapper = styled.div`
+  /* position: sticky; */
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 2;
+  background: ${COLORS.white};
+`;
+
+const InnerWrapper = styled(MaxWidthWrapper)`
   display: flex;
   justify-content: space-between;
   align-items: center;
