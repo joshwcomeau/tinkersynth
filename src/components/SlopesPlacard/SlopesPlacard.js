@@ -165,12 +165,12 @@ const SlopesPlacard = ({ width, height }) => {
             r="4"
             fill="#E6E6E6"
             stroke={COLORS.gray[900]}
-            stroke-width="3"
+            strokeWidth="3"
           />
           <path
             d="M4.43932 40.4393L6.56064 42.5607M4.43932 42.5607L6.56064 40.4393"
             stroke="#555"
-            stroke-width="1"
+            strokeWidth="1"
           />
           <circle
             cx="146.5"
@@ -178,12 +178,12 @@ const SlopesPlacard = ({ width, height }) => {
             r="4"
             fill="#E6E6E6"
             stroke={COLORS.gray[900]}
-            stroke-width="3"
+            strokeWidth="3"
           />
           <path
             d="M145.439 42.4393L147.561 44.5607M145.439 44.5607L147.561 42.4393"
             stroke="#555"
-            stroke-width="1"
+            strokeWidth="1"
           />
         </g>
       </Svg>
