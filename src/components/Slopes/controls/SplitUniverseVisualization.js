@@ -51,7 +51,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 40 40">
       <mask
-        id="mask0"
+        id="split-uni-mask-0"
         mask-type="alpha"
         maskUnits="userSpaceOnUse"
         x="18"
@@ -65,7 +65,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
         />
       </mask>
       <mask
-        id="mask1"
+        id="split-uni-mask-1"
         mask-type="alpha"
         maskUnits="userSpaceOnUse"
         x="10"
@@ -76,7 +76,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
         <circle cx="20" cy="20" r="10" fill="#C4C4C4" />
       </mask>
       <mask
-        id="mask2"
+        id="split-uni-mask-2"
         mask-type="alpha"
         maskUnits="userSpaceOnUse"
         x="1"
@@ -91,7 +91,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
       </mask>
 
       <animated.g
-        mask="url(#mask0)"
+        mask="url(#split-uni-mask-0)"
         transform={spring.ratio.interpolate(
           ratio => `
           translate(
@@ -102,7 +102,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
         )}
       >
         <circle cx="20" cy="20" r="12.5" stroke="#1AD9FF" strokeWidth="2" />
-        <g mask="url(#mask1)">
+        <g mask="url(#split-uni-mask-1)">
           <path
             d="M12.0833 20L7.5 14.375V11.25L10.119 10H14.0476L15.3571 13.125L17.9762 12.5L19.2857 15.625L16.6667 16.25L14.7024 19.375L18.631 20.625L21.25 23.125L18.631 26.25L15.3571 28.75L16.6667 24.375L14.7024 21.25L12.0833 20Z"
             stroke="#32FF98"
@@ -131,7 +131,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
       </animated.g>
 
       <animated.g
-        mask="url(#mask2)"
+        mask="url(#split-uni-mask-2)"
         transform={spring.ratio.interpolate(
           ratio => `
           translate(
@@ -143,7 +143,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
       >
         <circle cx="20" cy="20" r="12.5" stroke="#1AD9FF" strokeWidth="2" />
         <mask
-          id="mask3"
+          id="split-uni-mask-3"
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
           x="10"
@@ -153,7 +153,7 @@ const SplitUniverseVisualization = ({ size, value }: Props) => {
         >
           <circle cx="20" cy="20" r="10" fill="#C4C4C4" />
         </mask>
-        <g mask="url(#mask3)">
+        <g mask="url(#split-uni-mask-3)">
           <path
             d="M12.0833 20L7.5 14.375V11.25L10.119 10H14.0476L15.3571 13.125L17.9762 12.5L19.2857 15.625L16.6667 16.25L14.7024 19.375L18.631 20.625L21.25 23.125L18.631 26.25L15.3571 28.75L16.6667 24.375L14.7024 21.25L12.0833 20Z"
             stroke="#32FF98"
