@@ -9,7 +9,7 @@ import { COLORS, UNIT } from '../../constants';
 
 import Spacer from '../Spacer';
 
-const HEIGHT = 61;
+const HEIGHT = 54;
 
 const SeedPicker = () => {
   return (
@@ -20,7 +20,7 @@ const SeedPicker = () => {
       <MainContent>
         <RetroNumbers
           hits={1337}
-          size={25}
+          size={23}
           minLength={6}
           padding={0}
           digitSpacing={2}
@@ -56,8 +56,8 @@ const Wrapper = styled.div`
 `;
 
 const Heading = styled.div`
-  height: 26px;
-  line-height: 26px;
+  height: 22px;
+  line-height: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -87,15 +87,21 @@ const Actions = styled.div`
 `;
 
 const IncrementDecrementButton = styled.button`
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 16px;
   height: 16px;
-  padding: 0;
-  background: transparent;
-  border: none;
   color: white;
+  cursor: pointer;
 
   &:active {
     background: ${COLORS.pink[300]};
+  }
+
+  & svg {
+    display: block !important;
   }
 `;
 

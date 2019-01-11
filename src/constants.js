@@ -159,6 +159,12 @@ export const COLORS = {
       brightness: 40,
     }),
 
+    '800': prepColor({
+      hue: 0,
+      saturation: 0,
+      brightness: 28,
+    }),
+
     '900': prepColor({
       hue: 0,
       saturation: 0,

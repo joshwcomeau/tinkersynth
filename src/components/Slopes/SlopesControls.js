@@ -31,18 +31,24 @@ const SlopesControls = ({ width }: Props) => {
       <Row>
         <SettingsCluster width={width} />
       </Row>
+      <Spacer size={UNIT * 2} />
       <Row>
         <Column>
           <PerspectiveCluster width={columnWidth} />
+          <Spacer size={UNIT * 2} />
           <PeaksCluster width={columnWidth} />
         </Column>
         <Spacer size={UNIT * 2} />
 
         <Column>
           <SimilarityCluster width={columnWidth} />
+
+          <Spacer size={UNIT * 2} />
           <PolarCluster width={columnWidth} />
         </Column>
       </Row>
+
+      <Spacer size={UNIT * 2} />
 
       <Row>
         <Column />
