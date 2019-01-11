@@ -7,6 +7,7 @@ import {
   getPossiblyOccludingRowIndices,
   getDampingAmountForSlopes,
   plotAsPolarCoordinate,
+  getPerlinValueWithOctaves,
 } from './Slopes.helpers';
 
 const seed = Math.random();
@@ -48,6 +49,7 @@ const sketch = ({
   amplitude,
   selfSimilarity,
   polarHoleSize,
+  numOfOctaves = 1,
 }) => {
   let start;
   if (DEBUG_PERF) {
@@ -113,6 +115,7 @@ const sketch = ({
         peaksCurveStrength,
         amplitude,
         selfSimilarity,
+        numOfOctaves,
       });
 
       const previousSamplePoint = getSampleCoordinates({
@@ -137,6 +140,7 @@ const sketch = ({
         peaksCurveStrength,
         amplitude,
         selfSimilarity,
+        numOfOctaves,
       });
 
       let line = [previousSamplePoint, samplePoint];
@@ -219,6 +223,7 @@ const getSampleCoordinates = ({
   peaksCurve,
   peaksCurveStrength,
   selfSimilarity,
+  numOfOctaves,
 }) => {
   // Our standard value is this curvy, swoopy slope thing, à la Joy Division.
   // We use perlin noise for this: the sampleIndex forms the x axis value,
@@ -232,8 +237,14 @@ const getSampleCoordinates = ({
   const perlinIndex =
     normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
     perlinRangePerRow;
-  const perlinValue =
-    perlin2(perlinIndex, (rowIndex / numOfRows) * selfSimilarity) * amplitude;
+
+  const perlinValue = getPerlinValueWithOctaves(
+    perlin2,
+    perlinIndex,
+    (rowIndex / numOfRows) * selfSimilarity,
+    amplitude,
+    numOfOctaves
+  );
 
   // Another possible world is where each value is randomized. This creates a
   // busy "noise" effect. Ranges from -0.25 to 0.25

@@ -22,8 +22,7 @@ const ScrewRow = ({ numOfScrews = 3 }: Props) => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 5px;
-  height: 17px;
+  padding: 7px;
 `;
 
 export default ScrewRow;

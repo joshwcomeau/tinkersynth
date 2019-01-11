@@ -7,7 +7,7 @@ import { clamp, normalize } from '../../utils';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import RectangularHandle from '../RectangularHandle';
-import Notches from './Notches';
+import Decorations from './Decorations';
 
 type Props = {
   value: number,
@@ -23,8 +23,7 @@ type Props = {
   isDisabled: boolean,
 };
 
-// TODO: Either use or remove HANDLE_BUFFER
-const HANDLE_BUFFER = 0;
+const HANDLE_BUFFER = 2;
 
 const Slider = ({
   value,
@@ -89,11 +88,7 @@ const Slider = ({
 
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
-      <Decorations>
-        <Notches num={numOfNotches} position="left" />
-        <Track />
-        <Notches num={numOfNotches} position="right" />
-      </Decorations>
+      <Decorations numOfNotches={numOfNotches} />
 
       <HandleWrapper
         onMouseDown={ev => {
@@ -151,27 +146,6 @@ const HandleWrapper = styled.button`
   &:focus:not(.focus-visible) {
     outline: none;
   }
-`;
-
-const Decorations = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Track = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 2px;
-  height: 100%;
-  background: ${COLORS.gray[100]};
-  border-radius: 2px;
 `;
 
 // $FlowIgnore

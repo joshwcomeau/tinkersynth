@@ -383,3 +383,29 @@ export const plotAsPolarCoordinate = ({
 
   return centeredPolarPoint;
 };
+
+export const getPerlinValueWithOctaves = (
+  perlinGenerator,
+  x,
+  y,
+  rootAmplitude,
+  numOfOctaves
+) => {
+  // const rootValue = perlinGenerator(x, y) * rootAmplitude;
+
+  let value = 0;
+  let cursor = 1;
+  while (cursor <= numOfOctaves) {
+    const multiple = 2 ** cursor;
+    const frequency = x * multiple;
+    const amplitude = rootAmplitude / multiple;
+
+    const octaveVal = perlinGenerator(frequency, y) * amplitude;
+
+    value += octaveVal;
+
+    cursor++;
+  }
+
+  return value;
+};

@@ -2,6 +2,8 @@
 // $FlowFixMe
 import { useRef, useState, useEffect } from 'react';
 
+import { debounce } from '../utils';
+
 const useBoundingBox = () => {
   // Our `ref` is needed to be passed to the component's `ref` attribute.
   // $FlowFixMe
@@ -13,12 +15,31 @@ const useBoundingBox = () => {
 
   useEffect(
     () => {
-      if (ref.current) {
-        setBoundingBox(ref.current.getBoundingClientRect());
+      if (!ref.current) {
+        return;
       }
+
+      setBoundingBox(ref.current.getBoundingClientRect());
     },
     [ref.current]
   );
+
+  // We want to re-capture the bounding box whenever the user scrolls or
+  // resizes the window.
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const handleResize = debounce(() => {
+      setBoundingBox(ref.current.getBoundingClientRect());
+    }, 250);
+
+    window.addEventListener('scroll', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleResize);
+    };
+  }, []);
 
   return [ref, boundingBox];
 };
