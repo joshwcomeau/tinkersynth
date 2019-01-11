@@ -20,18 +20,12 @@ const SettingsCluster = ({ width }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   return (
-    <Row>
+    <InstrumentCluster direction="row">
       <SlopesPlacard />
       <Spacer size={UNIT * 2} />
-      <InstrumentCluster direction="row">
-        <SeedPicker />
-      </InstrumentCluster>
-    </Row>
+      <SeedPicker />
+    </InstrumentCluster>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-`;
 
 export default SettingsCluster;

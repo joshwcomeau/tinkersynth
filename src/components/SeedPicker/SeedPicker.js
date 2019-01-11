@@ -4,28 +4,27 @@ import styled from 'styled-components';
 import { Icon } from 'react-icons-kit';
 import { chevronUp } from 'react-icons-kit/feather/chevronUp';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
+import { u2049 as bangQuestion } from 'react-icons-kit/noto_emoji_regular/u2049';
 import { COLORS, UNIT } from '../../constants';
 
 import Spacer from '../Spacer';
-import HelpButton from '../HelpButton';
 
-const HEIGHT = 43;
+const HEIGHT = 61;
 
 const SeedPicker = () => {
   return (
     <Wrapper>
       <Heading>
         <Label>Seed #</Label>
-        <HelpButton />
       </Heading>
       <MainContent>
         <RetroNumbers
           hits={1337}
-          size={18}
+          size={25}
           minLength={6}
           padding={0}
-          digitSpacing={1}
-          segmentThickness={2}
+          digitSpacing={2}
+          segmentThickness={3}
           segmentSpacing={0.5}
           withBorder={false}
           segmentActiveColor={COLORS.pink[500]}
@@ -57,6 +56,8 @@ const Wrapper = styled.div`
 `;
 
 const Heading = styled.div`
+  height: 26px;
+  line-height: 26px;
   display: flex;
   align-items: center;
   justify-content: space-between;
