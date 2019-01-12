@@ -3,17 +3,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSpring, animated, interpolated } from 'react-spring/hooks';
 
 import { createSvgPathForCurve } from '../../helpers/line.helpers';
-import { random } from '../../utils';
+import { range, random, normalize } from '../../utils';
 
 type Props = {
   width?: number,
 };
 
-const useBouncyMountains = () => {
+const useBezier = () => {
   const left = 10;
   const top = 27;
   const width = 48;
   const height = 34;
+
+  const numOfPoints = width / 2;
 
   const mountainRef = useRef(null);
 
@@ -59,12 +61,64 @@ const useBouncyMountains = () => {
   return [mountainRef, spring];
 };
 
+const useSineWave = () => {
+  const padding = 8;
+  const left = 10 + padding;
+  const top = 27 + padding;
+  const width = 48 - padding * 2;
+  const height = 34 - padding * 2;
+
+  const numOfPoints = width / 2;
+
+  const maxVal = 3 * Math.PI;
+
+  const [offset, setOffset] = useState(0);
+
+  // Speed in hertz: how many times should the wave cycle per second?
+  const speed = 2;
+
+  useEffect(() => {
+    let animationFrameId;
+    let lastTickAt = performance.now();
+
+    const tick = () => {
+      const now = performance.now();
+
+      const timeDelta = (now - lastTickAt) / 1000;
+
+      setOffset(offset + timeDelta / (1 / speed));
+
+      animationFrameId = window.requestAnimationFrame(tick);
+    };
+
+    tick();
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  const points = range(numOfPoints).map(i => {
+    const ratio = i / numOfPoints;
+    const x = left + ratio * width;
+
+    const y =
+      top +
+      height / 2 +
+      Math.sin(normalize(ratio + offset, 0, 1, 0, maxVal)) * (height / 2);
+
+    return [x, y];
+  });
+
+  return points;
+};
+
 const LoadingMachine = ({ width = 145 }: Props) => {
-  const [mountainRef] = useBouncyMountains();
+  const sinePoints = useSineWave();
 
   return (
     <svg width={width} viewBox="0 0 145 177" fill="none">
-      <g id="Case">
+      <g data-layer-name="Case">
         <mask
           id="mask0"
           mask-type="alpha"
@@ -82,13 +136,19 @@ const LoadingMachine = ({ width = 145 }: Props) => {
         <g mask="url(#mask0)">
           <path d="M16 1L0 17H128L144 1H16Z" fill="#ABABAB" />
           <path d="M144 1L128 17V177L144 161V1Z" fill="#959595" />
-          <rect id="Rectangle" y="17" width="128" height="160" fill="#C4C4C4" />
+          <rect
+            data-layer-name="Rectangle"
+            y="17"
+            width="128"
+            height="160"
+            fill="#C4C4C4"
+          />
         </g>
       </g>
 
-      <g id="Slopes">
+      <g data-layer-name="Sine">
         <rect
-          id="Rectangle 2"
+          data-layer-name="Rectangle 2"
           x="10"
           y="27"
           width="48"
@@ -96,14 +156,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <path
-          ref={mountainRef}
-          id="mountain-1"
-          d={`
-            M 17 54
-            Q 33 15
-              52 54
-          `}
+        <polyline
+          data-layer-name="sine-wave"
+          points={sinePoints.map(p => p.join(',')).join(' ')}
           stroke="#32FF98"
           strokeWidth="2"
           strokeLinecap="round"
@@ -112,9 +167,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           }}
         />
       </g>
-      <g id="Bezier">
+      <g data-layer-name="Bezier">
         <rect
-          id="Rectangle 2.1"
+          data-layer-name="Rectangle 2.1"
           x="10"
           y="69"
           width="64"
@@ -123,15 +178,15 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#2B2B2B"
         />
         <path
-          id="Vector 3"
+          data-layer-name="Vector 3"
           d="M19 96C19 96 44.9936 105.362 56 96C62.6517 90.3423 66 76 66 76"
           stroke="#FF27FF"
           strokeWidth="4"
         />
       </g>
-      <g id="Polar viz">
+      <g data-layer-name="Polar viz">
         <rect
-          id="Rectangle 2.2"
+          data-layer-name="Rectangle 2.2"
           x="82"
           y="69"
           width="36"
@@ -140,7 +195,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#2B2B2B"
         />
         <line
-          id="Line"
+          data-layer-name="Line"
           x1="88"
           y1="76"
           x2="112"
@@ -149,7 +204,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line_2"
+          data-layer-name="Line_2"
           x1="88"
           y1="82"
           x2="112"
@@ -158,7 +213,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line_3"
+          data-layer-name="Line_3"
           x1="88"
           y1="88"
           x2="112"
@@ -167,7 +222,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line_4"
+          data-layer-name="Line_4"
           x1="88"
           y1="94"
           x2="112"
@@ -176,7 +231,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line_5"
+          data-layer-name="Line_5"
           x1="88"
           y1="100"
           x2="112"
@@ -185,9 +240,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
       </g>
-      <g id="Touch slider">
+      <g data-layer-name="Touch slider">
         <rect
-          id="Rectangle 2.1_2"
+          data-layer-name="Rectangle 2.1_2"
           x="66"
           y="27"
           width="52"
@@ -195,10 +250,17 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <g id="Group 2">
-          <ellipse id="Ellipse" cx="71" cy="32" rx="2" ry="2" fill="#1AD9FF" />
+        <g data-layer-name="Group 2">
           <ellipse
-            id="Ellipse_2"
+            data-layer-name="Ellipse"
+            cx="71"
+            cy="32"
+            rx="2"
+            ry="2"
+            fill="#1AD9FF"
+          />
+          <ellipse
+            data-layer-name="Ellipse_2"
             cx="71"
             cy="38"
             rx="2"
@@ -206,9 +268,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2_2">
+        <g data-layer-name="Group 2_2">
           <ellipse
-            id="Ellipse_3"
+            data-layer-name="Ellipse_3"
             cx="77"
             cy="32"
             rx="2"
@@ -216,7 +278,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
           <ellipse
-            id="Ellipse_4"
+            data-layer-name="Ellipse_4"
             cx="77"
             cy="38"
             rx="2"
@@ -224,9 +286,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2.1">
+        <g data-layer-name="Group 2.1">
           <ellipse
-            id="Ellipse_5"
+            data-layer-name="Ellipse_5"
             cx="83"
             cy="32"
             rx="2"
@@ -234,7 +296,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
           <ellipse
-            id="Ellipse_6"
+            data-layer-name="Ellipse_6"
             cx="83"
             cy="38"
             rx="2"
@@ -242,9 +304,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2_3">
+        <g data-layer-name="Group 2_3">
           <ellipse
-            id="Ellipse_7"
+            data-layer-name="Ellipse_7"
             cx="89"
             cy="32"
             rx="2"
@@ -252,7 +314,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_8"
+            data-layer-name="Ellipse_8"
             cx="89"
             cy="38"
             rx="2"
@@ -260,9 +322,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group 2_4">
+        <g data-layer-name="Group 2_4">
           <ellipse
-            id="Ellipse_9"
+            data-layer-name="Ellipse_9"
             cx="95"
             cy="32"
             rx="2"
@@ -270,7 +332,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_10"
+            data-layer-name="Ellipse_10"
             cx="95"
             cy="38"
             rx="2"
@@ -278,9 +340,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group 2.2">
+        <g data-layer-name="Group 2.2">
           <ellipse
-            id="Ellipse_11"
+            data-layer-name="Ellipse_11"
             cx="101"
             cy="32"
             rx="2"
@@ -288,7 +350,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_12"
+            data-layer-name="Ellipse_12"
             cx="101"
             cy="38"
             rx="2"
@@ -296,9 +358,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group">
+        <g data-layer-name="Group">
           <ellipse
-            id="Ellipse_13"
+            data-layer-name="Ellipse_13"
             cx="107"
             cy="32"
             rx="2"
@@ -306,7 +368,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
           <ellipse
-            id="Ellipse_14"
+            data-layer-name="Ellipse_14"
             cx="107"
             cy="38"
             rx="2"
@@ -314,9 +376,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
         </g>
-        <g id="Group_2">
+        <g data-layer-name="Group_2">
           <ellipse
-            id="Ellipse_15"
+            data-layer-name="Ellipse_15"
             cx="113"
             cy="32"
             rx="2"
@@ -324,7 +386,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
           <ellipse
-            id="Ellipse_16"
+            data-layer-name="Ellipse_16"
             cx="113"
             cy="38"
             rx="2"
@@ -333,9 +395,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           />
         </g>
       </g>
-      <g id="Touch slider_2">
+      <g data-layer-name="Touch slider_2">
         <rect
-          id="Rectangle 2.1_3"
+          data-layer-name="Rectangle 2.1_3"
           x="66"
           y="45"
           width="52"
@@ -343,9 +405,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <g id="Group 2_5">
+        <g data-layer-name="Group 2_5">
           <ellipse
-            id="Ellipse_17"
+            data-layer-name="Ellipse_17"
             cx="71"
             cy="50"
             rx="2"
@@ -353,7 +415,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
           <ellipse
-            id="Ellipse_18"
+            data-layer-name="Ellipse_18"
             cx="71"
             cy="56"
             rx="2"
@@ -361,9 +423,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2_6">
+        <g data-layer-name="Group 2_6">
           <ellipse
-            id="Ellipse_19"
+            data-layer-name="Ellipse_19"
             cx="77"
             cy="50"
             rx="2"
@@ -371,7 +433,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
           <ellipse
-            id="Ellipse_20"
+            data-layer-name="Ellipse_20"
             cx="77"
             cy="56"
             rx="2"
@@ -379,9 +441,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2.1_2">
+        <g data-layer-name="Group 2.1_2">
           <ellipse
-            id="Ellipse_21"
+            data-layer-name="Ellipse_21"
             cx="83"
             cy="50"
             rx="2"
@@ -389,7 +451,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
           <ellipse
-            id="Ellipse_22"
+            data-layer-name="Ellipse_22"
             cx="83"
             cy="56"
             rx="2"
@@ -397,9 +459,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#1AD9FF"
           />
         </g>
-        <g id="Group 2_7">
+        <g data-layer-name="Group 2_7">
           <ellipse
-            id="Ellipse_23"
+            data-layer-name="Ellipse_23"
             cx="89"
             cy="50"
             rx="2"
@@ -407,7 +469,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_24"
+            data-layer-name="Ellipse_24"
             cx="89"
             cy="56"
             rx="2"
@@ -415,9 +477,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group 2_8">
+        <g data-layer-name="Group 2_8">
           <ellipse
-            id="Ellipse_25"
+            data-layer-name="Ellipse_25"
             cx="95"
             cy="50"
             rx="2"
@@ -425,7 +487,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_26"
+            data-layer-name="Ellipse_26"
             cx="95"
             cy="56"
             rx="2"
@@ -433,9 +495,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group 2.2_2">
+        <g data-layer-name="Group 2.2_2">
           <ellipse
-            id="Ellipse_27"
+            data-layer-name="Ellipse_27"
             cx="101"
             cy="50"
             rx="2"
@@ -443,7 +505,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
           <ellipse
-            id="Ellipse_28"
+            data-layer-name="Ellipse_28"
             cx="101"
             cy="56"
             rx="2"
@@ -451,9 +513,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#32FF98"
           />
         </g>
-        <g id="Group_3">
+        <g data-layer-name="Group_3">
           <ellipse
-            id="Ellipse_29"
+            data-layer-name="Ellipse_29"
             cx="107"
             cy="50"
             rx="2"
@@ -461,7 +523,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
           <ellipse
-            id="Ellipse_30"
+            data-layer-name="Ellipse_30"
             cx="107"
             cy="56"
             rx="2"
@@ -469,9 +531,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
         </g>
-        <g id="Group_4">
+        <g data-layer-name="Group_4">
           <ellipse
-            id="Ellipse_31"
+            data-layer-name="Ellipse_31"
             cx="113"
             cy="50"
             rx="2"
@@ -479,7 +541,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             fill="#FFEB33"
           />
           <ellipse
-            id="Ellipse_32"
+            data-layer-name="Ellipse_32"
             cx="113"
             cy="56"
             rx="2"
@@ -488,9 +550,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           />
         </g>
       </g>
-      <g id="Slider">
+      <g data-layer-name="Slider">
         <rect
-          id="Rectangle 2.3"
+          data-layer-name="Rectangle 2.3"
           x="10"
           y="115"
           width="16"
@@ -499,7 +561,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#2B2B2B"
         />
         <line
-          id="Line 2"
+          data-layer-name="Line 2"
           x1="14"
           y1="120"
           x2="22"
@@ -509,7 +571,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.1"
+          data-layer-name="Line 2.1"
           x1="14"
           y1="126"
           x2="22"
@@ -519,7 +581,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.2"
+          data-layer-name="Line 2.2"
           x1="14"
           y1="132"
           x2="22"
@@ -529,7 +591,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.3"
+          data-layer-name="Line 2.3"
           x1="14"
           y1="138"
           x2="22"
@@ -539,7 +601,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.4"
+          data-layer-name="Line 2.4"
           x1="14"
           y1="144"
           x2="22"
@@ -549,7 +611,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.5"
+          data-layer-name="Line 2.5"
           x1="14"
           y1="150"
           x2="22"
@@ -559,7 +621,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.6"
+          data-layer-name="Line 2.6"
           x1="14"
           y1="156"
           x2="22"
@@ -569,7 +631,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.7"
+          data-layer-name="Line 2.7"
           x1="14"
           y1="162"
           x2="22"
@@ -579,7 +641,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <rect
-          id="Rectangle 3"
+          data-layer-name="Rectangle 3"
           x="8"
           y="153"
           width="20"
@@ -588,9 +650,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#FF27FF"
         />
       </g>
-      <g id="Slider_2">
+      <g data-layer-name="Slider_2">
         <rect
-          id="Rectangle 2.3_2"
+          data-layer-name="Rectangle 2.3_2"
           x="32"
           y="115"
           width="16"
@@ -599,7 +661,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#2B2B2B"
         />
         <line
-          id="Line 2_2"
+          data-layer-name="Line 2_2"
           x1="36"
           y1="120"
           x2="44"
@@ -609,7 +671,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.1_2"
+          data-layer-name="Line 2.1_2"
           x1="36"
           y1="126"
           x2="44"
@@ -619,7 +681,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.2_2"
+          data-layer-name="Line 2.2_2"
           x1="36"
           y1="132"
           x2="44"
@@ -629,7 +691,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.3_2"
+          data-layer-name="Line 2.3_2"
           x1="36"
           y1="138"
           x2="44"
@@ -639,7 +701,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.4_2"
+          data-layer-name="Line 2.4_2"
           x1="36"
           y1="144"
           x2="44"
@@ -649,7 +711,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.5_2"
+          data-layer-name="Line 2.5_2"
           x1="36"
           y1="150"
           x2="44"
@@ -659,7 +721,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.6_2"
+          data-layer-name="Line 2.6_2"
           x1="36"
           y1="156"
           x2="44"
@@ -669,7 +731,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <line
-          id="Line 2.7_2"
+          data-layer-name="Line 2.7_2"
           x1="36"
           y1="162"
           x2="44"
@@ -679,7 +741,7 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           strokeWidth="2"
         />
         <rect
-          id="Rectangle 3_2"
+          data-layer-name="Rectangle 3_2"
           x="30"
           y="129"
           width="20"
@@ -688,9 +750,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           fill="#FF27FF"
         />
       </g>
-      <g id="Earth control">
+      <g data-layer-name="Earth control">
         <rect
-          id="Rectangle 2.1_4"
+          data-layer-name="Rectangle 2.1_4"
           x="54"
           y="115"
           width="30"
@@ -698,9 +760,9 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <g id="Planet">
+        <g data-layer-name="Planet">
           <circle
-            id="Ellipse 3"
+            data-layer-name="Ellipse 3"
             cx="69"
             cy="132"
             r="11"
@@ -716,7 +778,13 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             width="18"
             height="18"
           >
-            <circle id="Ellipse 3.1" cx="69" cy="132" r="8.8" fill="#C4C4C4" />
+            <circle
+              data-layer-name="Ellipse 3.1"
+              cx="69"
+              cy="132"
+              r="8.8"
+              fill="#C4C4C4"
+            />
           </mask>
           <g mask="url(#mask1)">
             <g>
@@ -741,33 +809,81 @@ const LoadingMachine = ({ width = 145 }: Props) => {
             </g>
           </g>
         </g>
-        <g id="Touch slider_3">
+        <g data-layer-name="Touch slider_3">
           <path
-            id="Rectangle 2.1_5"
+            data-layer-name="Rectangle 2.1_5"
             d="M54 149H84V163C84 165.209 82.2091 167 80 167H58C55.7909 167 54 165.209 54 163V149Z"
             fill="#575656"
           />
-          <g id="Group 2_9">
-            <circle id="Ellipse_33" cx="60" cy="155" r="2" fill="#1AD9FF" />
-            <circle id="Ellipse_34" cx="60" cy="161" r="2" fill="#1AD9FF" />
+          <g data-layer-name="Group 2_9">
+            <circle
+              data-layer-name="Ellipse_33"
+              cx="60"
+              cy="155"
+              r="2"
+              fill="#1AD9FF"
+            />
+            <circle
+              data-layer-name="Ellipse_34"
+              cx="60"
+              cy="161"
+              r="2"
+              fill="#1AD9FF"
+            />
           </g>
-          <g id="Group 2_10">
-            <circle id="Ellipse_35" cx="66" cy="155" r="2" fill="#1AD9FF" />
-            <circle id="Ellipse_36" cx="66" cy="161" r="2" fill="#1AD9FF" />
+          <g data-layer-name="Group 2_10">
+            <circle
+              data-layer-name="Ellipse_35"
+              cx="66"
+              cy="155"
+              r="2"
+              fill="#1AD9FF"
+            />
+            <circle
+              data-layer-name="Ellipse_36"
+              cx="66"
+              cy="161"
+              r="2"
+              fill="#1AD9FF"
+            />
           </g>
-          <g id="Group 2_11">
-            <circle id="Ellipse_37" cx="72" cy="155" r="2" fill="#32FF98" />
-            <circle id="Ellipse_38" cx="72" cy="161" r="2" fill="#32FF98" />
+          <g data-layer-name="Group 2_11">
+            <circle
+              data-layer-name="Ellipse_37"
+              cx="72"
+              cy="155"
+              r="2"
+              fill="#32FF98"
+            />
+            <circle
+              data-layer-name="Ellipse_38"
+              cx="72"
+              cy="161"
+              r="2"
+              fill="#32FF98"
+            />
           </g>
-          <g id="Group_5">
-            <circle id="Ellipse_39" cx="78" cy="155" r="2" fill="#FFEB33" />
-            <circle id="Ellipse_40" cx="78" cy="161" r="2" fill="#FFEB33" />
+          <g data-layer-name="Group_5">
+            <circle
+              data-layer-name="Ellipse_39"
+              cx="78"
+              cy="155"
+              r="2"
+              fill="#FFEB33"
+            />
+            <circle
+              data-layer-name="Ellipse_40"
+              cx="78"
+              cy="161"
+              r="2"
+              fill="#FFEB33"
+            />
           </g>
         </g>
       </g>
-      <g id="Status">
+      <g data-layer-name="Status">
         <rect
-          id="Rectangle 2_2"
+          data-layer-name="Rectangle 2_2"
           x="90"
           y="137"
           width="28"
@@ -775,16 +891,22 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <circle id="Ellipse_41" cx="104" cy="146" r="4" fill="#32FF98" />
+        <circle
+          data-layer-name="Ellipse_41"
+          cx="104"
+          cy="146"
+          r="4"
+          fill="#32FF98"
+        />
         <path
-          id="OK"
+          data-layer-name="OK"
           d="M103.768 156.52C103.768 157.59 103.471 158.469 102.877 159.156C102.283 159.84 101.523 160.182 100.598 160.182C99.6797 160.182 98.9219 159.838 98.3242 159.15C97.7305 158.463 97.4336 157.586 97.4336 156.52C97.4336 155.441 97.7285 154.562 98.3184 153.883C98.9082 153.199 99.668 152.857 100.598 152.857C101.523 152.857 102.283 153.201 102.877 153.889C103.471 154.576 103.768 155.453 103.768 156.52ZM100.598 159.35C101.254 159.35 101.77 159.1 102.145 158.6C102.523 158.096 102.713 157.402 102.713 156.52C102.713 155.637 102.523 154.945 102.145 154.445C101.77 153.941 101.254 153.689 100.598 153.689C99.9375 153.689 99.4199 153.939 99.0449 154.439C98.6738 154.936 98.4883 155.629 98.4883 156.52C98.4883 157.402 98.6758 158.096 99.0508 158.6C99.4297 159.1 99.9453 159.35 100.598 159.35ZM106.609 159.174H107.002C107.232 159.174 107.395 159.205 107.488 159.268C107.582 159.33 107.629 159.434 107.629 159.578C107.629 159.734 107.588 159.844 107.506 159.906C107.424 159.969 107.268 160 107.037 160H105.033C104.9 160 104.799 159.965 104.729 159.895C104.662 159.82 104.629 159.715 104.629 159.578C104.629 159.434 104.666 159.33 104.74 159.268C104.818 159.205 104.949 159.174 105.133 159.174H105.32H105.695V153.895H105.32C105.023 153.895 104.834 153.865 104.752 153.807C104.67 153.744 104.629 153.633 104.629 153.473C104.629 153.336 104.662 153.232 104.729 153.162C104.799 153.088 104.9 153.051 105.033 153.051H107.037C107.268 153.051 107.424 153.082 107.506 153.145C107.588 153.207 107.629 153.316 107.629 153.473C107.629 153.629 107.576 153.738 107.471 153.801C107.365 153.863 107.166 153.895 106.873 153.895H106.609V156.279L109.053 153.895H108.982H108.854C108.662 153.895 108.523 153.861 108.438 153.795C108.352 153.729 108.309 153.621 108.309 153.473C108.309 153.32 108.342 153.213 108.408 153.15C108.475 153.084 108.582 153.051 108.73 153.051H110.459C110.592 153.051 110.693 153.088 110.764 153.162C110.834 153.232 110.869 153.336 110.869 153.473C110.869 153.625 110.822 153.734 110.729 153.801C110.639 153.863 110.477 153.895 110.242 153.895H110.16L107.893 156.086C108.232 156.156 108.561 156.375 108.877 156.742C109.193 157.109 109.686 157.92 110.354 159.174H110.459C110.701 159.174 110.863 159.203 110.945 159.262C111.027 159.32 111.068 159.426 111.068 159.578C111.068 159.715 111.033 159.82 110.963 159.895C110.896 159.965 110.797 160 110.664 160H110.102C109.977 160 109.885 159.986 109.826 159.959C109.771 159.932 109.715 159.869 109.656 159.771C109.621 159.717 109.404 159.32 109.006 158.582L108.777 158.154C108.531 157.697 108.285 157.355 108.039 157.129C107.793 156.898 107.531 156.764 107.254 156.725L106.609 157.334V159.174Z"
           fill="white"
         />
       </g>
-      <g id="Buttons">
+      <g data-layer-name="Buttons">
         <rect
-          id="Rectangle 2.1_6"
+          data-layer-name="Rectangle 2.1_6"
           x="90"
           y="115"
           width="28"
@@ -792,8 +914,20 @@ const LoadingMachine = ({ width = 145 }: Props) => {
           rx="4"
           fill="#2B2B2B"
         />
-        <circle id="Ellipse 2" cx="98" cy="123" r="4" fill="#D90000" />
-        <circle id="Ellipse 2.1" cx="110" cy="123" r="4" fill="#D90000" />
+        <circle
+          data-layer-name="Ellipse 2"
+          cx="98"
+          cy="123"
+          r="4"
+          fill="#D90000"
+        />
+        <circle
+          data-layer-name="Ellipse 2.1"
+          cx="110"
+          cy="123"
+          r="4"
+          fill="#D90000"
+        />
       </g>
     </svg>
   );
