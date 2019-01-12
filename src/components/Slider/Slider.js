@@ -12,9 +12,6 @@ import Decorations from './Decorations';
 type Props = {
   value: number,
   updateValue: (num: number) => void,
-  // Sliders work by default on a scale of 0-100
-  min?: number,
-  max?: number,
   width: number,
   height: number,
   numOfNotches?: number,
@@ -25,11 +22,13 @@ type Props = {
 
 const HANDLE_BUFFER = 2;
 
+// All sliders expect values to be between 0 and 100
+const min = 0;
+const max = 100;
+
 const Slider = ({
   value,
   updateValue,
-  min = 0,
-  max = 100,
   width,
   height,
   numOfNotches = 18,
@@ -38,6 +37,8 @@ const Slider = ({
   isDisabled,
 }: Props) => {
   const [dragging, setDragging] = useState(false);
+  const [animateTransition, setAnimateTransition] = useState(true);
+
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
 
   const updatePosition = ev => {
@@ -63,6 +64,7 @@ const Slider = ({
 
       const handleMouseUp = () => {
         setDragging(false);
+        setAnimateTransition(true);
       };
 
       window.addEventListener('mouseup', handleMouseUp);
@@ -98,6 +100,8 @@ const Slider = ({
             return;
           }
 
+          setAnimateTransition(false);
+
           setDragging(true);
         }}
         style={{
@@ -113,6 +117,7 @@ const Slider = ({
             ${-HANDLE_BUFFER}px,
             ${handleDisplacement - HANDLE_BUFFER}px
           )`,
+          transition: `transform ${animateTransition ? 250 : 0}ms`,
           cursor: isDisabled ? 'not-allowed' : dragging ? 'grabbing' : 'grab',
         }}
       >

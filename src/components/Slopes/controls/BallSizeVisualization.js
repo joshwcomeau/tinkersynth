@@ -1,5 +1,6 @@
 // @flow
-import React from 'react';
+import React, { useEffect } from 'react';
+import ImageCache from '../../../vendor/image-cache';
 
 import baseballSrc from '../../../images/baseball.svg';
 import basketballSrc from '../../../images/basketball.svg';
@@ -8,6 +9,14 @@ import beachballSrc from '../../../images/beachball.svg';
 import tennisballSrc from '../../../images/tennisball.svg';
 
 import Ball from './Ball';
+
+const images = [
+  baseballSrc,
+  basketballSrc,
+  pingpongballSrc,
+  beachballSrc,
+  tennisballSrc,
+];
 
 type Props = {
   size: number,
@@ -66,6 +75,22 @@ const getDataForValue = (value: number) => {
 const BallSizeVisualization = ({ size, value }: Props) => {
   // Size is unused, because I'm lazy. Ideally it should size the images
   // according to the prop, but I made all the images assuming they'd be 32px.
+
+  // On mount, wait a little bit and then preload all ball images used in
+  // this visualization.
+  // We want to preload them so that there's no gap between ball-drops when
+  // moving the slider.
+  // We want to wait a bit so that we aren't fetching and processing the images
+  // during the hectic first couple seconds after initial mount.
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      ImageCache.stuff(images);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   const {
     id,

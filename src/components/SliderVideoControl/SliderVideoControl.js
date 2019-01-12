@@ -21,8 +21,6 @@ type Props = {
 const SliderVideoControl = ({
   value,
   updateValue,
-  min = 0,
-  max = 1,
   width,
   height,
   spacing = 4,
@@ -51,8 +49,6 @@ const SliderVideoControl = ({
         <Slider
           value={value}
           updateValue={updateValue}
-          min={min}
-          max={max}
           width={sliderWidth}
           height={sliderHeight}
         />

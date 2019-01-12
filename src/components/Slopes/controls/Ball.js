@@ -19,17 +19,22 @@ const Ball = ({
   gravity,
   squishiness,
   dropFrom,
+  enableDropAnimation,
 }: Props) => {
-  return (
-    <Drop
-      distance={dropFrom}
-      bounciness={bounciness}
-      squishiness={squishiness}
-      gravity={gravity}
-    >
-      <img alt={id} src={src} />
-    </Drop>
-  );
+  if (enableDropAnimation) {
+    return (
+      <Drop
+        distance={dropFrom}
+        bounciness={bounciness}
+        squishiness={squishiness}
+        gravity={gravity}
+      >
+        <img alt={id} src={src} />
+      </Drop>
+    );
+  }
+
+  return <img alt={id} src={src} />;
 };
 
 export default Ball;

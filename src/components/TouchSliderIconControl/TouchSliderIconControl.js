@@ -10,8 +10,6 @@ type Props = {
   updateValue: (num: number) => void,
   width: number,
   height: number,
-  min?: number,
-  max?: number,
   dotSize?: number,
   visualizationComponent: any,
 };
@@ -21,8 +19,6 @@ const TouchSliderIconControl = ({
   updateValue,
   width,
   height,
-  min,
-  max,
   dotSize = 3,
   visualizationComponent,
 }: Props) => {
@@ -46,8 +42,6 @@ const TouchSliderIconControl = ({
           updateValue={updateValue}
           width={touchSliderWidth}
           height={height}
-          min={min}
-          max={max}
           dotSize={dotSize}
         />
       </TouchSliderWrapper>

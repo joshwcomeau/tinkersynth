@@ -63,7 +63,7 @@ const generateLine = (numOfPoints, smoothPoints, randomLines, ratio) => {
 
 const springConfig = {
   tension: 120,
-  friction: 7,
+  friction: 12,
 };
 
 const NoiseVisualization = ({ width, height, value }: Props) => {

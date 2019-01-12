@@ -37,8 +37,6 @@ const PolarCluster = ({ width }: Props) => {
         <SliderVideoControl
           value={slopesParams.polarAmount}
           updateValue={slopesParams.setPolarAmount}
-          min={0}
-          max={100}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={15}

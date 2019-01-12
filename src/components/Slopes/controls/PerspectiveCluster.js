@@ -34,8 +34,6 @@ const PerspectiveCluster = ({ width }: Props) => {
       <SliderVideoControl
         value={slopesParams.perspective}
         updateValue={slopesParams.setPerspective}
-        min={0}
-        max={100}
         width={videoSliderWidth}
         height={videoSliderHeight}
         visualizationComponent={PerspectiveVisualization}

@@ -14,14 +14,15 @@ import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
 type Props = {
   value: number,
   updateValue: (num: number) => void,
-  // Sliders work on a scale of 0-100 by default
-  min: number,
-  max: number,
   width: number,
   height: number,
   // Aesthetic choices
   dotSize: number,
 };
+
+// All sliders expect values to be between 0 and 100
+const min = 0;
+const max = 100;
 
 const useOffscreenCanvasIfAvailable = (
   canvasRef,
@@ -65,7 +66,7 @@ const useOffscreenCanvasIfAvailable = (
       return;
     }
 
-    const { max, dotSize } = props;
+    const { dotSize } = props;
 
     const { dotCoords, numOfCols } = generateDotCoords(width, height, dotSize);
 
@@ -98,7 +99,7 @@ const useOffscreenCanvasIfAvailable = (
 };
 
 const TouchSlider = (props: Props) => {
-  const { value, updateValue, min, max, width, height } = props;
+  const { value, updateValue, width, height } = props;
 
   const [dragging, setDragging] = useState(false);
   const [hoveredValue, setHoveredValue] = useState(null);
@@ -187,11 +188,6 @@ const TouchSlider = (props: Props) => {
       />
     </div>
   );
-};
-
-TouchSlider.defaultProps = {
-  min: 0,
-  max: 100,
 };
 
 const Canvas = styled.canvas`

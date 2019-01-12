@@ -18,7 +18,18 @@ const getGridRotation = ratio => ratio * 50;
 const PerspectiveVisualization = ({ width, height, value }: Props) => {
   const ratio = 1 - value / 100;
 
-  const spring = useSpring({ ratio, config: { tension: 120, friction: 25 } });
+  const gridSpring = useSpring({
+    ratio,
+    config: { tension: 120, friction: 29 },
+  });
+  const mountainSpring = useSpring({
+    ratio,
+    config: { tension: 200, friction: 30 },
+  });
+  const sunSpring = useSpring({
+    ratio,
+    config: { tension: 80, friction: 10 },
+  });
 
   const gridHeight = height * 0.75;
   const gridWidth = gridHeight * (4 / 3);
@@ -29,7 +40,7 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
         style={{
           width: gridWidth,
           height: gridHeight,
-          transform: spring.ratio.interpolate(
+          transform: gridSpring.ratio.interpolate(
             ratio => `perspective(200px) rotateX(${getGridRotation(ratio)}deg)`
           ),
         }}
@@ -48,7 +59,9 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           style={{
             top: gridHeight * (1.5 / 6),
             left: gridWidth * (3 / 8),
-            transform: `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`,
+            transform: mountainSpring.ratio.interpolate(
+              ratio => `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`
+            ),
           }}
         >
           <path
@@ -70,7 +83,9 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           style={{
             top: gridHeight * (1 / 6),
             left: gridWidth * (1 / 8),
-            transform: `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`,
+            transform: mountainSpring.ratio.interpolate(
+              ratio => `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`
+            ),
           }}
         >
           <path
@@ -92,14 +107,16 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           style={{
             top: gridHeight * (2 / 6),
             left: gridWidth * (3 / 8),
-            transform: `
-              translate3d(
-                ${ratio * 20}px,
-                ${ratio * -90}px,
-                ${ratio * 40 - 5}px
-              )
-              rotateX(${-getGridRotation(ratio)}deg)
-            `,
+            transform: sunSpring.ratio.interpolate(
+              ratio => `
+                translate3d(
+                  ${ratio * 20}px,
+                  ${ratio * -110}px,
+                  ${ratio * 40 - 5}px
+                )
+                rotateX(${-getGridRotation(ratio)}deg)
+              `
+            ),
           }}
         >
           <circle
@@ -135,7 +152,7 @@ const GridWrapper = styled(animated.div)`
   transform-style: preserve-3d;
 `;
 
-const Mountain = styled.svg`
+const Mountain = styled(animated.svg)`
   position: absolute;
   z-index: 2;
   transform-origin: bottom center;
@@ -143,7 +160,7 @@ const Mountain = styled.svg`
   overflow: visible;
 `;
 
-const Sun = styled.svg`
+const Sun = styled(animated.svg)`
   position: absolute;
   z-index: 1;
   transform-origin: bottom center;

@@ -34,8 +34,6 @@ const NoiseCluster = ({ width }: Props) => {
         <SliderVideoControl
           value={slopesParams.spikyness}
           updateValue={slopesParams.setSpikyness}
-          min={0}
-          max={100}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={0}
