@@ -144,7 +144,7 @@ export const COLORS = {
     '400': prepColor({
       hue: 0,
       saturation: 0,
-      brightness: 74,
+      brightness: 78,
     }),
 
     '500': prepColor({
@@ -209,7 +209,7 @@ export const BREAKPOINTS = {
   lgMin: `(min-width: ${BREAKPOINT_SIZES.md + 1}px)`,
 };
 
-export const HEADER_HEIGHT = 75;
+export const HEADER_HEIGHT = 50;
 export const MAX_WIDTH = {
   sm: '100%',
   md: BREAKPOINT_SIZES.md + 'px',

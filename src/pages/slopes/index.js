@@ -15,7 +15,6 @@ const SlopesIndex = () => (
         <LoadingMachine />
       }
     />
-    <LoadingMachine />
   </Layout>
 );
 

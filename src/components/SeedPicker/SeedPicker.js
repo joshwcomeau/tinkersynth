@@ -11,7 +11,7 @@ import Spacer from '../Spacer';
 
 const HEIGHT = 54;
 
-const SeedPicker = () => {
+const SeedPicker = ({ seed, setSeed }) => {
   return (
     <Wrapper>
       <Heading>
@@ -19,7 +19,7 @@ const SeedPicker = () => {
       </Heading>
       <MainContent>
         <RetroNumbers
-          hits={1337}
+          hits={seed}
           size={23}
           minLength={6}
           padding={0}
@@ -35,10 +35,16 @@ const SeedPicker = () => {
         <Spacer size={UNIT} />
 
         <Actions>
-          <IncrementDecrementButton>
+          <IncrementDecrementButton
+            disabled={seed === 65535}
+            onClick={() => setSeed(seed + 1)}
+          >
             <Icon icon={chevronUp} size={16} />
           </IncrementDecrementButton>
-          <IncrementDecrementButton>
+          <IncrementDecrementButton
+            disabled={seed === 0}
+            onClick={() => setSeed(seed - 1)}
+          >
             <Icon icon={chevronDown} size={16} />
           </IncrementDecrementButton>
         </Actions>
@@ -98,6 +104,11 @@ const IncrementDecrementButton = styled.button`
 
   &:active {
     background: ${COLORS.pink[300]};
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0;
   }
 
   & svg {

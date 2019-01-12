@@ -10,12 +10,18 @@ import {
   getPerlinValueWithOctaves,
 } from './Slopes.helpers';
 
-const seed = Math.random();
-const { perlin2 } = createNoiseGenerator(5);
-
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
 const DEBUG_PERF = false;
+
+let cachedSeed;
+let noiseGenerator;
+
+const updateSeed = seed => {
+  cachedSeed = seed;
+  let { perlin2 } = createNoiseGenerator(seed);
+  noiseGenerator = perlin2;
+};
 
 /**
  *
@@ -50,7 +56,12 @@ const sketch = ({
   selfSimilarity,
   polarHoleSize,
   numOfOctaves = 1,
+  seed,
 }) => {
+  if (seed !== cachedSeed) {
+    updateSeed(seed);
+  }
+
   let start;
   if (DEBUG_PERF) {
     start = performance.now();
@@ -239,7 +250,7 @@ const getSampleCoordinates = ({
     perlinRangePerRow;
 
   const perlinValue = getPerlinValueWithOctaves(
-    perlin2,
+    noiseGenerator,
     perlinIndex,
     (rowIndex / numOfRows) * selfSimilarity,
     amplitude,

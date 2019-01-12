@@ -16,6 +16,9 @@ type Props = {
 
 export const SlopesProvider = ({ children }: Props) => {
   // High-level "Parameters", tweakable settings
+  const defaultSeed = Math.round(Math.random() * 65535);
+  const [seed, setSeed] = useState(defaultSeed);
+
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
   const [polarAmount, setPolarAmount] = useState(0);
@@ -42,6 +45,8 @@ export const SlopesProvider = ({ children }: Props) => {
   return (
     <SlopesContext.Provider
       value={{
+        seed,
+        setSeed,
         perspective,
         setPerspective,
         spikyness,

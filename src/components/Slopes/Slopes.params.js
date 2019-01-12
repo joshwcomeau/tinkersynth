@@ -27,6 +27,7 @@ type InputParameters = {
 };
 
 const transformParameters = ({
+  seed,
   height,
   perspective,
   spikyness,
@@ -151,6 +152,7 @@ const transformParameters = ({
     enableOcclusion,
     peaksCurve,
     selfSimilarity,
+    seed,
   };
 };
 

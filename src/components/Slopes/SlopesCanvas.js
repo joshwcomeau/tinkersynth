@@ -130,6 +130,7 @@ const SlopesCanvasContainer = props => {
   const slopesParams = useContext(SlopesContext);
 
   const springParams = extractTypeFromObject(slopesParams, 'number');
+  delete springParams.seed;
 
   return (
     <Spring to={springParams}>

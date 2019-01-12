@@ -10,7 +10,7 @@ import SlopesPlacard from '../../SlopesPlacard';
 import SeedPicker from '../../SeedPicker';
 import RandomizeButton from '../../RandomizeButton';
 import Spacer from '../../Spacer';
-import TextLink from '../../TextLink';
+import Link from '../../Link';
 
 type Props = {
   width: number,
@@ -26,24 +26,26 @@ const SettingsCluster = ({ width }: Props) => {
       <SlopesPlacard />
 
       <Note>
-        <FirstLine>
+        <FirstLine title="A generative art machine. By Josh Comeau.">
           A generative art machine.
           <br />
           By{' '}
-          <TextLink to="https://twitter.com/JoshWComeau" target="_blank">
-            Josh Comeau
-          </TextLink>
+          <strong>
+            <Link to="https://twitter.com/JoshWComeau" target="_blank">
+              Josh Comeau
+            </Link>
+          </strong>
           .
         </FirstLine>
-        <SecondLine>
-          <TextLink to="" style={{ color: 'inherit' }}>
+        {/* <SecondLine>
+          <Link to="" style={{ color: 'inherit' }}>
             📕 Documentation
-          </TextLink>
-        </SecondLine>
+          </Link>
+        </SecondLine> */}
       </Note>
 
       <InstrumentCluster>
-        <SeedPicker />
+        <SeedPicker seed={slopesParams.seed} setSeed={slopesParams.setSeed} />
         <Spacer size={UNIT * 2} />
         <RandomizeButton />
       </InstrumentCluster>
@@ -60,8 +62,10 @@ const Row = styled.div`
 const Note = styled.div`
   flex: 1;
   text-align: center;
-  color: ${COLORS.gray[800]};
+  color: ${COLORS.gray[400]};
   line-height: 1.3;
+  text-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.5),
+    0px 0.5px 0px rgba(255, 255, 255, 0.9);
 `;
 
 const FirstLine = styled.div`
