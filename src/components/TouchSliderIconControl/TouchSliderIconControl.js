@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Spring } from 'react-spring';
 
 import TouchSlider from '../TouchSlider';
 import { COLORS, CONTROL_RADIUS } from '../../constants';
@@ -37,13 +38,17 @@ const TouchSliderIconControl = ({
       <Spacer size={0} />
 
       <TouchSliderWrapper>
-        <TouchSlider
-          value={value}
-          updateValue={updateValue}
-          width={touchSliderWidth}
-          height={height}
-          dotSize={dotSize}
-        />
+        <Spring to={{ value }}>
+          {interpolated => (
+            <TouchSlider
+              value={interpolated.value}
+              updateValue={updateValue}
+              width={touchSliderWidth}
+              height={height}
+              dotSize={dotSize}
+            />
+          )}
+        </Spring>
       </TouchSliderWrapper>
     </Wrapper>
   );

@@ -29,7 +29,6 @@ const InnerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background: white; */
 `;
 
 export default RandomizeButton;

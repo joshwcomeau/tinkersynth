@@ -13,6 +13,7 @@ const BigRedButton = ({ size = 40, onClick }) => {
       onClick={onClick}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
+      onMouseLeave={() => isActive && setIsActive(false)}
     >
       <Svg width={size} height={size} viewBox="0 0 40 40" fill="none">
         <mask
