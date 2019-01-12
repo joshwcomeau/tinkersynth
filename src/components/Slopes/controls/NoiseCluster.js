@@ -38,7 +38,7 @@ const NoiseCluster = ({ width }: Props) => {
           max={100}
           width={videoSliderWidth}
           height={sliderHeight}
-          spacing={15}
+          spacing={0}
           visualizationComponent={NoiseVisualization}
         />
 
