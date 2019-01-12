@@ -47,7 +47,7 @@ const SettingsCluster = ({ width }: Props) => {
       <InstrumentCluster>
         <SeedPicker seed={slopesParams.seed} setSeed={slopesParams.setSeed} />
         <Spacer size={UNIT * 2} />
-        <RandomizeButton />
+        <RandomizeButton onClick={slopesParams.randomize} />
       </InstrumentCluster>
     </Row>
   );

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 
@@ -12,13 +13,15 @@ type Props = {
   value: number,
 };
 
+const getGridRotation = ratio => ratio * 50;
+
 const PerspectiveVisualization = ({ width, height, value }: Props) => {
   const ratio = 1 - value / 100;
 
+  const spring = useSpring({ ratio, config: { tension: 120, friction: 25 } });
+
   const gridHeight = height * 0.75;
   const gridWidth = gridHeight * (4 / 3);
-
-  const gridRotation = ratio * 75;
 
   return (
     <Wrapper style={{ width, height }}>
@@ -26,7 +29,9 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
         style={{
           width: gridWidth,
           height: gridHeight,
-          transform: `perspective(200px) rotateX(${gridRotation}deg)`,
+          transform: spring.ratio.interpolate(
+            ratio => `perspective(200px) rotateX(${getGridRotation(ratio)}deg)`
+          ),
         }}
       >
         <Grid
@@ -43,7 +48,7 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           style={{
             top: gridHeight * (1.5 / 6),
             left: gridWidth * (3 / 8),
-            transform: `translateZ(1px) rotateX(${-gridRotation}deg)`,
+            transform: `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`,
           }}
         >
           <path
@@ -65,7 +70,7 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           style={{
             top: gridHeight * (1 / 6),
             left: gridWidth * (1 / 8),
-            transform: `translateZ(1px) rotateX(${-gridRotation}deg)`,
+            transform: `translateZ(1px) rotateX(${-getGridRotation(ratio)}deg)`,
           }}
         >
           <path
@@ -89,11 +94,11 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
             left: gridWidth * (3 / 8),
             transform: `
               translate3d(
-                ${ratio * 60}px,
+                ${ratio * 20}px,
                 ${ratio * -90}px,
-                ${ratio * 40 - 1}px
+                ${ratio * 40 - 5}px
               )
-              rotateX(${-gridRotation}deg)
+              rotateX(${-getGridRotation(ratio)}deg)
             `,
           }}
         >
@@ -115,7 +120,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const GridWrapper = styled.div`
+const GridWrapper = styled(animated.div)`
   position: absolute;
   z-index: 0;
   top: 0;

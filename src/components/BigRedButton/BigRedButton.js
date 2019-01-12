@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { COLORS } from '../../constants';
+
 import Svg from '../Svg';
 
-const BigRedButton = ({ size = 40, handleClick }) => {
+const BigRedButton = ({ size = 40, onClick }) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
     <Button
-      onClick={handleClick}
+      onClick={onClick}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
     >
       <Svg width={size} height={size} viewBox="0 0 40 40" fill="none">
         <mask
-          id="bbmask0"
+          id="outer-mask"
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
           x="0"
@@ -22,9 +24,9 @@ const BigRedButton = ({ size = 40, handleClick }) => {
           width="40"
           height="40"
         >
-          <circle cx="20" cy="20" r="20" fill="#C4C4C4" />
+          <circle cx="20" cy="20" r="15" fill="#000000" />
         </mask>
-        <g mask="url(#bbmask0)">
+        <g>
           <circle cx="20" cy="20" r="20" fill="#2B2B2B" />
           <path
             d="M40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20ZM4.81942 20C4.81942 28.384 11.616 35.1806 20 35.1806C28.384 35.1806 35.1806 28.384 35.1806 20C35.1806 11.616 28.384 4.81942 20 4.81942C11.616 4.81942 4.81942 11.616 4.81942 20Z"
@@ -42,7 +44,7 @@ const BigRedButton = ({ size = 40, handleClick }) => {
               strokeLinecap="round"
             />
           </g>
-          <g filter="url(#big-red-button-4)">
+          <g filter="url(#big-red-button-highlight-upper-edge)">
             <path
               d="M8.21985 5.39015C11.4832 2.56555 15.6528 1.00752 19.9687 1.00003C24.2847 0.992532 28.4597 2.53607 31.7328 5.34932"
               stroke="url(#big-red-button-5)"
@@ -52,14 +54,32 @@ const BigRedButton = ({ size = 40, handleClick }) => {
               style={{ mixBlendMode: 'luminosity' }}
             />
           </g>
-          <circle cx="20" cy="20" r="14" fill="#FF2D1A" />
-          <circle
-            cx="20"
-            cy="20"
-            r="12"
-            fill="url(#big-red-button-uh)"
-            style={{ mixBlendMode: 'hard-light' }}
-          />
+          <g mask="url(#outer-mask)">
+            <g
+              data-layer-name="the-button-itself"
+              style={{
+                // opacity: isActive ? 0.8 : 1,
+                transformOrigin: 'center center',
+                transform: `
+                  scale(${isActive ? 0.95 : 1}, ${isActive ? 0.95 : 1})
+                `,
+              }}
+            >
+              <circle
+                cx="20"
+                cy="20"
+                r="15"
+                fill={isActive ? COLORS.red[500] : COLORS.red[300]}
+              />
+              <circle
+                cx="20"
+                cy="20"
+                r="13"
+                fill="url(#big-red-button-3d-effect)"
+                style={{ mixBlendMode: 'hard-light' }}
+              />
+            </g>
+          </g>
         </g>
         <defs>
           <filter
@@ -84,7 +104,7 @@ const BigRedButton = ({ size = 40, handleClick }) => {
             />
           </filter>
           <filter
-            id="big-red-button-4"
+            id="big-red-button-highlight-upper-edge"
             x="5.21982"
             y="-2"
             width="29.513"
@@ -148,7 +168,7 @@ const BigRedButton = ({ size = 40, handleClick }) => {
             <stop offset="1" stopColor="white" stopOpacity="0.44" />
           </linearGradient>
           <linearGradient
-            id="big-red-button-uh"
+            id="big-red-button-3d-effect"
             x1="20"
             y1="8"
             x2="20"
