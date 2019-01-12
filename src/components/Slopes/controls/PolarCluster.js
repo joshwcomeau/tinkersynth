@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
+import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -19,9 +20,18 @@ type Props = {
   width: number,
 };
 
-const PolarCluster = ({ width }: Props) => {
-  const slopesParams = useContext(SlopesContext);
-
+const PolarCluster = ({
+  width,
+  polarAmount,
+  setPolarAmount,
+  ballSize,
+  setBallSize,
+  disabledParams,
+  omega,
+  setOmega,
+  splitUniverse,
+  setSplitUniverse,
+}: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   const sliderHeight = 164;
@@ -35,8 +45,8 @@ const PolarCluster = ({ width }: Props) => {
     <InstrumentCluster direction="column">
       <Row>
         <SliderVideoControl
-          value={slopesParams.polarAmount}
-          updateValue={slopesParams.setPolarAmount}
+          value={polarAmount}
+          updateValue={setPolarAmount}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={15}
@@ -49,11 +59,11 @@ const PolarCluster = ({ width }: Props) => {
           width={polarHoleSliderWidth}
           height={sliderHeight}
           padding={polarHoleSliderPadding}
-          value={slopesParams.ballSize}
-          updateValue={slopesParams.setBallSize}
+          value={ballSize}
+          updateValue={setBallSize}
           visualizationComponent={BallSizeVisualization}
           numOfNotches={14}
-          isDisabled={slopesParams.disabledParams.ballSize}
+          isDisabled={disabledParams.ballSize}
         />
       </Row>
 
@@ -61,8 +71,8 @@ const PolarCluster = ({ width }: Props) => {
 
       <Row>
         <TouchSliderIconControl
-          value={slopesParams.omega}
-          updateValue={slopesParams.setOmega}
+          value={omega}
+          updateValue={setOmega}
           width={innerWidth}
           height={40}
           visualizationComponent={OmegaVisualization}
@@ -73,8 +83,8 @@ const PolarCluster = ({ width }: Props) => {
 
       <Row>
         <TouchSliderIconControl
-          value={slopesParams.splitUniverse}
-          updateValue={slopesParams.setSplitUniverse}
+          value={splitUniverse}
+          updateValue={setSplitUniverse}
           width={innerWidth}
           height={40}
           visualizationComponent={SplitUniverseVisualization}
@@ -88,5 +98,34 @@ const Row = styled.div`
   display: flex;
 `;
 
-// $FlowIgnore
-export default React.memo(PolarCluster);
+const OptimizedPolarCluster = memoWhileIgnoring(
+  [
+    'setPolarAmount',
+    'setBallSize',
+    'setOmega',
+    'setSplitUniverse',
+    'disabledParams',
+  ],
+  PolarCluster
+);
+
+const Container = ({ width }) => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <OptimizedPolarCluster
+      width={width}
+      polarAmount={slopesParams.polarAmount}
+      setPolarAmount={slopesParams.setPolarAmount}
+      ballSize={slopesParams.ballSize}
+      setBallSize={slopesParams.setBallSize}
+      disabledParams={slopesParams.disabledParams}
+      omega={slopesParams.omega}
+      setOmega={slopesParams.setOmega}
+      splitUniverse={slopesParams.splitUniverse}
+      setSplitUniverse={slopesParams.setSplitUniverse}
+    />
+  );
+};
+
+export default Container;

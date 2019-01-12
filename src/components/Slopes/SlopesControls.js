@@ -42,7 +42,6 @@ const SlopesControls = ({ width }: Props) => {
 
         <Column>
           <SimilarityCluster width={columnWidth} />
-
           <Spacer size={UNIT * 2} />
           <PolarCluster width={columnWidth} />
         </Column>

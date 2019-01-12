@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 
 import { UNIT } from '../../../constants';
+import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -15,9 +16,15 @@ type Props = {
   width: number,
 };
 
-const PerspectiveCluster = ({ width }: Props) => {
-  const slopesParams = useContext(SlopesContext);
-
+const PeaksCluster = ({
+  width,
+  peaksCurve,
+  setPeaksCurve,
+  personInflateAmount,
+  setPersonInflateAmount,
+  wavelength,
+  setWavelength,
+}: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   const sliderWidth = 36;
@@ -33,8 +40,8 @@ const PerspectiveCluster = ({ width }: Props) => {
   return (
     <InstrumentCluster>
       <BezierControl
-        curve={slopesParams.peaksCurve}
-        updateCurve={slopesParams.setPeaksCurve}
+        curve={peaksCurve}
+        updateCurve={setPeaksCurve}
         width={bezierControlWidth}
         height={bezierControlHeight}
       />
@@ -45,8 +52,8 @@ const PerspectiveCluster = ({ width }: Props) => {
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
-        value={slopesParams.personInflateAmount}
-        updateValue={slopesParams.setPersonInflateAmount}
+        value={personInflateAmount}
+        updateValue={setPersonInflateAmount}
         visualizationComponent={PersonInflateVisualization}
       />
 
@@ -56,12 +63,33 @@ const PerspectiveCluster = ({ width }: Props) => {
         width={sliderWidth}
         height={sliderHeight}
         padding={sliderPadding}
-        value={slopesParams.wavelength}
-        updateValue={slopesParams.setWavelength}
+        value={wavelength}
+        updateValue={setWavelength}
         visualizationComponent={WavelengthVisualization}
       />
     </InstrumentCluster>
   );
 };
 
-export default PerspectiveCluster;
+const OptimizedPeaksCluster = memoWhileIgnoring(
+  ['setPeaksCurve', 'setPersonInflateAmount', 'setWavelength'],
+  PeaksCluster
+);
+
+const Container = ({ width }) => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <OptimizedPeaksCluster
+      width={width}
+      peaksCurve={slopesParams.peaksCurve}
+      setPeaksCurve={slopesParams.setPeaksCurve}
+      personInflateAmount={slopesParams.personInflateAmount}
+      setPersonInflateAmount={slopesParams.setPersonInflateAmount}
+      wavelength={slopesParams.wavelength}
+      setWavelength={slopesParams.setWavelength}
+    />
+  );
+};
+
+export default Container;

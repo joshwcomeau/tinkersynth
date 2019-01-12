@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { sample } from '../../utils';
 
@@ -46,8 +46,26 @@ export const SlopesProvider = ({ children }: Props) => {
 
   const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
 
-  // We have a "randomize" button that sets arbitrary values for every control.
+  const wasLastUpdateRandom = useRef(false);
+
+  const wrappedSetter = setter => args => {
+    // wasLastUpdateRandom.current = false;
+    setter(args);
+  };
+
+  // We have a "randomize" button that sets arbitrary values for some controls.
+  // This triggers every visualization to run at once, which is glorious on my
+  // iMac Pro, but is likely a stuttery trainwreck on most machines.
+  //
+  // Two things we can do to improve this situation:
+  // - Only update ~half of the properties on every press, but a random half
+  //   each time (this seems like a good idea anyway?)
+  // - Disable _certain_ visualizations. The ballSize visualization, for
+  //   example, seems surprisingly resource-hungry, and I can just do a hard cut
+  //   between balls.
   const randomize = () => {
+    wasLastUpdateRandom.current = true;
+
     setSeed(getRandomSeed());
 
     setPerspective(getRandomSliderValue());
@@ -74,33 +92,34 @@ export const SlopesProvider = ({ children }: Props) => {
     <SlopesContext.Provider
       value={{
         seed,
-        setSeed,
         perspective,
-        setPerspective,
         spikyness,
-        setSpikyness,
         polarAmount,
-        setPolarAmount,
         omega,
-        setOmega,
         splitUniverse,
-        setSplitUniverse,
         enableOcclusion,
-        setEnableOcclusion,
         enableLineBoost,
-        setEnableLineBoost,
         peaksCurve,
-        setPeaksCurve,
         personInflateAmount,
-        setPersonInflateAmount,
         wavelength,
-        setWavelength,
         waterBoilAmount,
-        setWaterBoilAmount,
         ballSize,
-        setBallSize,
         disabledParams,
+        setSeed: wrappedSetter(setSeed),
+        setPerspective: wrappedSetter(setPerspective),
+        setSpikyness: wrappedSetter(setSpikyness),
+        setPolarAmount: wrappedSetter(setPolarAmount),
+        setOmega: wrappedSetter(setOmega),
+        setSplitUniverse: wrappedSetter(setSplitUniverse),
+        setEnableOcclusion: wrappedSetter(setEnableOcclusion),
+        setEnableLineBoost: wrappedSetter(setEnableLineBoost),
+        setPeaksCurve: wrappedSetter(setPeaksCurve),
+        setPersonInflateAmount: wrappedSetter(setPersonInflateAmount),
+        setWavelength: wrappedSetter(setWavelength),
+        setWaterBoilAmount: wrappedSetter(setWaterBoilAmount),
+        setBallSize: wrappedSetter(setBallSize),
         randomize,
+        wasLastUpdateRandom: wasLastUpdateRandom.current,
       }}
     >
       {children}

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../../constants';
+import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -16,9 +17,7 @@ type Props = {
   width: number,
 };
 
-const SettingsCluster = ({ width }: Props) => {
-  const slopesParams = useContext(SlopesContext);
-
+const SettingsCluster = ({ width, seed, setSeed, randomize }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   return (
@@ -45,11 +44,29 @@ const SettingsCluster = ({ width }: Props) => {
       </Note>
 
       <InstrumentCluster>
-        <SeedPicker seed={slopesParams.seed} setSeed={slopesParams.setSeed} />
+        <SeedPicker seed={seed} setSeed={setSeed} />
         <Spacer size={UNIT * 2} />
-        <RandomizeButton onClick={slopesParams.randomize} />
+        <RandomizeButton onClick={randomize} />
       </InstrumentCluster>
     </Row>
+  );
+};
+
+const OptimizedSettingsCluster = memoWhileIgnoring(
+  ['setSeed', 'randomize'],
+  SettingsCluster
+);
+
+const Container = ({ width }) => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <OptimizedSettingsCluster
+      width={width}
+      seed={slopesParams.seed}
+      setSeed={slopesParams.setSeed}
+      randomize={slopesParams.randomize}
+    />
   );
 };
 
@@ -77,4 +94,4 @@ const SecondLine = styled.div`
   font-size: 12px;
 `;
 
-export default SettingsCluster;
+export default Container;

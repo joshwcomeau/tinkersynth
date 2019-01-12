@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 
 import { UNIT } from '../../../constants';
+import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -17,9 +18,15 @@ type Props = {
   width: number,
 };
 
-const PerspectiveCluster = ({ width }: Props) => {
-  const slopesParams = useContext(SlopesContext);
-
+const PerspectiveCluster = ({
+  width,
+  perspective,
+  enableOcclusion,
+  enableLineBoost,
+  setPerspective,
+  setEnableOcclusion,
+  setEnableLineBoost,
+}: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   const videoSliderHeight = 130;
@@ -32,8 +39,8 @@ const PerspectiveCluster = ({ width }: Props) => {
   return (
     <InstrumentCluster>
       <SliderVideoControl
-        value={slopesParams.perspective}
-        updateValue={slopesParams.setPerspective}
+        value={perspective}
+        updateValue={setPerspective}
         width={videoSliderWidth}
         height={videoSliderHeight}
         visualizationComponent={PerspectiveVisualization}
@@ -43,15 +50,15 @@ const PerspectiveCluster = ({ width }: Props) => {
         <ToggleControl
           width={toggleControlSize}
           height={toggleControlSize}
-          value={slopesParams.enableOcclusion}
-          updateValue={slopesParams.setEnableOcclusion}
+          value={enableOcclusion}
+          updateValue={setEnableOcclusion}
           visualizationComponent={OcclusionVisualization}
         />
         <ToggleControl
           width={toggleControlSize}
           height={toggleControlSize}
-          value={slopesParams.enableLineBoost}
-          updateValue={slopesParams.setEnableLineBoost}
+          value={enableLineBoost}
+          updateValue={setEnableLineBoost}
           visualizationComponent={LineBoostVisualization}
         />
       </Column>
@@ -59,5 +66,25 @@ const PerspectiveCluster = ({ width }: Props) => {
   );
 };
 
-// $FlowIgnore
-export default React.memo(PerspectiveCluster);
+const OptimizedPerspectiveCluster = memoWhileIgnoring(
+  ['setPerspective', 'setEnableOcclusion', 'setEnableLineBoost'],
+  PerspectiveCluster
+);
+
+const Container = ({ width }) => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <OptimizedPerspectiveCluster
+      width={width}
+      perspective={slopesParams.perspective}
+      enableOcclusion={slopesParams.enableOcclusion}
+      enableLineBoost={slopesParams.enableLineBoost}
+      setPerspective={slopesParams.setPerspective}
+      setEnableOcclusion={slopesParams.setEnableOcclusion}
+      setEnableLineBoost={slopesParams.setEnableLineBoost}
+    />
+  );
+};
+
+export default Container;

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
+import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -16,9 +17,14 @@ type Props = {
   width: number,
 };
 
-const NoiseCluster = ({ width }: Props) => {
-  const slopesParams = useContext(SlopesContext);
-
+const NoiseCluster = ({
+  width,
+  spikyness,
+  setSpikyness,
+  ballSize,
+  setBallSize,
+  disabledParams,
+}: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
   const sliderHeight = 164;
@@ -32,8 +38,8 @@ const NoiseCluster = ({ width }: Props) => {
     <InstrumentCluster direction="column">
       <Row>
         <SliderVideoControl
-          value={slopesParams.spikyness}
-          updateValue={slopesParams.setSpikyness}
+          value={spikyness}
+          updateValue={setSpikyness}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={0}
@@ -46,14 +52,34 @@ const NoiseCluster = ({ width }: Props) => {
           width={polarHoleSliderWidth}
           height={sliderHeight}
           padding={polarHoleSliderPadding}
-          value={slopesParams.ballSize}
-          updateValue={slopesParams.setBallSize}
+          value={ballSize}
+          updateValue={setBallSize}
           visualizationComponent={BallSizeVisualization}
           numOfNotches={14}
-          isDisabled={slopesParams.disabledParams.ballSize}
+          isDisabled={disabledParams.ballSize}
         />
       </Row>
     </InstrumentCluster>
+  );
+};
+
+const OptimizedNoiseCluster = memoWhileIgnoring(
+  ['setSpikyness', 'setBallSize', 'disabledParams'],
+  NoiseCluster
+);
+
+const Container = ({ width }) => {
+  const slopesParams = useContext(SlopesContext);
+
+  return (
+    <OptimizedNoiseCluster
+      width={width}
+      spikyness={slopesParams.spikyness}
+      setSpikyness={slopesParams.setSpikyness}
+      ballSize={slopesParams.ballSize}
+      setBallSize={slopesParams.setBallSize}
+      disabledParams={slopesParams.disabledParams}
+    />
   );
 };
 
@@ -61,5 +87,4 @@ const Row = styled.div`
   display: flex;
 `;
 
-// $FlowIgnore
-export default React.memo(NoiseCluster);
+export default Container;
