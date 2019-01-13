@@ -61,11 +61,6 @@ const generateLine = (numOfPoints, smoothPoints, randomLines, ratio) => {
     .join('\n');
 };
 
-const springConfig = {
-  tension: 120,
-  friction: 12,
-};
-
 const NoiseVisualization = ({ width, height, value }: Props) => {
   const ratio = value / 100;
 
@@ -117,9 +112,47 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     return getValuesForBezierCurve(curve, t);
   });
 
-  const spring = useSpring({
+  const spring1 = useSpring({
     ratio,
-    config: springConfig,
+    config: {
+      tension: 120,
+      friction: 12,
+    },
+  });
+  const spring2 = useSpring({
+    ratio,
+    config: {
+      tension: 150,
+      friction: 10,
+    },
+  });
+  const spring3 = useSpring({
+    ratio,
+    config: {
+      tension: 50,
+      friction: 15,
+    },
+  });
+  const spring4 = useSpring({
+    ratio,
+    config: {
+      tension: 260,
+      friction: 35,
+    },
+  });
+  const spring5 = useSpring({
+    ratio,
+    config: {
+      tension: 225,
+      friction: 12,
+    },
+  });
+  const spring6 = useSpring({
+    ratio,
+    config: {
+      tension: 225,
+      friction: 6,
+    },
   });
 
   const lineColors = [
@@ -137,6 +170,8 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     randomLines4,
     randomLines5,
   ];
+
+  const springs = [spring1, spring2, spring3, spring4, spring5, spring6];
 
   return (
     <Svg width={width} height={height}>
@@ -157,7 +192,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
       {lineColors.map((color, index) => (
         <animated.path
           key={index}
-          d={spring.ratio.interpolate(ratio =>
+          d={springs[index].ratio.interpolate(ratio =>
             generateLine(numOfPoints, smoothPoints, lines[index], ratio)
           )}
           stroke={color}
