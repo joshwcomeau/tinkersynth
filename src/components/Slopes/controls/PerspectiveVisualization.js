@@ -11,11 +11,17 @@ type Props = {
   width: number,
   height: number,
   value: number,
+  isBroken: boolean,
 };
 
 const getGridRotation = ratio => ratio * 50;
 
-const PerspectiveVisualization = ({ width, height, value }: Props) => {
+const PerspectiveVisualization = ({
+  width,
+  height,
+  value,
+  isBroken,
+}: Props) => {
   const ratio = 1 - value / 100;
 
   const gridSpring = useSpring({
@@ -35,7 +41,13 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
   const gridWidth = gridHeight * (4 / 3);
 
   return (
-    <Wrapper style={{ width, height }}>
+    <Wrapper
+      style={{
+        width,
+        height,
+        backgroundColor: isBroken ? COLORS.red[500] : 'initial',
+      }}
+    >
       <GridWrapper
         style={{
           width: gridWidth,
@@ -50,7 +62,7 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
           width={gridWidth}
           rows={6}
           cols={8}
-          stroke={COLORS.blue[700]}
+          stroke={isBroken ? COLORS.white : COLORS.blue[700]}
           strokeWidth={2}
         />
         <Mountain
@@ -66,12 +78,12 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
         >
           <path
             d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1"
-            fill={COLORS.gray[900]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
           />
           <path
             d="M23 1C11.5 1 1 29 1 29 M45 29 C45 29 34.5 1 23 1"
             fill="none"
-            stroke={COLORS.green[500]}
+            stroke={isBroken ? COLORS.white : COLORS.green[500]}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -90,12 +102,12 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
         >
           <path
             d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1"
-            fill={COLORS.gray[900]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
           />
           <path
             d="M23 1C15 1 1 45 1 45 M 45 45 C45 45 31 1 23 1"
             fill="none"
-            stroke={COLORS.green[300]}
+            stroke={isBroken ? COLORS.white : COLORS.green[500]}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -123,8 +135,8 @@ const PerspectiveVisualization = ({ width, height, value }: Props) => {
             cx="8"
             cy="8"
             r="5"
-            stroke={COLORS.yellow[300]}
-            fill={COLORS.gray[900]}
+            stroke={isBroken ? COLORS.white : COLORS.yellow[300]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
             strokeWidth={2}
           />
         </Sun>

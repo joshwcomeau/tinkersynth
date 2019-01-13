@@ -106,6 +106,15 @@ const IncrementDecrementButton = styled.button`
     background: ${COLORS.pink[300]};
   }
 
+  &:focus {
+    outline: auto;
+    outline-color: ${COLORS.pink[300]};
+  }
+
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
+
   &:disabled {
     cursor: default;
     opacity: 0;

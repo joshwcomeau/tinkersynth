@@ -5,11 +5,11 @@ import warningSrc from '../../images/warning.png';
 
 import BigRedButton from '../BigRedButton';
 
-const RandomizeButton = ({ onClick }) => {
+const RandomizeButton = ({ handlePress }) => {
   return (
     <Wrapper style={{ backgroundImage: `url(${warningSrc})` }}>
       <InnerWrapper>
-        <BigRedButton onClick={onClick} />
+        <BigRedButton handlePress={handlePress} />
       </InnerWrapper>
     </Wrapper>
   );

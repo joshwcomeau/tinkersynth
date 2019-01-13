@@ -24,6 +24,11 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
     <Button
       style={{ width, height }}
       onMouseDown={() => handleToggle(!isToggled)}
+      onKeyPress={ev => {
+        if (ev.key === 'Enter') {
+          handleToggle(!isToggled);
+        }
+      }}
     >
       <InnerWrapper
         style={{

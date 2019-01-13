@@ -88,6 +88,8 @@ const Slider = ({
   const handleDisplacement = normalize(value, min, max, height, 0);
   const handleColor = isDisabled ? COLORS.gray[300] : COLORS.pink[300];
 
+  const actualHeight = height * 1.2;
+
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
       <Decorations numOfNotches={numOfNotches} />
@@ -103,6 +105,17 @@ const Slider = ({
           setAnimateTransition(false);
 
           setDragging(true);
+        }}
+        onKeyDown={ev => {
+          if (ev.key === 'ArrowUp') {
+            if (value < 120) {
+              updateValue(value + 2);
+            }
+          } else if (ev.key === 'ArrowDown') {
+            if (value > -20) {
+              updateValue(value - 2);
+            }
+          }
         }}
         style={{
           width: handleWidth,

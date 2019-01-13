@@ -46,7 +46,7 @@ const SettingsCluster = ({ width, seed, setSeed, randomize }: Props) => {
       <InstrumentCluster>
         <SeedPicker seed={seed} setSeed={setSeed} />
         <Spacer size={UNIT * 2} />
-        <RandomizeButton onClick={randomize} />
+        <RandomizeButton handlePress={randomize} />
       </InstrumentCluster>
     </Row>
   );

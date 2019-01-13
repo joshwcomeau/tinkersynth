@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from 'react-icons-kit';
+import { u2728 as boomIcon } from 'react-icons-kit/noto_emoji_regular/u2728';
 
 import { COLORS, CONTROL_RADIUS } from '../../constants';
 
@@ -26,6 +28,8 @@ const SliderVideoControl = ({
   spacing = 4,
   visualizationComponent,
 }: Props) => {
+  const isOutOfBounds = value < 0 || value > 100;
+
   // The `width` provided is for the whole unit.
   const sliderWidth = 28;
   const sliderHeight = height - 8;
@@ -42,6 +46,7 @@ const SliderVideoControl = ({
           value={value}
           width={visualizationWidth}
           height={visualizationHeight}
+          isBroken={isOutOfBounds}
         />
       </VisualizationWrapper>
 
@@ -51,6 +56,7 @@ const SliderVideoControl = ({
           updateValue={updateValue}
           width={sliderWidth}
           height={sliderHeight}
+          extendRange={isOutOfBounds}
         />
       </SliderWrapper>
     </Wrapper>

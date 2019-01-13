@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -5,15 +6,26 @@ import { COLORS } from '../../constants';
 
 import Svg from '../Svg';
 
-const BigRedButton = ({ size = 40, onClick }) => {
+const BigRedButton = ({ size = 40, handlePress }) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
     <Button
-      onClick={onClick}
+      onClick={handlePress}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
       onMouseLeave={() => isActive && setIsActive(false)}
+      onKeyDown={ev => {
+        if (!isActive && ev.key === 'Enter') {
+          setIsActive(true);
+        }
+      }}
+      onKeyUp={ev => {
+        if (ev.key === 'Enter') {
+          setIsActive(false);
+          handlePress();
+        }
+      }}
     >
       <Svg width={size} height={size} viewBox="0 0 40 40" fill="none">
         <mask
@@ -185,7 +197,8 @@ const BigRedButton = ({ size = 40, onClick }) => {
   );
 };
 
-const Button = styled.div`
+const Button = styled.button`
+  all: unset;
   display: block;
   margin: 0;
   padding: 0;
@@ -194,6 +207,15 @@ const Button = styled.div`
   cursor: pointer;
   border-radius: 100px;
   border: 4px solid white;
+
+  &:focus {
+    outline: auto;
+    outline-color: ${COLORS.pink[300]};
+  }
+
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 `;
 
 export default BigRedButton;
