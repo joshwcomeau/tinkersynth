@@ -16,9 +16,9 @@ const ToastManager = ({ toasts, dismissToast }) => {
         native
         items={toasts}
         keys={item => item.id}
-        from={{ transform: 'scaleX(0)' }}
-        enter={{ transform: 'scaleX(1)' }}
-        leave={{ transform: 'scaleX(0)' }}
+        from={{ transform: 'translateY(0px) scale(0, 1)', opacity: 1 }}
+        enter={{ transform: 'translateY(0px) scale(1, 1)', opacity: 1 }}
+        leave={{ transform: 'translateY(-8px) scale(1, 0)', opacity: 0.5 }}
       >
         {toast => props => (
           <ToastWrapper style={props}>
@@ -49,7 +49,7 @@ const ToastWrapper = styled(animated.div)`
   top: 0;
   right: 0;
   will-change: transform;
-  transform-origin: center right;
+  transform-origin: top right;
 `;
 
 const mapStateToProps = state => {

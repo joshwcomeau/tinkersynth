@@ -60,6 +60,10 @@ const transformParameters = ({
   );
 
   let distanceBetweenRows = normalize(perspectiveCurved, 0, 1, 0, height * 0.1);
+  if (perspective < 0) {
+    distanceBetweenRows *= -1;
+  }
+
   const rowHeightMultiplier = normalize(perspectiveCurved, 0, 1, 0.05, 0.25);
 
   let rowHeight = 50 + height * rowHeightMultiplier;
