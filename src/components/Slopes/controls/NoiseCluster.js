@@ -19,6 +19,9 @@ type Props = {
   width: number,
   spikyness: number,
   setSpikyness: SetNumber,
+  explosionAmount: number,
+  setExplosionAmount: SetNumber,
+  disabledParams: any,
 };
 
 const NoiseCluster = ({
@@ -29,7 +32,6 @@ const NoiseCluster = ({
   setExplosionAmount,
   disabledParams,
 }: Props) => {
-  console.log({ explosionAmount });
   const innerWidth = width - UNIT * 2 - 2;
 
   const sliderHeight = 164;
@@ -69,7 +71,7 @@ const NoiseCluster = ({
 };
 
 const OptimizedNoiseCluster = memoWhileIgnoring(
-  ['setSpikyness', 'setBallSize', 'disabledParams'],
+  ['setSpikyness', 'setExplosionAmount', 'disabledParams'],
   NoiseCluster
 );
 

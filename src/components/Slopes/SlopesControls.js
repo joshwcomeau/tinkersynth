@@ -13,6 +13,7 @@ import SimilarityCluster from './controls/SimilarityCluster';
 import SettingsCluster from './controls/SettingsCluster';
 import PolarCluster from './controls/PolarCluster';
 import NoiseCluster from './controls/NoiseCluster';
+import AudioCluster from './controls/AudioCluster';
 
 type Props = {
   width: number,
@@ -20,11 +21,17 @@ type Props = {
 
 const SlopesControls = ({ width }: Props) => {
   // We receive an outerWidth through props.
+
+  const padding = UNIT * 2;
+
   // We want our control panel to have two columns, and to have equal spacing
   // on both sides (so 3 units of spacing total: left, between, right).
-  const padding = UNIT * 2;
-  const totalSpacing = padding * 3;
-  const columnWidth = (width - totalSpacing) / 2;
+  const twinColumnWidth = (width - padding * 3) / 2;
+
+  // The final set near the bottom bucks this pattern, because asymmetry is
+  // pretty.
+  const miniColumnWidth = 60;
+  const splitColumnWidth = (width - miniColumnWidth - padding * 4) / 2;
 
   return (
     <ControlPanel width={width} padding={padding}>
@@ -34,25 +41,38 @@ const SlopesControls = ({ width }: Props) => {
       <Spacer size={UNIT * 2} />
       <Row>
         <Column>
-          <PerspectiveCluster width={columnWidth} />
+          <PerspectiveCluster width={twinColumnWidth} />
           <Spacer size={UNIT * 2} />
-          <PeaksCluster width={columnWidth} />
+          <PeaksCluster width={twinColumnWidth} />
         </Column>
         <Spacer size={UNIT * 2} />
 
         <Column>
-          <SimilarityCluster width={columnWidth} />
+          <SimilarityCluster width={twinColumnWidth} />
           <Spacer size={UNIT * 2} />
-          <PolarCluster width={columnWidth} />
+          <PolarCluster width={twinColumnWidth} />
         </Column>
       </Row>
 
       <Spacer size={UNIT * 2} />
 
       <Row>
-        <Column />
         <Column>
-          <NoiseCluster width={columnWidth} />
+          <AudioCluster width={splitColumnWidth} />
+        </Column>
+        <Spacer size={UNIT * 2} />
+        <Column>
+          <NoiseCluster width={splitColumnWidth} />
+        </Column>
+        <Spacer size={UNIT * 2} />
+        <Column>
+          <div
+            style={{
+              background: 'red',
+              width: miniColumnWidth,
+              height: miniColumnWidth,
+            }}
+          />
         </Column>
       </Row>
     </ControlPanel>
