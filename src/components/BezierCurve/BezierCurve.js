@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
-import { Spring } from 'react-spring';
+import { Spring, animated, interpolate } from 'react-spring';
 
 import { COLORS, CONTROL_RADIUS } from '../../constants';
 import { clamp, normalize } from '../../utils';
@@ -23,6 +23,18 @@ type Props = {
 const HANDLE_RADIUS = 10;
 const BORDER_WIDTH = 12;
 const DOT_SPACING = 15;
+
+// Utility method that produces the SVG path directions for the curve, given
+// 3 points.
+const getInstructions = (p1, p2, p3) =>
+  `
+  M ${p1[0]},${p1[1]}
+  Q ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}
+`;
+
+// NOTE: I'm assuming for now that this is a quadratic bezier curve, not
+// a cubic one. If I want to restore cubic behaviour, check out what this
+// fine looked like in 9e22f4a0ea3dd3c7f0193fdad57826daa21f26b5 or earlier.
 
 class BezierCurve extends PureComponent<Props> {
   state = {
@@ -105,25 +117,16 @@ class BezierCurve extends PureComponent<Props> {
     // top-left).
     //
     // Transform this data to be usable in our SVG.
-    const [p1, p2, p3, p4] = points.map(([x, y]) => [
+    const [p1, p2, p3] = points.map(([x, y]) => [
       x * svgWidth,
       (1 - y) * svgHeight,
     ]);
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
 
-    const getInstructions = (p1, p2, p3, p4) =>
-      `
-        M ${p1[0]},${p1[1]}
-        Q ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}
-      `;
-
-    // NOTE: I'm assuming for now that this is a quadratic bezier curve, not
-    // a cubic one. If I want to restore cubic behaviour, check out what this
-    // fine looked like in 9e22f4a0ea3dd3c7f0193fdad57826daa21f26b5 or earlier.
     return (
-      <Spring to={{ p1, p2, p3, p4 }} immediate={!isAnimated}>
-        {interpolated => (
+      <Spring native to={{ p1, p2, p3 }} immediate={!isAnimated}>
+        {sprung => (
           <Wrapper style={{ width, height }}>
             <Svg
               width={svgWidth}
@@ -137,24 +140,22 @@ class BezierCurve extends PureComponent<Props> {
               />
 
               <ControlLine
-                x1={interpolated.p1[0]}
-                y1={interpolated.p1[1]}
-                x2={interpolated.p2[0]}
-                y2={interpolated.p2[1]}
+                x1={sprung.p1.interpolate((x, y) => x)}
+                y1={sprung.p1.interpolate((x, y) => y)}
+                x2={sprung.p2.interpolate((x, y) => x)}
+                y2={sprung.p2.interpolate((x, y) => y)}
               />
               <ControlLine
-                x1={interpolated.p2[0]}
-                y1={interpolated.p2[1]}
-                x2={interpolated.p3[0]}
-                y2={interpolated.p3[1]}
+                x1={sprung.p2.interpolate((x, y) => x)}
+                y1={sprung.p2.interpolate((x, y) => y)}
+                x2={sprung.p3.interpolate((x, y) => x)}
+                y2={sprung.p3.interpolate((x, y) => y)}
               />
 
-              <path
-                d={getInstructions(
-                  interpolated.p1,
-                  interpolated.p2,
-                  interpolated.p3,
-                  interpolated.p4
+              <animated.path
+                d={interpolate(
+                  [sprung.p1, sprung.p2, sprung.p3],
+                  getInstructions
                 )}
                 fill="none"
                 stroke={strokeColor}
@@ -164,12 +165,15 @@ class BezierCurve extends PureComponent<Props> {
               {/* Start point */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p1')}
-                transform={`
-                  translate(
-                    ${interpolated.p1[0] - svgWidth / 2},
-                    ${interpolated.p1[1] - HANDLE_RADIUS}
-                  )
-                `}
+                transform={sprung.p1.interpolate(
+                  (x, y) =>
+                    `
+                    translate(
+                      ${x - svgWidth / 2},
+                      ${y - HANDLE_RADIUS}
+                    )
+                  `
+                )}
               >
                 <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
               </PointWrapper>
@@ -177,12 +181,15 @@ class BezierCurve extends PureComponent<Props> {
               {/* Control point 1 */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p2')}
-                transform={`
-                  translate(
-                    ${interpolated.p2[0] - svgWidth / 2},
-                    ${interpolated.p2[1] - HANDLE_RADIUS}
-                  )
-                `}
+                transform={sprung.p2.interpolate(
+                  (x, y) =>
+                    `
+                    translate(
+                      ${x - svgWidth / 2},
+                      ${y - HANDLE_RADIUS}
+                    )
+                  `
+                )}
               >
                 <RoundHandle
                   id="bezier-control"
@@ -195,12 +202,14 @@ class BezierCurve extends PureComponent<Props> {
               {/* End point */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p3')}
-                transform={`
-                  translate(
-                    ${interpolated.p3[0] - svgWidth / 2},
-                    ${interpolated.p3[1] - HANDLE_RADIUS}
-                  )
-                `}
+                transform={sprung.p3.interpolate(
+                  (x, y) => `
+                    translate(
+                      ${x - svgWidth / 2},
+                      ${y - HANDLE_RADIUS}
+                    )
+                  `
+                )}
               >
                 <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
               </PointWrapper>
@@ -226,7 +235,7 @@ const Svg = styled.svg`
   touch-action: none;
 `;
 
-const PointWrapper = styled.g`
+const PointWrapper = styled(animated.g)`
   cursor: grab;
 
   &:active {
@@ -234,7 +243,7 @@ const PointWrapper = styled.g`
   }
 `;
 
-const ControlLine = styled.line`
+const ControlLine = styled(animated.line)`
   stroke: ${COLORS.gray[700]};
   stroke-width: 1;
 `;
