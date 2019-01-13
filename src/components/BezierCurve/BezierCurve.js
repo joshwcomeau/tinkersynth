@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import { Spring } from 'react-spring';
 
 import { COLORS, CONTROL_RADIUS } from '../../constants';
 import { clamp, normalize } from '../../utils';
@@ -103,91 +104,102 @@ class BezierCurve extends PureComponent<Props> {
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
 
-    const instructions =
-      curveType === 'cubic'
-        ? `
-            M ${p1[0]},${p1[1]}
-            C ${p2[0]},${p2[1]} ${p3[0]},${p3[1]} ${p4[0]},${p4[1]}
-          `
-        : `
-            M ${p1[0]},${p1[1]}
-            Q ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}
-          `;
+    const getInstructions = (p1, p2, p3, p4) =>
+      `
+        M ${p1[0]},${p1[1]}
+        Q ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}
+      `;
 
-    const lastPoint = curveType === 'cubic' ? p4 : p3;
-    const lastPointId = curveType === 'cubic' ? 'p4' : 'p3';
-
+    // NOTE: I'm assuming for now that this is a quadratic bezier curve, not
+    // a cubic one. If I want to restore cubic behaviour, check out what this
+    // fine looked like in 9e22f4a0ea3dd3c7f0193fdad57826daa21f26b5 or earlier.
     return (
-      <Wrapper style={{ width, height }}>
-        <Svg
-          width={svgWidth}
-          height={svgHeight}
-          ref={node => (this.node = node)}
-        >
-          <Background
-            width={svgWidth}
-            height={svgHeight}
-            squareSize={DOT_SPACING}
-          />
-
-          <ControlLine x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} />
-          {curveType === 'quadratic' && (
-            <ControlLine x1={p2[0]} y1={p2[1]} x2={p3[0]} y2={p3[1]} />
-          )}
-          {curveType === 'cubic' && (
-            <ControlLine x1={p3[0]} y1={p3[1]} x2={p4[0]} y2={p4[1]} />
-          )}
-          <path
-            d={instructions}
-            fill="none"
-            stroke={strokeColor}
-            strokeWidth={strokeWidth}
-          />
-
-          {/* Start point */}
-          <PointWrapper
-            onMouseDown={this.handleSelectPoint('p1')}
-            transform={`translate(${p1[0] - svgWidth / 2}, ${p1[1] -
-              HANDLE_RADIUS})`}
-          >
-            <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
-          </PointWrapper>
-
-          {/* End point */}
-          <PointWrapper
-            onMouseDown={this.handleSelectPoint(lastPointId)}
-            transform={`translate(${lastPoint[0] -
-              svgWidth / 2}, ${lastPoint[1] - HANDLE_RADIUS})`}
-          >
-            <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
-          </PointWrapper>
-
-          {/* Control point 1 */}
-          <PointWrapper
-            onMouseDown={this.handleSelectPoint('p2')}
-            transform={`translate(${p2[0] - svgWidth / 2}, ${p2[1] -
-              HANDLE_RADIUS})`}
-          >
-            <RoundHandle
-              id="bezier-control"
-              size={HANDLE_RADIUS * 2}
-              innerColor={COLORS.violet[100]}
-              outerColor={COLORS.violet[300]}
-            />
-          </PointWrapper>
-
-          {/* Control point 2 - currently unused */}
-          {curveType === 'cubic' && (
-            <PointWrapper
-              onMouseDown={this.handleSelectPoint('p3')}
-              transform={`translate(${p3[0] - svgWidth / 2}, ${p3[1] -
-                HANDLE_RADIUS})`}
+      <Spring to={{ p1, p2, p3, p4 }}>
+        {interpolated => (
+          <Wrapper style={{ width, height }}>
+            <Svg
+              width={svgWidth}
+              height={svgHeight}
+              ref={node => (this.node = node)}
             >
-              <RoundHandle size={HANDLE_RADIUS * 2} />
-            </PointWrapper>
-          )}
-        </Svg>
-      </Wrapper>
+              <Background
+                width={svgWidth}
+                height={svgHeight}
+                squareSize={DOT_SPACING}
+              />
+
+              <ControlLine
+                x1={interpolated.p1[0]}
+                y1={interpolated.p1[1]}
+                x2={interpolated.p2[0]}
+                y2={interpolated.p2[1]}
+              />
+              <ControlLine
+                x1={interpolated.p2[0]}
+                y1={interpolated.p2[1]}
+                x2={interpolated.p3[0]}
+                y2={interpolated.p3[1]}
+              />
+
+              <path
+                d={getInstructions(
+                  interpolated.p1,
+                  interpolated.p2,
+                  interpolated.p3,
+                  interpolated.p4
+                )}
+                fill="none"
+                stroke={strokeColor}
+                strokeWidth={strokeWidth}
+              />
+
+              {/* Start point */}
+              <PointWrapper
+                onMouseDown={this.handleSelectPoint('p1')}
+                transform={`
+                  translate(
+                    ${interpolated.p1[0] - svgWidth / 2},
+                    ${interpolated.p1[1] - HANDLE_RADIUS}
+                  )
+                `}
+              >
+                <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
+              </PointWrapper>
+
+              {/* Control point 1 */}
+              <PointWrapper
+                onMouseDown={this.handleSelectPoint('p2')}
+                transform={`
+                  translate(
+                    ${interpolated.p2[0] - svgWidth / 2},
+                    ${interpolated.p2[1] - HANDLE_RADIUS}
+                  )
+                `}
+              >
+                <RoundHandle
+                  id="bezier-control"
+                  size={HANDLE_RADIUS * 2}
+                  innerColor={COLORS.violet[100]}
+                  outerColor={COLORS.violet[300]}
+                />
+              </PointWrapper>
+
+              {/* End point */}
+              <PointWrapper
+                onMouseDown={this.handleSelectPoint('p3')}
+                transform={`
+                  translate(
+                    ${interpolated.p3[0] - svgWidth / 2},
+                    ${interpolated.p3[1] - HANDLE_RADIUS}
+                  )
+                `}
+              >
+                <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+              </PointWrapper>
+            </Svg>
+          </Wrapper>
+        )}
+      </Spring>
     );
   }
 }

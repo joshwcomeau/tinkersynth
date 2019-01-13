@@ -26,6 +26,42 @@ const getRandomSliderValue = () =>
 
 const getRandomBooleanValue = () => sample([true, false]);
 
+const getRandomPeaksCurve = () => {
+  // Let's have some sensible "standard" curves to sample from.
+  const presetCurves = [
+    DEFAULT_PEAKS_CURVE,
+    {
+      // This one is a straight line along the top
+      startPoint: [0, 1],
+      controlPoint1: [0.5, 1],
+      endPoint: [1, 1],
+    },
+    {
+      // Rainbow
+      startPoint: [0.1, 0.2],
+      controlPoint1: [0.5, 1],
+      endPoint: [0.9, 0.2],
+    },
+    {
+      // Diagonal line (polar corkscrew)
+      startPoint: [0, 1],
+      controlPoint1: [0.55, 0.55],
+      endPoint: [1, 0],
+    },
+  ];
+
+  // Let's also add a chance to generate one totally at random
+  const useRandomCurve = Math.random() > 0.5;
+
+  return useRandomCurve
+    ? {
+        startPoint: [Math.random(), Math.random()],
+        controlPoint1: [Math.random(), Math.random()],
+        endPoint: [Math.random(), Math.random()],
+      }
+    : sample(presetCurves);
+};
+
 export const SlopesProvider = ({ children }: Props) => {
   // High-level "Parameters", tweakable settings
   const defaultSeed = getRandomSeed();
@@ -66,19 +102,58 @@ export const SlopesProvider = ({ children }: Props) => {
   const randomize = () => {
     isRandomized.current = true;
 
-    setSeed(getRandomSeed());
+    // setSeed(getRandomSeed());
 
     setPerspective(getRandomSliderValue());
-    setSpikyness(getRandomSliderValue());
-    setPolarAmount(getRandomSliderValue());
-    setOmega(getRandomSliderValue());
-    setSplitUniverse(getRandomSliderValue());
+
     setPersonInflateAmount(getRandomSliderValue());
     setWavelength(getRandomSliderValue());
-    setWaterBoilAmount(getRandomSliderValue());
     setBallSize(getRandomSliderValue());
 
-    setEnableOcclusion(getRandomBooleanValue());
+    setPeaksCurve(getRandomPeaksCurve());
+
+    // Certain parameters make more sense at one of the extremities, so let's
+    // increase the chances of those.
+    const polarAmount = sample([0, 0, 0, 100, 100, getRandomSliderValue()]);
+    setPolarAmount(polarAmount);
+
+    const omega =
+      polarAmount === 0 ? 0 : sample([0, 100, getRandomSliderValue()]);
+    setOmega(omega);
+
+    const waterBoilAmount = sample([100, getRandomSliderValue()]);
+    setWaterBoilAmount(waterBoilAmount);
+
+    const spikyness = sample([0, 0, 0, 1, getRandomSliderValue()]);
+    setSpikyness(spikyness);
+
+    // splitUniverse is _such_ a drastic effect. Let's make it stick to 0
+    // most of the time.
+    const splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
+    setSplitUniverse(splitUniverse);
+
+    // Line boost is a really expensive property. To keep randomization speedy,
+    // let's keep it off most of the time.
+    setEnableLineBoost(sample([false, false, false, false, false, true]));
+
+    // If we're splitting the universe, we almost always want occlusion to be
+    // off.
+    const enableOcclusion =
+      splitUniverse > 0
+        ? sample([
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+          ])
+        : getRandomBooleanValue();
+    setEnableOcclusion(enableOcclusion);
   };
 
   // Sometimes, values in 1 parameter will disable others.

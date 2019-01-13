@@ -15,42 +15,61 @@ type Props = {
   height: number,
 };
 
-const BezierControl = ({ curve, updateCurve, width, height }: Props) => (
-  <Wrapper style={{ width, height }}>
-    <BezierCurve
-      width={width}
-      height={height}
-      points={[curve.startPoint, curve.controlPoint1, curve.endPoint]}
-      updatePoint={(id, point) => {
-        // The BezierCurve returns a point based on ID, and the coordinates
-        // assume a top/left origin.
-        // Our curves are named differently, and are based from the
-        // bottom-left corner.
-        //
-        // TODO: It would be much nicer to just update the BezierCurve
-        // component to match this project.
-        let name;
+const BezierControl = ({ curve, updateCurve, width, height }: Props) => {
+  const isCubic = !!curve.controlPoint2;
 
-        switch (id) {
-          case 'p1':
-            name = 'startPoint';
-            break;
-
-          case 'p2':
-            name = 'controlPoint1';
-            break;
-          case 'p3':
-            name = 'endPoint';
-            break;
-          default:
-            throw new Error('unsupported ID: ' + id);
+  return (
+    <Wrapper style={{ width, height }}>
+      <BezierCurve
+        width={width}
+        height={height}
+        points={
+          isCubic
+            ? [
+                curve.startPoint,
+                curve.controlPoint1,
+                curve.controlPoint2,
+                curve.endPoint,
+              ]
+            : [curve.startPoint, curve.controlPoint1, curve.endPoint]
         }
+        updatePoint={(id, point) => {
+          // The BezierCurve returns a point based on ID, and the coordinates
+          // assume a top/left origin.
+          // Our curves are named differently, and are based from the
+          // bottom-left corner.
+          //
+          // TODO: It would be much nicer to just update the BezierCurve
+          // component to match this project.
+          let name;
 
-        updateCurve({ ...curve, [name]: point });
-      }}
-    />
-  </Wrapper>
-);
+          switch (id) {
+            case 'p1':
+              name = 'startPoint';
+              break;
+
+            case 'p2':
+              name = 'controlPoint1';
+              break;
+
+            case 'p3':
+              name = isCubic ? 'controlPoint2' : 'endPoint';
+              break;
+
+            case 'p4':
+              name = 'endPoint';
+              break;
+
+            default:
+              throw new Error('unsupported ID: ' + id);
+          }
+
+          updateCurve({ ...curve, [name]: point });
+        }}
+      />
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   position: relative;
