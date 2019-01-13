@@ -12,6 +12,7 @@ import type { Curve } from '../../types';
 
 type InputParameters = {
   height: number,
+  amplitudeAmount: number,
   perspective: number,
   spikyness: number,
   explosionAmount: number,
@@ -31,6 +32,7 @@ type InputParameters = {
 const transformParameters = ({
   seed,
   height,
+  amplitudeAmount,
   perspective,
   spikyness,
   explosionAmount,
@@ -91,15 +93,23 @@ const transformParameters = ({
   }
 
   // Wavelength -> perlinRangePerRow & peak height
-  const MAX_PERLIN_RANGE = 16;
-  const perlinRangePerRow = normalize(
-    wavelength,
-    0,
-    100,
-    0.5,
-    MAX_PERLIN_RANGE
+  const MAX_PERLIN_RANGE_CARTESIAN = 8;
+  const MAX_PERLIN_RANGE_POLAR = 16;
+
+  const maxPerlin = mix(
+    MAX_PERLIN_RANGE_POLAR,
+    MAX_PERLIN_RANGE_CARTESIAN,
+    polarRatio
   );
-  const amplitude = 1 - (perlinRangePerRow / MAX_PERLIN_RANGE) * 0.4;
+
+  const perlinRangePerRow = normalize(wavelength, 0, 100, 0.5, maxPerlin);
+
+  // TODO: kill this
+  // const amplitude = 1 - (perlinRangePerRow / MAX_PERLIN_RANGE) * 0.4;
+
+  // Our amplitudeRatio is a number from 0 to 3, since it can cause the peaks
+  // to be up to 3x taller than they'd otherwise be.
+  const amplitudeRatio = (amplitudeAmount / 100) * 3;
 
   // Transform our `personInflateAmount` to control how wide the effect of the
   // peaks curve is.
@@ -156,7 +166,7 @@ const transformParameters = ({
     peaksCurveStrength,
     perlinRangePerRow,
     omegaRadiusSubtractAmount,
-    amplitude,
+    amplitudeRatio,
     polarHoleSize,
     // Some fields are just passed right through, no macros:
     enableOcclusion,

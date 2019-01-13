@@ -53,7 +53,7 @@ const sketch = ({
   peaksCurve,
   peaksCurveStrength,
   perlinRangePerRow,
-  amplitude,
+  amplitudeRatio,
   selfSimilarity,
   polarHoleSize,
   numOfOctaves = 1,
@@ -79,6 +79,7 @@ const sketch = ({
     const previousRowIndices = getPossiblyOccludingRowIndices({
       rowIndex,
       rowHeight,
+      amplitudeRatio,
       distanceBetweenRows,
     });
 
@@ -126,7 +127,7 @@ const sketch = ({
         omegaRadiusSubtractAmount,
         peaksCurve,
         peaksCurveStrength,
-        amplitude,
+        amplitudeRatio,
         selfSimilarity,
         numOfOctaves,
       });
@@ -152,7 +153,7 @@ const sketch = ({
         omegaRadiusSubtractAmount,
         peaksCurve,
         peaksCurveStrength,
-        amplitude,
+        amplitudeRatio,
         selfSimilarity,
         numOfOctaves,
       });
@@ -225,7 +226,7 @@ const getSampleCoordinates = ({
   rowOffset,
   rowHeight,
   horizontalMargin,
-  amplitude,
+  amplitudeRatio,
   perlinRangePerRow,
   explosionRatio,
   perlinRatio,
@@ -248,7 +249,7 @@ const getSampleCoordinates = ({
   // apart that each row appears totally independent. This is controlled by
   // `selfSimilarity`
   //
-  // TODO: Should I apply the amplitude to `mixedValue` as well?
+  // TODO: Should I apply the amplitudeRatio to `mixedValue` as well?
   const perlinIndex =
     normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
     perlinRangePerRow;
@@ -257,13 +258,13 @@ const getSampleCoordinates = ({
     noiseGenerator,
     perlinIndex,
     (rowIndex / numOfRows) * selfSimilarity,
-    amplitude,
+    amplitudeRatio,
     numOfOctaves
   );
 
   // Another possible world is where each value is randomized. This creates a
   // busy "noise" effect.
-  // TODO: Make the multiplier based on amplitude
+  // TODO: Make the multiplier based on amplitudeRatio
   const rndBase = (Math.random() - 0.5) * 0.5;
 
   // We also have our `explosionRatio`, which makes those interesting spikes.

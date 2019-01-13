@@ -67,6 +67,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const defaultSeed = getRandomSeed();
   const [seed, setSeed] = useState(defaultSeed);
 
+  const [amplitudeAmount, setAmplitudeAmount] = useState(50);
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
   const [explosionAmount, setExplosionAmount] = useState(10);
@@ -105,6 +106,7 @@ export const SlopesProvider = ({ children }: Props) => {
 
     setSeed(getRandomSeed());
     setPerspective(getRandomSliderValue());
+    setAmplitudeAmount(getRandomSliderValue());
 
     // Some parameters don't need to be updated on every tick.
     if (Math.random() > 0.5) {
@@ -176,6 +178,7 @@ export const SlopesProvider = ({ children }: Props) => {
     <SlopesContext.Provider
       value={{
         seed,
+        amplitudeAmount,
         perspective,
         spikyness,
         explosionAmount,
@@ -191,6 +194,7 @@ export const SlopesProvider = ({ children }: Props) => {
         ballSize,
         disabledParams,
         setSeed: wrappedSetter(setSeed),
+        setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
         setPerspective: wrappedSetter(setPerspective),
         setSpikyness: wrappedSetter(setSpikyness),
         setExplosionAmount: wrappedSetter(setExplosionAmount),

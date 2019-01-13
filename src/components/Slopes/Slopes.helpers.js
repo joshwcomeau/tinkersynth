@@ -276,13 +276,23 @@ export const occludeLineIfNecessary = (
 export const getPossiblyOccludingRowIndices = ({
   rowIndex,
   rowHeight,
+  amplitudeRatio,
   distanceBetweenRows,
 }) => {
-  // The largest possible peak will be `rowHeight`px tall.
+  // The largest possible peak will be `rowHeight * amplitudeRatio`px tall.
   // If our rowHeight is 100px, and our distanceBetweenRows is 20, we know that
   // we need to check up to 5 previous rows, since a max peak will be 100px
   // tall, and 100px below.
-  const maxNumOfOccludingRows = Math.ceil(rowHeight / distanceBetweenRows);
+  const theoreticalMaxHeight = rowHeight * amplitudeRatio;
+
+  // That said, the theoretical max never seems to actually happen.
+  // For optimization, I can reduce this number a bit without risking a
+  // break in occlusion
+  const practicalMaxHeight = theoreticalMaxHeight * 0.777;
+
+  const maxNumOfOccludingRows = Math.ceil(
+    practicalMaxHeight / distanceBetweenRows
+  );
 
   const lowestRowIndex = Math.max(0, rowIndex - maxNumOfOccludingRows);
 
