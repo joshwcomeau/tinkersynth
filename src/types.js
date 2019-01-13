@@ -11,10 +11,8 @@ export type Curve = {
 
 export type SetNumber = (val: number) => void;
 
-export type ToastType = 'success' | 'error' | 'notice';
 export type Toast = {
   id: string,
-  type: ToastType,
   title?: string,
   message: string,
 };
