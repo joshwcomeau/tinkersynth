@@ -1,7 +1,9 @@
 // @flow
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import * as actions from '../../actions';
 import { COLORS } from '../../constants';
 import { clamp, normalize } from '../../utils';
 import useBoundingBox from '../../hooks/bounding-box.hook';
@@ -35,6 +37,8 @@ const Slider = ({
   handleWidth = 30,
   handleHeight = 21,
   isDisabled,
+  isMachineBroken,
+  breakMachineWithKeyboard,
 }: Props) => {
   const [dragging, setDragging] = useState(false);
   const [animateTransition, setAnimateTransition] = useState(true);
@@ -88,8 +92,6 @@ const Slider = ({
   const handleDisplacement = normalize(value, min, max, height, 0);
   const handleColor = isDisabled ? COLORS.gray[300] : COLORS.pink[300];
 
-  const actualHeight = height * 1.2;
-
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
       <Decorations numOfNotches={numOfNotches} />
@@ -107,14 +109,31 @@ const Slider = ({
           setDragging(true);
         }}
         onKeyDown={ev => {
+          // Allow keyboard navigators to break out of the range by 20% in
+          // either direction :o this is an easter egg!
+          let hasBrokenOutOfRange = false;
+
           if (ev.key === 'ArrowUp') {
             if (value < 120) {
-              updateValue(value + 2);
+              const newValue = value + 2;
+              updateValue(newValue);
+
+              hasBrokenOutOfRange = newValue > 100;
             }
           } else if (ev.key === 'ArrowDown') {
             if (value > -20) {
-              updateValue(value - 2);
+              const newValue = value - 2;
+              updateValue(newValue);
+
+              hasBrokenOutOfRange = newValue < 0;
             }
+          }
+
+          if (!isMachineBroken && hasBrokenOutOfRange) {
+            // Mark the machine as "broken".
+            // This just displays a toast for the user, and keeps track of
+            // that state, so that we don't keep showing them the toast.
+            breakMachineWithKeyboard();
           }
         }}
         style={{
@@ -166,5 +185,17 @@ const HandleWrapper = styled.button`
   }
 `;
 
-// $FlowIgnore
-export default React.memo(Slider);
+const mapStateToProps = state => {
+  const isMachineBroken = state.machine.hasBeenBroken;
+
+  return { isMachineBroken };
+};
+
+const mapDispatchToProps = {
+  breakMachineWithKeyboard: actions.breakMachineWithKeyboard,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Slider);

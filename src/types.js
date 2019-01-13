@@ -1,12 +1,20 @@
 // @flow
 
-type Point = [number, number];
+export type Point = [number, number];
 
-type Curve = {
+export type Curve = {
   startPoint: Point,
   controlPoint1: Point,
   controlPoint2?: Point,
   endPoint: Point,
 };
 
-type SetNumber = (val: number) => void;
+export type SetNumber = (val: number) => void;
+
+export type ToastType = 'success' | 'error' | 'notice';
+export type Toast = {
+  id: string,
+  type: ToastType,
+  title?: string,
+  message: string,
+};
