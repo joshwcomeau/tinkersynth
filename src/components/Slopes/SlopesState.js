@@ -102,20 +102,28 @@ export const SlopesProvider = ({ children }: Props) => {
   const randomize = () => {
     isRandomized.current = true;
 
-    // setSeed(getRandomSeed());
-
+    setSeed(getRandomSeed());
     setPerspective(getRandomSliderValue());
 
-    setPersonInflateAmount(getRandomSliderValue());
-    setWavelength(getRandomSliderValue());
-    setBallSize(getRandomSliderValue());
-
-    setPeaksCurve(getRandomPeaksCurve());
+    // Some parameters don't need to be updated on every tick.
+    if (Math.random() > 0.5) {
+      setPeaksCurve(getRandomPeaksCurve());
+    }
+    if (Math.random() > 0.25) {
+      setPersonInflateAmount(getRandomSliderValue());
+    }
+    if (Math.random() > 0.25) {
+      setWavelength(getRandomSliderValue());
+    }
 
     // Certain parameters make more sense at one of the extremities, so let's
     // increase the chances of those.
     const polarAmount = sample([0, 0, 0, 100, 100, getRandomSliderValue()]);
     setPolarAmount(polarAmount);
+
+    if (polarAmount > 0 && Math.random() > 0.5) {
+      setBallSize(getRandomSliderValue());
+    }
 
     const omega =
       polarAmount === 0 ? 0 : sample([0, 100, getRandomSliderValue()]);
