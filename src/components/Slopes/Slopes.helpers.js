@@ -385,14 +385,12 @@ export const plotAsPolarCoordinate = ({
 };
 
 export const getPerlinValueWithOctaves = (
-  perlinGenerator,
+  noiseGenerator,
   x,
   y,
   rootAmplitude,
   numOfOctaves
 ) => {
-  // const rootValue = perlinGenerator(x, y) * rootAmplitude;
-
   let value = 0;
   let cursor = 1;
   while (cursor <= numOfOctaves) {
@@ -400,7 +398,7 @@ export const getPerlinValueWithOctaves = (
     const frequency = x * multiple;
     const amplitude = rootAmplitude / multiple;
 
-    const octaveVal = perlinGenerator(frequency, y) * amplitude;
+    const octaveVal = noiseGenerator(frequency, y) * amplitude;
 
     value += octaveVal;
 

@@ -5,25 +5,27 @@
 // This file specifies the mapping from high-level params to actual variables
 // used in the logic.
 // `value` will always be from 0-1000
-import { normalize, mix } from '../../utils';
+import { normalize, mix, clamp } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
-import type { Bezier } from '../../types';
+import type { Curve } from '../../types';
 
 type InputParameters = {
   height: number,
   perspective: number,
   spikyness: number,
+  explosionAmount: number,
   polarAmount: number,
   omega: number,
   splitUniverse: number,
   enableOcclusion: boolean,
   enableLineBoost: boolean,
-  peaksCurve: Bezier,
+  peaksCurve: Curve,
   personInflateAmount: number,
   wavelength: number,
   waterBoilAmount: number,
   ballSize: number,
+  seed: number,
 };
 
 const transformParameters = ({
@@ -31,6 +33,7 @@ const transformParameters = ({
   height,
   perspective,
   spikyness,
+  explosionAmount,
   polarAmount,
   omega,
   splitUniverse,
@@ -69,6 +72,8 @@ const transformParameters = ({
   let rowHeight = 50 + height * rowHeightMultiplier;
 
   const perlinRatio = (100 - spikyness) / 100;
+
+  const explosionRatio = explosionAmount / 100;
 
   const polarRatio = polarAmount / 100;
 
@@ -141,6 +146,7 @@ const transformParameters = ({
   return {
     distanceBetweenRows,
     perlinRatio,
+    explosionRatio,
     rowHeight,
     polarRatio,
     polarTanRatio,

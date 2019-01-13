@@ -37,6 +37,9 @@ onmessage = throttle(function({ data }) {
       width: data.width,
       height: data.height,
       context: ctx,
+      // TODO: Make these params
+      // background: 'black',
+      // lineColor: 'white',
     });
   } else {
     // $FlowIgnore

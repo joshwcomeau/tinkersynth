@@ -40,10 +40,10 @@ const PeaksCluster = ({
   const sliderWidth = 36;
   const sliderPadding = 4;
 
-  const numOfSliders = 2;
+  const numOfSliders = 1;
 
   const bezierControlWidth = innerWidth - (sliderWidth + UNIT) * numOfSliders;
-  const bezierControlHeight = bezierControlWidth;
+  const bezierControlHeight = 170;
 
   const sliderHeight = bezierControlHeight;
 
@@ -68,24 +68,12 @@ const PeaksCluster = ({
         visualizationComponent={PersonInflateVisualization}
         isAnimated={!isRandomized}
       />
-
-      <Spacer size={UNIT} />
-
-      <SliderIconControl
-        width={sliderWidth}
-        height={sliderHeight}
-        padding={sliderPadding}
-        value={wavelength}
-        updateValue={setWavelength}
-        visualizationComponent={WavelengthVisualization}
-        isAnimated={!isRandomized}
-      />
     </InstrumentCluster>
   );
 };
 
 const OptimizedPeaksCluster = memoWhileIgnoring(
-  ['setPeaksCurve', 'setPersonInflateAmount', 'setWavelength', 'isRandomized'],
+  ['setPeaksCurve', 'setPersonInflateAmount', 'isRandomized'],
   PeaksCluster
 );
 
@@ -99,8 +87,6 @@ const Container = ({ width }) => {
       setPeaksCurve={slopesParams.setPeaksCurve}
       personInflateAmount={slopesParams.personInflateAmount}
       setPersonInflateAmount={slopesParams.setPersonInflateAmount}
-      wavelength={slopesParams.wavelength}
-      setWavelength={slopesParams.setWavelength}
       isRandomized={slopesParams.isRandomized}
     />
   );

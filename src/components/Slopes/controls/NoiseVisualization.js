@@ -160,7 +160,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     COLORS.yellow[500],
     COLORS.green[500],
     COLORS.blue[300],
-    COLORS.violet[300],
+    COLORS.pink[300],
   ];
 
   const lines = [
@@ -175,20 +175,6 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
 
   return (
     <Svg width={width} height={height}>
-      {/*
-      TODO: Uncomment this, use it when ratio is 0.
-
-      <path
-        d={`
-          M 0,${innerHeight}
-          C ${innerWidth * 0.33},${innerHeight * -1.75}
-            ${innerWidth * 0.66},${innerHeight * 2.25}
-            ${innerWidth},${innerHeight / 2}
-        `}
-        stroke={COLORS.aqua[500]}
-        strokeWidth={5}
-        strokeLinecap="round"
-      /> */}
       {lineColors.map((color, index) => (
         <animated.path
           key={index}
@@ -198,7 +184,8 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
           stroke={color}
           strokeWidth={4}
           strokeLinecap="round"
-          style={{ mixBlendMode: 'color-dodge' }}
+          strokeOpacity={1}
+          style={{ mixBlendMode: 'lighten' }}
         />
       ))}
     </Svg>

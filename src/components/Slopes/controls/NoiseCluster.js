@@ -13,26 +13,31 @@ import BallSizeVisualization from './BallSizeVisualization';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
+import type { SetNumber } from '../../../types';
+
 type Props = {
   width: number,
+  spikyness: number,
+  setSpikyness: SetNumber,
 };
 
 const NoiseCluster = ({
   width,
   spikyness,
   setSpikyness,
-  ballSize,
-  setBallSize,
+  explosionAmount,
+  setExplosionAmount,
   disabledParams,
 }: Props) => {
+  console.log({ explosionAmount });
   const innerWidth = width - UNIT * 2 - 2;
 
   const sliderHeight = 164;
 
-  const polarHoleSliderWidth = 32;
-  const polarHoleSliderPadding = 4;
+  const secondarySliderWidth = 32;
+  const secondarySliderPadding = 4;
 
-  const videoSliderWidth = innerWidth - polarHoleSliderWidth - UNIT;
+  const videoSliderWidth = innerWidth - secondarySliderWidth - UNIT;
 
   return (
     <InstrumentCluster direction="column">
@@ -49,14 +54,14 @@ const NoiseCluster = ({
         <Spacer size={UNIT} />
 
         <SliderIconControl
-          width={polarHoleSliderWidth}
+          width={secondarySliderWidth}
           height={sliderHeight}
-          padding={polarHoleSliderPadding}
-          value={ballSize}
-          updateValue={setBallSize}
+          padding={secondarySliderPadding}
+          value={explosionAmount}
+          updateValue={setExplosionAmount}
           visualizationComponent={BallSizeVisualization}
           numOfNotches={14}
-          isDisabled={disabledParams.ballSize}
+          isDisabled={disabledParams.explosionAmount}
         />
       </Row>
     </InstrumentCluster>
@@ -76,8 +81,8 @@ const Container = ({ width }) => {
       width={width}
       spikyness={slopesParams.spikyness}
       setSpikyness={slopesParams.setSpikyness}
-      ballSize={slopesParams.ballSize}
-      setBallSize={slopesParams.setBallSize}
+      explosionAmount={slopesParams.explosionAmount}
+      setExplosionAmount={slopesParams.setExplosionAmount}
       disabledParams={slopesParams.disabledParams}
     />
   );

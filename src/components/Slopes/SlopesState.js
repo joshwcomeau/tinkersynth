@@ -69,6 +69,7 @@ export const SlopesProvider = ({ children }: Props) => {
 
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
+  const [explosionAmount, setExplosionAmount] = useState(10);
   const [polarAmount, setPolarAmount] = useState(0);
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
@@ -177,6 +178,7 @@ export const SlopesProvider = ({ children }: Props) => {
         seed,
         perspective,
         spikyness,
+        explosionAmount,
         polarAmount,
         omega,
         splitUniverse,
@@ -191,6 +193,7 @@ export const SlopesProvider = ({ children }: Props) => {
         setSeed: wrappedSetter(setSeed),
         setPerspective: wrappedSetter(setPerspective),
         setSpikyness: wrappedSetter(setSpikyness),
+        setExplosionAmount: wrappedSetter(setExplosionAmount),
         setPolarAmount: wrappedSetter(setPolarAmount),
         setOmega: wrappedSetter(setOmega),
         setSplitUniverse: wrappedSetter(setSplitUniverse),

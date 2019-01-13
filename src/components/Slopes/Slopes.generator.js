@@ -1,5 +1,5 @@
 import { mixPoints } from '../../helpers/line.helpers';
-import { normalize, range, flatten, mix } from '../../utils';
+import { normalize, range, flatten, mix, clamp } from '../../utils';
 import createNoiseGenerator from '../../vendor/noise';
 
 import {
@@ -40,6 +40,7 @@ const sketch = ({
   margins,
   distanceBetweenRows,
   perlinRatio,
+  explosionRatio,
   rowHeight,
   polarRatio,
   polarTanRatio,
@@ -115,6 +116,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         perlinRangePerRow,
+        explosionRatio,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -140,6 +142,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         perlinRangePerRow,
+        explosionRatio,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -224,6 +227,7 @@ const getSampleCoordinates = ({
   horizontalMargin,
   amplitude,
   perlinRangePerRow,
+  explosionRatio,
   perlinRatio,
   polarRatio,
   polarTanRatio,
@@ -258,9 +262,31 @@ const getSampleCoordinates = ({
   );
 
   // Another possible world is where each value is randomized. This creates a
-  // busy "noise" effect. Ranges from -0.25 to 0.25
-  // TODO: Should the multiplier be a param, to control how loud the noise is?
-  const rnd = (Math.random() - 0.5) * 0.5;
+  // busy "noise" effect.
+  // TODO: Make the multiplier based on amplitude
+  const rndBase = (Math.random() - 0.5) * 0.5;
+
+  // We also have our `explosionRatio`, which makes those interesting spikes.
+  // `explosionRatio` is a linear value from 0 to 1, but we need a couple of
+  // derived values
+  //
+  // We want to scale up the effect quite strongly, so that the second half
+  // of the range is 100% effective.
+  const explosionEffect = clamp(explosionRatio * 2, 0, 1);
+
+  const explosionRowNormalized = normalize(explosionRatio, 0, 1, 6, 1);
+  const explosionColNormalized = normalize(explosionRatio, 0, 1, 10, 9);
+
+  const explosionRowMultiplier = clamp(
+    Math.tan(sampleIndex * explosionRowNormalized) * 0.5,
+    -5,
+    5
+  );
+  // const explosionColMultiplier = Math.tan(rowIndex * explosionColNormalized) * 0.5;
+
+  const rndWithExplosion = rndBase * explosionRowMultiplier;
+
+  const rnd = mix(rndWithExplosion, rndBase, explosionRatio);
 
   // We mix between two possible values: our normal slopy value, and our random
   // noise value.
