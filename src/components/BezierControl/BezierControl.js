@@ -13,9 +13,16 @@ type Props = {
   updateCurve: (curve: Curve) => void,
   width: number,
   height: number,
+  isAnimated: boolean,
 };
 
-const BezierControl = ({ curve, updateCurve, width, height }: Props) => {
+const BezierControl = ({
+  curve,
+  updateCurve,
+  width,
+  height,
+  isAnimated,
+}: Props) => {
   const isCubic = !!curve.controlPoint2;
 
   return (
@@ -23,6 +30,7 @@ const BezierControl = ({ curve, updateCurve, width, height }: Props) => {
       <BezierCurve
         width={width}
         height={height}
+        isAnimated={isAnimated}
         points={
           isCubic
             ? [

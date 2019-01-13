@@ -11,9 +11,10 @@ import Background from './Background';
 type PointData = [number, number];
 
 type Props = {
-  points: Array<[number, number]>,
   width: number,
   height: number,
+  isAnimated: boolean,
+  points: Array<[number, number]>,
   strokeColor?: string,
   strokeWidth?: number,
   updatePoint: (id: number, point: PointData) => void,
@@ -87,7 +88,14 @@ class BezierCurve extends PureComponent<Props> {
   };
 
   render() {
-    const { points, width, height, strokeColor, strokeWidth } = this.props;
+    const {
+      points,
+      width,
+      height,
+      isAnimated,
+      strokeColor,
+      strokeWidth,
+    } = this.props;
 
     const svgWidth = width - BORDER_WIDTH * 2;
     const svgHeight = height - BORDER_WIDTH * 2;
@@ -114,7 +122,7 @@ class BezierCurve extends PureComponent<Props> {
     // a cubic one. If I want to restore cubic behaviour, check out what this
     // fine looked like in 9e22f4a0ea3dd3c7f0193fdad57826daa21f26b5 or earlier.
     return (
-      <Spring to={{ p1, p2, p3, p4 }}>
+      <Spring to={{ p1, p2, p3, p4 }} immediate={!isAnimated}>
         {interpolated => (
           <Wrapper style={{ width, height }}>
             <Svg

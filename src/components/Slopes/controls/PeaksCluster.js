@@ -54,6 +54,7 @@ const PeaksCluster = ({
         updateCurve={setPeaksCurve}
         width={bezierControlWidth}
         height={bezierControlHeight}
+        isAnimated={isRandomized}
       />
 
       <Spacer size={UNIT} />
