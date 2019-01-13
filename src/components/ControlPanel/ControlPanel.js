@@ -24,18 +24,26 @@ const ControlPanel = ({ width, padding, children }: Props) => {
           </DecorativeHeader>
 
           <MainContents style={{ padding }}>{children}</MainContents>
+
+          <DecorativeFooter>
+            <ScrewRow />
+          </DecorativeFooter>
         </FrontPanel>
       </Panel>
+
+      <Shadow />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  position: relative;
   perspective: 200px;
 `;
 
 const Panel = styled.div`
   position: relative;
+  z-index: 2;
   margin-top: 50px;
 `;
 
@@ -63,6 +71,27 @@ const DecorativeHeader = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.075);
 `;
 
-const MainContents = styled.div``;
+const DecorativeFooter = styled.div`
+  height: 22px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  background: white;
+`;
+
+const MainContents = styled.div`
+  margin-bottom: ${UNIT * 2}px;
+`;
+
+const Shadow = styled.div`
+  position: absolute;
+  z-index: 0;
+  bottom: -30px;
+  left: -20px;
+  right: -20px;
+  height: 40px;
+  border-radius: 100%;
+  background: black;
+  filter: blur(30px);
+  opacity: 0.25;
+`;
 
 export default ControlPanel;

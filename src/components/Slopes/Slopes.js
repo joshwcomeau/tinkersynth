@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import { COLORS } from '../../constants';
+import { COLORS, UNIT } from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 
@@ -43,6 +43,7 @@ const Slopes = () => {
 const OuterWrapper = styled.div`
   position: relative;
   background: ${COLORS.gray[700]};
+  padding-bottom: ${UNIT * 8}px;
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`
