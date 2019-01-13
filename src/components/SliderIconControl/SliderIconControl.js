@@ -14,6 +14,7 @@ type Props = {
   spacing?: number,
   isDisabled: boolean,
   visualizationComponent: any,
+  isAnimated: boolean,
 };
 
 const SliderIconControl = ({
@@ -23,6 +24,7 @@ const SliderIconControl = ({
   spacing = 4,
   isDisabled,
   visualizationComponent,
+  isAnimated,
   ...sliderProps
 }: Props) => {
   const sliderIconSize = width;
@@ -37,7 +39,11 @@ const SliderIconControl = ({
       <VisualizationWrapper
         style={{ width: sliderIconSize, height: sliderIconSize }}
       >
-        <Visualization size={sliderIconSize} value={value} />
+        <Visualization
+          size={sliderIconSize}
+          value={value}
+          isAnimated={isAnimated}
+        />
       </VisualizationWrapper>
 
       <SliderWrapper style={{ width, padding: spacing }}>

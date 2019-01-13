@@ -12,18 +12,28 @@ import Spacer from '../../Spacer';
 import PersonInflateVisualization from './PersonInflateVisualization';
 import WavelengthVisualization from './WavelengthVisualization';
 
+import type { Curve, SetNumber } from '../../../types';
+
 type Props = {
   width: number,
+  peaksCurve: Curve,
+  personInflateAmount: number,
+  wavelength: number,
+  setPeaksCurve: SetNumber,
+  setPersonInflateAmount: SetNumber,
+  setWavelength: SetNumber,
+  isRandomized: boolean,
 };
 
 const PeaksCluster = ({
   width,
   peaksCurve,
-  setPeaksCurve,
   personInflateAmount,
-  setPersonInflateAmount,
   wavelength,
+  setPeaksCurve,
+  setPersonInflateAmount,
   setWavelength,
+  isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -55,6 +65,7 @@ const PeaksCluster = ({
         value={personInflateAmount}
         updateValue={setPersonInflateAmount}
         visualizationComponent={PersonInflateVisualization}
+        isAnimated={!isRandomized}
       />
 
       <Spacer size={UNIT} />
@@ -66,13 +77,14 @@ const PeaksCluster = ({
         value={wavelength}
         updateValue={setWavelength}
         visualizationComponent={WavelengthVisualization}
+        isAnimated={!isRandomized}
       />
     </InstrumentCluster>
   );
 };
 
 const OptimizedPeaksCluster = memoWhileIgnoring(
-  ['setPeaksCurve', 'setPersonInflateAmount', 'setWavelength'],
+  ['setPeaksCurve', 'setPersonInflateAmount', 'setWavelength', 'isRandomized'],
   PeaksCluster
 );
 
@@ -88,6 +100,7 @@ const Container = ({ width }) => {
       setPersonInflateAmount={slopesParams.setPersonInflateAmount}
       wavelength={slopesParams.wavelength}
       setWavelength={slopesParams.setWavelength}
+      isRandomized={slopesParams.isRandomized}
     />
   );
 };

@@ -72,7 +72,7 @@ const getDataForValue = (value: number) => {
   }
 };
 
-const BallSizeVisualization = ({ size, value }: Props) => {
+const BallSizeVisualization = ({ size, value, isAnimated }: Props) => {
   // Size is unused, because I'm lazy. Ideally it should size the images
   // according to the prop, but I made all the images assuming they'd be 32px.
 
@@ -110,6 +110,7 @@ const BallSizeVisualization = ({ size, value }: Props) => {
       bounciness={bounciness}
       squishiness={squishiness}
       gravity={gravity}
+      isAnimated={isAnimated}
     />
   );
 };

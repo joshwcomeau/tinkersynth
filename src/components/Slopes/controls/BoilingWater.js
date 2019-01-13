@@ -34,6 +34,7 @@ const BoilingWater = ({
   width,
   height,
   perlinRow,
+  isAnimated,
 }: Props) => {
   const boiledAwayOffset = value * 0.075;
 
@@ -41,6 +42,7 @@ const BoilingWater = ({
 
   const spring = useSpring({
     config: SPRING_CONFIG,
+    immediate: !isAnimated,
     sx: left,
     sy:
       normalize(

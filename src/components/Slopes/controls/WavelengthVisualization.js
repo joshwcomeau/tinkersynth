@@ -42,7 +42,7 @@ const calculatePathFromValue = (value, size) => {
   return createSVGPathFromWaveformPoints(points);
 };
 
-const WavelengthVisualization = ({ value, size, padding = 6 }) => {
+const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
   const innerSize = size - padding * 2;
 
   const spring = useSpring({
@@ -51,6 +51,7 @@ const WavelengthVisualization = ({ value, size, padding = 6 }) => {
       tension: 80,
       friction: 14,
     },
+    immediate: !isAnimated,
   });
 
   return (

@@ -11,6 +11,7 @@ import OmegaVisualizationPath from './OmegaVisualizationPath';
 type Props = {
   size: number,
   value: number,
+  isAnimated: boolean,
 };
 
 const offsetCurves = [
@@ -29,7 +30,7 @@ const springConfig = {
 /**
  * COMPONENT
  */
-const OmegaVisualization = ({ size, value }: Props) => {
+const OmegaVisualization = ({ size, value, isAnimated }: Props) => {
   const baseMixValue = value / 100;
 
   const pathColors = [
@@ -46,6 +47,7 @@ const OmegaVisualization = ({ size, value }: Props) => {
         <Spring
           key={i}
           to={{ mix: getValueOnCurve(baseMixValue, offsetCurves[i]) }}
+          immediate={!isAnimated}
           config={springConfig}
         >
           {interpolated => (

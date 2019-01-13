@@ -46,10 +46,10 @@ export const SlopesProvider = ({ children }: Props) => {
 
   const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
 
-  const wasLastUpdateRandom = useRef(false);
+  const isRandomized = useRef(false);
 
   const wrappedSetter = setter => args => {
-    // wasLastUpdateRandom.current = false;
+    isRandomized.current = false;
     setter(args);
   };
 
@@ -64,7 +64,7 @@ export const SlopesProvider = ({ children }: Props) => {
   //   example, seems surprisingly resource-hungry, and I can just do a hard cut
   //   between balls.
   const randomize = () => {
-    wasLastUpdateRandom.current = true;
+    isRandomized.current = true;
 
     setSeed(getRandomSeed());
 
@@ -119,7 +119,7 @@ export const SlopesProvider = ({ children }: Props) => {
         setWaterBoilAmount: wrappedSetter(setWaterBoilAmount),
         setBallSize: wrappedSetter(setBallSize),
         randomize,
-        wasLastUpdateRandom: wasLastUpdateRandom.current,
+        isRandomized: isRandomized.current,
       }}
     >
       {children}

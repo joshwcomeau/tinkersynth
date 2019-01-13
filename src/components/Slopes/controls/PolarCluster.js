@@ -31,6 +31,7 @@ const PolarCluster = ({
   setOmega,
   splitUniverse,
   setSplitUniverse,
+  isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -64,6 +65,7 @@ const PolarCluster = ({
           visualizationComponent={BallSizeVisualization}
           numOfNotches={14}
           isDisabled={disabledParams.ballSize}
+          isAnimated={!isRandomized}
         />
       </Row>
 
@@ -76,6 +78,7 @@ const PolarCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={OmegaVisualization}
+          isAnimated={!isRandomized}
         />
       </Row>
 
@@ -88,6 +91,7 @@ const PolarCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={SplitUniverseVisualization}
+          isAnimated={!isRandomized}
         />
       </Row>
     </InstrumentCluster>
@@ -105,6 +109,7 @@ const OptimizedPolarCluster = memoWhileIgnoring(
     'setOmega',
     'setSplitUniverse',
     'disabledParams',
+    'isRandomized',
   ],
   PolarCluster
 );
@@ -124,6 +129,7 @@ const Container = ({ width }) => {
       setOmega={slopesParams.setOmega}
       splitUniverse={slopesParams.splitUniverse}
       setSplitUniverse={slopesParams.setSplitUniverse}
+      isRandomized={slopesParams.isRandomized}
     />
   );
 };

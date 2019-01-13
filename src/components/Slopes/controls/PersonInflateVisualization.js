@@ -12,15 +12,17 @@ const springConfig = {
   friction: 7,
 };
 
-const PersonInflateVisualization = ({ value, size }) => {
+const PersonInflateVisualization = ({ value, size, isAnimated }) => {
   const headSpring = useSpring({
     translate: (value / 100) * -3,
     config: springConfig,
+    immediate: !isAnimated,
   });
   const bodyRadius = useSpring({
     rx: normalize(value, 0, 100, 0.5, 8),
     ry: normalize(value, 0, 100, 5, 8.5),
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   const leftLegPoints = useSpring({
@@ -29,6 +31,7 @@ const PersonInflateVisualization = ({ value, size }) => {
     x2: normalize(value, 0, 100, 17.6584, 15.6584),
     y2: 21.4472,
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   const rightLegPoints = useSpring({
@@ -37,6 +40,7 @@ const PersonInflateVisualization = ({ value, size }) => {
     x2: normalize(value, 0, 100, 18.3416, 20.3416),
     y2: 21.4472,
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   const leftArmPoints = useSpring({
@@ -45,6 +49,7 @@ const PersonInflateVisualization = ({ value, size }) => {
     x2: normalize(value, 0, 100, 16.5858, 13.7227),
     y2: normalize(value, 0, 100, 14, 13.6132),
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   const rightArmPoints = useSpring({
@@ -53,6 +58,7 @@ const PersonInflateVisualization = ({ value, size }) => {
     x2: normalize(value, 0, 100, 19.3662, 22.4084),
     y2: normalize(value, 0, 100, 13.8927, 14.128),
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   return (

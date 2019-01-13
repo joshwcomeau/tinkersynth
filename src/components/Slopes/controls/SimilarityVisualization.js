@@ -11,19 +11,22 @@ import BoilingSteam from './BoilingSteam';
 type Props = {
   size: number,
   value: number,
+  isAnimated: boolean,
 };
 
-const SimilarityVisualization = ({ size, value }: Props) => {
+const SimilarityVisualization = ({ size, value, isAnimated }: Props) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 32 32">
       {/* Steam */}
-      <FadeAfterChange as="g" value={value} sustain={500} release={2000}>
-        <BoilingSteam value={value} strength={1} offset={0} />
-        <BoilingSteam value={value} strength={1} offset={5} />
-        <BoilingSteam value={value} strength={1} offset={10} />
-        <BoilingSteam value={value} strength={1} offset={15} />
-        <BoilingSteam value={value} strength={1} offset={20} />
-      </FadeAfterChange>
+      {isAnimated && (
+        <FadeAfterChange as="g" value={value} sustain={500} release={2000}>
+          <BoilingSteam value={value} strength={1} offset={0} />
+          <BoilingSteam value={value} strength={1} offset={5} />
+          <BoilingSteam value={value} strength={1} offset={10} />
+          <BoilingSteam value={value} strength={1} offset={15} />
+          <BoilingSteam value={value} strength={1} offset={20} />
+        </FadeAfterChange>
+      )}
       {/* Burner */}
       <path
         d="M8.5 27L11 29.5L13.5 27L16 29.5L18.5 27L21 29.5L23.5 27"
@@ -49,6 +52,7 @@ const SimilarityVisualization = ({ size, value }: Props) => {
         height={9}
         color={COLORS.aqua[300]}
         perlinRow={0.04}
+        isAnimated={isAnimated}
       />
     </Svg>
   );

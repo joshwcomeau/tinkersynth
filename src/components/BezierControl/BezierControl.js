@@ -6,18 +6,11 @@ import { COLORS, CONTROL_RADIUS } from '../../constants';
 
 import BezierCurve from '../BezierCurve';
 
-type Point = [number, number];
-
-type BezierCurvePoints = {
-  startPoint: Point,
-  controlPoint1: Point,
-  controlPoint2?: Point,
-  endPoint: Point,
-};
+import type { Curve } from '../../types';
 
 type Props = {
-  curve: BezierCurvePoints,
-  updateCurve: (curve: BezierCurvePoints) => void,
+  curve: Curve,
+  updateCurve: (curve: Curve) => void,
   width: number,
   height: number,
 };

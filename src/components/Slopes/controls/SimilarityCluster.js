@@ -14,12 +14,14 @@ type Props = {
   width: number,
   waterBoilAmount: number,
   setWaterBoilAmount: (val: number) => void,
+  isRandomized: boolean,
 };
 
 const SimilarityCluster = ({
   width,
   waterBoilAmount,
   setWaterBoilAmount,
+  isRandomized,
 }: Props) => {
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
@@ -32,13 +34,14 @@ const SimilarityCluster = ({
         width={innerWidth}
         height={40}
         visualizationComponent={SimilarityVisualization}
+        isAnimated={!isRandomized}
       />
     </InstrumentCluster>
   );
 };
 
 const OptimizedSimilarityCluster = memoWhileIgnoring(
-  ['setWaterBoilAmount'],
+  ['setWaterBoilAmount', 'isRandomized'],
   SimilarityCluster
 );
 
@@ -50,6 +53,7 @@ const Container = ({ width }) => {
       width={width}
       waterBoilAmount={slopesParams.waterBoilAmount}
       setWaterBoilAmount={slopesParams.setWaterBoilAmount}
+      isRandomized={slopesParams.isRandomized}
     />
   );
 };

@@ -9,6 +9,7 @@ import { useSpring, animated } from 'react-spring/hooks';
 type Props = {
   size: number,
   value: number,
+  isAnimated: boolean,
 };
 
 const springConfig = {
@@ -23,12 +24,13 @@ const getWithinRange = (ratio, from, to) => {
   return clamp(normalize(ratio, SPLIT_WITHIN, 1, from, to), ...minMaxArr);
 };
 
-const SplitUniverseVisualization = ({ size, value }: Props) => {
+const SplitUniverseVisualization = ({ size, value, isAnimated }: Props) => {
   const ratio = value / 100;
 
   const spring = useSpring({
     ratio,
     config: springConfig,
+    immediate: !isAnimated,
   });
 
   const tearNode = useRef(null);
