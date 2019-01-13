@@ -26,12 +26,7 @@ const SlopesControls = ({ width }: Props) => {
 
   // We want our control panel to have two columns, and to have equal spacing
   // on both sides (so 3 units of spacing total: left, between, right).
-  const twinColumnWidth = (width - padding * 3) / 2;
-
-  // The final set near the bottom bucks this pattern, because asymmetry is
-  // pretty.
-  const miniColumnWidth = 60;
-  const splitColumnWidth = (width - miniColumnWidth - padding * 4) / 2;
+  const columnWidth = (width - padding * 3) / 2;
 
   return (
     <ControlPanel width={width} padding={padding}>
@@ -41,38 +36,20 @@ const SlopesControls = ({ width }: Props) => {
       <Spacer size={UNIT * 2} />
       <Row>
         <Column>
-          <PerspectiveCluster width={twinColumnWidth} />
+          <PerspectiveCluster width={columnWidth} />
           <Spacer size={UNIT * 2} />
-          <PeaksCluster width={twinColumnWidth} />
-        </Column>
-        <Spacer size={UNIT * 2} />
-
-        <Column>
-          <SimilarityCluster width={twinColumnWidth} />
+          <PeaksCluster width={columnWidth} />
           <Spacer size={UNIT * 2} />
-          <PolarCluster width={twinColumnWidth} />
-        </Column>
-      </Row>
-
-      <Spacer size={UNIT * 2} />
-
-      <Row>
-        <Column>
-          <AudioCluster width={splitColumnWidth} />
+          <AudioCluster width={columnWidth} />
         </Column>
         <Spacer size={UNIT * 2} />
+
         <Column>
-          <NoiseCluster width={splitColumnWidth} />
-        </Column>
-        <Spacer size={UNIT * 2} />
-        <Column>
-          <div
-            style={{
-              background: 'red',
-              width: miniColumnWidth,
-              height: miniColumnWidth,
-            }}
-          />
+          <SimilarityCluster width={columnWidth} />
+          <Spacer size={UNIT * 2} />
+          <PolarCluster width={columnWidth} />
+          <Spacer size={UNIT * 2} />
+          <NoiseCluster width={columnWidth} />
         </Column>
       </Row>
     </ControlPanel>

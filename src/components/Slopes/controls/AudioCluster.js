@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
 import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import TouchSliderIconControl from '../../TouchSliderIconControl';
+import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 
@@ -34,18 +36,48 @@ const AudioCluster = ({
   const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
 
   return (
-    <InstrumentCluster>
-      <TouchSliderIconControl
-        value={wavelength}
-        updateValue={setWavelength}
-        width={innerWidth}
-        height={40}
-        visualizationComponent={WavelengthVisualization}
-        isAnimated={!isRandomized}
-      />
+    <InstrumentCluster direction="column">
+      <Row>
+        <TouchSliderIconControl
+          value={wavelength}
+          updateValue={setWavelength}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={WavelengthVisualization}
+          isAnimated={!isRandomized}
+        />
+      </Row>
+      <Spacer size={UNIT} />
+
+      <Row>
+        <TouchSliderIconControl
+          value={wavelength}
+          updateValue={setWavelength}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={WavelengthVisualization}
+          isAnimated={!isRandomized}
+        />
+      </Row>
+      <Spacer size={UNIT} />
+
+      <Row>
+        <TouchSliderIconControl
+          value={wavelength}
+          updateValue={setWavelength}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={WavelengthVisualization}
+          isAnimated={!isRandomized}
+        />
+      </Row>
     </InstrumentCluster>
   );
 };
+
+const Row = styled.div`
+  display: flex;
+`;
 
 const OptimizedAudioCluster = memoWhileIgnoring(
   ['setWavelength', 'setAmplitude', 'setNumOfOctaves', 'isRandomized'],

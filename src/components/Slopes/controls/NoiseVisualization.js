@@ -185,7 +185,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
           strokeWidth={4}
           strokeLinecap="round"
           strokeOpacity={1}
-          style={{ mixBlendMode: 'lighten' }}
+          style={{ mixBlendMode: 'color-dodge' }}
         />
       ))}
     </Svg>
