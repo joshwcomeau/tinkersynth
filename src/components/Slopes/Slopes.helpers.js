@@ -288,7 +288,7 @@ export const getPossiblyOccludingRowIndices = ({
   // That said, the theoretical max never seems to actually happen.
   // For optimization, I can reduce this number a bit without risking a
   // break in occlusion
-  const practicalMaxHeight = theoreticalMaxHeight * 0.777;
+  const practicalMaxHeight = theoreticalMaxHeight * 0.5;
 
   const maxNumOfOccludingRows = Math.ceil(
     practicalMaxHeight / distanceBetweenRows

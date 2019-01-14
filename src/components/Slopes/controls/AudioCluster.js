@@ -10,6 +10,7 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 
 import WavelengthVisualization from './WavelengthVisualization';
+import AmplitudeVisualization from './AmplitudeVisualization';
 
 type Props = {
   width: number,
@@ -55,7 +56,7 @@ const AudioCluster = ({
           updateValue={setAmplitudeAmount}
           width={innerWidth}
           height={47}
-          visualizationComponent={WavelengthVisualization}
+          visualizationComponent={AmplitudeVisualization}
           isAnimated={!isRandomized}
         />
       </Row>

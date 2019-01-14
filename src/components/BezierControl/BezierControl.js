@@ -87,4 +87,4 @@ const Wrapper = styled.div`
 `;
 
 // $FlowIgnore
-export default React.memo(BezierControl);
+export default BezierControl;

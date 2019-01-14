@@ -1,7 +1,7 @@
 // @flow
 import React, { useRef, useState } from 'react';
 
-import { sample } from '../../utils';
+import { sample, random } from '../../utils';
 
 // $FlowFixMe
 export const SlopesContext = React.createContext({});
@@ -68,6 +68,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [seed, setSeed] = useState(defaultSeed);
 
   const [amplitudeAmount, setAmplitudeAmount] = useState(50);
+  const [numOfOctaves, setNumOfOctaves] = useState(0);
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
   const [explosionAmount, setExplosionAmount] = useState(10);
@@ -91,22 +92,18 @@ export const SlopesProvider = ({ children }: Props) => {
     setter(args);
   };
 
-  // We have a "randomize" button that sets arbitrary values for some controls.
-  // This triggers every visualization to run at once, which is glorious on my
-  // iMac Pro, but is likely a stuttery trainwreck on most machines.
+  // Generate a new set of settings!
+  // Note that it's a very curated sort of randomness. The goal isn't to be
+  // truly random, but to produce something that looks good more often than
+  // not.
   //
-  // Two things we can do to improve this situation:
-  // - Only update ~half of the properties on every press, but a random half
-  //   each time (this seems like a good idea anyway?)
-  // - Disable _certain_ visualizations. The ballSize visualization, for
-  //   example, seems surprisingly resource-hungry, and I can just do a hard cut
-  //   between balls.
+  // TODO: Should I set this function as a ref? Seems like it's maybe expensive
+  // to create on every update.
   const randomize = () => {
     isRandomized.current = true;
 
     setSeed(getRandomSeed());
     setPerspective(getRandomSliderValue());
-    setAmplitudeAmount(getRandomSliderValue());
 
     // Some parameters don't need to be updated on every tick.
     if (Math.random() > 0.5) {
@@ -116,7 +113,14 @@ export const SlopesProvider = ({ children }: Props) => {
       setPersonInflateAmount(getRandomSliderValue());
     }
     if (Math.random() > 0.25) {
-      setWavelength(getRandomSliderValue());
+      // Amplitudes below 25 or above 75 don't really look good
+      setAmplitudeAmount(random(25, 75));
+    }
+    if (Math.random() > 0.25) {
+      setWavelength(random(25, 75));
+    }
+    if (Math.random() > 0.25) {
+      setNumOfOctaves(getRandomSliderValue());
     }
 
     // Certain parameters make more sense at one of the extremities, so let's
@@ -179,6 +183,7 @@ export const SlopesProvider = ({ children }: Props) => {
       value={{
         seed,
         amplitudeAmount,
+        numOfOctaves,
         perspective,
         spikyness,
         explosionAmount,
@@ -195,6 +200,7 @@ export const SlopesProvider = ({ children }: Props) => {
         disabledParams,
         setSeed: wrappedSetter(setSeed),
         setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
+        setNumOfOctaves: wrappedSetter(setNumOfOctaves),
         setPerspective: wrappedSetter(setPerspective),
         setSpikyness: wrappedSetter(setSpikyness),
         setExplosionAmount: wrappedSetter(setExplosionAmount),

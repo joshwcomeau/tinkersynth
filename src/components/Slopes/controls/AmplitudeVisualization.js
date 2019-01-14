@@ -4,45 +4,35 @@ import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 import { range, normalize } from '../../../utils';
+import { createSvgPathForPoints } from '../../../helpers/line.helpers';
 
 import Svg from '../../Svg';
 
 // Increase to improve performance.
-const RESOLUTION = 1;
-
-const createSVGPathFromWaveformPoints = points =>
-  points.reduce((acc, [x, y], index) => {
-    // For the very first point, we have to Move to that area
-    if (index === 0) {
-      return `M ${x},${y} `;
-    }
-
-    // For all subsequent points, we can just draw a line to it.
-    return `${acc} L ${x},${y}`;
-  }, '');
+const RESOLUTION = 2;
 
 const calculatePathFromValue = (value, size) => {
-  const maxValue = normalize(value, 0, 100, 0.25 * Math.PI, 5.75 * Math.PI);
-  const waveAmplitude = size * 0.4;
+  const ratio = value / 100;
+  const maxAmplitude = size * 0.4;
+  const amplitude = maxAmplitude * ratio;
+
+  const maxX = Math.PI * 2;
 
   const numOfPoints = Math.floor(size / RESOLUTION);
 
   const points = range(numOfPoints).map(i => {
-    // I want it to start at the bottom of the curve, rather than at the
-    // X axis, so offset it by 0.25 a cycle.
-    const offset = Math.PI * 0.5;
-    const ratio = (i / numOfPoints) * maxValue + offset;
+    const ratio = (i / numOfPoints) * maxX;
 
     const x = i * RESOLUTION;
-    const y = Math.sin(ratio + maxValue / 2) * waveAmplitude + size / 2;
+    const y = Math.sin(ratio + maxX / 2) * amplitude + size / 2;
 
     return [x, y];
   });
 
-  return createSVGPathFromWaveformPoints(points);
+  return createSvgPathForPoints(points);
 };
 
-const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
+const AmplitudeVisualization = ({ value, size, padding = 6, isAnimated }) => {
   const innerSize = size - padding * 2;
 
   const spring = useSpring({
@@ -62,7 +52,7 @@ const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
             calculatePathFromValue(v, innerSize)
           )}
           fill="none"
-          stroke={COLORS.red[300]}
+          stroke={COLORS.green[300]}
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -78,4 +68,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default WavelengthVisualization;
+export default AmplitudeVisualization;

@@ -239,6 +239,17 @@ export const createSvgPathForCurve = (curve: Bezier) => {
     `;
 };
 
+export const createSvgPathForPoints = points =>
+  points.reduce((acc, [x, y], index) => {
+    // For the very first point, we have to Move to that area
+    if (index === 0) {
+      return `M ${x},${y} `;
+    }
+
+    // For all subsequent points, we can just draw a line to it.
+    return `${acc} L ${x},${y}`;
+  }, '');
+
 export const mixPoints = (p1: Point, p2: Point, ratio: number) => [
   mix(p1[0], p2[0], ratio),
   mix(p1[1], p2[1], ratio),

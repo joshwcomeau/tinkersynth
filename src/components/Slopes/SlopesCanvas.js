@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import { Spring } from 'react-spring';
 
-import { extractTypeFromObject } from '../../utils';
+import { mix, extractTypeFromObject } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import {
   getScaledCanvasProps,
@@ -37,7 +37,16 @@ const useCanvasDrawing = (
 
   const topMargin = (height / 11) * 1;
   const leftMargin = (width / 8.5) * 1;
-  const samplesPerRow = Math.ceil(width * 0.5);
+
+  // I want `samplesPerRow` to be as high as possible, so that curves aren't
+  // choppy and gross. But, the higher it is, the more expensive / slow it is
+  // to compute.
+  // In standard "cartesian" mode, using width * 0.5 is fine (1 point every 2
+  // pixels). In Polar mode, though, a single line does a big loop around the
+  // canvas, so we need more than 1 point per width-pixel to represent it.
+  const samplesPerRowWidthMultiplier = mix(1, 0.5, params.polarAmount / 100);
+
+  const samplesPerRow = Math.ceil(width * samplesPerRowWidthMultiplier);
 
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
