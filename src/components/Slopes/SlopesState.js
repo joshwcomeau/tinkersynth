@@ -75,7 +75,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [polarAmount, setPolarAmount] = useState(0);
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
-  const [personInflateAmount, setPersonInflateAmount] = useState(25);
+  const [personInflateAmount, setPersonInflateAmount] = useState(50);
   const [wavelength, setWavelength] = useState(25);
   const [waterBoilAmount, setWaterBoilAmount] = useState(100);
   const [ballSize, setBallSize] = useState(50);

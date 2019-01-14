@@ -39,6 +39,7 @@ const ControlPanel = ({ width, padding, children }: Props) => {
 const Wrapper = styled.div`
   position: relative;
   perspective: 200px;
+  user-select: none;
 `;
 
 const Panel = styled.div`

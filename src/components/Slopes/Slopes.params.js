@@ -24,6 +24,7 @@ type InputParameters = {
   peaksCurve: Curve,
   personInflateAmount: number,
   wavelength: number,
+  octaveAmount: number,
   waterBoilAmount: number,
   ballSize: number,
   seed: number,
@@ -87,10 +88,13 @@ const transformParameters = ({
   const omegaRadiusSubtractAmount = rowHeight;
   const omegaRatio = omega / 100;
 
+  let selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
+
   let numOfRows = 60;
   if (enableLineBoost) {
     numOfRows = numOfRows * 2 - 1;
     distanceBetweenRows /= 2;
+    selfSimilarity *= 2;
   }
 
   // Wavelength -> perlinRangePerRow & peak height
@@ -138,19 +142,6 @@ const transformParameters = ({
     },
     normalize(personInflateAmount, 0, 100, 5, 0)
   );
-
-  // When the wavelength is really low, we want to reduce the strength of the
-  // peaks curve. This is because at low wavelength, what should be long smooth
-  // slopes develop weird little points.
-  // NOTE: Unfortunately, we want to do the opposite thing when the polarRatio
-  // is >0, since in circular mode, we want the lines to line up, when the
-  // curve is in its default position.
-  if (polarRatio < 1) {
-    const wavelengthAdjustment = Math.max(wavelength / 100, 0.05);
-    peaksCurveStrength *= mix(wavelengthAdjustment, 1, 1 - polarRatio);
-  }
-
-  const selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
   const polarHoleSize = normalize(ballSize, 0, 100, 5, 150);
 
