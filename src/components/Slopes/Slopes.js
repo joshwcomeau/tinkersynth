@@ -8,6 +8,7 @@ import { COLORS, UNIT } from '../../constants';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 
 import { SlopesProvider } from './SlopesState';
+import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvas from './SlopesCanvas';
 import SlopesControls from './SlopesControls';
 import SlopesExport from './SlopesExport';
@@ -27,9 +28,9 @@ const Slopes = () => {
     <SlopesProvider>
       <OuterWrapper>
         <InnerWrapper>
-          <CanvasWrapper>
+          <SlopesCanvasWrapper>
             <SlopesCanvas width={canvasWidth} height={canvasHeight} />
-          </CanvasWrapper>
+          </SlopesCanvasWrapper>
 
           <SlopesControls width={600} />
         </InnerWrapper>
@@ -50,10 +51,10 @@ const InnerWrapper = styled(MaxWidthWrapper)`
   display: flex;
 `;
 
-const CanvasWrapper = styled.div`
-  padding: 2rem;
-  flex: 1;
-  text-align: center;
-`;
+// const CanvasWrapper = styled.div`
+//   padding: 2rem;
+//   flex: 1;
+//   text-align: center;
+// `;
 
 export default Slopes;

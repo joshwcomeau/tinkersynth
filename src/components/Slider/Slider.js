@@ -40,6 +40,7 @@ const Slider = ({
   isMachineBroken,
   breakMachineWithKeyboard,
 }: Props) => {
+  console.log('non', numOfNotches);
   const [dragging, setDragging] = useState(false);
   const [animateTransition, setAnimateTransition] = useState(true);
 

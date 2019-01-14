@@ -15,7 +15,7 @@ type Props = {
 const ControlPanel = ({ width, padding, children }: Props) => {
   return (
     <Wrapper style={{ width }}>
-      <Panel>
+      <InnerWrapper>
         <TopPanel />
 
         <FrontPanel>
@@ -29,7 +29,7 @@ const ControlPanel = ({ width, padding, children }: Props) => {
             <ScrewRow />
           </DecorativeFooter>
         </FrontPanel>
-      </Panel>
+      </InnerWrapper>
 
       <Shadow />
     </Wrapper>
@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   user-select: none;
 `;
 
-const Panel = styled.div`
+const InnerWrapper = styled.div`
   position: relative;
   z-index: 2;
   margin-top: 50px;

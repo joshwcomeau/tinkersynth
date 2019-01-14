@@ -126,12 +126,21 @@ const useCanvasDrawing = (
 const SlopesCanvas = ({ width, height, ...params }: Props) => {
   const canvasRef = useRef(null);
 
-  const scaledCanvasProps = getScaledCanvasProps(width, height);
+  const { style, ...dimensions } = getScaledCanvasProps(width, height);
   const devicePixelRatio = getDevicePixelRatio();
 
   useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
 
-  return <canvas ref={canvasRef} {...scaledCanvasProps} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      {...dimensions}
+      style={{
+        ...style,
+        display: 'block',
+      }}
+    />
+  );
 };
 
 // TODO: Can I use hooks, and merge this with the parent?
