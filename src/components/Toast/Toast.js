@@ -34,13 +34,13 @@ class ToastComponent extends React.Component<Props> {
           <Spacer size={UNIT * 2} />
 
           <Actions>
-            <Button
+            <Dismiss
               ref={node => (this.dismissNode = node)}
-              color={COLORS.gray[700]}
-              onTrigger={() => dismissToast(id)}
+              style={{ color: COLORS.gray[700] }}
+              onClick={() => dismissToast(id)}
             >
               Dismiss
-            </Button>
+            </Dismiss>
           </Actions>
         </MainBox>
       </OuterWrapper>
@@ -87,6 +87,23 @@ const Actions = styled.div`
   justify-content: flex-end;
   padding-top: ${UNIT * 2}px;
   border-top: 1px solid ${COLORS.gray[300]};
+`;
+
+const Dismiss = styled.button`
+  all: unset;
+  display: block;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:focus {
+    outline: auto;
+    outline-color: ${COLORS.pink[300]};
+  }
+
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 `;
 
 export default ToastComponent;
