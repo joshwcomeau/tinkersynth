@@ -4,45 +4,50 @@ import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../../constants';
 import { range, normalize } from '../../../utils';
+import { createSvgPathForPoints } from '../../../helpers/line.helpers';
+import { getPerlinValueWithOctaves } from '../../Slopes/Slopes.helpers';
 
 import Svg from '../../Svg';
 
 // Increase to improve performance.
 const RESOLUTION = 2;
 
-const createSVGPathFromWaveformPoints = points =>
-  points.reduce((acc, [x, y], index) => {
-    // For the very first point, we have to Move to that area
-    if (index === 0) {
-      return `M ${x},${y} `;
-    }
+const waveLength = Math.PI;
 
-    // For all subsequent points, we can just draw a line to it.
-    return `${acc} L ${x},${y}`;
-  }, '');
+const noiseGenerator = x => {
+  // x is a number from 0 to 2Pi. Since our frequency is assumed to be 1,
+  // this works without any further tweaks (since our wavelength is 2Pi)
+  return Math.sin(x) * -1;
+};
 
 const calculatePathFromValue = (value, size) => {
-  const maxValue = normalize(value, 0, 100, 0.25 * Math.PI, 5.75 * Math.PI);
-  const waveAmplitude = size * 0.4;
-
   const numOfPoints = Math.floor(size / RESOLUTION);
 
+  const numOfOctaves = normalize(value, 0, 100, 1, 3.5);
+
+  const rootAmplitude = size * 0.4;
+
   const points = range(numOfPoints).map(i => {
-    // I want it to start at the bottom of the curve, rather than at the
-    // X axis, so offset it by 0.25 a cycle.
-    const offset = Math.PI * 0.5;
-    const ratio = (i / numOfPoints) * maxValue + offset;
+    const ratio = (i / numOfPoints) * waveLength;
 
     const x = i * RESOLUTION;
-    const y = Math.sin(ratio + maxValue / 2) * waveAmplitude + size / 2;
+    const y =
+      getPerlinValueWithOctaves(
+        noiseGenerator,
+        ratio,
+        null,
+        rootAmplitude,
+        numOfOctaves
+      ) +
+      size / 2;
 
     return [x, y];
   });
 
-  return createSVGPathFromWaveformPoints(points);
+  return createSvgPathForPoints(points);
 };
 
-const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
+const OctaveVisualization = ({ value, size, padding = 6, isAnimated }) => {
   const innerSize = size - padding * 2;
 
   const spring = useSpring({
@@ -62,7 +67,7 @@ const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
             calculatePathFromValue(v, innerSize)
           )}
           fill="none"
-          stroke={COLORS.red[300]}
+          stroke={COLORS.aqua[300]}
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -78,4 +83,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default WavelengthVisualization;
+export default OctaveVisualization;

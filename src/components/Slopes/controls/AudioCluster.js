@@ -11,6 +11,7 @@ import { InstrumentCluster } from '../../ControlPanel';
 
 import WavelengthVisualization from './WavelengthVisualization';
 import AmplitudeVisualization from './AmplitudeVisualization';
+import OctaveVisualization from './OctaveVisualization';
 
 type Props = {
   width: number,
@@ -38,47 +39,37 @@ const AudioCluster = ({
 
   return (
     <InstrumentCluster direction="column">
-      <Row>
-        <TouchSliderIconControl
-          value={wavelength}
-          updateValue={setWavelength}
-          width={innerWidth}
-          height={47}
-          visualizationComponent={WavelengthVisualization}
-          isAnimated={!isRandomized}
-        />
-      </Row>
+      <TouchSliderIconControl
+        value={amplitudeAmount}
+        updateValue={setAmplitudeAmount}
+        width={innerWidth}
+        height={47}
+        visualizationComponent={AmplitudeVisualization}
+        isAnimated={!isRandomized}
+      />
       <Spacer size={UNIT} />
 
-      <Row>
-        <TouchSliderIconControl
-          value={amplitudeAmount}
-          updateValue={setAmplitudeAmount}
-          width={innerWidth}
-          height={47}
-          visualizationComponent={AmplitudeVisualization}
-          isAnimated={!isRandomized}
-        />
-      </Row>
+      <TouchSliderIconControl
+        value={wavelength}
+        updateValue={setWavelength}
+        width={innerWidth}
+        height={47}
+        visualizationComponent={WavelengthVisualization}
+        isAnimated={!isRandomized}
+      />
       <Spacer size={UNIT} />
 
-      <Row>
-        <TouchSliderIconControl
-          value={octaveAmount}
-          updateValue={setOctaveAmount}
-          width={innerWidth}
-          height={47}
-          visualizationComponent={WavelengthVisualization}
-          isAnimated={!isRandomized}
-        />
-      </Row>
+      <TouchSliderIconControl
+        value={octaveAmount}
+        updateValue={setOctaveAmount}
+        width={innerWidth}
+        height={47}
+        visualizationComponent={OctaveVisualization}
+        isAnimated={!isRandomized}
+      />
     </InstrumentCluster>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-`;
 
 const OptimizedAudioCluster = memoWhileIgnoring(
   ['setWavelength', 'setAmplitudeAmount', 'setOctaveAmount', 'isRandomized'],

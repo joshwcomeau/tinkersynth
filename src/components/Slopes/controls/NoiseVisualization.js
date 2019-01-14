@@ -182,7 +182,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
             generateLine(numOfPoints, smoothPoints, lines[index], ratio)
           )}
           stroke={color}
-          strokeWidth={4}
+          strokeWidth={3}
           strokeLinecap="round"
           strokeOpacity={1}
           style={{ mixBlendMode: 'color-dodge' }}
