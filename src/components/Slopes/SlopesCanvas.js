@@ -144,14 +144,17 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
 };
 
 // TODO: Can I use hooks, and merge this with the parent?
+// What about when hooks build in sCU by returning the same value :o
 const SlopesCanvasContainer = props => {
   const slopesParams = useContext(SlopesContext);
 
   const springParams = extractTypeFromObject(slopesParams, 'number');
+
+  // I forget why I'm doing this :(
   delete springParams.seed;
 
   return (
-    <Spring to={springParams}>
+    <Spring to={springParams} immediate={slopesParams.isRandomized}>
       {interpolatedParams => (
         <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
       )}

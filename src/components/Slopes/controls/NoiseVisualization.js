@@ -73,19 +73,16 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
   const curve = {
     startPoint: [
       horizontalPadding,
-      verticalPadding + innerHeight
+      verticalPadding + innerHeight / 2
     ],
     controlPoint1: [
-      horizontalPadding + innerWidth * 0.33,
-      verticalPadding + innerHeight * -1.25,
+      horizontalPadding + innerWidth * 0.5,
+      verticalPadding + innerHeight / 2
     ],
-    controlPoint2: [
-      horizontalPadding + innerWidth * 0.66,
-      verticalPadding + innerHeight * 1.75,
-    ],
+
     endPoint: [
       horizontalPadding + innerWidth,
-      innerHeight / 2,
+      verticalPadding + innerHeight / 2
     ],
   };
 
@@ -129,8 +126,8 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
   const spring3 = useSpring({
     ratio,
     config: {
-      tension: 50,
-      friction: 15,
+      tension: 75,
+      friction: 10,
     },
   });
   const spring4 = useSpring({

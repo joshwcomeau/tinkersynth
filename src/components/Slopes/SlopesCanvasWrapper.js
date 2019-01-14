@@ -17,7 +17,6 @@ const SlopesCanvasWrapper = ({ children }: Props) => {
         <TopPanel />
         <InnerWrapper>
           <ChildWrapper>{children}</ChildWrapper>
-          <Shadow />
         </InnerWrapper>
 
         <Spacer size={UNIT} />
@@ -52,6 +51,7 @@ const InnerWrapper = styled.div`
 const ChildWrapper = styled.div`
   position: relative;
   z-index: 1;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
 `;
 
 const TopPanel = styled.div`
@@ -64,18 +64,6 @@ const TopPanel = styled.div`
   background: ${COLORS.gray[300]};
   transform: rotateX(25deg);
   transform-origin: bottom center;
-`;
-
-const Shadow = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  background: transparent;
-  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.4);
-  padding: 4px;
 `;
 
 const Actions = styled.div`
