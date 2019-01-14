@@ -1,6 +1,9 @@
 import { checkIntersection } from 'line-intersect';
 
-import { getDistanceToBezierCurve } from '../../helpers/line.helpers';
+import {
+  getDistanceToBezierCurve,
+  getValuesForBezierCurve,
+} from '../../helpers/line.helpers';
 import {
   clamp,
   normalize,
@@ -433,4 +436,61 @@ export const getPerlinValueWithOctaves = (
   }
 
   return value;
+};
+
+export const takeExplosionsIntoAccount = (
+  explosionRatio,
+  sampleIndex,
+  rowIndex,
+  rndBase
+) => {
+  // We have two possible effects: applying Math.tan on the sampleIndex for an
+  // interesting left-right approach, and applying Math.tan on the rowIndex
+  // for a top-down one.
+  //
+  // A single slider controls the mixes of these 2 effects:
+  // - At 0, both effects are at 0.
+  // - from 0-33, the Column effect goes from 0 to 1.
+  // - from 33-66, column effect stays at 1
+  // - from 66-100, column effect drops back down to 0
+  // - from 66-100, row effect goes from 0 to 1
+  //
+  // TODO: Do I actually want rowEffect? Maybe it muddies it up too much :/
+
+  // I'll use a bezier curve to map the value for the column.
+  const columnCurve = {
+    startPoint: [0, 0],
+    controlPoint1: [0.5, 2],
+    endPoint: [1, 0],
+  };
+
+  const MAX_MULTIPLIER = 1.5;
+  const MIN_MULTIPLIER = -MAX_MULTIPLIER;
+
+  let [, columnEffectStrength] = getValuesForBezierCurve(
+    columnCurve,
+    explosionRatio
+  );
+
+  // Since rowEffectStrength only rises towards the end, I'll do a lerp.
+  const rowEffectStrength = clamp(normalize(explosionRatio, 0, 1, -1, 1), 0, 1);
+
+  // The "values" are the numbers we actually want to use as multipliers within
+  // Math.tan. These are literally magic numbers: I don't understand them, but
+  // they look good?
+  const columnEffectValue = normalize(explosionRatio, 0, 1, 2.5, 3.65);
+  const rowEffectValue = normalize(explosionRatio, 0, 1, 10, 9);
+
+  const columnEffectMultiplier =
+    Math.tan(sampleIndex * columnEffectValue) * 0.5;
+  const rowEffectMultiplier = Math.tan(rowIndex * rowEffectValue) * 0.5;
+
+  const multiplier = clamp(
+    columnEffectMultiplier * columnEffectStrength +
+      rowEffectMultiplier * rowEffectStrength,
+    MIN_MULTIPLIER,
+    MAX_MULTIPLIER
+  );
+
+  return rndBase + rndBase * multiplier;
 };

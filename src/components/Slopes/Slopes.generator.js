@@ -8,6 +8,7 @@ import {
   getDampingAmountForSlopes,
   plotAsPolarCoordinate,
   getPerlinValueWithOctaves,
+  takeExplosionsIntoAccount,
 } from './Slopes.helpers';
 
 // This flag allows us to log out how long each cycle takes, to compare perf
@@ -267,38 +268,12 @@ const getSampleCoordinates = ({
   // TODO: Make the multiplier based on amplitudeRatio
   const rndBase = (Math.random() - 0.5) * 0.5;
 
-  // We also have our `explosionRatio`, which makes those interesting spikes.
-  // `explosionRatio` is a linear value from 0 to 1, but we need a couple of
-  // derived values
-  //
-  // We want to scale up the effect quite strongly, so that the second half
-  // of the range is 100% effective.
-  const explosionEffect = clamp(explosionRatio * 2, 0, 1);
-
-  const explosionRowNormalized = normalize(explosionRatio, 0, 1, 6, 1);
-  const explosionRowMultiplier = clamp(
-    Math.tan(sampleIndex * explosionRowNormalized) * 0.5,
-    -5,
-    5
+  const rnd = takeExplosionsIntoAccount(
+    explosionRatio,
+    sampleIndex,
+    rowIndex,
+    rndBase
   );
-
-  // NOTE: ColNormalized looks prtty cool too, but I'm too lazy to find a way
-  // to fit it in.
-  // const explosionColNormalized = normalize(explosionRatio, 0, 1, 10, 9);
-  // const explosionColMultiplier = clamp(
-  //   Math.tan(rowIndex * explosionColNormalized) * 0.5,
-  //   -5,
-  //   5
-  // );
-  // const explosionMultiplier = mix(
-  //   explosionRowMultiplier,
-  //   explosionColMultiplier,
-  //   0
-  // );
-
-  const rndWithExplosion = rndBase * explosionRowMultiplier;
-
-  const rnd = mix(rndWithExplosion, rndBase, explosionRatio);
 
   // We mix between two possible values: our normal slopy value, and our random
   // noise value.
