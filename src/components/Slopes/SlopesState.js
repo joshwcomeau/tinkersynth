@@ -68,7 +68,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [seed, setSeed] = useState(defaultSeed);
 
   const [amplitudeAmount, setAmplitudeAmount] = useState(50);
-  const [numOfOctaves, setNumOfOctaves] = useState(0);
+  const [octaveAmount, setOctaveAmount] = useState(0);
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
   const [explosionAmount, setExplosionAmount] = useState(10);
@@ -119,9 +119,8 @@ export const SlopesProvider = ({ children }: Props) => {
     if (Math.random() > 0.25) {
       setWavelength(random(25, 75));
     }
-    if (Math.random() > 0.25) {
-      setNumOfOctaves(getRandomSliderValue());
-    }
+
+    setOctaveAmount(Math.random() > 0.75 ? getRandomSliderValue() : 0);
 
     // Certain parameters make more sense at one of the extremities, so let's
     // increase the chances of those.
@@ -183,7 +182,7 @@ export const SlopesProvider = ({ children }: Props) => {
       value={{
         seed,
         amplitudeAmount,
-        numOfOctaves,
+        octaveAmount,
         perspective,
         spikyness,
         explosionAmount,
@@ -200,7 +199,7 @@ export const SlopesProvider = ({ children }: Props) => {
         disabledParams,
         setSeed: wrappedSetter(setSeed),
         setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
-        setNumOfOctaves: wrappedSetter(setNumOfOctaves),
+        setOctaveAmount: wrappedSetter(setOctaveAmount),
         setPerspective: wrappedSetter(setPerspective),
         setSpikyness: wrappedSetter(setSpikyness),
         setExplosionAmount: wrappedSetter(setExplosionAmount),

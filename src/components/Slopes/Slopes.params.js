@@ -33,6 +33,8 @@ const transformParameters = ({
   seed,
   height,
   amplitudeAmount,
+  wavelength,
+  octaveAmount,
   perspective,
   spikyness,
   explosionAmount,
@@ -43,7 +45,6 @@ const transformParameters = ({
   enableLineBoost,
   peaksCurve,
   personInflateAmount,
-  wavelength,
   waterBoilAmount,
   ballSize,
 }: InputParameters) => {
@@ -153,6 +154,8 @@ const transformParameters = ({
 
   const polarHoleSize = normalize(ballSize, 0, 100, 5, 150);
 
+  const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -162,6 +165,7 @@ const transformParameters = ({
     polarTanRatio,
     polarTanMultiplier,
     numOfRows,
+    numOfOctaves,
     omegaRatio,
     peaksCurveStrength,
     perlinRangePerRow,

@@ -401,12 +401,29 @@ export const getPerlinValueWithOctaves = (
   rootAmplitude,
   numOfOctaves
 ) => {
+  // It's possible for `numOfOctaves` to be a fraction.
+  // This allows us to smoothly go between steps (no sudden jump from 1 to 2).
+  // Essentially we just need to make sure that the final octave, if not a
+  // round number, takes that fraction into account.
+  // eg. if it's 2.5, the 3rd octave will have a 0.5 multiplier (in addition
+  // to the `multiple` already quieting down higher octaves.)
+  const maxNumToIterate = Math.ceil(numOfOctaves);
+
   let value = 0;
   let cursor = 1;
-  while (cursor <= numOfOctaves) {
-    const multiple = 2 ** cursor;
-    const frequency = x * multiple;
-    const amplitude = rootAmplitude / multiple;
+  while (cursor <= maxNumToIterate) {
+    // Every additional octave is quieter than the one before it.
+    const frequencyMultiple = 2 ** cursor;
+    let amplitudeMultiple = 1 / frequencyMultiple;
+
+    // We also need to factor in if this is the final octave and it's not at
+    // full foce (eg. the 5th octave with 4.5 octaves).
+    if (cursor - numOfOctaves > 0) {
+      amplitudeMultiple *= numOfOctaves % 1;
+    }
+
+    const frequency = x * frequencyMultiple;
+    const amplitude = rootAmplitude * amplitudeMultiple;
 
     const octaveVal = noiseGenerator(frequency, y) * amplitude;
 

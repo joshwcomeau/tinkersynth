@@ -16,10 +16,10 @@ type Props = {
   width: number,
   wavelength: number,
   amplitudeAmount: number,
-  numOfOctaves: number,
+  octaveAmount: number,
   setWavelength: (val: number) => void,
   setAmplitudeAmount: (val: number) => void,
-  setNumOfOctaves: (val: number) => void,
+  setOctaveAmount: (val: number) => void,
   isRandomized: boolean,
 };
 
@@ -27,10 +27,10 @@ const AudioCluster = ({
   width,
   wavelength,
   amplitudeAmount,
-  numOfOctaves,
+  octaveAmount,
   setWavelength,
   setAmplitudeAmount,
-  setNumOfOctaves,
+  setOctaveAmount,
   isRandomized,
 }) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -64,8 +64,8 @@ const AudioCluster = ({
 
       <Row>
         <TouchSliderIconControl
-          value={wavelength}
-          updateValue={setWavelength}
+          value={octaveAmount}
+          updateValue={setOctaveAmount}
           width={innerWidth}
           height={47}
           visualizationComponent={WavelengthVisualization}
@@ -81,7 +81,7 @@ const Row = styled.div`
 `;
 
 const OptimizedAudioCluster = memoWhileIgnoring(
-  ['setWavelength', 'setAmplitudeAmount', 'setNumOfOctaves', 'isRandomized'],
+  ['setWavelength', 'setAmplitudeAmount', 'setOctaveAmount', 'isRandomized'],
   AudioCluster
 );
 
@@ -93,10 +93,10 @@ const Container = ({ width }) => {
       width={width}
       wavelength={slopesParams.wavelength}
       amplitudeAmount={slopesParams.amplitudeAmount}
-      numOfOctaves={slopesParams.numOfOctaves}
+      octaveAmount={slopesParams.octaveAmount}
       setWavelength={slopesParams.setWavelength}
       setAmplitudeAmount={slopesParams.setAmplitudeAmount}
-      setNumOfOctaves={slopesParams.setNumOfOctaves}
+      setOctaveAmount={slopesParams.setOctaveAmount}
       isRandomized={slopesParams.isRandomized}
     />
   );
