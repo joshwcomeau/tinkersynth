@@ -138,8 +138,14 @@ export const SlopesProvider = ({ children }: Props) => {
     const waterBoilAmount = sample([100, getRandomSliderValue()]);
     setWaterBoilAmount(waterBoilAmount);
 
-    const spikyness = sample([0, 0, 0, 1, getRandomSliderValue()]);
+    const spikyness = sample([0, 0, 0, 100, getRandomSliderValue()]);
     setSpikyness(spikyness);
+
+    if (spikyness > 0) {
+      setStaticAmount(Math.random() > 0.5 ? getRandomSliderValue() : 0);
+    } else {
+      setStaticAmount(0);
+    }
 
     // splitUniverse is _such_ a drastic effect. Let's make it stick to 0
     // most of the time.

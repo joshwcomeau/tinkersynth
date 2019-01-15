@@ -22,6 +22,7 @@ type Props = {
   staticAmount: number,
   setStaticAmount: SetNumber,
   disabledParams: any,
+  isRandomized: boolean,
 };
 
 const NoiseCluster = ({
@@ -31,6 +32,7 @@ const NoiseCluster = ({
   staticAmount,
   setStaticAmount,
   disabledParams,
+  isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -64,6 +66,7 @@ const NoiseCluster = ({
           visualizationComponent={StaticVisualization}
           numOfNotches={14}
           isDisabled={disabledParams.staticAmount}
+          isAnimated={!isRandomized}
         />
       </Row>
     </InstrumentCluster>
@@ -71,7 +74,7 @@ const NoiseCluster = ({
 };
 
 const OptimizedNoiseCluster = memoWhileIgnoring(
-  ['setSpikyness', 'setStaticAmount', 'disabledParams'],
+  ['setSpikyness', 'setStaticAmount', 'disabledParams', 'isRandomized'],
   NoiseCluster
 );
 
@@ -86,6 +89,7 @@ const Container = ({ width }) => {
       staticAmount={slopesParams.staticAmount}
       setStaticAmount={slopesParams.setStaticAmount}
       disabledParams={slopesParams.disabledParams}
+      isRandomized={slopesParams.isRandomized}
     />
   );
 };

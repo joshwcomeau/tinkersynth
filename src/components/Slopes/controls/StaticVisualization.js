@@ -9,25 +9,36 @@ import radarSweep from '../../../images/radar-sweep-2x.png';
 import Svg from '../../Svg';
 import StaticNoise from './StaticNoise';
 
-const springConfig = {
-  tension: 120,
-  friction: 7,
-};
-
-const StaticVisualization = ({ value, size, isAnimated }) => {
+const getSweepAngle = value => {
   const rotationOffset = 180;
-  const numOfSweeps = 1.5;
-  const sweepAngle = normalize(
+  const numOfSweeps = 2;
+
+  return normalize(
     value,
     0,
     100,
     rotationOffset * -1,
     rotationOffset * -1 + numOfSweeps * 360 * -1
   );
+};
 
-  const isEnemyVisible = value > 45;
+const getSweepOpacity = value => {
+  return clamp(normalize(value, 0, 100, 0, 10), 0, 1);
+};
+
+const StaticVisualization = ({ value, size, isAnimated }) => {
+  const isEnemyVisible = value > 34;
 
   const noisePadding = 3;
+
+  const spring = useSpring({
+    value,
+    config: {
+      tension: 120,
+      friction: 12,
+    },
+    immediate: !isAnimated,
+  });
 
   return (
     <Wrapper>
@@ -39,7 +50,10 @@ const StaticVisualization = ({ value, size, isAnimated }) => {
         style={{
           width: size,
           height: size,
-          transform: `rotate(${sweepAngle}deg)`,
+          transform: spring.value.interpolate(
+            val => `rotate(${getSweepAngle(val)}deg)`
+          ),
+          opacity: spring.value.interpolate(val => getSweepOpacity(val)),
         }}
       />
       <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
@@ -127,7 +141,10 @@ const StaticVisualization = ({ value, size, isAnimated }) => {
             d="M22 19L22.0018 21.9976L24.8532 21.0729L22.0029 22.0009L23.7634 24.4271L22 22.003L20.2366 24.4271L21.9971 22.0009L19.1468 21.0729L21.9982 21.9976L22 19Z"
             stroke="white"
             strokeWidth={2}
-            style={{ opacity: isEnemyVisible ? 1 : 0 }}
+            style={{
+              opacity: isEnemyVisible ? 1 : 0,
+              transition: 'opacity 600ms',
+            }}
           />
         </g>
       </svg>
@@ -148,7 +165,7 @@ const NoiseWrapper = styled.div`
   bottom: 0;
 `;
 
-const Sweep = styled.img`
+const Sweep = styled(animated.img)`
   position: absolute;
   z-index: 1;
   top: 0;
