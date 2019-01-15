@@ -8,7 +8,7 @@ import {
   getDampingAmountForSlopes,
   plotAsPolarCoordinate,
   getPerlinValueWithOctaves,
-  takeExplosionsIntoAccount,
+  takeStaticIntoAccount,
 } from './Slopes.helpers';
 
 // This flag allows us to log out how long each cycle takes, to compare perf
@@ -41,7 +41,7 @@ const sketch = ({
   margins,
   distanceBetweenRows,
   perlinRatio,
-  explosionRatio,
+  staticRatio,
   rowHeight,
   polarRatio,
   polarTanRatio,
@@ -74,7 +74,7 @@ const sketch = ({
   let lines = [];
 
   // Generate some data!
-  range(numOfRows).forEach(rowIndex => {
+  range(numOfRows).forEach(function iterateRows(rowIndex) {
     let row = [];
 
     const previousRowIndices = getPossiblyOccludingRowIndices({
@@ -89,7 +89,7 @@ const sketch = ({
     // Our old 'Y' values will now be the 'r', and the sampleIndex will become
     // the degrees.
 
-    range(samplesPerRow).forEach(sampleIndex => {
+    range(samplesPerRow).forEach(function iterateSamples(sampleIndex) {
       if (sampleIndex === 0) {
         return;
       }
@@ -118,7 +118,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         perlinRangePerRow,
-        explosionRatio,
+        staticRatio,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -144,7 +144,7 @@ const sketch = ({
         rowOffset,
         rowHeight,
         perlinRangePerRow,
-        explosionRatio,
+        staticRatio,
         horizontalMargin,
         perlinRatio,
         polarRatio,
@@ -162,11 +162,11 @@ const sketch = ({
       let line = [previousSamplePoint, samplePoint];
 
       const previousLines = previousRowIndices
-        .map(previousRowIndex =>
-          lines[previousRowIndex]
+        .map(function mapPreviousLines(previousRowIndex) {
+          return lines[previousRowIndex]
             ? lines[previousRowIndex][sampleIndex - 1]
-            : null
-        )
+            : null;
+        })
         .filter(line => !!line);
 
       if (enableOcclusion) {
@@ -229,7 +229,7 @@ const getSampleCoordinates = ({
   horizontalMargin,
   amplitudeRatio,
   perlinRangePerRow,
-  explosionRatio,
+  staticRatio,
   perlinRatio,
   polarRatio,
   polarTanRatio,
@@ -268,8 +268,8 @@ const getSampleCoordinates = ({
   // TODO: Make the multiplier based on amplitudeRatio
   const rndBase = (Math.random() - 0.5) * 0.5;
 
-  const rnd = takeExplosionsIntoAccount(
-    explosionRatio,
+  const rnd = takeStaticIntoAccount(
+    staticRatio,
     sampleIndex,
     rowIndex,
     rndBase

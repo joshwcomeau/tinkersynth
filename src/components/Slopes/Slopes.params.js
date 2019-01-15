@@ -15,7 +15,7 @@ type InputParameters = {
   amplitudeAmount: number,
   perspective: number,
   spikyness: number,
-  explosionAmount: number,
+  staticAmount: number,
   polarAmount: number,
   omega: number,
   splitUniverse: number,
@@ -38,7 +38,7 @@ const transformParameters = ({
   octaveAmount,
   perspective,
   spikyness,
-  explosionAmount,
+  staticAmount,
   polarAmount,
   omega,
   splitUniverse,
@@ -77,7 +77,7 @@ const transformParameters = ({
 
   const perlinRatio = (100 - spikyness) / 100;
 
-  const explosionRatio = explosionAmount / 100;
+  const staticRatio = staticAmount / 100;
 
   const polarRatio = polarAmount / 100;
 
@@ -150,7 +150,7 @@ const transformParameters = ({
   return {
     distanceBetweenRows,
     perlinRatio,
-    explosionRatio,
+    staticRatio,
     rowHeight,
     polarRatio,
     polarTanRatio,

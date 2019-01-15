@@ -9,7 +9,7 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SliderVideoControl from '../../SliderVideoControl';
 import NoiseVisualization from './NoiseVisualization';
-import BallSizeVisualization from './BallSizeVisualization';
+import StaticVisualization from './StaticVisualization';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
@@ -19,8 +19,8 @@ type Props = {
   width: number,
   spikyness: number,
   setSpikyness: SetNumber,
-  explosionAmount: number,
-  setExplosionAmount: SetNumber,
+  staticAmount: number,
+  setStaticAmount: SetNumber,
   disabledParams: any,
 };
 
@@ -28,8 +28,8 @@ const NoiseCluster = ({
   width,
   spikyness,
   setSpikyness,
-  explosionAmount,
-  setExplosionAmount,
+  staticAmount,
+  setStaticAmount,
   disabledParams,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
@@ -59,11 +59,11 @@ const NoiseCluster = ({
           width={secondarySliderWidth}
           height={sliderHeight}
           padding={secondarySliderPadding}
-          value={explosionAmount}
-          updateValue={setExplosionAmount}
-          visualizationComponent={BallSizeVisualization}
+          value={staticAmount}
+          updateValue={setStaticAmount}
+          visualizationComponent={StaticVisualization}
           numOfNotches={14}
-          isDisabled={disabledParams.explosionAmount}
+          isDisabled={disabledParams.staticAmount}
         />
       </Row>
     </InstrumentCluster>
@@ -71,7 +71,7 @@ const NoiseCluster = ({
 };
 
 const OptimizedNoiseCluster = memoWhileIgnoring(
-  ['setSpikyness', 'setExplosionAmount', 'disabledParams'],
+  ['setSpikyness', 'setStaticAmount', 'disabledParams'],
   NoiseCluster
 );
 
@@ -83,8 +83,8 @@ const Container = ({ width }) => {
       width={width}
       spikyness={slopesParams.spikyness}
       setSpikyness={slopesParams.setSpikyness}
-      explosionAmount={slopesParams.explosionAmount}
-      setExplosionAmount={slopesParams.setExplosionAmount}
+      staticAmount={slopesParams.staticAmount}
+      setStaticAmount={slopesParams.setStaticAmount}
       disabledParams={slopesParams.disabledParams}
     />
   );

@@ -107,7 +107,10 @@ export const occludeLineIfNecessary = (
   let becomeOccludedFromIndex;
   let breakFreeFromIndex;
 
-  previousPolarLines.forEach((previousPolarLine, i) => {
+  previousPolarLines.forEach(function handlePartialObscured(
+    previousPolarLine,
+    i
+  ) {
     // See if our two lines intersect, in the segments given.
     let { type, point } = checkIntersection(
       polarLine[0][0],
@@ -438,8 +441,8 @@ export const getPerlinValueWithOctaves = (
   return value;
 };
 
-export const takeExplosionsIntoAccount = (
-  explosionRatio,
+export const takeStaticIntoAccount = (
+  staticRatio,
   sampleIndex,
   rowIndex,
   rndBase
@@ -469,17 +472,17 @@ export const takeExplosionsIntoAccount = (
 
   let [, columnEffectStrength] = getValuesForBezierCurve(
     columnCurve,
-    explosionRatio
+    staticRatio
   );
 
   // Since rowEffectStrength only rises towards the end, I'll do a lerp.
-  const rowEffectStrength = clamp(normalize(explosionRatio, 0, 1, -1, 1), 0, 1);
+  const rowEffectStrength = clamp(normalize(staticRatio, 0, 1, -1, 1), 0, 1);
 
   // The "values" are the numbers we actually want to use as multipliers within
   // Math.tan. These are literally magic numbers: I don't understand them, but
   // they look good?
-  const columnEffectValue = normalize(explosionRatio, 0, 1, 2.5, 3.65);
-  const rowEffectValue = normalize(explosionRatio, 0, 1, 10, 9);
+  const columnEffectValue = normalize(staticRatio, 0, 1, 2.5, 3.65);
+  const rowEffectValue = normalize(staticRatio, 0, 1, 10, 9);
 
   const columnEffectMultiplier =
     Math.tan(sampleIndex * columnEffectValue) * 0.5;
