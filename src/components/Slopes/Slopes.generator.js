@@ -1,6 +1,8 @@
+import createSeededRandomGenerator from 'random-seed';
+import createPerlinGenerator from '../../vendor/noise';
+
 import { mixPoints } from '../../helpers/line.helpers';
 import { normalize, range, flatten, mix, clamp } from '../../utils';
-import createNoiseGenerator from '../../vendor/noise';
 
 import {
   occludeLineIfNecessary,
@@ -13,15 +15,38 @@ import {
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = false;
+const DEBUG_PERF = true;
+const RECORDED_TIMES = [];
 
-let cachedSeed;
-let noiseGenerator;
+const randomSeed = createSeededRandomGenerator.create();
+
+let cachedPerlinSeed;
+let cachedPerlinRatio = null;
+let perlinGenerator;
 
 const updateSeed = seed => {
-  cachedSeed = seed;
-  let { perlin2 } = createNoiseGenerator(seed);
-  noiseGenerator = perlin2;
+  cachedPerlinSeed = seed;
+  let { perlin2 } = createPerlinGenerator(seed);
+  perlinGenerator = perlin2;
+};
+
+// This API is a bit wonky / backwards, but it works.
+// Our noise API will continue to generate new random values until you call
+// `initState`, and then it "resets" to the beginning of the sequence of
+// pseudo-random values.
+//
+// Most of the time, when a parameter like `perspective` changes, I want to
+// preserve the previous sequence of random values, so that the lines don't
+// regenerate.
+//
+// Critically, each `sketch` call generates the same number of data points, and
+// so by initializing to the beginning of the sequence at the start of every
+// tick, I ensure the same values will be used.
+//
+// When the perlin seed changes, or when mutating the "perlinRatio", I want to
+// generate new values, so I won't call this method.
+const reuseRandomValues = () => {
+  randomSeed.initState();
 };
 
 /**
@@ -60,7 +85,18 @@ const sketch = ({
   numOfOctaves = 1,
   seed,
 }) => {
-  if (seed !== cachedSeed) {
+  const hasSeedChanged = seed !== cachedPerlinSeed;
+
+  // Keep the same random values around unless we're
+  if (!hasSeedChanged && perlinRatio === cachedPerlinRatio) {
+    reuseRandomValues();
+  } else {
+    // We need to retain a memory of the previous cachedPerlinRatio, since we
+    // decide whether or not to reuse the noise values based on if it's changed.
+    cachedPerlinRatio = perlinRatio;
+  }
+
+  if (hasSeedChanged) {
     updateSeed(seed);
   }
 
@@ -188,7 +224,11 @@ const sketch = ({
   lines = flatten(lines).filter(line => !!line);
 
   if (DEBUG_PERF) {
-    console.info(performance.now() - start);
+    RECORDED_TIMES.push(performance.now() - start);
+    const sum = values => values.reduce((sum, value) => sum + value, 0);
+    const mean = values => sum(values) / values.length;
+
+    console.info(mean(RECORDED_TIMES));
   }
 
   return lines;
@@ -256,7 +296,7 @@ const getSampleCoordinates = ({
     perlinRangePerRow;
 
   const perlinValue = getPerlinValueWithOctaves(
-    noiseGenerator,
+    perlinGenerator,
     perlinIndex,
     (rowIndex / numOfRows) * selfSimilarity,
     amplitudeRatio,
@@ -266,7 +306,8 @@ const getSampleCoordinates = ({
   // Another possible world is where each value is randomized. This creates a
   // busy "noise" effect.
   // TODO: Make the multiplier based on amplitudeRatio
-  const rndBase = (Math.random() - 0.5) * 0.5;
+  // const rndBase = randomSeed.floatBetween(-1, 1) * amplitudeRatio ?
+  const rndBase = randomSeed.floatBetween(-0.5, 0.5);
 
   const rnd = takeStaticIntoAccount(
     staticRatio,

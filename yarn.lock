@@ -3362,7 +3362,7 @@ command-exists@^1.2.2:
   resolved "https://registry.yarnpkg.com/command-exists/-/command-exists-1.2.8.tgz#715acefdd1223b9c9b37110a149c6392c2852291"
   integrity sha512-PM54PkseWbiiD/mMsbvW351/u+dafwTJ0ye2qB60G1aGQP9j3xK2gmMDc+R34L3nDtx4qMCitXT75mkbkGJDLw==
 
-commander@^2.11.0:
+commander@^2.11.0, commander@^2.9.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
@@ -3710,6 +3710,11 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^3.1.6:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.8.tgz#715f070bf6014f2ae992a98b3929258b713f08d5"
+  integrity sha1-cV8HC/YBTyrpkqmLOSkli3E/CNU=
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -11509,6 +11514,14 @@ seed-random@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/seed-random/-/seed-random-2.2.0.tgz#2a9b19e250a817099231a5b99a4daf80b7fbed54"
   integrity sha1-KpsZ4lCoFwmSMaW5mk2vgLf77VQ=
+
+seeded-random@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/seeded-random/-/seeded-random-1.0.1.tgz#fcf0a8f8091e34f526dc4c547a08fe71ce6037a9"
+  integrity sha1-/PCo+AkeNPUm3ExUegj+cc5gN6k=
+  dependencies:
+    commander "^2.9.0"
+    crypto-js "^3.1.6"
 
 seek-bzip@^1.0.5:
   version "1.0.5"
