@@ -79,36 +79,54 @@ const StaticVisualization = ({ value, size, isAnimated }) => {
           </filter>
         </defs>
 
-        <path
-          d="M5 16.5238H16M27 16.5238H16M16 16.5238V5M16 16.5238V27"
-          stroke="#32FF98"
-          strokeOpacity="0.46"
-        />
         <circle
           cx="16"
           cy="16"
           r="3.11905"
           stroke="#009E69"
-          strokeOpacity="0.5"
+          strokeWidth={1}
+          strokeOpacity="0"
         />
         <circle
           cx="16"
           cy="15.9999"
           r="6.2619"
           stroke="#009E69"
-          strokeOpacity="0.5"
+          strokeWidth={1}
+          strokeOpacity="0"
         />
         <circle
           cx="16"
           cy="16"
           r="9.40476"
           stroke="#009E69"
-          strokeOpacity="0.5"
+          strokeWidth={1}
+          strokeOpacity="0"
         />
+        <line
+          x1={6}
+          y1={16.5}
+          x2={26}
+          y2={16.5}
+          stroke={COLORS.green[500]}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+        <line
+          x1={16.5}
+          y1={7}
+          x2={16.5}
+          y2={27}
+          stroke={COLORS.green[500]}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
         <g filter="url(#static-viz-filter0)">
           <path
             d="M22 19L22.0018 21.9976L24.8532 21.0729L22.0029 22.0009L23.7634 24.4271L22 22.003L20.2366 24.4271L21.9971 22.0009L19.1468 21.0729L21.9982 21.9976L22 19Z"
             stroke="white"
+            strokeWidth={2}
             style={{ opacity: isEnemyVisible ? 1 : 0 }}
           />
         </g>

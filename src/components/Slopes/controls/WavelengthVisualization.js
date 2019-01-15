@@ -62,7 +62,7 @@ const WavelengthVisualization = ({ value, size, padding = 6, isAnimated }) => {
             calculatePathFromValue(v, innerSize)
           )}
           fill="none"
-          stroke={COLORS.red[300]}
+          stroke={COLORS.yellow[300]}
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"

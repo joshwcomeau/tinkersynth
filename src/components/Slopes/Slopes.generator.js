@@ -15,7 +15,7 @@ import {
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = true;
+const DEBUG_PERF = false;
 const RECORDED_TIMES = [];
 
 const randomSeed = createSeededRandomGenerator.create();
@@ -289,8 +289,6 @@ const getSampleCoordinates = ({
   // looks cohesive, like a 2D map. Other times, the values are far enough
   // apart that each row appears totally independent. This is controlled by
   // `selfSimilarity`
-  //
-  // TODO: Should I apply the amplitudeRatio to `mixedValue` as well?
   const perlinIndex =
     normalize(sampleIndex, 0, samplesPerRow, 0, perlinRangePerRow) +
     perlinRangePerRow;
@@ -305,9 +303,8 @@ const getSampleCoordinates = ({
 
   // Another possible world is where each value is randomized. This creates a
   // busy "noise" effect.
-  // TODO: Make the multiplier based on amplitudeRatio
-  // const rndBase = randomSeed.floatBetween(-1, 1) * amplitudeRatio ?
-  const rndBase = randomSeed.floatBetween(-0.5, 0.5);
+  // Use our amplitude to control how "loud" the noise is. We need to di
+  const rndBase = randomSeed.floatBetween(-0.25, 0.25) * amplitudeRatio;
 
   const rnd = takeStaticIntoAccount(
     staticRatio,

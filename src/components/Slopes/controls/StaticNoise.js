@@ -37,12 +37,12 @@ const StaticNoise = ({ value, size }) => {
 
       const maxNumOfCells = size / RESOLUTION;
 
+      ctx.clearRect(0, 0, size, size);
+
       // No sense painting all the noise if it isn't visible!
       if (value < startAppearingAtValue) {
         return;
       }
-
-      ctx.clearRect(0, 0, size, size);
 
       const alpha = normalize(value, startAppearingAtValue, 100, 0, 1);
 
