@@ -90,7 +90,7 @@ const transformParameters = ({
 
   let selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
-  let numOfRows = 60;
+  let numOfRows = 40;
   if (enableLineBoost) {
     numOfRows = numOfRows * 2 - 1;
     distanceBetweenRows /= 2;

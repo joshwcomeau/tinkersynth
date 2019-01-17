@@ -11,6 +11,7 @@ import {
   plotAsPolarCoordinate,
   getPerlinValueWithOctaves,
   takeStaticIntoAccount,
+  getNumOfUsableRows,
 } from './Slopes.helpers';
 
 // This flag allows us to log out how long each cycle takes, to compare perf
@@ -109,8 +110,29 @@ const sketch = ({
 
   let lines = [];
 
+  // Precompute all row offsets
+  const rowOffsets = range(numOfRows).map(rowIndex => {
+    return getRowOffset(
+      rowIndex,
+      width,
+      height,
+      verticalMargin,
+      distanceBetweenRows,
+      polarRatio,
+      polarHoleSize
+    );
+  });
+
+  const numOfUsableRows = getNumOfUsableRows(
+    width,
+    height,
+    numOfRows,
+    polarRatio,
+    rowOffsets
+  );
+
   // Generate some data!
-  range(numOfRows).forEach(function iterateRows(rowIndex) {
+  range(numOfUsableRows).forEach(function iterateRows(rowIndex) {
     let row = [];
 
     const previousRowIndices = getPossiblyOccludingRowIndices({
@@ -130,15 +152,7 @@ const sketch = ({
         return;
       }
 
-      const rowOffset = getRowOffset(
-        rowIndex,
-        width,
-        height,
-        verticalMargin,
-        distanceBetweenRows,
-        polarRatio,
-        polarHoleSize
-      );
+      const rowOffset = rowOffsets[rowIndex];
 
       const distanceBetweenSamples =
         (width - horizontalMargin * 2) / samplesPerRow;
@@ -320,12 +334,11 @@ const getSampleCoordinates = ({
   // Unless explicitly disabled, we want the peak strength to follow a bezier
   // curve. For example, the classic Joy Division cover would have a straight
   // line down the middle where the peaks are strongest.
-
+  const verticalRatio = 1 - rowOffset / height;
   const slopeDampingAmount = getDampingAmountForSlopes({
     sampleIndex,
     samplesPerRow,
-    rowIndex,
-    numOfRows,
+    verticalRatio,
     curve: peaksCurve,
     curveStrength: peaksCurveStrength,
   });

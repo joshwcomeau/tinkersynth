@@ -316,15 +316,11 @@ export const getPossiblyOccludingRowIndices = ({
 export const getDampingAmountForSlopes = ({
   sampleIndex,
   samplesPerRow,
-  // TODO: Pass a % of the available canvas height instead of using rowIndex
-  // and numOfRows.
-  rowIndex,
-  numOfRows,
+  verticalRatio,
   curve,
   curveStrength,
 }) => {
   const horizontalRatio = sampleIndex / samplesPerRow;
-  const verticalRatio = rowIndex / numOfRows;
 
   const distanceToBezier = getDistanceToBezierCurve({
     point: [horizontalRatio, verticalRatio],
@@ -496,4 +492,59 @@ export const takeStaticIntoAccount = (
   );
 
   return rndBase + rndBase * multiplier;
+};
+
+export const getNumOfUsableRows = (
+  width,
+  height,
+  numOfRows,
+  polarRatio,
+  rowOffsets
+) => {
+  // If the user has spaced out the rows a bunch, some might be spilling off
+  // the edge of the canvas. We don't have to worry about those rows. In
+  // addition to the potential perf win of not computing unused lines, it
+  // also means we can apply the Bezier curve dampening in an intuitive way.
+  let index;
+
+  if (polarRatio < 0.1) {
+    // The first 10% of the range is cartesian-like.
+    // In this mode, we just need to look for negative offsets, sinnce the
+    // spill-over always happens at the top of the canvas.
+    index = rowOffsets.findIndex(offset => offset < 0);
+  } else if (polarRatio > 0.85) {
+    // In the top end of the range, rowOffsets are distances from the center
+    // of the canvas. In this case, we need to look for rowOffsets that are too
+    // large to fit in the canvas.
+    //
+    // We can imagine the "radius" of our canvas being the distance between one
+    // of the corners and the center point. This is the largest distance from
+    // the center to any part of the canvas.
+    //
+    // If the row offset is greater than this radius, it can't be visible on the
+    // canvas.
+
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
+    const radius = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+
+    index = rowOffsets.findIndex(offset => offset > radius);
+  } else {
+    return numOfRows;
+  }
+
+  // If we weren't able to find an index of the first row outside our visible
+  // canvas, that means we want to render all rows
+  if (index === -1) {
+    return numOfRows;
+  }
+
+  // By looking at the rowOffset exclusively, it's possible we'll still see
+  // rows near the edge "flicker out", as each row can move in a negative
+  // direction and dip into the canvas.
+  //
+  // Rather than solve this the "proper" way using rowHeight and amplitude, I'm
+  // just going to return 1 more row than required. This is a rough
+  // approximation, but it appears to work just fine.
+  return index + 1;
 };
