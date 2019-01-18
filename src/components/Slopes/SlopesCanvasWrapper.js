@@ -10,7 +10,7 @@ type Props = {
   children: React$Node,
 };
 
-const SlopesCanvasWrapper = ({ children }: Props) => {
+const SlopesCanvasWrapper = ({ children, toggles }: Props) => {
   return (
     <Wrapper>
       <Machine>
@@ -21,10 +21,11 @@ const SlopesCanvasWrapper = ({ children }: Props) => {
 
         <Spacer size={UNIT} />
 
-        <Actions>
-          <div style={{ width: 40, height: 40, background: 'red' }} />
-          <div style={{ width: 40, height: 40, background: 'green' }} />
-        </Actions>
+        <Footer>
+          <Toggles>{toggles}</Toggles>
+
+          <div style={{ width: 38, height: 38, background: 'green' }} />
+        </Footer>
       </Machine>
     </Wrapper>
   );
@@ -66,9 +67,11 @@ const TopPanel = styled.div`
   transform-origin: bottom center;
 `;
 
-const Actions = styled.div`
+const Footer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const Toggles = styled.div``;
 
 export default SlopesCanvasWrapper;

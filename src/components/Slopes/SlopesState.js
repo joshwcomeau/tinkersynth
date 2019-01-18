@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react';
 
 import { sample, random } from '../../utils';
+import { useToggle } from '../../hooks/toggle.hook';
 
 // $FlowFixMe
 export const SlopesContext = React.createContext({});
@@ -66,6 +67,8 @@ export const SlopesProvider = ({ children }: Props) => {
   // High-level "Parameters", tweakable settings
   const defaultSeed = getRandomSeed();
   const [seed, setSeed] = useState(defaultSeed);
+
+  const [isDarkMode, toggleDarkMode] = useToggle(false);
 
   const [amplitudeAmount, setAmplitudeAmount] = useState(50);
   const [wavelength, setWavelength] = useState(25);
@@ -187,6 +190,7 @@ export const SlopesProvider = ({ children }: Props) => {
     <SlopesContext.Provider
       value={{
         seed,
+        isDarkMode,
         amplitudeAmount,
         octaveAmount,
         perspective,
@@ -204,6 +208,7 @@ export const SlopesProvider = ({ children }: Props) => {
         ballSize,
         disabledParams,
         setSeed: wrappedSetter(setSeed),
+        toggleDarkMode: wrappedSetter(toggleDarkMode),
         setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
         setOctaveAmount: wrappedSetter(setOctaveAmount),
         setPerspective: wrappedSetter(setPerspective),

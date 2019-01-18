@@ -6,6 +6,8 @@ import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import { COLORS, UNIT } from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
+import CanvasToggle from '../CanvasToggle';
+import BulbToggle from '../BulbToggle';
 
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
@@ -28,7 +30,13 @@ const Slopes = () => {
     <SlopesProvider>
       <OuterWrapper>
         <InnerWrapper>
-          <SlopesCanvasWrapper>
+          <SlopesCanvasWrapper
+            toggles={
+              <>
+                <CanvasToggle visualizationComponent={BulbToggle} />
+              </>
+            }
+          >
             <SlopesCanvas width={canvasWidth} height={canvasHeight} />
           </SlopesCanvasWrapper>
 
