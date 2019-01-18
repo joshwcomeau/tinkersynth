@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 
 import { sample, random } from '../../utils';
-import { useToggle } from '../../hooks/toggle.hook';
+import useToggle from '../../hooks/toggle.hook';
 
 // $FlowFixMe
 export const SlopesContext = React.createContext({});

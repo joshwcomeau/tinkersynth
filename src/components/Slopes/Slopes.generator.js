@@ -17,7 +17,7 @@ import {
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = false;
+const DEBUG_PERF = true;
 const RECORDED_TIMES = [];
 
 const randomSeed = createSeededRandomGenerator.create();
@@ -208,12 +208,6 @@ const sketch = ({
     lines.push(row);
   });
 
-  // Map through all the lines again, handling occlusion.
-  // NOTE: In previous versions, this was done as part of the earlier iteration.
-  // This saves ~2ms on my machine, which could be significant on chromebooks.
-  // I split it up because it made it easier to reason about this code, which
-  // allowed other optimizations, but maybe at some point I should
-  // re-consolidate it?
   lines = lines.map((row, rowIndex) => {
     const previousRowIndices = getPossiblyOccludingRowIndices({
       rowIndex,

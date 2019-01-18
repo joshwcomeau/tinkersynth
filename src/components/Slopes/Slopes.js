@@ -30,13 +30,7 @@ const Slopes = () => {
     <SlopesProvider>
       <OuterWrapper>
         <InnerWrapper>
-          <SlopesCanvasWrapper
-            toggles={
-              <>
-                <CanvasToggle visualizationComponent={BulbToggle} />
-              </>
-            }
-          >
+          <SlopesCanvasWrapper>
             <SlopesCanvas width={canvasWidth} height={canvasHeight} />
           </SlopesCanvasWrapper>
 

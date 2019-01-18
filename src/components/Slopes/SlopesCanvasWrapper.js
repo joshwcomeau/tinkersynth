@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { UNIT, COLORS } from '../../constants';
 
 import Spacer from '../Spacer';
+import SlopesCanvasActions from './SlopesCanvasActions';
 
 type Props = {
   children: React$Node,
@@ -22,7 +23,9 @@ const SlopesCanvasWrapper = ({ children, toggles }: Props) => {
         <Spacer size={UNIT} />
 
         <Footer>
-          <Toggles>{toggles}</Toggles>
+          <Toggles>
+            <SlopesCanvasActions />
+          </Toggles>
 
           <div style={{ width: 38, height: 38, background: 'green' }} />
         </Footer>

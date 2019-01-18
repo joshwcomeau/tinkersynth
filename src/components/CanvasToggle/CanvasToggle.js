@@ -6,16 +6,14 @@ import { COLORS } from '../../constants';
 import UnstyledButton from '../UnstyledButton';
 
 const CanvasToggle = ({ size = 38, isActive, handleToggle, children }) => {
-  const Visualization = visualizationComponent;
-
   return (
-    <Button style={{ width: size, height: size }}>
+    <Button style={{ width: size, height: size }} onClick={handleToggle}>
       <LED
         style={{
           backgroundColor: isActive ? COLORS.green[300] : COLORS.gray[300],
         }}
       />
-      {children}
+      <ChildrenWrapper>{children}</ChildrenWrapper>
     </Button>
   );
 };
@@ -26,18 +24,23 @@ const Button = styled(UnstyledButton)`
   border-radius: 4px;
 `;
 
-const VisualizationWrapper = styled.div`
-  position: relative;
+const ChildrenWrapper = styled.div`
+  position: absolute;
   z-index: 1;
+  top: 1px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
 `;
 
 const LED = styled.div`
   position: absolute;
+  z-index: 2;
   left: 0;
   right: 0;
   bottom: -3px;
   margin: auto;
-  z-index: 2;
   width: 10px;
   height: 10px;
   border-radius: 100%;
