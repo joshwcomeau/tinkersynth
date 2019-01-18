@@ -16,7 +16,7 @@ import {
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = false;
+const DEBUG_PERF = true;
 const RECORDED_TIMES = [];
 
 const randomSeed = createSeededRandomGenerator.create();
@@ -86,6 +86,32 @@ const sketch = ({
   numOfOctaves = 1,
   seed,
 }) => {
+  const [verticalMargin, horizontalMargin] = margins;
+
+  const distanceBetweenSamples = (width - horizontalMargin * 2) / samplesPerRow;
+
+  const sampleData = {
+    width,
+    height,
+    samplesPerRow,
+    distanceBetweenSamples,
+    numOfRows,
+    rowHeight,
+    perlinRangePerRow,
+    staticRatio,
+    horizontalMargin,
+    perlinRatio,
+    polarRatio,
+    polarTanRatio,
+    polarTanMultiplier,
+    omegaRatio,
+    omegaRadiusSubtractAmount,
+    peaksCurve,
+    peaksCurveStrength,
+    amplitudeRatio,
+    selfSimilarity,
+    numOfOctaves,
+  };
   const hasSeedChanged = seed !== cachedPerlinSeed;
 
   // Keep the same random values around unless we're
@@ -105,8 +131,6 @@ const sketch = ({
   if (DEBUG_PERF) {
     start = performance.now();
   }
-
-  const [verticalMargin, horizontalMargin] = margins;
 
   let lines = [];
 
@@ -142,11 +166,6 @@ const sketch = ({
       distanceBetweenRows,
     });
 
-    // We can set each row to be a radius around a center point, instead of
-    // parallel lines :o
-    // Our old 'Y' values will now be the 'r', and the sampleIndex will become
-    // the degrees.
-
     range(samplesPerRow).forEach(function iterateSamples(sampleIndex) {
       if (sampleIndex === 0) {
         return;
@@ -154,60 +173,34 @@ const sketch = ({
 
       const rowOffset = rowOffsets[rowIndex];
 
-      const distanceBetweenSamples =
-        (width - horizontalMargin * 2) / samplesPerRow;
+      // NOTE FOR FUTURE ME:
+      // THe issue is that the occlusion happens after `getSampleCoordinate`,
+      // but by trying to reuse a previous value, it grabs the non-occluded one?
+      // That doesn't really make sense... but hopefully moving to a two-stage
+      // system, where first I calculate all the raw line values, and THEN I
+      // calculate the occlusions, will fix it.
+      //
+      // The next, totally different problem is around not passing a huge data
+      // structure to be drawn on canvas. See notes in the benchmark.md
 
-      let samplePoint = getSampleCoordinates({
+      const usePreviousCalculatedPoint =
+        perlinRatio === 1 && sampleIndex >= 2 && row[row.length - 1];
+
+      let samplePoint = getSampleCoordinates(
+        rowIndex,
+        rowOffset,
         sampleIndex,
-        rowIndex,
-        width,
-        height,
-        samplesPerRow,
-        distanceBetweenSamples,
-        numOfRows,
-        rowOffset,
-        rowHeight,
-        perlinRangePerRow,
-        staticRatio,
-        horizontalMargin,
-        perlinRatio,
-        polarRatio,
-        polarTanRatio,
-        polarTanMultiplier,
-        omegaRatio,
-        omegaRadiusSubtractAmount,
-        peaksCurve,
-        peaksCurveStrength,
-        amplitudeRatio,
-        selfSimilarity,
-        numOfOctaves,
-      });
+        sampleData
+      );
 
-      const previousSamplePoint = getSampleCoordinates({
-        sampleIndex: sampleIndex - 1,
-        rowIndex,
-        width,
-        height,
-        samplesPerRow,
-        distanceBetweenSamples,
-        numOfRows,
-        rowOffset,
-        rowHeight,
-        perlinRangePerRow,
-        staticRatio,
-        horizontalMargin,
-        perlinRatio,
-        polarRatio,
-        polarTanRatio,
-        polarTanMultiplier,
-        omegaRatio,
-        omegaRadiusSubtractAmount,
-        peaksCurve,
-        peaksCurveStrength,
-        amplitudeRatio,
-        selfSimilarity,
-        numOfOctaves,
-      });
+      const previousSamplePoint = usePreviousCalculatedPoint
+        ? row[row.length - 1][1]
+        : getSampleCoordinates(
+            rowIndex,
+            rowOffset,
+            sampleIndex - 1,
+            sampleData
+          );
 
       let line = [previousSamplePoint, samplePoint];
 
@@ -238,6 +231,9 @@ const sketch = ({
   lines = flatten(lines).filter(line => !!line);
 
   if (DEBUG_PERF) {
+    if (RECORDED_TIMES.length > 40) {
+      RECORDED_TIMES.shift();
+    }
     RECORDED_TIMES.push(performance.now() - start);
     const sum = values => values.reduce((sum, value) => sum + value, 0);
     const mean = values => sum(values) / values.length;
@@ -270,32 +266,34 @@ const getRowOffset = (
   return mix(polarValue, cartesianValue, polarRatio);
 };
 
-const getSampleCoordinates = ({
+const getSampleCoordinates = (
   rowIndex,
-  sampleIndex,
-  width,
-  height,
-  samplesPerRow,
-  distanceBetweenSamples,
-  numOfRows,
   rowOffset,
-  rowHeight,
-  horizontalMargin,
-  amplitudeRatio,
-  perlinRangePerRow,
-  staticRatio,
-  perlinRatio,
-  polarRatio,
-  polarTanRatio,
-  polarTanMultiplier,
-  omegaRatio,
-  omegaRadiusSubtractAmount,
-  enableOcclusion,
-  peaksCurve,
-  peaksCurveStrength,
-  selfSimilarity,
-  numOfOctaves,
-}) => {
+  sampleIndex,
+  {
+    width,
+    height,
+    samplesPerRow,
+    distanceBetweenSamples,
+    numOfRows,
+    rowHeight,
+    horizontalMargin,
+    amplitudeRatio,
+    perlinRangePerRow,
+    staticRatio,
+    perlinRatio,
+    polarRatio,
+    polarTanRatio,
+    polarTanMultiplier,
+    omegaRatio,
+    omegaRadiusSubtractAmount,
+    enableOcclusion,
+    peaksCurve,
+    peaksCurveStrength,
+    selfSimilarity,
+    numOfOctaves,
+  }
+) => {
   // Our standard value is this curvy, swoopy slope thing, à la Joy Division.
   // We use perlin noise for this: the sampleIndex forms the x axis value,
   // while the rowIndex forms the y axis value.
