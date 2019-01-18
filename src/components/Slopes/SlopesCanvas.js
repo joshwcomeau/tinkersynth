@@ -8,6 +8,7 @@ import {
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
+import memoWhileIgnoring from '../../hocs/memo-while-ignoring';
 
 import transformParameters from './Slopes.params';
 import { SlopesContext } from './SlopesState';
@@ -89,14 +90,9 @@ const useCanvasDrawing = (
     }
   }, []);
 
-  // NOTE: Right now, I'm allowing the canvas to redraw whenever it rerenders.
-  // This seems to be OK since SlopesCanvas is a pure component (using
-  // React.memo).
-  // If this component re-renders too much, we may wish to add an array of
-  // derived variables, to only update on them
-  // eg. triggerUpdateOn = [distanceBetweenRows, perlinRatio, ...]
-  const triggerUpdateOn = undefined;
-
+  // Redraw on every render.
+  // `memoWhileIgnoring` should ensure that only the pertinent updates cause
+  // a re-render.
   useEffect(() => {
     let messageData = {
       width,
@@ -120,7 +116,7 @@ const useCanvasDrawing = (
     }
 
     worker.postMessage(messageData, transfer);
-  }, triggerUpdateOn);
+  });
 };
 
 const SlopesCanvas = ({ width, height, ...params }: Props) => {
@@ -143,24 +139,50 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
   );
 };
 
-// TODO: Can I use hooks, and merge this with the parent?
-// What about when hooks build in sCU by returning the same value :o
-const SlopesCanvasContainer = props => {
+const OptimizedSlopesCanvas = memoWhileIgnoring(
+  [
+    'setSeed',
+    'setAmplitudeAmount',
+    'setOctaveAmount',
+    'setPerspective',
+    'setSpikyness',
+    'setStaticAmount',
+    'setPolarAmount',
+    'setOmega',
+    'setSplitUniverse',
+    'setEnableOcclusion',
+    'setEnableLineBoost',
+    'setPeaksCurve',
+    'setPersonInflateAmount',
+    'setWavelength',
+    'setWaterBoilAmount',
+    'setBallSize',
+    'randomize',
+    'disabledParams',
+  ],
+  SlopesCanvas
+);
+
+const Container = (props: any) => {
   const slopesParams = useContext(SlopesContext);
 
   const springParams = extractTypeFromObject(slopesParams, 'number');
 
-  // I forget why I'm doing this :(
+  // I generally want to spring all params, but I don't want to spring the seed;
+  // fractional seeds don't make sense, and it would be too chaotic anyway.
   delete springParams.seed;
 
   return (
     <Spring to={springParams} immediate={slopesParams.isRandomized}>
       {interpolatedParams => (
-        <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
+        <OptimizedSlopesCanvas
+          {...slopesParams}
+          {...interpolatedParams}
+          {...props}
+        />
       )}
     </Spring>
   );
 };
 
-// $FlowIgnore
-export default React.memo(SlopesCanvasContainer);
+export default Container;
