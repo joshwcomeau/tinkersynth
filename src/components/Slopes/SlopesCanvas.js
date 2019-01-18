@@ -85,6 +85,9 @@ const useCanvasDrawing = (
           width,
           height,
           context,
+          background: params.isDarkMode ? '#111111' : '#FFFFFF',
+          lineColor: params.isDarkMode ? '#FFFFFF' : '#000000',
+          lineWidth: params.isDarkMode ? 1.5 : 1,
         });
       };
     }

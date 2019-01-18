@@ -55,7 +55,6 @@ const InnerWrapper = styled.div`
 const ChildWrapper = styled.div`
   position: relative;
   z-index: 1;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
 `;
 
 const TopPanel = styled.div`

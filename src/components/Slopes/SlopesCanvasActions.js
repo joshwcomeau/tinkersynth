@@ -10,8 +10,6 @@ const ACTION_SIZE = 38;
 const SlopesCanvasActions = () => {
   const slopesParams = React.useContext(SlopesContext);
 
-  console.log({ slopesParams });
-
   return (
     <Wrapper>
       <BulbToggle

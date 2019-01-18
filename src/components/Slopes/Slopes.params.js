@@ -48,6 +48,7 @@ const transformParameters = ({
   personInflateAmount,
   waterBoilAmount,
   ballSize,
+  isDarkMode,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
@@ -168,6 +169,7 @@ const transformParameters = ({
     peaksCurve,
     selfSimilarity,
     seed,
+    isDarkMode,
   };
 };
 

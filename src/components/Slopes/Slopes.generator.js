@@ -17,7 +17,7 @@ import {
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = true;
+const DEBUG_PERF = false;
 const RECORDED_TIMES = [];
 
 const randomSeed = createSeededRandomGenerator.create();
