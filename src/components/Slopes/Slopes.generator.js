@@ -159,12 +159,10 @@ const sketch = ({
   range(numOfUsableRows).forEach(function iterateRows(rowIndex) {
     let row = [];
 
-    const previousRowIndices = getPossiblyOccludingRowIndices({
-      rowIndex,
-      rowHeight,
-      amplitudeRatio,
-      distanceBetweenRows,
-    });
+    // We can set each row to be a radius around a center point, instead of
+    // parallel lines :o
+    // Our old 'Y' values will now be the 'r', and the sampleIndex will become
+    // the degrees.
 
     range(samplesPerRow).forEach(function iterateSamples(sampleIndex) {
       if (sampleIndex === 0) {
@@ -183,8 +181,7 @@ const sketch = ({
       // The next, totally different problem is around not passing a huge data
       // structure to be drawn on canvas. See notes in the benchmark.md
 
-      const usePreviousCalculatedPoint =
-        perlinRatio === 1 && sampleIndex >= 2 && row[row.length - 1];
+      const usePreviousCalculatedPoint = perlinRatio === 1 && sampleIndex >= 2;
 
       let samplePoint = getSampleCoordinates(
         rowIndex,
@@ -204,28 +201,43 @@ const sketch = ({
 
       let line = [previousSamplePoint, samplePoint];
 
-      const previousLines = previousRowIndices
-        .map(function mapPreviousLines(previousRowIndex) {
-          return lines[previousRowIndex]
-            ? lines[previousRowIndex][sampleIndex - 1]
-            : null;
-        })
-        .filter(line => !!line);
-
-      if (enableOcclusion) {
-        line = occludeLineIfNecessary(
-          line,
-          previousLines,
-          width,
-          height,
-          polarRatio
-        );
-      }
-
       row.push(line);
     });
 
     lines.push(row);
+  });
+
+  // Map through all the lines again, handling occlusion.
+  // NOTE: In previous versions, this was done as part of the earlier iteration.
+  // This saves ~2ms on my machine, which could be significant on chromebooks.
+  // I split it up because it made it easier to reason about this code, which
+  // allowed other optimizations, but maybe at some point I should
+  // re-consolidate it?
+  lines = lines.map((row, rowIndex) => {
+    const previousRowIndices = getPossiblyOccludingRowIndices({
+      rowIndex,
+      rowHeight,
+      amplitudeRatio,
+      distanceBetweenRows,
+    });
+
+    return row.map((line, sampleIndex) => {
+      const previousLines = previousRowIndices
+        .map(function mapPreviousLines(previousRowIndex) {
+          return lines[previousRowIndex]
+            ? lines[previousRowIndex][sampleIndex]
+            : null;
+        })
+        .filter(line => !!line);
+
+      return occludeLineIfNecessary(
+        line,
+        previousLines,
+        width,
+        height,
+        polarRatio
+      );
+    });
   });
 
   lines = flatten(lines).filter(line => !!line);

@@ -68,6 +68,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [seed, setSeed] = useState(defaultSeed);
 
   const [amplitudeAmount, setAmplitudeAmount] = useState(50);
+  const [wavelength, setWavelength] = useState(25);
   const [octaveAmount, setOctaveAmount] = useState(0);
   const [perspective, setPerspective] = useState(40);
   const [spikyness, setSpikyness] = useState(0);
@@ -76,7 +77,6 @@ export const SlopesProvider = ({ children }: Props) => {
   const [omega, setOmega] = useState(0);
   const [splitUniverse, setSplitUniverse] = useState(0);
   const [personInflateAmount, setPersonInflateAmount] = useState(50);
-  const [wavelength, setWavelength] = useState(25);
   const [waterBoilAmount, setWaterBoilAmount] = useState(100);
   const [ballSize, setBallSize] = useState(50);
 
