@@ -548,3 +548,27 @@ export const getNumOfUsableRows = (
   // approximation, but it appears to work just fine.
   return index + 1;
 };
+
+export const joinLineSegments = lines => {
+  return lines.reduce((acc, line, index) => {
+    const [startPoint, endPoint] = line;
+
+    if (index === 0) {
+      return [line];
+    }
+
+    const previousLine = acc[acc.length - 1];
+    const previousLineEnd = previousLine[previousLine.length - 1];
+
+    if (
+      previousLineEnd[0] === startPoint[0] &&
+      previousLineEnd[1] === startPoint[1]
+    ) {
+      acc[acc.length - 1].push(endPoint);
+    } else {
+      acc.push(line);
+    }
+
+    return acc;
+  }, []);
+};

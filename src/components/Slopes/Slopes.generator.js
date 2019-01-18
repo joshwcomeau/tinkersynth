@@ -12,11 +12,12 @@ import {
   getPerlinValueWithOctaves,
   takeStaticIntoAccount,
   getNumOfUsableRows,
+  joinLineSegments,
 } from './Slopes.helpers';
 
 // This flag allows us to log out how long each cycle takes, to compare perf
 // of multiple approaches.
-const DEBUG_PERF = true;
+const DEBUG_PERF = false;
 const RECORDED_TIMES = [];
 
 const randomSeed = createSeededRandomGenerator.create();
@@ -241,6 +242,18 @@ const sketch = ({
   });
 
   lines = flatten(lines).filter(line => !!line);
+
+  // If our lines are mostly-contiguous (perlinRatio of 1), we should create
+  // polylines instead of having many many 2-point line segments.
+  // This saves a ton of time when it comes to actually drawing the lines:
+  // With standard settings, it goes from 30-40ms drawing time to 5-6ms.
+  //
+  // The data-munging cost of the `joinLineSegments` call is <1ms,
+  // so this is a huge win :D
+  const isMostlyContiguous = perlinRatio === 1;
+  if (isMostlyContiguous) {
+    lines = joinLineSegments(lines);
+  }
 
   if (DEBUG_PERF) {
     if (RECORDED_TIMES.length > 40) {
