@@ -1,3 +1,4 @@
+import { COLORS } from '../../constants';
 import { throttle } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 
@@ -37,7 +38,7 @@ onmessage = throttle(function({ data }) {
       width: data.width,
       height: data.height,
       context: ctx,
-      lineColor: data.enableDarkMode ? '#FFFFFF' : '#000000',
+      lineColor: data.enableDarkMode ? COLORS.white : COLORS.gray[900],
       background: 'transparent',
       lineWidth: data.enableDarkMode ? 1.5 : 1,
     });
