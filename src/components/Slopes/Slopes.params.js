@@ -21,7 +21,6 @@ type InputParameters = {
   omega: number,
   splitUniverse: number,
   enableOcclusion: boolean,
-  enableLineBoost: boolean,
   peaksCurve: Curve,
   personInflateAmount: number,
   wavelength: number,
@@ -40,13 +39,13 @@ const transformParameters = ({
   wavelength,
   octaveAmount,
   perspective,
+  lineAmount,
   spikyness,
   staticAmount,
   polarAmount,
   omega,
   splitUniverse,
   enableOcclusion,
-  enableLineBoost,
   peaksCurve,
   personInflateAmount,
   waterBoilAmount,
@@ -96,12 +95,20 @@ const transformParameters = ({
 
   let selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
-  let numOfRows = 40;
-  if (enableLineBoost) {
-    numOfRows = numOfRows * 2 - 1;
-    distanceBetweenRows /= 2;
-    selfSimilarity *= 2;
-  }
+  // `lineAmount` is directly responsible for the `numOfRows`.
+  // It also affects some other properties, though.
+  // TODO: Experiment! Are these values ideal, now that this is a range instead
+  // of a simple toggle?
+  const MIN_NUM_ROWS = 1;
+  const MAX_NUM_ROWS = 80;
+  const numOfRows = Math.round(
+    normalize(lineAmount, 0, 100, MIN_NUM_ROWS, MAX_NUM_ROWS)
+  );
+  // distanceBetweenRows =
+  //   distanceBetweenRows /
+  //   normalize(numOfRows, MIN_NUM_ROWS, MAX_NUM_ROWS, 1, 2);
+  // selfSimilarity =
+  //   selfSimilarity * normalize(numOfRows, MIN_NUM_ROWS, MAX_NUM_ROWS, 1, 2);
 
   // Wavelength -> perlinRangePerRow & peak height
   const MAX_PERLIN_RANGE_CARTESIAN = 8;
@@ -153,6 +160,10 @@ const transformParameters = ({
 
   const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
 
+  // This will control a few things:
+  // - samplesPerRow, low values = less samples
+  // - lineWidth, low values = thicker lines (bigger dots)
+  // - The actual segment size, calculated in the generator
   const segmentRatio = segmentWidth / 100;
 
   return {

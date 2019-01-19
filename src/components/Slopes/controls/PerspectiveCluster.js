@@ -7,25 +7,27 @@ import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SliderVideoControl from '../../SliderVideoControl';
-import ToggleControl from '../../ToggleControl';
+import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 import Column from '../../Column';
 import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
-import LineBoostVisualization from './LineBoostVisualization';
+import LineAmountVisualization from './LineAmountVisualization';
 
 type Props = {
   width: number,
+  perspective: number,
+  lineAmount: number,
+  setPerspective: (val: number) => void,
+  setLineAmount: (val: number) => void,
 };
 
 const PerspectiveCluster = ({
   width,
   perspective,
-  enableOcclusion,
-  enableLineBoost,
+  lineAmount,
   setPerspective,
-  setEnableOcclusion,
-  setEnableLineBoost,
+  setLineAmount,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -33,8 +35,8 @@ const PerspectiveCluster = ({
 
   // Our toggleControl should use up half of the available vertical space,
   // minus the UNIT of padding separating the two.
-  const toggleControlSize = (videoSliderHeight - UNIT) / 2;
-  const videoSliderWidth = innerWidth - toggleControlSize - UNIT;
+  const secondarySliderWidth = 36;
+  const videoSliderWidth = innerWidth - secondarySliderWidth - UNIT;
 
   return (
     <InstrumentCluster>
@@ -47,19 +49,12 @@ const PerspectiveCluster = ({
       />
       <Spacer size={UNIT} />
       <Column>
-        <ToggleControl
-          width={toggleControlSize}
-          height={toggleControlSize}
-          value={enableOcclusion}
-          updateValue={setEnableOcclusion}
-          visualizationComponent={OcclusionVisualization}
-        />
-        <ToggleControl
-          width={toggleControlSize}
-          height={toggleControlSize}
-          value={enableLineBoost}
-          updateValue={setEnableLineBoost}
-          visualizationComponent={LineBoostVisualization}
+        <SliderIconControl
+          width={secondarySliderWidth}
+          height={videoSliderHeight}
+          value={lineAmount}
+          updateValue={setLineAmount}
+          visualizationComponent={LineAmountVisualization}
         />
       </Column>
     </InstrumentCluster>
@@ -67,7 +62,7 @@ const PerspectiveCluster = ({
 };
 
 const OptimizedPerspectiveCluster = memoWhileIgnoring(
-  ['setPerspective', 'setEnableOcclusion', 'setEnableLineBoost'],
+  ['setPerspective', 'setLineAmount'],
   PerspectiveCluster
 );
 
@@ -78,11 +73,9 @@ const Container = ({ width }) => {
     <OptimizedPerspectiveCluster
       width={width}
       perspective={slopesParams.perspective}
-      enableOcclusion={slopesParams.enableOcclusion}
-      enableLineBoost={slopesParams.enableLineBoost}
+      lineAmount={slopesParams.lineAmount}
       setPerspective={slopesParams.setPerspective}
-      setEnableOcclusion={slopesParams.setEnableOcclusion}
-      setEnableLineBoost={slopesParams.setEnableLineBoost}
+      setLineAmount={slopesParams.setLineAmount}
     />
   );
 };

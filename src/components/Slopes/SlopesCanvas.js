@@ -152,24 +152,27 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
 
 const OptimizedSlopesCanvas = memoWhileIgnoring(
   [
+    'disabledParams',
     'setSeed',
+    'toggleDarkMode',
+    'toggleMargins',
     'setAmplitudeAmount',
     'setOctaveAmount',
     'setPerspective',
+    'setLineAmount',
     'setSpikyness',
     'setStaticAmount',
     'setPolarAmount',
     'setOmega',
     'setSplitUniverse',
     'setEnableOcclusion',
-    'setEnableLineBoost',
     'setPeaksCurve',
     'setPersonInflateAmount',
     'setWavelength',
     'setWaterBoilAmount',
     'setBallSize',
+    'setSegmentWidth',
     'randomize',
-    'disabledParams',
   ],
   SlopesCanvas
 );

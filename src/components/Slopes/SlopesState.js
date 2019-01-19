@@ -75,6 +75,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [wavelength, setWavelength] = useState(25);
   const [octaveAmount, setOctaveAmount] = useState(0);
   const [perspective, setPerspective] = useState(40);
+  const [lineAmount, setLineAmount] = useState(0);
   const [spikyness, setSpikyness] = useState(0);
   const [staticAmount, setStaticAmount] = useState(0);
   const [polarAmount, setPolarAmount] = useState(0);
@@ -83,10 +84,9 @@ export const SlopesProvider = ({ children }: Props) => {
   const [personInflateAmount, setPersonInflateAmount] = useState(50);
   const [waterBoilAmount, setWaterBoilAmount] = useState(100);
   const [ballSize, setBallSize] = useState(50);
-  const [segmentWidth, setSegmentWidth] = useState(1);
+  const [segmentWidth, setSegmentWidth] = useState(50);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
-  const [enableLineBoost, setEnableLineBoost] = useState(false);
 
   const [peaksCurve, setPeaksCurve] = useState(DEFAULT_PEAKS_CURVE);
 
@@ -157,9 +157,24 @@ export const SlopesProvider = ({ children }: Props) => {
     const splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
     setSplitUniverse(splitUniverse);
 
-    // Line boost is a really expensive property. To keep randomization speedy,
-    // let's keep it off most of the time.
-    setEnableLineBoost(sample([false, false, false, false, false, true]));
+    // Performance suffers when we add lots of lines. Let's keep it generally
+    // to a pretty low number
+    setLineAmount(
+      sample([
+        5,
+        10,
+        20,
+        30,
+        35,
+        40,
+        40,
+        50,
+        50,
+        50,
+        60,
+        getRandomSliderValue(),
+      ])
+    );
 
     // If we're splitting the universe, we almost always want occlusion to be
     // off.
@@ -197,13 +212,13 @@ export const SlopesProvider = ({ children }: Props) => {
         amplitudeAmount,
         octaveAmount,
         perspective,
+        lineAmount,
         spikyness,
         staticAmount,
         polarAmount,
         omega,
         splitUniverse,
         enableOcclusion,
-        enableLineBoost,
         peaksCurve,
         personInflateAmount,
         wavelength,
@@ -217,13 +232,13 @@ export const SlopesProvider = ({ children }: Props) => {
         setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
         setOctaveAmount: wrappedSetter(setOctaveAmount),
         setPerspective: wrappedSetter(setPerspective),
+        setLineAmount: wrappedSetter(setLineAmount),
         setSpikyness: wrappedSetter(setSpikyness),
         setStaticAmount: wrappedSetter(setStaticAmount),
         setPolarAmount: wrappedSetter(setPolarAmount),
         setOmega: wrappedSetter(setOmega),
         setSplitUniverse: wrappedSetter(setSplitUniverse),
         setEnableOcclusion: wrappedSetter(setEnableOcclusion),
-        setEnableLineBoost: wrappedSetter(setEnableLineBoost),
         setPeaksCurve: wrappedSetter(setPeaksCurve),
         setPersonInflateAmount: wrappedSetter(setPersonInflateAmount),
         setWavelength: wrappedSetter(setWavelength),
