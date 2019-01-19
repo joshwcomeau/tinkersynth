@@ -95,20 +95,11 @@ const transformParameters = ({
 
   let selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
-  // `lineAmount` is directly responsible for the `numOfRows`.
-  // It also affects some other properties, though.
-  // TODO: Experiment! Are these values ideal, now that this is a range instead
-  // of a simple toggle?
   const MIN_NUM_ROWS = 1;
-  const MAX_NUM_ROWS = 80;
+  const MAX_NUM_ROWS = 75;
   const numOfRows = Math.round(
     normalize(lineAmount, 0, 100, MIN_NUM_ROWS, MAX_NUM_ROWS)
   );
-  // distanceBetweenRows =
-  //   distanceBetweenRows /
-  //   normalize(numOfRows, MIN_NUM_ROWS, MAX_NUM_ROWS, 1, 2);
-  // selfSimilarity =
-  //   selfSimilarity * normalize(numOfRows, MIN_NUM_ROWS, MAX_NUM_ROWS, 1, 2);
 
   // Wavelength -> perlinRangePerRow & peak height
   const MAX_PERLIN_RANGE_CARTESIAN = 8;

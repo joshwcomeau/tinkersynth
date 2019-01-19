@@ -75,7 +75,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [wavelength, setWavelength] = useState(25);
   const [octaveAmount, setOctaveAmount] = useState(0);
   const [perspective, setPerspective] = useState(40);
-  const [lineAmount, setLineAmount] = useState(0);
+  const [lineAmount, setLineAmount] = useState(45);
   const [spikyness, setSpikyness] = useState(0);
   const [staticAmount, setStaticAmount] = useState(0);
   const [polarAmount, setPolarAmount] = useState(0);
