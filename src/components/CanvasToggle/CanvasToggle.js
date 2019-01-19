@@ -30,8 +30,10 @@ const ChildrenWrapper = styled.div`
   top: 1px;
   left: 0;
   right: 0;
+  bottom: 1px;
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 const LED = styled.div`

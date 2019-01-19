@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { UNIT } from '../../constants';
+
 import BulbToggle from '../BulbToggle';
+import MarginsToggle from '../MarginsToggle';
 import Spacer from '../Spacer';
 import { SlopesContext } from './SlopesState';
 
@@ -14,8 +17,16 @@ const SlopesCanvasActions = () => {
     <Wrapper>
       <BulbToggle
         size={ACTION_SIZE}
-        isDarkMode={slopesParams.isDarkMode}
+        enableDarkMode={slopesParams.enableDarkMode}
         toggleDarkMode={slopesParams.toggleDarkMode}
+      />
+
+      <Spacer size={UNIT} />
+
+      <MarginsToggle
+        size={ACTION_SIZE}
+        enableMargins={slopesParams.enableMargins}
+        toggleMargins={slopesParams.toggleMargins}
       />
     </Wrapper>
   );

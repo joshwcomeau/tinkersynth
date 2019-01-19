@@ -68,7 +68,8 @@ export const SlopesProvider = ({ children }: Props) => {
   const defaultSeed = getRandomSeed();
   const [seed, setSeed] = useState(defaultSeed);
 
-  const [isDarkMode, toggleDarkMode] = useToggle(false);
+  const [enableDarkMode, toggleDarkMode] = useToggle(false);
+  const [enableMargins, toggleMargins] = useToggle(false);
 
   const [amplitudeAmount, setAmplitudeAmount] = useState(50);
   const [wavelength, setWavelength] = useState(25);
@@ -190,7 +191,8 @@ export const SlopesProvider = ({ children }: Props) => {
     <SlopesContext.Provider
       value={{
         seed,
-        isDarkMode,
+        enableDarkMode,
+        enableMargins,
         amplitudeAmount,
         octaveAmount,
         perspective,
@@ -209,6 +211,7 @@ export const SlopesProvider = ({ children }: Props) => {
         disabledParams,
         setSeed: wrappedSetter(setSeed),
         toggleDarkMode: wrappedSetter(toggleDarkMode),
+        toggleMargins: wrappedSetter(toggleMargins),
         setAmplitudeAmount: wrappedSetter(setAmplitudeAmount),
         setOctaveAmount: wrappedSetter(setOctaveAmount),
         setPerspective: wrappedSetter(setPerspective),
