@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
-import { useSpring, animated } from 'react-spring/hooks';
+import RetroNumbers from 'react-retro-hit-counter';
+import styled from 'styled-components';
 
-import { COLORS } from '../../../constants';
+import { COLORS, MIN_NUM_ROWS, MAX_NUM_ROWS } from '../../../constants';
 import { normalize } from '../../../utils';
 
 import Svg from '../../Svg';
@@ -13,68 +14,37 @@ type Props = {
 };
 
 const LineAmountVisualization = ({ size, value }: Props) => {
-  // NOTE: For this to be pixel-perfect, height should be a multiple of 23.
-  // I'm going to hard-set this value instead of using the prop, although if
-  // the layout changes this will need to be revisited.
-  // const height = 23;
-  const outerConfig = { tension: 180, friction: 10 };
-  const innerConfig = { tension: 180, friction: 20 };
+  const numOfLines = Math.round(
+    normalize(value, 0, 100, MIN_NUM_ROWS, MAX_NUM_ROWS)
+  );
 
-  const sharedValues = {
-    x1: 1,
-    x2: size - 1,
-    strokeWidth: 2,
-    strokeLinecap: 'round',
-    style: {
-      transition: 'all 300ms',
-    },
-  };
+  const padding = 5;
+  const innerSize = size - padding * 2 - 6;
 
-  const lineData = [
-    useSpring({
-      stroke: COLORS.red[300],
-      y1: normalize(value, 0, 100, 1, 4),
-      y2: normalize(value, 0, 100, 1, 4),
-      config: outerConfig,
-      ...sharedValues,
-    }),
-    useSpring({
-      stroke: COLORS.yellow[500],
-      y1: normalize(value, 0, 100, 6, 11),
-      y2: normalize(value, 0, 100, 6, 11),
-      config: innerConfig,
-      ...sharedValues,
-    }),
-    useSpring({
-      stroke: COLORS.blue[300],
-      y1: normalize(value, 0, 100, 16, 11),
-      y2: normalize(value, 0, 100, 16, 11),
-      ...sharedValues,
-    }),
-    useSpring({
-      stroke: COLORS.green[500],
-      y1: 11,
-      y2: 11,
-      config: innerConfig,
-      ...sharedValues,
-    }),
-
-    useSpring({
-      stroke: COLORS.violet[300],
-      y1: normalize(value, 0, 100, 21, 18),
-      y2: normalize(value, 0, 100, 21, 18),
-      config: outerConfig,
-      ...sharedValues,
-    }),
-  ];
+  console.log(numOfLines);
 
   return (
-    <Svg width={size} height={size}>
-      {lineData.map((lineDatum, index) => (
-        <animated.line key={index} {...lineDatum} />
-      ))}
-    </Svg>
+    <Wrapper style={{ height: size }}>
+      <RetroNumbers
+        minLength={2}
+        hits={numOfLines}
+        size={innerSize}
+        padding={padding}
+        digitSpacing={2}
+        segmentThickness={2}
+        segmentSpacing={0.5}
+        withBorder={false}
+        segmentActiveColor={COLORS.pink[500]}
+        segmentInactiveColor="rgba(242, 24, 188, 0.2)"
+        backgroundColor={COLORS.gray[900]}
+      />
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 export default LineAmountVisualization;

@@ -225,3 +225,6 @@ export const Z_INDICES = {
   loadingScreen: 2000,
   titlebar: 10000,
 };
+
+export const MIN_NUM_ROWS = 1;
+export const MAX_NUM_ROWS = 75;

@@ -5,6 +5,7 @@
 // This file specifies the mapping from high-level params to actual variables
 // used in the logic.
 // `value` will always be from 0-1000
+import { MIN_NUM_ROWS, MAX_NUM_ROWS } from '../../constants';
 import { normalize, mix, clamp } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
@@ -95,8 +96,6 @@ const transformParameters = ({
 
   let selfSimilarity = normalize(waterBoilAmount, 0, 100, 0, 30);
 
-  const MIN_NUM_ROWS = 1;
-  const MAX_NUM_ROWS = 75;
   const numOfRows = Math.round(
     normalize(lineAmount, 0, 100, MIN_NUM_ROWS, MAX_NUM_ROWS)
   );

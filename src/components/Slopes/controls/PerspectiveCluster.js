@@ -47,7 +47,9 @@ const PerspectiveCluster = ({
         height={videoSliderHeight}
         visualizationComponent={PerspectiveVisualization}
       />
+
       <Spacer size={UNIT} />
+
       <Column>
         <SliderIconControl
           width={secondarySliderWidth}
@@ -55,6 +57,7 @@ const PerspectiveCluster = ({
           value={lineAmount}
           updateValue={setLineAmount}
           visualizationComponent={LineAmountVisualization}
+          numOfNotches={13}
         />
       </Column>
     </InstrumentCluster>
