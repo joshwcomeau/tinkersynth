@@ -31,13 +31,15 @@ const useBoundingBox = () => {
       return;
     }
 
-    const handleResize = debounce(() => {
+    const recalculate = debounce(() => {
       setBoundingBox(ref.current.getBoundingClientRect());
     }, 250);
 
-    window.addEventListener('scroll', handleResize);
+    window.addEventListener('scroll', recalculate);
+    window.addEventListener('resize', recalculate);
     return () => {
-      window.removeEventListener('scroll', handleResize);
+      window.removeEventListener('scroll', recalculate);
+      window.removeEventListener('resize', recalculate);
     };
   }, []);
 
