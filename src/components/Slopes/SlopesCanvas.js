@@ -36,8 +36,11 @@ const useCanvasDrawing = (
     return;
   }
 
+  // NOTE: I'm moving to a "fake" margin, where I just cover up the sides.
+  // I'll need to use `canvas-sketch-util` to crop within a specific size,
+  // when actually prepping it for printing.
   const topMargin = (height / 11) * 1;
-  const leftMargin = (width / 8.5) * 1;
+  const leftMargin = 0; // (width / 8.5) * 1;
 
   // I want `samplesPerRow` to be as high as possible, so that curves aren't
   // choppy and gross. But, the higher it is, the more expensive / slow it is

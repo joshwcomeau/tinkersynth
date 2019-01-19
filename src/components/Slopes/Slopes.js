@@ -30,7 +30,7 @@ const Slopes = () => {
     <SlopesProvider>
       <OuterWrapper>
         <InnerWrapper>
-          <SlopesCanvasWrapper>
+          <SlopesCanvasWrapper width={canvasWidth} height={canvasHeight}>
             <SlopesCanvas width={canvasWidth} height={canvasHeight} />
           </SlopesCanvasWrapper>
 

@@ -6,18 +6,22 @@ import { UNIT, COLORS } from '../../constants';
 
 import Spacer from '../Spacer';
 import SlopesCanvasActions from './SlopesCanvasActions';
+import SlopesCanvasMargins from './SlopesCanvasMargins';
 
 type Props = {
+  width: number,
+  height: number,
   children: React$Node,
 };
 
-const SlopesCanvasWrapper = ({ children, toggles }: Props) => {
+const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
   return (
     <Wrapper>
       <Machine>
         <TopPanel />
         <InnerWrapper>
           <ChildWrapper>{children}</ChildWrapper>
+          <SlopesCanvasMargins width={width} height={height} />
         </InnerWrapper>
 
         <Spacer size={UNIT} />
