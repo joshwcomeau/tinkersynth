@@ -208,32 +208,34 @@ const sketch = ({
     lines.push(row);
   });
 
-  lines = lines.map((row, rowIndex) => {
-    const previousRowIndices = getPossiblyOccludingRowIndices({
-      rowIndex,
-      rowHeight,
-      amplitudeRatio,
-      distanceBetweenRows,
-    });
+  if (enableOcclusion) {
+    lines = lines.map((row, rowIndex) => {
+      const previousRowIndices = getPossiblyOccludingRowIndices({
+        rowIndex,
+        rowHeight,
+        amplitudeRatio,
+        distanceBetweenRows,
+      });
 
-    return row.map((line, sampleIndex) => {
-      const previousLines = previousRowIndices
-        .map(function mapPreviousLines(previousRowIndex) {
-          return lines[previousRowIndex]
-            ? lines[previousRowIndex][sampleIndex]
-            : null;
-        })
-        .filter(line => !!line);
+      return row.map((line, sampleIndex) => {
+        const previousLines = previousRowIndices
+          .map(function mapPreviousLines(previousRowIndex) {
+            return lines[previousRowIndex]
+              ? lines[previousRowIndex][sampleIndex]
+              : null;
+          })
+          .filter(line => !!line);
 
-      return occludeLineIfNecessary(
-        line,
-        previousLines,
-        width,
-        height,
-        polarRatio
-      );
+        return occludeLineIfNecessary(
+          line,
+          previousLines,
+          width,
+          height,
+          polarRatio
+        );
+      });
     });
-  });
+  }
 
   lines = flatten(lines).filter(line => !!line);
 

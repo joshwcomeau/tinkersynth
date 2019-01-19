@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import { Spring } from 'react-spring';
 
+import { COLORS } from '../../constants';
 import { mix, extractTypeFromObject } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import {
@@ -88,8 +89,9 @@ const useCanvasDrawing = (
           width,
           height,
           context,
-          lineColor: params.enableDarkMode ? '#FFFFFF' : '#000000',
-          lineWidth: params.enableDarkMode ? 1.5 : 1,
+          lineColor: data.enableDarkMode ? COLORS.white : COLORS.gray[900],
+          background: 'transparent',
+          lineWidth: 1,
         });
       };
     }
