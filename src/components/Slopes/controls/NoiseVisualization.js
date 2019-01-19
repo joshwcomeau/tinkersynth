@@ -69,6 +69,9 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
   const innerWidth = width - horizontalPadding * 2;
   const innerHeight = height - verticalPadding * 2;
 
+  // When the `value` is 0, we want to draw a little smiley-face mouth.
+  // As the value increases, it fractures into noise, but this curve is
+  // used to calculate that "from" position.
   // prettier-ignore
   const curve = {
     startPoint: [
@@ -77,7 +80,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     ],
     controlPoint1: [
       horizontalPadding + innerWidth * 0.5,
-      verticalPadding + innerHeight / 2
+      innerHeight * 1.25
     ],
 
     endPoint: [
@@ -86,7 +89,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     ],
   };
 
-  const numOfPoints = Math.round(innerWidth / 5) + 1;
+  const numOfPoints = Math.round(innerWidth / 4) + 1;
 
   const randomLines1 = useRef(
     generateRandomLines(1, width, height, numOfPoints)
@@ -109,46 +112,62 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     return getValuesForBezierCurve(curve, t);
   });
 
+  // As the value increases from 0 to 1, each colour of noise will follow
+  // the same pattern of exploding outwards... it looks really mechanical /
+  // artificial, though, if the shape is too perfect (eg. at 0.5, it still
+  // forms a vague curve shape).
+  //
+  // Apply different easings to different springs by using bezier curves, and
+  // mapping the value onto them.
+  const linearCurve = {
+    startPoint: [0, 0],
+    controlPoint1: [0.5, 0.5],
+    endPoint: [1, 1],
+  };
+  const eagerCurve = {
+    startPoint: [0, 0],
+    controlPoint1: [0, 1],
+    endPoint: [1, 1],
+  };
+  const reticentCurve = {
+    startPoint: [0, 0],
+    controlPoint1: [1, 0],
+    endPoint: [1, 1],
+  };
+
   const spring1 = useSpring({
-    ratio,
+    ratio: getValuesForBezierCurve(linearCurve, ratio)[1],
     config: {
       tension: 120,
       friction: 12,
     },
   });
   const spring2 = useSpring({
-    ratio,
+    ratio: getValuesForBezierCurve(linearCurve, ratio)[1] * 1.25,
     config: {
       tension: 150,
       friction: 10,
     },
   });
   const spring3 = useSpring({
-    ratio,
+    ratio: getValuesForBezierCurve(eagerCurve, ratio)[1],
     config: {
       tension: 75,
       friction: 10,
     },
   });
   const spring4 = useSpring({
-    ratio,
+    ratio: getValuesForBezierCurve(eagerCurve, ratio)[1] * 1.15,
     config: {
       tension: 260,
       friction: 35,
     },
   });
   const spring5 = useSpring({
-    ratio,
+    ratio: getValuesForBezierCurve(reticentCurve, ratio)[1],
     config: {
       tension: 225,
       friction: 12,
-    },
-  });
-  const spring6 = useSpring({
-    ratio,
-    config: {
-      tension: 225,
-      friction: 6,
     },
   });
 
@@ -168,7 +187,7 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
     randomLines5,
   ];
 
-  const springs = [spring1, spring2, spring3, spring4, spring5, spring6];
+  const springs = [spring1, spring2, spring3, spring4, spring5];
 
   return (
     <Svg width={width} height={height}>
