@@ -88,7 +88,6 @@ const useCanvasDrawing = (
           width,
           height,
           context,
-          background: params.enableDarkMode ? '#111111' : '#FFFFFF',
           lineColor: params.enableDarkMode ? '#FFFFFF' : '#000000',
           lineWidth: params.enableDarkMode ? 1.5 : 1,
         });

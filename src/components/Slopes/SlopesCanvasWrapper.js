@@ -2,11 +2,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { UNIT, COLORS } from '../../constants';
+import {
+  UNIT,
+  COLORS,
+  LIGHT_BACKGROUND,
+  DARK_BACKGROUND,
+} from '../../constants';
 
 import Spacer from '../Spacer';
 import SlopesCanvasActions from './SlopesCanvasActions';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
+import { SlopesContext } from './SlopesState';
 
 type Props = {
   width: number,
@@ -15,13 +21,28 @@ type Props = {
 };
 
 const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
+  const slopesParams = React.useContext(SlopesContext);
+
   return (
     <Wrapper>
       <Machine>
         <TopPanel />
         <InnerWrapper>
-          <ChildWrapper>{children}</ChildWrapper>
-          <SlopesCanvasMargins width={width} height={height} />
+          <ChildWrapper
+            style={{
+              backgroundColor: slopesParams.enableDarkMode
+                ? DARK_BACKGROUND
+                : LIGHT_BACKGROUND,
+            }}
+          >
+            {children}
+          </ChildWrapper>
+          <SlopesCanvasMargins
+            width={width}
+            height={height}
+            enableDarkMode={slopesParams.enableDarkMode}
+            enableMargins={slopesParams.enableMargins}
+          />
         </InnerWrapper>
 
         <Spacer size={UNIT} />

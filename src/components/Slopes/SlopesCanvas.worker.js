@@ -37,8 +37,8 @@ onmessage = throttle(function({ data }) {
       width: data.width,
       height: data.height,
       context: ctx,
-      background: data.enableDarkMode ? '#111111' : '#FFFFFF',
       lineColor: data.enableDarkMode ? '#FFFFFF' : '#000000',
+      background: 'transparent',
       lineWidth: data.enableDarkMode ? 1.5 : 1,
     });
   } else {
