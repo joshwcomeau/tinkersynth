@@ -166,7 +166,7 @@ export const retraceLines = (polylines, numOfStrokes = 4) => {
 };
 
 /**
- * Given 4 points for a cubic bezier curve, figure out the X/Y values for
+ * Given 3-4 points for a cubic bezier curve, figure out the X/Y values for
  * `t`, a number from 0-1 representing progress.
  */
 export const getValuesForBezierCurve = (

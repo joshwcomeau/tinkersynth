@@ -7,7 +7,7 @@ const runTests = (label, fn, num) => {
     fn(i);
   }
 
-  console.log(`${label}: `, Date.now() - start);
+  console.info(`${label}: `, Date.now() - start);
 };
 
 const numOfTests = 1000000000;

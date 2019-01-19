@@ -84,6 +84,7 @@ const sketch = ({
   amplitudeRatio,
   selfSimilarity,
   polarHoleSize,
+  segmentRatio,
   numOfOctaves = 1,
   seed,
 }) => {
@@ -209,7 +210,7 @@ const sketch = ({
   });
 
   if (enableOcclusion) {
-    lines = lines.map((row, rowIndex) => {
+    const newLines = lines.map((row, rowIndex) => {
       const previousRowIndices = getPossiblyOccludingRowIndices({
         rowIndex,
         rowHeight,
@@ -235,6 +236,27 @@ const sketch = ({
         );
       });
     });
+
+    lines = newLines;
+  }
+
+  if (segmentRatio < 1) {
+    lines.forEach(row => {
+      row.forEach(line => {
+        if (!line) {
+          return;
+        }
+        const [p1, p2] = line;
+
+        const deltaX = p2[0] - p1[0];
+        const deltaY = p2[1] - p1[1];
+
+        line[1] = [
+          p1[0] + deltaX * segmentRatio,
+          p1[1] + deltaY * segmentRatio,
+        ];
+      });
+    });
   }
 
   lines = flatten(lines).filter(line => !!line);
@@ -246,7 +268,7 @@ const sketch = ({
   //
   // The data-munging cost of the `joinLineSegments` call is <1ms,
   // so this is a huge win :D
-  const isMostlyContiguous = perlinRatio === 1;
+  const isMostlyContiguous = perlinRatio === 1 && segmentRatio === 1;
   if (isMostlyContiguous) {
     lines = joinLineSegments(lines);
   }

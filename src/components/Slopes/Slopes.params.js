@@ -11,6 +11,7 @@ import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 import type { Curve } from '../../types';
 
 type InputParameters = {
+  seed: number,
   height: number,
   amplitudeAmount: number,
   perspective: number,
@@ -27,7 +28,9 @@ type InputParameters = {
   octaveAmount: number,
   waterBoilAmount: number,
   ballSize: number,
-  seed: number,
+  segmentWidth: number,
+  enableDarkMode: boolean,
+  enableMargins: boolean,
 };
 
 const transformParameters = ({
@@ -48,6 +51,7 @@ const transformParameters = ({
   personInflateAmount,
   waterBoilAmount,
   ballSize,
+  segmentWidth,
   enableDarkMode,
   enableMargins,
 }: InputParameters) => {
@@ -149,6 +153,8 @@ const transformParameters = ({
 
   const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
 
+  const segmentRatio = segmentWidth / 100;
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -165,6 +171,7 @@ const transformParameters = ({
     omegaRadiusSubtractAmount,
     amplitudeRatio,
     polarHoleSize,
+    segmentRatio,
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,

@@ -40,7 +40,7 @@ onmessage = throttle(function({ data }) {
       context: ctx,
       lineColor: data.enableDarkMode ? COLORS.white : COLORS.gray[900],
       background: 'transparent',
-      lineWidth: 1,
+      lineWidth: 2,
     });
   } else {
     // $FlowIgnore

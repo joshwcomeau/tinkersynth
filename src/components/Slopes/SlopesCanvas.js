@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useContext } from 'react';
 import { Spring } from 'react-spring';
 
 import { COLORS } from '../../constants';
-import { mix, extractTypeFromObject } from '../../utils';
+import { mix, extractTypeFromObject, normalize } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import {
   getScaledCanvasProps,
@@ -36,7 +36,7 @@ const useCanvasDrawing = (
   if (!worker) {
     return;
   }
-
+  ('');
   // NOTE: I'm moving to a "fake" margin, where I just cover up the sides.
   // I'll need to use `canvas-sketch-util` to crop within a specific size,
   // when actually prepping it for printing.
@@ -51,7 +51,11 @@ const useCanvasDrawing = (
   // canvas, so we need more than 1 point per width-pixel to represent it.
   const samplesPerRowWidthMultiplier = mix(1, 0.5, params.polarAmount / 100);
 
-  const samplesPerRow = Math.ceil(width * samplesPerRowWidthMultiplier);
+  const segmentWidthMultiplier = normalize(params.segmentWidth, 0, 100, 0.5, 1);
+
+  const samplesPerRow = Math.ceil(
+    width * samplesPerRowWidthMultiplier * segmentWidthMultiplier
+  );
 
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
