@@ -13,15 +13,15 @@ const getTranslateValue = (ratio, brickId) => {
 
   switch (brickId) {
     case 'red-brick': {
-      offset = normalize(ratio, 0, 1, -3, -30);
+      offset = normalize(ratio, 0, 1, 0, -30);
       break;
     }
     case 'aqua-brick': {
-      offset = normalize(ratio, 0, 1, -3, -20);
+      offset = normalize(ratio, 0, 1, 0, -20);
       break;
     }
     case 'yellow-brick': {
-      offset = normalize(ratio, 0, 1, -3, -10);
+      offset = normalize(ratio, 0, 1, 0, -10);
       break;
     }
   }
@@ -41,27 +41,20 @@ const LegoBrickVisualization = ({ value, size, isAnimated }) => {
 
   return (
     <Wrapper style={{ width: size, height: size, margin: 'auto' }}>
-      <Svg width={size} height={size} viewBox="0 0 48 48">
+      <Svg width={size} height={size} viewBox="0 0 54 54">
         <mask
           id="lego-mask"
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="54"
-          height="54"
+          x="1"
+          y="1"
+          width="52"
+          height="52"
         >
           <rect width="54" height="54" fill="#000000" />
         </mask>
 
-        <g
-          mask="url(#lego-mask)"
-          style={{
-            // For reasons unknown, the bricks aren't centered.
-            // They were in the original SVG export, not sure what happened.
-            transform: 'translateX(-3px)',
-          }}
-        >
+        <g mask="url(#lego-mask)">
           <animated.g
             data-layer-name="yellow-brick"
             style={{
