@@ -37,7 +37,7 @@ const useCanvasDrawing = (
   if (!worker) {
     return;
   }
-  ('');
+
   // NOTE: I'm moving to a "fake" margin, where I just cover up the sides.
   // I'll need to use `canvas-sketch-util` to crop within a specific size,
   // when actually prepping it for printing.
@@ -68,16 +68,6 @@ const useCanvasDrawing = (
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
 
-  // The user can tweak "high-level parameters" like spikyness, perspective,
-  // etc. These values need to be reduced to low-level variables used in
-  // calculation. There is not a 1:1 mapping between them: a single
-  // high-level param might tweak several low-level vars, and the same
-  // variable might be affected by multiple params.
-  const drawingVariables = transformParameters({
-    height,
-    ...params,
-  });
-
   // On mount, set up the worker message-handling
   useEffect(() => {
     if (!canvasRef.current) {
@@ -93,13 +83,15 @@ const useCanvasDrawing = (
       context.scale(devicePixelRatio, devicePixelRatio);
 
       worker.onmessage = function({ data }) {
-        if (!data.lines) {
+        const { lines, ...passedData } = data;
+
+        if (!lines) {
           return;
         }
 
         renderPolylines(
-          data.lines,
-          getRenderOptions(width, height, context, data)
+          lines,
+          getRenderOptions(width, height, context, passedData)
         );
       };
     }
@@ -109,6 +101,16 @@ const useCanvasDrawing = (
   // `memoWhileIgnoring` should ensure that only the pertinent updates cause
   // a re-render.
   useEffect(() => {
+    // The user can tweak "high-level parameters" like spikyness, perspective,
+    // etc. These values need to be reduced to low-level variables used in
+    // calculation. There is not a 1:1 mapping between them: a single
+    // high-level param might tweak several low-level vars, and the same
+    // variable might be affected by multiple params.
+    const drawingVariables = transformParameters({
+      height,
+      ...params,
+    });
+
     let messageData = {
       width,
       height,

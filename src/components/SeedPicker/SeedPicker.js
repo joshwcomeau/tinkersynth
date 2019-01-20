@@ -79,7 +79,7 @@ const Label = styled.label`
 const MainContent = styled.div`
   padding: ${UNIT}px;
   padding-top: 0;
-  padding-right: ${UNIT / 2}px;
+  padding-right: ${UNIT * 0.75}px;
   flex: 1;
   display: flex;
   justify-content: space-between;

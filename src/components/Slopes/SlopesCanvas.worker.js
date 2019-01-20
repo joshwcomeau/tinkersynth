@@ -41,6 +41,6 @@ onmessage = throttle(function({ data }) {
     );
   } else {
     // $FlowIgnore
-    postMessage({ lines });
+    postMessage({ lines, ...data });
   }
 }, 17);

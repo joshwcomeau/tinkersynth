@@ -84,7 +84,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [personInflateAmount, setPersonInflateAmount] = useState(50);
   const [waterBoilAmount, setWaterBoilAmount] = useState(100);
   const [ballSize, setBallSize] = useState(50);
-  const [dotAmount, setDotAmount] = useState(50);
+  const [dotAmount, setDotAmount] = useState(0);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
 

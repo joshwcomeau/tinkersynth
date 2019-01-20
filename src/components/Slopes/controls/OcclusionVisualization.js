@@ -22,7 +22,7 @@ const OcclusionVisualization = ({ width, height, value }: Props) => {
 
   const frontLineOffset = isOccluded ? -90 : -100;
 
-  const backLineOffset = isOccluded ? -55 : -70;
+  const backLineOffset = isOccluded ? -63 : -77;
 
   return (
     <Wrapper style={{ width, height }}>

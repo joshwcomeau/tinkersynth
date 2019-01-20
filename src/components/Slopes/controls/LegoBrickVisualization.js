@@ -13,15 +13,15 @@ const getTranslateValue = (ratio, brickId) => {
 
   switch (brickId) {
     case 'red-brick': {
-      offset = normalize(ratio, 0, 1, 0, -30);
+      offset = normalize(ratio, 0, 1, -3, -30);
       break;
     }
     case 'aqua-brick': {
-      offset = normalize(ratio, 0, 1, 0, -20);
+      offset = normalize(ratio, 0, 1, -3, -20);
       break;
     }
     case 'yellow-brick': {
-      offset = normalize(ratio, 0, 1, 0, -10);
+      offset = normalize(ratio, 0, 1, -3, -10);
       break;
     }
   }

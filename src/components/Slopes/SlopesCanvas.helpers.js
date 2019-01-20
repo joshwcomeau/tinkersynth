@@ -8,6 +8,7 @@ export const getRenderOptions = (
   context: CanvasRenderingContext2D,
   { enableDarkMode, dotRatio }: any
 ) => {
+  console.log({ enableDarkMode, dotRatio });
   // prettier-ignore
   const MAX_WIDTH = 2.5;
   const DEFAULT_WIDTH = 1;
@@ -20,6 +21,8 @@ export const getRenderOptions = (
           1,
           MAX_WIDTH
         );
+
+  console.log(dotRatio, lineWidth);
 
   return {
     width,
