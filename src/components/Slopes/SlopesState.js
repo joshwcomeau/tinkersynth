@@ -125,7 +125,11 @@ export const SlopesProvider = ({ children }: Props) => {
       setWavelength(random(25, 75));
     }
 
-    setOctaveAmount(Math.random() > 0.75 ? getRandomSliderValue() : 0);
+    setDotAmount(Math.random() > 0.75 ? getRandomSliderValue() : 0);
+
+    if (Math.random() > 0.75) {
+      setOctaveAmount(Math.random() > 0.5 ? getRandomSliderValue() : 0);
+    }
 
     // Certain parameters make more sense at one of the extremities, so let's
     // increase the chances of those.

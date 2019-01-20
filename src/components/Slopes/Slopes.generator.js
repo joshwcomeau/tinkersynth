@@ -84,7 +84,7 @@ const sketch = ({
   amplitudeRatio,
   selfSimilarity,
   polarHoleSize,
-  segmentRatio,
+  dotRatio,
   numOfOctaves = 1,
   seed,
 }) => {
@@ -240,7 +240,11 @@ const sketch = ({
     lines = newLines;
   }
 
-  if (segmentRatio < 1) {
+  if (dotRatio !== 0) {
+    // `dotRatio` is linear between 0 and 1, but most of the range isn't that
+    // interesting.
+    const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0, 1);
+
     lines.forEach(row => {
       row.forEach(line => {
         if (!line) {
@@ -252,8 +256,8 @@ const sketch = ({
         const deltaY = p2[1] - p1[1];
 
         line[1] = [
-          p1[0] + deltaX * segmentRatio,
-          p1[1] + deltaY * segmentRatio,
+          p1[0] + deltaX * shiftedDotRatio,
+          p1[1] + deltaY * shiftedDotRatio,
         ];
       });
     });
@@ -268,7 +272,7 @@ const sketch = ({
   //
   // The data-munging cost of the `joinLineSegments` call is <1ms,
   // so this is a huge win :D
-  const isMostlyContiguous = perlinRatio === 1 && segmentRatio === 1;
+  const isMostlyContiguous = perlinRatio === 1 && dotRatio === 1;
   if (isMostlyContiguous) {
     lines = joinLineSegments(lines);
   }

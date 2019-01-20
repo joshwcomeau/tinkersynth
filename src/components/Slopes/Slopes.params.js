@@ -151,24 +151,13 @@ const transformParameters = ({
 
   const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
 
-  // dotAmount -> segmentRatio
+  // dotAmount -> dotRatio
   //
   // This will control a few things:
   // - samplesPerRow, low values = less samples
   // - lineWidth, low values = thicker lines (bigger dots)
   // - The actual segment size, calculated in the generator
-  let segmentRatio = 1 - dotAmount / 100;
-
-  // The first half of the range is pretty uninteresting most of the time,
-  // so we'll put it on a pretty intense curve
-  [, segmentRatio] = getValuesForBezierCurve(
-    {
-      startPoint: [0, 0],
-      controlPoint1: [0, 1.2],
-      endPoint: [1, 1],
-    },
-    segmentRatio
-  );
+  const dotRatio = dotAmount / 100;
 
   return {
     distanceBetweenRows,
@@ -186,7 +175,7 @@ const transformParameters = ({
     omegaRadiusSubtractAmount,
     amplitudeRatio,
     polarHoleSize,
-    segmentRatio,
+    dotRatio,
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,

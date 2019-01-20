@@ -14,6 +14,7 @@ import memoWhileIgnoring from '../../hocs/memo-while-ignoring';
 import transformParameters from './Slopes.params';
 import { SlopesContext } from './SlopesState';
 import Worker from './SlopesCanvas.worker';
+import { getRenderOptions } from './SlopesCanvas.helpers';
 
 let worker;
 if (typeof window !== 'undefined') {
@@ -55,7 +56,7 @@ const useCanvasDrawing = (
   // the samples per row. In combination with tweaking the lineWIdth, this will
   // give us bigger dots, spaced further apart.
   const dotAmountMultiplier = clamp(
-    normalize(params.dotAmount, 80, 100, 1, 0.2),
+    normalize(params.dotAmount, 0, 100, 1, 0.2),
     0,
     1
   );
@@ -96,14 +97,10 @@ const useCanvasDrawing = (
           return;
         }
 
-        renderPolylines(data.lines, {
-          width,
-          height,
-          context,
-          lineColor: data.enableDarkMode ? COLORS.white : COLORS.gray[900],
-          background: 'transparent',
-          lineWidth: 1,
-        });
+        renderPolylines(
+          data.lines,
+          getRenderOptions(width, height, context, data)
+        );
       };
     }
   }, []);

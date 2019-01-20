@@ -3,6 +3,7 @@ import { throttle } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 
 import generator from './Slopes.generator';
+import { getRenderOptions } from './SlopesCanvas.helpers';
 
 // The offscreenCanvas API doesn't like when we try to pass the canvas multiple
 // times between worker and main thread.
@@ -34,14 +35,10 @@ onmessage = throttle(function({ data }) {
       ctx.scale(devicePixelRatio, devicePixelRatio);
     }
 
-    renderPolylines(lines, {
-      width: data.width,
-      height: data.height,
-      context: ctx,
-      lineColor: data.enableDarkMode ? COLORS.white : COLORS.gray[900],
-      background: 'transparent',
-      lineWidth: 1,
-    });
+    renderPolylines(
+      lines,
+      getRenderOptions(data.width, data.height, ctx, data)
+    );
   } else {
     // $FlowIgnore
     postMessage({ lines });
