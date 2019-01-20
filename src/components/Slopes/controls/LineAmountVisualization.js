@@ -21,8 +21,6 @@ const LineAmountVisualization = ({ size, value }: Props) => {
   const padding = 5;
   const innerSize = size - padding * 2 - 6;
 
-  console.log(numOfLines);
-
   return (
     <Wrapper style={{ height: size }}>
       <RetroNumbers

@@ -16,6 +16,7 @@ type InputParameters = {
   height: number,
   amplitudeAmount: number,
   perspective: number,
+  lineAmount: number,
   spikyness: number,
   staticAmount: number,
   polarAmount: number,

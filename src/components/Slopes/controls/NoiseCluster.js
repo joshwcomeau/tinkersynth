@@ -36,7 +36,7 @@ const NoiseCluster = ({
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
-  const sliderHeight = 164;
+  const sliderHeight = 157;
 
   const secondarySliderWidth = 32;
   const secondarySliderPadding = 4;

@@ -10,73 +10,52 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 
 import OcclusionVisualization from './OcclusionVisualization';
-import AmplitudeVisualization from './AmplitudeVisualization';
+import SegmentWidthVisualization from './SegmentWidthVisualization';
 import OctaveVisualization from './OctaveVisualization';
 
 type Props = {
   width: number,
-  wavelength: number,
-  amplitudeAmount: number,
-  octaveAmount: number,
-  setWavelength: (val: number) => void,
-  setAmplitudeAmount: (val: number) => void,
-  setOctaveAmount: (val: number) => void,
+  segmentWidth: number,
+  setSegmentWidth: (val: number) => void,
   isRandomized: boolean,
 };
 
 const LineCluster = ({
-  width,
-  wavelength,
-  amplitudeAmount,
-  octaveAmount,
-  setWavelength,
-  setAmplitudeAmount,
-  setOctaveAmount,
+  columnWidth,
+  segmentWidth,
+  setSegmentWidth,
   isRandomized,
 }) => {
-  const OUTER_BORDER_WIDTH = 1;
-  const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
+  // TODO: change segmentWidth to a word that doesn't end in `width`
 
   return (
     <InstrumentCluster direction="row">
       <TouchSliderIconControl
-        value={amplitudeAmount}
-        updateValue={setAmplitudeAmount}
-        width={innerWidth}
-        height={47}
-        visualizationComponent={AmplitudeVisualization}
+        value={segmentWidth}
+        updateValue={setSegmentWidth}
+        width={columnWidth}
+        height={48}
+        visualizationComponent={SegmentWidthVisualization}
         isAnimated={!isRandomized}
       />
       <Spacer size={UNIT} />
-
-      <ToggleControl
-        width={toggleControlSize}
-        height={toggleControlSize}
-        value={enableOcclusion}
-        updateValue={setEnableOcclusion}
-        visualizationComponent={OcclusionVisualization}
-      />
     </InstrumentCluster>
   );
 };
 
 const OptimizedLineCluster = memoWhileIgnoring(
-  ['setWavelength', 'setAmplitudeAmount', 'setOctaveAmount', 'isRandomized'],
+  ['setSegmentWidth', 'isRandomized'],
   LineCluster
 );
 
-const Container = ({ width }) => {
+const Container = ({ columnWidth }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedLineCluster
-      width={width}
-      wavelength={slopesParams.wavelength}
-      amplitudeAmount={slopesParams.amplitudeAmount}
-      octaveAmount={slopesParams.octaveAmount}
-      setWavelength={slopesParams.setWavelength}
-      setAmplitudeAmount={slopesParams.setAmplitudeAmount}
-      setOctaveAmount={slopesParams.setOctaveAmount}
+      columnWidth={columnWidth}
+      segmentWidth={slopesParams.segmentWidth}
+      setSegmentWidth={slopesParams.setSegmentWidth}
       isRandomized={slopesParams.isRandomized}
     />
   );

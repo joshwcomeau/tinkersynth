@@ -103,6 +103,10 @@ const useOffscreenCanvasIfAvailable = (
 const TouchSlider = (props: Props) => {
   const { value, updateValue, width, height, colorway } = props;
 
+  if (typeof width !== 'number') {
+    throw new Error('Please give TouchSlider an explicit width');
+  }
+
   const [dragging, setDragging] = useState(false);
   const [hoveredValue, setHoveredValue] = useState(null);
 
