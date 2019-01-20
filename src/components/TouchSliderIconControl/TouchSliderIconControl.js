@@ -21,9 +21,9 @@ const TouchSliderIconControl = ({
   updateValue,
   width,
   height,
-  dotSize = 3,
   visualizationComponent,
   isAnimated,
+  ...delegated
 }: Props) => {
   const iconSize = height;
 
@@ -47,7 +47,7 @@ const TouchSliderIconControl = ({
               updateValue={updateValue}
               width={touchSliderWidth}
               height={height}
-              dotSize={dotSize}
+              {...delegated}
             />
           )}
         </Spring>

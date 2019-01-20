@@ -10,6 +10,7 @@ import {
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
+import type { Colorway } from './TouchSlider.helpers';
 
 type Props = {
   value: number,
@@ -18,6 +19,7 @@ type Props = {
   height: number,
   // Aesthetic choices
   dotSize: number,
+  colorway: Colorway,
 };
 
 // All sliders expect values to be between 0 and 100
@@ -66,7 +68,7 @@ const useOffscreenCanvasIfAvailable = (
       return;
     }
 
-    const { dotSize } = props;
+    const { dotSize, colorway } = props;
 
     const { dotCoords, numOfCols } = generateDotCoords(width, height, dotSize);
 
@@ -83,7 +85,7 @@ const useOffscreenCanvasIfAvailable = (
     dotCoords.slice(0, numToDisplay).forEach(([x, y, colIndex], index) => {
       ctx.beginPath();
       ctx.arc(x, y, dotSize / 2, 0, 2 * Math.PI);
-      ctx.fillStyle = getColorForColIndex(colIndex, numOfCols);
+      ctx.fillStyle = getColorForColIndex(colorway, colIndex, numOfCols);
 
       let opacity = 1;
       if (index + 1 > numOfSelectedDots) {
@@ -99,7 +101,7 @@ const useOffscreenCanvasIfAvailable = (
 };
 
 const TouchSlider = (props: Props) => {
-  const { value, updateValue, width, height } = props;
+  const { value, updateValue, width, height, colorway } = props;
 
   const [dragging, setDragging] = useState(false);
   const [hoveredValue, setHoveredValue] = useState(null);
@@ -188,6 +190,11 @@ const TouchSlider = (props: Props) => {
       />
     </div>
   );
+};
+
+TouchSlider.defaultProps = {
+  dotSize: 3,
+  colorway: 'cool',
 };
 
 const Canvas = styled.canvas`

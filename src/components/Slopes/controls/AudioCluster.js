@@ -46,6 +46,7 @@ const AudioCluster = ({
         height={47}
         visualizationComponent={AmplitudeVisualization}
         isAnimated={!isRandomized}
+        colorway="red"
       />
       <Spacer size={UNIT} />
 
@@ -56,6 +57,7 @@ const AudioCluster = ({
         height={47}
         visualizationComponent={WavelengthVisualization}
         isAnimated={!isRandomized}
+        colorway="yellow"
       />
       <Spacer size={UNIT} />
 
@@ -66,6 +68,7 @@ const AudioCluster = ({
         height={47}
         visualizationComponent={OctaveVisualization}
         isAnimated={!isRandomized}
+        colorway="blue"
       />
     </InstrumentCluster>
   );

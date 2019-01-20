@@ -33,12 +33,50 @@ export const generateDotCoords = (
   return { dotCoords, numOfCols };
 };
 
-export const getColorForColIndex = (colIndex: number, numOfCols: number) => {
+export type Colorway = 'cool' | 'red' | 'yellow' | 'blue';
+
+export const getColorForColIndex = (
+  colorway: Colorway,
+  colIndex: number,
+  numOfCols: number
+) => {
+  let hue, saturation, brightness;
+
   const colRatio = colIndex / numOfCols;
 
-  const hue = roundToNearest(normalize(colRatio, 0, 1, 210, 50), 20);
-  const saturation = Math.round(normalize(colRatio, 0, 1, 80, 90));
-  const brightness = Math.round(normalize(colRatio, 0, 1, 90, 100));
+  const hueStep = 20;
+
+  switch (colorway) {
+    case 'cool': {
+      hue = roundToNearest(normalize(colRatio, 0, 1, 210, 50), hueStep);
+      saturation = Math.round(normalize(colRatio, 0, 1, 80, 90));
+      brightness = Math.round(normalize(colRatio, 0, 1, 90, 100));
+
+      break;
+    }
+
+    case 'red': {
+      hue = roundToNearest(normalize(colRatio, 0, 1, 0, 60), 15);
+      saturation = Math.round(normalize(colRatio, 0, 1, 100, 85));
+      brightness = Math.round(normalize(colRatio, 0, 1, 100, 90));
+
+      break;
+    }
+    case 'yellow': {
+      hue = roundToNearest(normalize(colRatio, 0, 1, 60, 120), 20);
+      saturation = Math.round(normalize(colRatio, 0, 1, 100, 100));
+      brightness = Math.round(normalize(colRatio, 0, 1, 100, 100));
+
+      break;
+    }
+    case 'blue': {
+      hue = roundToNearest(normalize(colRatio, 0, 1, 180, 240), 20);
+      saturation = Math.round(normalize(colRatio, 0, 1, 100, 70));
+      brightness = Math.round(normalize(colRatio, 0, 1, 85, 100));
+
+      break;
+    }
+  }
 
   return prepColor({ hue, saturation, brightness });
 };
