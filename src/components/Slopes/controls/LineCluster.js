@@ -34,7 +34,7 @@ const LineCluster = ({
         value={segmentWidth}
         updateValue={setSegmentWidth}
         width={columnWidth}
-        height={48}
+        height={54}
         visualizationComponent={SegmentWidthVisualization}
         isAnimated={!isRandomized}
       />
