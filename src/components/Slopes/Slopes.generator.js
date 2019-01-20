@@ -243,7 +243,7 @@ const sketch = ({
   if (dotRatio !== 0) {
     // `dotRatio` is linear between 0 and 1, but most of the range isn't that
     // interesting.
-    const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0, 1);
+    const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0.01, 1);
 
     lines.forEach(row => {
       row.forEach(line => {
