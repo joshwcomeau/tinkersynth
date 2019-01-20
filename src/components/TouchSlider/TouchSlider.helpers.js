@@ -14,17 +14,36 @@ export const generateDotCoords = (
 ) => {
   let dotCoords = [];
 
+  const verticalPadding = 8;
+  const horizontalPadding = 10;
+
   const dotSpacing = Math.round(dotSize);
 
   const numOfCols = Math.floor(width / (dotSize + dotSpacing)) - 2;
-  const numOfRows = Math.floor(height / (dotSize + dotSpacing)) - 1;
+  let numOfRows = Math.floor(height / (dotSize + dotSpacing)) - 1;
+
+  // HACK: I've noticed sometimes we don't keave enough bottom padding.
+  // It's better to have 1 fewer row than to try and cram it in.
+  // There's certainly a more elegant solution than this, though.
+  let leftoverSpacing = height - dotSize * numOfRows - dotSpacing * numOfRows;
+  if (leftoverSpacing < verticalPadding) {
+    numOfRows -= 1;
+    leftoverSpacing += dotSize + dotSpacing;
+  }
+
+  // Center the dots vertically
+  // This is necessary since we just start adding dots at `verticalPadding`,
+  // and there can be significantly different space between the last dot and
+  // the bottom.
+  // Not entirely sure why I need to subtract half of the dotSize, but it works.
+  const verticalOffset = (verticalPadding + leftoverSpacing) / 2 - dotSize / 2;
 
   range(numOfCols).map(colIndex =>
     range(numOfRows)
       .reverse()
       .forEach(rowIndex => {
-        const x = colIndex * (dotSize + dotSpacing) + 10;
-        const y = rowIndex * (dotSize + dotSpacing) + 8;
+        const x = colIndex * (dotSize + dotSpacing) + horizontalPadding;
+        const y = rowIndex * (dotSize + dotSpacing) + verticalOffset;
 
         dotCoords.push([x, y, colIndex, rowIndex]);
       })
