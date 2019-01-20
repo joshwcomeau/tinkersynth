@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useContext } from 'react';
 import { Spring } from 'react-spring';
 
 import { COLORS } from '../../constants';
-import { mix, extractTypeFromObject, normalize } from '../../utils';
+import { clamp, mix, extractTypeFromObject, normalize } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import {
   getScaledCanvasProps,
@@ -51,10 +51,17 @@ const useCanvasDrawing = (
   // canvas, so we need more than 1 point per width-pixel to represent it.
   const samplesPerRowWidthMultiplier = mix(1, 0.5, params.polarAmount / 100);
 
-  const segmentWidthMultiplier = normalize(params.segmentWidth, 0, 100, 0.5, 1);
+  // When our `dotAmount` value gets really low, we actually want to decrease
+  // the samples per row. In combination with tweaking the lineWIdth, this will
+  // give us bigger dots, spaced further apart.
+  const dotAmountMultiplier = clamp(
+    normalize(params.dotAmount, 80, 100, 1, 0.2),
+    0,
+    1
+  );
 
   const samplesPerRow = Math.ceil(
-    width * samplesPerRowWidthMultiplier * segmentWidthMultiplier
+    width * samplesPerRowWidthMultiplier * dotAmountMultiplier
   );
 
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
@@ -171,7 +178,7 @@ const OptimizedSlopesCanvas = memoWhileIgnoring(
     'setWavelength',
     'setWaterBoilAmount',
     'setBallSize',
-    'setSegmentWidth',
+    'setdotAmount',
     'randomize',
   ],
   SlopesCanvas

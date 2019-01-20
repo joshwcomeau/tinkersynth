@@ -10,32 +10,30 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 
 import OcclusionVisualization from './OcclusionVisualization';
-import SegmentWidthVisualization from './SegmentWidthVisualization';
+import LegoBrickVisualization from './LegoBrickVisualization';
 import OctaveVisualization from './OctaveVisualization';
 
 type Props = {
   width: number,
-  segmentWidth: number,
-  setSegmentWidth: (val: number) => void,
+  dotAmount: number,
+  setDotAmount: (val: number) => void,
   isRandomized: boolean,
 };
 
 const LineCluster = ({
   columnWidth,
-  segmentWidth,
-  setSegmentWidth,
+  dotAmount,
+  setDotAmount,
   isRandomized,
 }) => {
-  // TODO: change segmentWidth to a word that doesn't end in `width`
-
   return (
     <InstrumentCluster direction="row">
       <TouchSliderIconControl
-        value={segmentWidth}
-        updateValue={setSegmentWidth}
+        value={dotAmount}
+        updateValue={setDotAmount}
         width={columnWidth}
         height={54}
-        visualizationComponent={SegmentWidthVisualization}
+        visualizationComponent={LegoBrickVisualization}
         isAnimated={!isRandomized}
       />
       <Spacer size={UNIT} />
@@ -44,7 +42,7 @@ const LineCluster = ({
 };
 
 const OptimizedLineCluster = memoWhileIgnoring(
-  ['setSegmentWidth', 'isRandomized'],
+  ['setDotAmount', 'isRandomized'],
   LineCluster
 );
 
@@ -54,8 +52,8 @@ const Container = ({ columnWidth }) => {
   return (
     <OptimizedLineCluster
       columnWidth={columnWidth}
-      segmentWidth={slopesParams.segmentWidth}
-      setSegmentWidth={slopesParams.setSegmentWidth}
+      dotAmount={slopesParams.dotAmount}
+      setDotAmount={slopesParams.setDotAmount}
       isRandomized={slopesParams.isRandomized}
     />
   );

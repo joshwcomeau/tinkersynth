@@ -84,7 +84,7 @@ export const SlopesProvider = ({ children }: Props) => {
   const [personInflateAmount, setPersonInflateAmount] = useState(50);
   const [waterBoilAmount, setWaterBoilAmount] = useState(100);
   const [ballSize, setBallSize] = useState(50);
-  const [segmentWidth, setSegmentWidth] = useState(50);
+  const [dotAmount, setDotAmount] = useState(50);
 
   const [enableOcclusion, setEnableOcclusion] = useState(true);
 
@@ -224,7 +224,7 @@ export const SlopesProvider = ({ children }: Props) => {
         wavelength,
         waterBoilAmount,
         ballSize,
-        segmentWidth,
+        dotAmount,
         disabledParams,
         setSeed: wrappedSetter(setSeed),
         toggleDarkMode: wrappedSetter(toggleDarkMode),
@@ -244,7 +244,7 @@ export const SlopesProvider = ({ children }: Props) => {
         setWavelength: wrappedSetter(setWavelength),
         setWaterBoilAmount: wrappedSetter(setWaterBoilAmount),
         setBallSize: wrappedSetter(setBallSize),
-        setSegmentWidth: wrappedSetter(setSegmentWidth),
+        setDotAmount: wrappedSetter(setDotAmount),
         randomize,
         isRandomized: isRandomized.current,
       }}

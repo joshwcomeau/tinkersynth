@@ -29,7 +29,7 @@ const getTranslateValue = (ratio, brickId) => {
   return `translateY(${offset}px)`;
 };
 
-const SegmentWidthVisualization = ({ value, size, isAnimated }) => {
+const LegoBrickVisualization = ({ value, size, isAnimated }) => {
   const spring = useSpring({
     ratio: value / 100,
     config: {
@@ -388,4 +388,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default SegmentWidthVisualization;
+export default LegoBrickVisualization;
