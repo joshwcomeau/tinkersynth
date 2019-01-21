@@ -12,8 +12,8 @@ export default styled.button`
   cursor: pointer;
 
   &:focus {
-    outline: auto;
-    outline-color: ${COLORS.pink[300]};
+    outline: 2px solid ${COLORS.pink[300]};
+    outline-offset: 2px;
   }
 
   &:focus:not(.focus-visible) {

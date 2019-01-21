@@ -10,6 +10,7 @@ import {
 } from '../../constants';
 
 import Spacer from '../Spacer';
+import Button from '../Button';
 import SlopesCanvasActions from './SlopesCanvasActions';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
 import { SlopesContext } from './SlopesState';
@@ -27,6 +28,7 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
     <Wrapper>
       <Machine>
         <TopPanel />
+
         <InnerWrapper>
           <ChildWrapper
             style={{
@@ -52,7 +54,7 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
             <SlopesCanvasActions />
           </Toggles>
 
-          <div style={{ width: 38, height: 38, background: 'green' }} />
+          <Button color={COLORS.blue[500]}>Purchase</Button>
         </Footer>
       </Machine>
     </Wrapper>

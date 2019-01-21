@@ -28,7 +28,11 @@ const Engraving = () => (
 
 const Note = styled.div`
   flex: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
   color: ${COLORS.gray[400]};
   line-height: 1.3;
   text-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.5),
@@ -36,8 +40,7 @@ const Note = styled.div`
 `;
 
 const FirstLine = styled.div`
-  margin-bottom: ${UNIT * 1.5}px;
-  font-size: 13px;
+  font-size: 16px;
 `;
 
 const SecondLine = styled.div`

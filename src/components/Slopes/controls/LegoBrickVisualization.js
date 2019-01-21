@@ -46,10 +46,10 @@ const LegoBrickVisualization = ({ value, size, isAnimated }) => {
           id="lego-mask"
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
-          x="1"
-          y="1"
-          width="52"
-          height="52"
+          x="2"
+          y="2"
+          width="50"
+          height="50"
         >
           <rect width="54" height="54" fill="#000000" />
         </mask>

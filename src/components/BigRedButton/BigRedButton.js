@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { COLORS } from '../../constants';
 
 import Svg from '../Svg';
+import UnstyledButton from '../UnstyledButton';
 
 const BigRedButton = ({ size = 40, handlePress }) => {
   const [isActive, setIsActive] = useState(false);
@@ -23,7 +24,6 @@ const BigRedButton = ({ size = 40, handlePress }) => {
       onKeyUp={ev => {
         if (ev.key === 'Enter') {
           setIsActive(false);
-          handlePress();
         }
       }}
     >
@@ -197,25 +197,9 @@ const BigRedButton = ({ size = 40, handlePress }) => {
   );
 };
 
-const Button = styled.button`
-  all: unset;
-  display: block;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+const Button = styled(UnstyledButton)`
   border-radius: 100px;
   border: 4px solid white;
-
-  &:focus {
-    outline: auto;
-    outline-color: ${COLORS.pink[300]};
-  }
-
-  &:focus:not(.focus-visible) {
-    outline: none;
-  }
 `;
 
 export default BigRedButton;
