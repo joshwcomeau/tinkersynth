@@ -8,6 +8,7 @@ import TouchSliderIconControl from '../../TouchSliderIconControl';
 import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 
 import WavelengthVisualization from './WavelengthVisualization';
 import AmplitudeVisualization from './AmplitudeVisualization';
@@ -18,6 +19,9 @@ type Props = {
   wavelength: number,
   amplitudeAmount: number,
   octaveAmount: number,
+  isWavelengthDisabled: boolean,
+  isAmplitudeAmountDisabled: boolean,
+  isOctaveAmountDisabled: boolean,
   setWavelength: (val: number) => void,
   setAmplitudeAmount: (val: number) => void,
   setOctaveAmount: (val: number) => void,
@@ -32,6 +36,9 @@ const AudioCluster = ({
   setWavelength,
   setAmplitudeAmount,
   setOctaveAmount,
+  isWavelengthDisabled,
+  isAmplitudeAmountDisabled,
+  isOctaveAmountDisabled,
   isRandomized,
 }) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -39,37 +46,57 @@ const AudioCluster = ({
 
   return (
     <InstrumentCluster direction="column">
-      <TouchSliderIconControl
-        value={amplitudeAmount}
-        updateValue={setAmplitudeAmount}
-        width={innerWidth}
-        height={47}
-        visualizationComponent={AmplitudeVisualization}
-        isAnimated={!isRandomized}
-        colorway="red"
-      />
+      <ControlCompartment
+        orientation="horizontal"
+        numOfDoors={1}
+        isDisabled={isAmplitudeAmountDisabled}
+      >
+        <TouchSliderIconControl
+          value={amplitudeAmount}
+          updateValue={setAmplitudeAmount}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={AmplitudeVisualization}
+          isAnimated={!isRandomized}
+          colorway="red"
+        />
+      </ControlCompartment>
+
       <Spacer size={UNIT} />
 
-      <TouchSliderIconControl
-        value={wavelength}
-        updateValue={setWavelength}
-        width={innerWidth}
-        height={47}
-        visualizationComponent={WavelengthVisualization}
-        isAnimated={!isRandomized}
-        colorway="yellow"
-      />
+      <ControlCompartment
+        orientation="horizontal"
+        numOfDoors={1}
+        isDisabled={isWavelengthDisabled}
+      >
+        <TouchSliderIconControl
+          value={wavelength}
+          updateValue={setWavelength}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={WavelengthVisualization}
+          isAnimated={!isRandomized}
+          colorway="yellow"
+        />
+      </ControlCompartment>
+
       <Spacer size={UNIT} />
 
-      <TouchSliderIconControl
-        value={octaveAmount}
-        updateValue={setOctaveAmount}
-        width={innerWidth}
-        height={47}
-        visualizationComponent={OctaveVisualization}
-        isAnimated={!isRandomized}
-        colorway="blue"
-      />
+      <ControlCompartment
+        orientation="horizontal"
+        numOfDoors={1}
+        isDisabled={isOctaveAmountDisabled}
+      >
+        <TouchSliderIconControl
+          value={octaveAmount}
+          updateValue={setOctaveAmount}
+          width={innerWidth}
+          height={47}
+          visualizationComponent={OctaveVisualization}
+          isAnimated={!isRandomized}
+          colorway="blue"
+        />
+      </ControlCompartment>
     </InstrumentCluster>
   );
 };
@@ -91,6 +118,9 @@ const Container = ({ width }) => {
       setWavelength={slopesParams.setWavelength}
       setAmplitudeAmount={slopesParams.setAmplitudeAmount}
       setOctaveAmount={slopesParams.setOctaveAmount}
+      isWavelengthDisabled={slopesParams.disabledParams.wavelength}
+      isAmplitudeAmountDisabled={slopesParams.disabledParams.amplitudeAmount}
+      isOctaveAmountDisabled={slopesParams.disabledParams.octaveAmount}
       isRandomized={slopesParams.isRandomized}
     />
   );

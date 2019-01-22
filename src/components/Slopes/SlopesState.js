@@ -205,6 +205,9 @@ export const SlopesProvider = ({ children }: Props) => {
   // it controls the size of the polar hole.
   const disabledParams = {
     ballSize: polarAmount === 0,
+    amplitudeAmount: splitUniverse === 100,
+    octaveAmount: splitUniverse === 100,
+    wavelength: splitUniverse === 100,
     waterBoilAmount: splitUniverse === 100,
   };
 

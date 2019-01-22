@@ -7,19 +7,22 @@ import { COLORS } from '../../constants';
 
 type Props = {
   orientation: 'horizontal' | 'vertical',
+  numOfDoors?: 1 | 2,
   isDisabled: boolean,
+  children: React$Node,
 };
 
-const getDoorTranslateString = (offset, orientation, doorIndex) => {
+const RADIUS = '3px';
+
+const getDoorTranslateString = (offset, orientation, numOfDoors, doorIndex) => {
   const translate = orientation === 'horizontal' ? 'translateY' : 'translateX';
+
   const doorSpecificOffset = doorIndex === 0 ? offset * -1 : offset;
 
   return `${translate}(${doorSpecificOffset}%)`;
 };
 
 const getDoorBorderRadius = (orientation, doorIndex) => {
-  const RADIUS = '4px';
-
   return orientation === 'horizontal'
     ? doorIndex === 0
       ? `${RADIUS} ${RADIUS} 0 0`
@@ -29,7 +32,12 @@ const getDoorBorderRadius = (orientation, doorIndex) => {
     : `0 ${RADIUS} ${RADIUS} 0`;
 };
 
-const ControlCompartment = ({ orientation, isDisabled, children }: Props) => {
+const ControlCompartment = ({
+  orientation,
+  isDisabled,
+  numOfDoors = 2,
+  children,
+}: Props) => {
   const wrapperRef = useRef(null);
 
   const doorSpring = useSpring({
@@ -45,7 +53,7 @@ const ControlCompartment = ({ orientation, isDisabled, children }: Props) => {
     opacity: isDisabled ? 1 : 0,
     config: {
       stiffness: 20,
-      friction: 30,
+      friction: 40,
     },
   });
 
@@ -60,23 +68,26 @@ const ControlCompartment = ({ orientation, isDisabled, children }: Props) => {
         <FirstDoor
           style={{
             borderRadius: getDoorBorderRadius(orientation, 0),
+            borderBottomColor: numOfDoors === 2 && COLORS.gray[500],
             transform: doorSpring.offset.interpolate(offset =>
-              getDoorTranslateString(offset, orientation, 0)
+              getDoorTranslateString(offset, orientation, numOfDoors, 0)
             ),
           }}
         >
           Control Disabled
         </FirstDoor>
-        <LastDoor
-          style={{
-            borderRadius: getDoorBorderRadius(orientation, 1),
-            transform: doorSpring.offset.interpolate(offset =>
-              getDoorTranslateString(offset, orientation, 1)
-            ),
-          }}
-        >
-          {/* TODO */}
-        </LastDoor>
+        {numOfDoors === 2 && (
+          <LastDoor
+            style={{
+              borderRadius: getDoorBorderRadius(orientation, 1),
+              transform: doorSpring.offset.interpolate(offset =>
+                getDoorTranslateString(offset, orientation, numOfDoors, 1)
+              ),
+            }}
+          >
+            {/* TODO */}
+          </LastDoor>
+        )}
       </Doors>
 
       <ChildrenShadow
@@ -111,6 +122,7 @@ const Doors = styled.div`
   bottom: 0;
   overflow: hidden;
   display: flex;
+  border-radius: ${RADIUS};
   flex-direction: ${props =>
     props.orientation === 'horizontal' ? 'column' : 'row'};
 `;
@@ -129,7 +141,6 @@ const FirstDoor = styled(Door)`
   font-weight: 600;
   color: ${COLORS.gray[500]};
   text-transform: uppercase;
-  border-bottom-color: ${COLORS.gray[500]};
 `;
 const LastDoor = styled(Door)`
   display: flex;

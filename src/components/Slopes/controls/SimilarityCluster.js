@@ -7,9 +7,9 @@ import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import TouchSliderIconControl from '../../TouchSliderIconControl';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 
 import SimilarityVisualization from './SimilarityVisualization';
-import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 
 type Props = {
   width: number,
