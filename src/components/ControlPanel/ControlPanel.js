@@ -101,7 +101,7 @@ const Shadow = styled.div`
   opacity: 0.75;
 `;
 
-const FOOT_HEIGHT = 14;
+const FOOT_HEIGHT = 16;
 const FOOT_WIDTH = 30;
 
 const Feet = styled.div`
@@ -119,8 +119,17 @@ const Feet = styled.div`
 const Foot = styled.div`
   height: ${FOOT_HEIGHT}px;
   width: ${FOOT_WIDTH}px;
-  background: linear-gradient(0deg, #333, #333);
-  border-radius: 0 0 7px 7px;
+  /* prettier-ignore */
+  background:
+    linear-gradient(
+      90deg,
+      #888,
+      #aaa,
+      #aaa,
+      #888
+    );
+  border-radius: 0 0 4px 4px;
+  box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 `;
 
 export default ControlPanel;
