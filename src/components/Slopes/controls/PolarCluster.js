@@ -124,11 +124,11 @@ const Container = ({ width }) => {
       setPolarAmount={slopesParams.setPolarAmount}
       ballSize={slopesParams.ballSize}
       setBallSize={slopesParams.setBallSize}
-      disabledParams={slopesParams.disabledParams}
       omega={slopesParams.omega}
       setOmega={slopesParams.setOmega}
       splitUniverse={slopesParams.splitUniverse}
       setSplitUniverse={slopesParams.setSplitUniverse}
+      disabledParams={slopesParams.disabledParams}
       isRandomized={slopesParams.isRandomized}
     />
   );

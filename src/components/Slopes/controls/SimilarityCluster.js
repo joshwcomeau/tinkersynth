@@ -9,11 +9,13 @@ import { InstrumentCluster } from '../../ControlPanel';
 import TouchSliderIconControl from '../../TouchSliderIconControl';
 
 import SimilarityVisualization from './SimilarityVisualization';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 
 type Props = {
   width: number,
   waterBoilAmount: number,
   setWaterBoilAmount: (val: number) => void,
+  isWaterBoilAmountDisabled: boolean,
   isRandomized: boolean,
 };
 
@@ -21,6 +23,7 @@ const SimilarityCluster = ({
   width,
   waterBoilAmount,
   setWaterBoilAmount,
+  isWaterBoilAmountDisabled,
   isRandomized,
 }: Props) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -28,20 +31,25 @@ const SimilarityCluster = ({
 
   return (
     <InstrumentCluster>
-      <TouchSliderIconControl
-        value={waterBoilAmount}
-        updateValue={setWaterBoilAmount}
-        width={innerWidth}
-        height={40}
-        visualizationComponent={SimilarityVisualization}
-        isAnimated={!isRandomized}
-      />
+      <ControlCompartment
+        orientation="horizontal"
+        isDisabled={isWaterBoilAmountDisabled}
+      >
+        <TouchSliderIconControl
+          value={waterBoilAmount}
+          updateValue={setWaterBoilAmount}
+          width={innerWidth}
+          height={40}
+          visualizationComponent={SimilarityVisualization}
+          isAnimated={!isRandomized}
+        />
+      </ControlCompartment>
     </InstrumentCluster>
   );
 };
 
 const OptimizedSimilarityCluster = memoWhileIgnoring(
-  ['setWaterBoilAmount', 'isRandomized'],
+  ['setWaterBoilAmount', 'disabledParams', 'isRandomized'],
   SimilarityCluster
 );
 
@@ -53,6 +61,7 @@ const Container = ({ width }) => {
       width={width}
       waterBoilAmount={slopesParams.waterBoilAmount}
       setWaterBoilAmount={slopesParams.setWaterBoilAmount}
+      isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
       isRandomized={slopesParams.isRandomized}
     />
   );
