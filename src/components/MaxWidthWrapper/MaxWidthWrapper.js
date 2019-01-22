@@ -25,7 +25,7 @@ const MaxWidthWrapper = styled.div`
   }
 
   @media ${BREAKPOINTS.lgMin} {
-    max-width: ${BREAKPOINT_SIZES.lg + 'px'};
+    max-width: ${props => props.maxWidth || BREAKPOINT_SIZES.lg + 'px'};
   }
 `;
 
