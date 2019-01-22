@@ -14,6 +14,11 @@ type Props = {
 
 const RADIUS = '3px';
 
+const verticalTextStyles = {
+  writingMode: 'vertical-rl',
+  transform: 'rotate(180deg)',
+};
+
 const getDoorTranslateString = (offset, orientation, numOfDoors, doorIndex) => {
   const translate = orientation === 'horizontal' ? 'translateY' : 'translateX';
 
@@ -74,7 +79,9 @@ const ControlCompartment = ({
             ),
           }}
         >
-          Control Disabled
+          <span style={orientation === 'vertical' ? verticalTextStyles : {}}>
+            Control Disabled
+          </span>
         </FirstDoor>
         {numOfDoors === 2 && (
           <LastDoor

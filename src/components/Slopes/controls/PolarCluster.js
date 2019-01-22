@@ -9,6 +9,8 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SliderVideoControl from '../../SliderVideoControl';
 import TouchSliderIconControl from '../../TouchSliderIconControl';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
+
 import PolarAmountVisualization from './PolarAmountVisualization';
 import BallSizeVisualization from './BallSizeVisualization';
 import OmegaVisualization from './OmegaVisualization';
@@ -18,19 +20,20 @@ import Spacer from '../../Spacer';
 
 type Props = {
   width: number,
+  isBallSizeDisabled: boolean,
 };
 
 const PolarCluster = ({
   width,
   polarAmount,
-  setPolarAmount,
   ballSize,
-  setBallSize,
-  disabledParams,
   omega,
-  setOmega,
   splitUniverse,
+  setPolarAmount,
+  setBallSize,
+  setOmega,
   setSplitUniverse,
+  isBallSizeDisabled,
   isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
@@ -56,17 +59,22 @@ const PolarCluster = ({
 
         <Spacer size={UNIT} />
 
-        <SliderIconControl
-          width={polarHoleSliderWidth}
-          height={sliderHeight}
-          padding={polarHoleSliderPadding}
-          value={ballSize}
-          updateValue={setBallSize}
-          visualizationComponent={BallSizeVisualization}
-          numOfNotches={14}
-          isDisabled={disabledParams.ballSize}
-          isAnimated={!isRandomized}
-        />
+        <ControlCompartment
+          orientation="vertical"
+          numOfDoors={1}
+          isDisabled={isBallSizeDisabled}
+        >
+          <SliderIconControl
+            width={polarHoleSliderWidth}
+            height={sliderHeight}
+            padding={polarHoleSliderPadding}
+            value={ballSize}
+            updateValue={setBallSize}
+            visualizationComponent={BallSizeVisualization}
+            numOfNotches={14}
+            isAnimated={!isRandomized}
+          />
+        </ControlCompartment>
       </Row>
 
       <Spacer size={UNIT} />
@@ -108,7 +116,6 @@ const OptimizedPolarCluster = memoWhileIgnoring(
     'setBallSize',
     'setOmega',
     'setSplitUniverse',
-    'disabledParams',
     'isRandomized',
   ],
   PolarCluster
@@ -128,7 +135,7 @@ const Container = ({ width }) => {
       setOmega={slopesParams.setOmega}
       splitUniverse={slopesParams.splitUniverse}
       setSplitUniverse={slopesParams.setSplitUniverse}
-      disabledParams={slopesParams.disabledParams}
+      isBallSizeDisabled={slopesParams.disabledParams.ballSize}
       isRandomized={slopesParams.isRandomized}
     />
   );
