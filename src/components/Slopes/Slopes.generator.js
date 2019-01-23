@@ -397,7 +397,8 @@ const getSampleCoordinates = (
   const cartesianY = normalize(value, -1, 1, -rowHeight, rowHeight) + rowOffset;
 
   const tangentY =
-    Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2) * rowOffset;
+    Math.tan((sampleIndex / samplesPerRow) * Math.PI * 2 * polarTanRatio * 2) *
+    rowOffset;
 
   const cartesianPoint = [
     sampleIndex * distanceBetweenSamples + horizontalMargin,

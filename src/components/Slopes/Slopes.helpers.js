@@ -384,12 +384,13 @@ export const plotAsPolarCoordinate = ({
 
   let [x, y] = convertPolarToCartesian(polarPoint);
 
-  // `polarTanRatio` and `polarTanMultiplier` use Math.tan instead of Math.sin
-  // for calculating the polar-to-cartesian values for Y. This creates a
-  // "Split universe" effect where lines divide the left and right halves.
-  const splitUniverseY = radius * Math.tan(theta) * polarTanMultiplier;
+  // TODO: This is really cool, but maybe not as good as without it?
+  // // `polarTanRatio` and `polarTanMultiplier` use Math.tan instead of Math.sin
+  // // for calculating the polar-to-cartesian values for Y. This creates a
+  // // "Split universe" effect where lines divide the left and right halves.
+  // const splitUniverseY = radius * Math.tan(theta) * polarTanMultiplier;
 
-  y = mix(splitUniverseY, y, polarTanRatio);
+  // y = mix(splitUniverseY, y, polarTanRatio);
 
   const centeredPolarPoint = [x + width / 2, y + height / 2];
 
