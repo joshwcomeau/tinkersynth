@@ -157,6 +157,9 @@ const reducer = (state, action) => {
   }
 };
 
+export type ToggleParameter = (parameterName: string) => void;
+export type TweakParameter = (key: string, value: number) => void;
+
 export const SlopesProvider = ({ children }: Props) => {
   // OK this provider does _a lot_. Let's break it down.
 
@@ -190,11 +193,20 @@ export const SlopesProvider = ({ children }: Props) => {
     };
   }, []);
 
-  const toggleParameter = parameterName =>
+  // ACTIONS
+  const toggleParameter = useRef(parameterName =>
     dispatch({
       type: 'TOGGLE_PARAMETER',
       parameterName,
-    });
+    })
+  );
+
+  const tweakParameter = useRef((key, value) =>
+    dispatch({
+      type: 'TWEAK_PARAMETER',
+      payload: { [key]: value },
+    })
+  );
 
   return (
     <SlopesContext.Provider
@@ -223,11 +235,11 @@ export const SlopesProvider = ({ children }: Props) => {
         ballSize: state.parameters.ballSize,
         dotAmount: state.parameters.dotAmount,
 
-        toggleParameter,
+        toggleParameter: toggleParameter.current,
+        tweakParameter: tweakParameter.current,
 
         toggleDarkMode: () => toggleParameter('enableDarkMode'),
         toggleMargins: () => toggleParameter('enableMargins'),
-        toggleOcclusion: () => toggleParameter('enableOcclusion'),
         setSeed: seed =>
           dispatch({ type: 'TWEAK_PARAMETER', payload: { seed } }),
         setAmplitudeAmount: amplitudeAmount =>

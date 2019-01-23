@@ -13,21 +13,23 @@ import { InstrumentCluster } from '../../ControlPanel';
 import OcclusionVisualization from './OcclusionVisualization';
 import LegoBrickVisualization from './LegoBrickVisualization';
 
+import type { ToggleParameter, TweakParameter } from '../SlopesState';
+
 type Props = {
   width: number,
   dotAmount: number,
-  setDotAmount: (val: number) => void,
   enableOcclusion: boolean,
-  toggleOcclusion: (val: boolean) => void,
+  toggleParameter: ToggleParameter,
+  tweakParameter: TweakParameter,
   isRandomized: boolean,
 };
 
 const LineCluster = ({
   columnWidth,
   dotAmount,
-  setDotAmount,
   enableOcclusion,
-  toggleOcclusion,
+  toggleParameter,
+  tweakParameter,
   isRandomized,
 }) => {
   const rowHeight = 54;
@@ -39,7 +41,7 @@ const LineCluster = ({
     <InstrumentCluster direction="row">
       <TouchSliderIconControl
         value={dotAmount}
-        updateValue={setDotAmount}
+        updateValue={val => tweakParameter('dotAmount', val)}
         width={innerWidth}
         height={54}
         visualizationComponent={LegoBrickVisualization}
@@ -50,17 +52,14 @@ const LineCluster = ({
         width={rowHeight}
         height={rowHeight}
         value={enableOcclusion}
-        updateValue={toggleOcclusion}
+        updateValue={() => toggleParameter('enableOcclusion')}
         visualizationComponent={OcclusionVisualization}
       />
     </InstrumentCluster>
   );
 };
 
-const OptimizedLineCluster = memoWhileIgnoring(
-  ['setDotAmount', 'toggleOcclusion', 'isRandomized'],
-  LineCluster
-);
+const OptimizedLineCluster = React.memo(LineCluster);
 
 const LineClusterContainer = ({ columnWidth }) => {
   const slopesParams = useContext(SlopesContext);
@@ -69,9 +68,9 @@ const LineClusterContainer = ({ columnWidth }) => {
     <OptimizedLineCluster
       columnWidth={columnWidth}
       dotAmount={slopesParams.dotAmount}
-      setDotAmount={slopesParams.setDotAmount}
       enableOcclusion={slopesParams.enableOcclusion}
-      toggleOcclusion={slopesParams.toggleOcclusion}
+      toggleParameter={slopesParams.toggleParameter}
+      tweakParameter={slopesParams.tweakParameter}
       isRandomized={slopesParams.isRandomized}
     />
   );
