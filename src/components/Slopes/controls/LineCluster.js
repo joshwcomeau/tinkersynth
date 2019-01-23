@@ -18,7 +18,7 @@ type Props = {
   dotAmount: number,
   setDotAmount: (val: number) => void,
   enableOcclusion: boolean,
-  setEnableOcclusion: (val: boolean) => void,
+  toggleOcclusion: (val: boolean) => void,
   isRandomized: boolean,
 };
 
@@ -27,7 +27,7 @@ const LineCluster = ({
   dotAmount,
   setDotAmount,
   enableOcclusion,
-  setEnableOcclusion,
+  toggleOcclusion,
   isRandomized,
 }) => {
   const rowHeight = 54;
@@ -50,7 +50,7 @@ const LineCluster = ({
         width={rowHeight}
         height={rowHeight}
         value={enableOcclusion}
-        updateValue={setEnableOcclusion}
+        updateValue={toggleOcclusion}
         visualizationComponent={OcclusionVisualization}
       />
     </InstrumentCluster>
@@ -58,11 +58,11 @@ const LineCluster = ({
 };
 
 const OptimizedLineCluster = memoWhileIgnoring(
-  ['setDotAmount', 'setOcclusion', 'isRandomized'],
+  ['setDotAmount', 'toggleOcclusion', 'isRandomized'],
   LineCluster
 );
 
-const Container = ({ columnWidth }) => {
+const LineClusterContainer = ({ columnWidth }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
@@ -71,10 +71,10 @@ const Container = ({ columnWidth }) => {
       dotAmount={slopesParams.dotAmount}
       setDotAmount={slopesParams.setDotAmount}
       enableOcclusion={slopesParams.enableOcclusion}
-      setEnableOcclusion={slopesParams.setEnableOcclusion}
+      toggleOcclusion={slopesParams.toggleOcclusion}
       isRandomized={slopesParams.isRandomized}
     />
   );
 };
 
-export default Container;
+export default LineClusterContainer;

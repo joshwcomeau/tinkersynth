@@ -6848,6 +6848,11 @@ imagemin@^6.0.0:
     pify "^4.0.1"
     replace-ext "^1.0.0"
 
+immer@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.0.tgz#36063119eb65fa3f0e81ce000eb22f4eede9762e"
+  integrity sha512-P0unw4sbgKsQBG3fHQ5IpdLWxmGpmzwmPu0dXpA+H2OLSDJhH4COhSwmGTWyFKq3X2YvoVRbvkBV927eyRGt4Q==
+
 immutable@~3.7.6:
   version "3.7.6"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.7.6.tgz#13b4d3cb12befa15482a26fe1b2ebae640071e4b"
