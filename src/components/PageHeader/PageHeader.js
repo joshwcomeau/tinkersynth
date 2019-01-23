@@ -3,9 +3,11 @@ import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
 
+import Heading from '../Heading';
+
 const PageHeader = ({ children }) => (
   <Wrapper>
-    <Title>{children}</Title>
+    <Heading size={1}>{children}</Heading>
 
     <UnderlineSvg viewBox="0 0 200 15">
       <polygon
@@ -26,12 +28,6 @@ const PageHeader = ({ children }) => (
 
 const Wrapper = styled.div`
   margin-bottom: ${UNIT * 8}px;
-`;
-
-const Title = styled.div`
-  font-size: 60px;
-  font-weight: bold;
-  letter-spacing: -1px;
 `;
 
 const UnderlineSvg = styled.svg`
