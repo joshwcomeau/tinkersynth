@@ -7,7 +7,6 @@ import { COLORS, UNIT } from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import CanvasToggle from '../CanvasToggle';
-import BulbToggle from '../BulbToggle';
 
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';

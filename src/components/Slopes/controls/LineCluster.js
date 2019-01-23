@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import TouchSliderIconControl from '../../TouchSliderIconControl';
 import ToggleControl from '../../ToggleControl';
@@ -13,14 +12,17 @@ import { InstrumentCluster } from '../../ControlPanel';
 import OcclusionVisualization from './OcclusionVisualization';
 import LegoBrickVisualization from './LegoBrickVisualization';
 
-import type { ToggleParameter, TweakParameter } from '../SlopesState';
+import type {
+  ToggleParameterAction,
+  TweakParameterAction,
+} from '../SlopesState';
 
 type Props = {
   width: number,
   dotAmount: number,
   enableOcclusion: boolean,
-  toggleParameter: ToggleParameter,
-  tweakParameter: TweakParameter,
+  toggleParameter: ToggleParameterAction,
+  tweakParameter: TweakParameterAction,
   isRandomized: boolean,
 };
 

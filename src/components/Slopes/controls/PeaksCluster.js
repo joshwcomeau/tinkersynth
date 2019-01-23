@@ -2,26 +2,24 @@
 import React, { useContext } from 'react';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
+
 import PersonInflateVisualization from './PersonInflateVisualization';
 import WavelengthVisualization from './WavelengthVisualization';
 
-import type { Curve, SetNumber } from '../../../types';
+import type { Curve } from '../../../types';
+import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
   width: number,
   peaksCurve: Curve,
   personInflateAmount: number,
-  wavelength: number,
-  setPeaksCurve: SetNumber,
-  setPersonInflateAmount: SetNumber,
-  setWavelength: SetNumber,
+  tweakParameter: TweakParameterAction,
   isRandomized: boolean,
 };
 
@@ -29,10 +27,7 @@ const PeaksCluster = ({
   width,
   peaksCurve,
   personInflateAmount,
-  wavelength,
-  setPeaksCurve,
-  setPersonInflateAmount,
-  setWavelength,
+  tweakParameter,
   isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
@@ -49,7 +44,7 @@ const PeaksCluster = ({
     <InstrumentCluster>
       <BezierControl
         curve={peaksCurve}
-        updateCurve={setPeaksCurve}
+        updateCurve={curve => tweakParameter('peaksCurve', curve)}
         width={bezierControlWidth}
         height={bezierControlHeight}
         isAnimated={isRandomized}
@@ -62,7 +57,7 @@ const PeaksCluster = ({
         height={sliderHeight}
         padding={sliderPadding}
         value={personInflateAmount}
-        updateValue={setPersonInflateAmount}
+        updateValue={val => tweakParameter('personInflateAmount', val)}
         visualizationComponent={PersonInflateVisualization}
         isAnimated={!isRandomized}
       />
@@ -70,24 +65,20 @@ const PeaksCluster = ({
   );
 };
 
-const OptimizedPeaksCluster = memoWhileIgnoring(
-  ['setPeaksCurve', 'setPersonInflateAmount', 'isRandomized'],
-  PeaksCluster
-);
+const OptimizedPeaksCluster = React.memo(PeaksCluster);
 
-const Container = ({ width }) => {
+const PeaksContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedPeaksCluster
       width={width}
       peaksCurve={slopesParams.peaksCurve}
-      setPeaksCurve={slopesParams.setPeaksCurve}
       personInflateAmount={slopesParams.personInflateAmount}
-      setPersonInflateAmount={slopesParams.setPersonInflateAmount}
+      tweakParameter={slopesParams.tweakParameter}
       isRandomized={slopesParams.isRandomized}
     />
   );
 };
 
-export default Container;
+export default PeaksContainer;

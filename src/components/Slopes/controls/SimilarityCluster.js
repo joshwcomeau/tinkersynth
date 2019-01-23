@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -11,20 +10,22 @@ import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 
 import SimilarityVisualization from './SimilarityVisualization';
 
+import type { TweakParameterAction } from '../SlopesState';
+
 type Props = {
   width: number,
   waterBoilAmount: number,
-  setWaterBoilAmount: (val: number) => void,
   isWaterBoilAmountDisabled: boolean,
   isRandomized: boolean,
+  tweakParameter: TweakParameterAction,
 };
 
 const SimilarityCluster = ({
   width,
   waterBoilAmount,
-  setWaterBoilAmount,
   isWaterBoilAmountDisabled,
   isRandomized,
+  tweakParameter,
 }: Props) => {
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
@@ -37,7 +38,7 @@ const SimilarityCluster = ({
       >
         <TouchSliderIconControl
           value={waterBoilAmount}
-          updateValue={setWaterBoilAmount}
+          updateValue={val => tweakParameter('waterBoilAmount', val)}
           width={innerWidth}
           height={40}
           visualizationComponent={SimilarityVisualization}
@@ -48,23 +49,20 @@ const SimilarityCluster = ({
   );
 };
 
-const OptimizedSimilarityCluster = memoWhileIgnoring(
-  ['setWaterBoilAmount', 'disabledParams', 'isRandomized'],
-  SimilarityCluster
-);
+const OptimizedSimilarityCluster = React.memo(SimilarityCluster);
 
-const Container = ({ width }) => {
+const SimilarityContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedSimilarityCluster
       width={width}
       waterBoilAmount={slopesParams.waterBoilAmount}
-      setWaterBoilAmount={slopesParams.setWaterBoilAmount}
       isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
       isRandomized={slopesParams.isRandomized}
+      tweakParameter={slopesParams.tweakParameter}
     />
   );
 };
 
-export default Container;
+export default SimilarityContainer;

@@ -100,34 +100,34 @@ const initialState = {
 
 const HISTORY_SIZE_LIMIT = 5;
 
-const reducer = (state, action) => {
+const reducer = produce((state, action) => {
   switch (action.type) {
     case 'TOGGLE_PARAMETER': {
       const { parameterName } = action;
 
-      return produce(state, draftState => {
-        const currentValue = draftState.parameters[parameterName];
+      const currentValue = state.parameters[parameterName];
 
-        draftState.parameters[parameterName] = !currentValue;
-      });
+      state.parameters[parameterName] = !currentValue;
+
+      return state;
     }
 
     case 'TWEAK_PARAMETER': {
       // TODO: Should I have a single action per parameter? Would I save a bunch
       // of re-renders if I did that?
-      return produce(state, draftState => {
-        draftState.isRandomized = false;
+      state.isRandomized = false;
 
-        draftState.history.push(state.parameters);
-        if (draftState.history.length > HISTORY_SIZE_LIMIT) {
-          draftState.history.shift();
-        }
+      state.history.push(state.parameters);
+      if (state.history.length > HISTORY_SIZE_LIMIT) {
+        state.history.shift();
+      }
 
-        draftState.parameters = {
-          ...state.parameters,
-          ...action.payload,
-        };
-      });
+      state.parameters = {
+        ...state.parameters,
+        ...action.payload,
+      };
+
+      return state;
     }
 
     case 'RANDOMIZE': {
@@ -139,26 +139,26 @@ const reducer = (state, action) => {
         return state;
       }
 
-      return produce(state, draftState => {
-        const lastState = draftState.history.pop();
+      const lastState = state.history.pop();
 
-        draftState.parameters = {
-          ...draftState.parameters,
-          ...lastState,
-        };
+      state.parameters = {
+        ...state.parameters,
+        ...lastState,
+      };
 
-        return draftState;
-      });
+      return state;
+
       // TODO
     }
 
     default:
       return state;
   }
-};
+});
 
-export type ToggleParameter = (parameterName: string) => void;
-export type TweakParameter = (key: string, value: number) => void;
+export type ToggleParameterAction = (parameterName: string) => void;
+export type TweakParameterAction = (key: string, value: any) => void;
+export type RandomizeAction = () => void;
 
 export const SlopesProvider = ({ children }: Props) => {
   // OK this provider does _a lot_. Let's break it down.
@@ -208,13 +208,16 @@ export const SlopesProvider = ({ children }: Props) => {
     })
   );
 
+  const shuffle = useRef(() =>
+    dispatch({
+      type: 'SHUFFLE',
+      payload: { [key]: value },
+    })
+  );
+
   return (
     <SlopesContext.Provider
       value={{
-        disabledParams: getDerivedDisabledParams(state.parameters),
-
-        isRandomized: state.isRandomized,
-
         seed: state.parameters.seed,
         enableDarkMode: state.parameters.enableDarkMode,
         enableMargins: state.parameters.enableMargins,
@@ -238,45 +241,11 @@ export const SlopesProvider = ({ children }: Props) => {
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,
 
-        toggleDarkMode: () => toggleParameter('enableDarkMode'),
-        toggleMargins: () => toggleParameter('enableMargins'),
-        setSeed: seed =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { seed } }),
-        setAmplitudeAmount: amplitudeAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { amplitudeAmount } }),
-        setOctaveAmount: octaveAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { octaveAmount } }),
-        setPerspective: perspective =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { perspective } }),
-        setLineAmount: lineAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { lineAmount } }),
-        setSpikyness: spikyness =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { spikyness } }),
-        setStaticAmount: staticAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { staticAmount } }),
-        setPolarAmount: polarAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { polarAmount } }),
-        setOmega: omega =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { omega } }),
-        setSplitUniverse: splitUniverse =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { splitUniverse } }),
-        setPeaksCurve: peaksCurve =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { peaksCurve } }),
-        setPersonInflateAmount: personInflateAmount =>
-          dispatch({
-            type: 'TWEAK_PARAMETER',
-            payload: { personInflateAmount },
-          }),
-        setWavelength: wavelength =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { wavelength } }),
-        setWaterBoilAmount: waterBoilAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { waterBoilAmount } }),
-        setBallSize: ballSize =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { ballSize } }),
-        setDotAmount: dotAmount =>
-          dispatch({ type: 'TWEAK_PARAMETER', payload: { dotAmount } }),
+        isRandomized: state.isRandomized,
 
-        randomize: () => dispatch({ type: 'RANDOMIZE' }),
+        disabledParams: getDerivedDisabledParams(state.parameters),
+
+        shuffle,
       }}
     >
       {children}

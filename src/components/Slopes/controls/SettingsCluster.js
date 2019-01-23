@@ -10,38 +10,39 @@ import SeedPicker from '../../SeedPicker';
 import RandomizeButton from '../../RandomizeButton';
 import Spacer from '../../Spacer';
 
+import type { TweakParameterAction } from '../SlopesState';
+
 type Props = {
   seed: number,
-  setSeed: (val: number) => void,
+  tweakParameter: TweakParameterAction,
   randomize: () => void,
 };
 
-const SettingsCluster = ({ seed, setSeed, randomize }: Props) => {
+const SettingsCluster = ({ seed, tweakParameter, randomize }: Props) => {
   return (
     <InstrumentCluster>
-      <SeedPicker seed={seed} setSeed={setSeed} />
+      <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
+
       <Spacer size={UNIT * 2} />
+
       <RandomizeButton handlePress={randomize} />
     </InstrumentCluster>
   );
 };
 
-const OptimizedSettingsCluster = memoWhileIgnoring(
-  ['setSeed', 'randomize'],
-  SettingsCluster
-);
+const OptimizedSettingsCluster = React.memo(SettingsCluster);
 
-const Container = ({ width }) => {
+const SettingsContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedSettingsCluster
       width={width}
       seed={slopesParams.seed}
-      setSeed={slopesParams.setSeed}
+      tweakParameter={slopesParams.tweakParameter}
       randomize={slopesParams.randomize}
     />
   );
 };
 
-export default Container;
+export default SettingsContainer;

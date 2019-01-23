@@ -14,20 +14,20 @@ import PerspectiveVisualization from './PerspectiveVisualization';
 import OcclusionVisualization from './OcclusionVisualization';
 import LineAmountVisualization from './LineAmountVisualization';
 
+import type { TweakParameterAction } from '../SlopesState';
+
 type Props = {
   width: number,
   perspective: number,
   lineAmount: number,
-  setPerspective: (val: number) => void,
-  setLineAmount: (val: number) => void,
+  tweakParameter: TweakParameterAction,
 };
 
 const PerspectiveCluster = ({
   width,
   perspective,
   lineAmount,
-  setPerspective,
-  setLineAmount,
+  tweakParameter,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -42,7 +42,7 @@ const PerspectiveCluster = ({
     <InstrumentCluster>
       <SliderVideoControl
         value={perspective}
-        updateValue={setPerspective}
+        updateValue={val => tweakParameter('perspective', val)}
         width={videoSliderWidth}
         height={videoSliderHeight}
         visualizationComponent={PerspectiveVisualization}
@@ -55,7 +55,7 @@ const PerspectiveCluster = ({
           width={secondarySliderWidth}
           height={videoSliderHeight}
           value={lineAmount}
-          updateValue={setLineAmount}
+          updateValue={val => tweakParameter('lineAmount', val)}
           visualizationComponent={LineAmountVisualization}
           numOfNotches={13}
         />
@@ -64,12 +64,9 @@ const PerspectiveCluster = ({
   );
 };
 
-const OptimizedPerspectiveCluster = memoWhileIgnoring(
-  ['setPerspective', 'setLineAmount'],
-  PerspectiveCluster
-);
+const OptimizedPerspectiveCluster = React.memo(PerspectiveCluster);
 
-const Container = ({ width }) => {
+const PerspectiveContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
@@ -77,10 +74,9 @@ const Container = ({ width }) => {
       width={width}
       perspective={slopesParams.perspective}
       lineAmount={slopesParams.lineAmount}
-      setPerspective={slopesParams.setPerspective}
-      setLineAmount={slopesParams.setLineAmount}
+      tweakParameter={slopesParams.tweakParameter}
     />
   );
 };
 
-export default Container;
+export default PerspectiveContainer;

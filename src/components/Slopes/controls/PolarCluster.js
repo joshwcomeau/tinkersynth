@@ -18,8 +18,16 @@ import SplitUniverseVisualization from './SplitUniverseVisualization';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
+import type { TweakParameterAction } from '../SlopesState';
+
 type Props = {
   width: number,
+  polarAmount: number,
+  ballSize: number,
+  omega: number,
+  splitUniverse: number,
+  tweakParameter: TweakParameterAction,
+  isRandomized: boolean,
   isBallSizeDisabled: boolean,
 };
 
@@ -29,10 +37,7 @@ const PolarCluster = ({
   ballSize,
   omega,
   splitUniverse,
-  setPolarAmount,
-  setBallSize,
-  setOmega,
-  setSplitUniverse,
+  tweakParameter,
   isBallSizeDisabled,
   isRandomized,
 }: Props) => {
@@ -50,7 +55,7 @@ const PolarCluster = ({
       <Row>
         <SliderVideoControl
           value={polarAmount}
-          updateValue={setPolarAmount}
+          updateValue={val => tweakParameter('polarAmount', val)}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={15}
@@ -65,11 +70,11 @@ const PolarCluster = ({
           isDisabled={isBallSizeDisabled}
         >
           <SliderIconControl
+            value={ballSize}
+            updateValue={val => tweakParameter('ballSize', val)}
             width={polarHoleSliderWidth}
             height={sliderHeight}
             padding={polarHoleSliderPadding}
-            value={ballSize}
-            updateValue={setBallSize}
             visualizationComponent={BallSizeVisualization}
             numOfNotches={14}
             isAnimated={!isRandomized}
@@ -82,7 +87,7 @@ const PolarCluster = ({
       <Row>
         <TouchSliderIconControl
           value={omega}
-          updateValue={setOmega}
+          updateValue={val => tweakParameter('omega', val)}
           width={innerWidth}
           height={40}
           visualizationComponent={OmegaVisualization}
@@ -95,7 +100,7 @@ const PolarCluster = ({
       <Row>
         <TouchSliderIconControl
           value={splitUniverse}
-          updateValue={setSplitUniverse}
+          updateValue={val => tweakParameter('splitUniverse', val)}
           width={innerWidth}
           height={40}
           visualizationComponent={SplitUniverseVisualization}
@@ -110,35 +115,23 @@ const Row = styled.div`
   display: flex;
 `;
 
-const OptimizedPolarCluster = memoWhileIgnoring(
-  [
-    'setPolarAmount',
-    'setBallSize',
-    'setOmega',
-    'setSplitUniverse',
-    'isRandomized',
-  ],
-  PolarCluster
-);
+const OptimizedPolarCluster = React.memo(PolarCluster);
 
-const Container = ({ width }) => {
+const PolarContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedPolarCluster
       width={width}
       polarAmount={slopesParams.polarAmount}
-      setPolarAmount={slopesParams.setPolarAmount}
       ballSize={slopesParams.ballSize}
-      setBallSize={slopesParams.setBallSize}
       omega={slopesParams.omega}
-      setOmega={slopesParams.setOmega}
       splitUniverse={slopesParams.splitUniverse}
-      setSplitUniverse={slopesParams.setSplitUniverse}
+      tweakParameter={slopesParams.tweakParameter}
       isBallSizeDisabled={slopesParams.disabledParams.ballSize}
       isRandomized={slopesParams.isRandomized}
     />
   );
 };
 
-export default Container;
+export default PolarContainer;

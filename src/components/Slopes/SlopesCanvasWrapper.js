@@ -11,9 +11,10 @@ import {
 
 import Spacer from '../Spacer';
 import Button from '../Button';
-import SlopesCanvasActions from './SlopesCanvasActions';
-import SlopesCanvasMargins from './SlopesCanvasMargins';
+
 import { SlopesContext } from './SlopesState';
+import PageCluster from './controls/PageCluster';
+import SlopesCanvasMargins from './SlopesCanvasMargins';
 
 type Props = {
   width: number,
@@ -51,7 +52,7 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
 
         <Footer>
           <Toggles>
-            <SlopesCanvasActions />
+            <PageCluster />
           </Toggles>
 
           <Button color={COLORS.blue[500]}>Purchase</Button>

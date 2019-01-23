@@ -2,17 +2,18 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
-import TouchSliderIconControl from '../../TouchSliderIconControl';
-import Spacer from '../../Spacer';
-import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import ControlCompartment from '../../ControlCompartment/ControlCompartment';
+import TouchSliderIconControl from '../../TouchSliderIconControl';
+import Spacer from '../../Spacer';
 
+import { SlopesContext } from '../SlopesState';
 import WavelengthVisualization from './WavelengthVisualization';
 import AmplitudeVisualization from './AmplitudeVisualization';
 import OctaveVisualization from './OctaveVisualization';
+
+import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
   width: number,
@@ -22,9 +23,7 @@ type Props = {
   isWavelengthDisabled: boolean,
   isAmplitudeAmountDisabled: boolean,
   isOctaveAmountDisabled: boolean,
-  setWavelength: (val: number) => void,
-  setAmplitudeAmount: (val: number) => void,
-  setOctaveAmount: (val: number) => void,
+  tweakParameter: TweakParameterAction,
   isRandomized: boolean,
 };
 
@@ -33,12 +32,10 @@ const AudioCluster = ({
   wavelength,
   amplitudeAmount,
   octaveAmount,
-  setWavelength,
-  setAmplitudeAmount,
-  setOctaveAmount,
   isWavelengthDisabled,
   isAmplitudeAmountDisabled,
   isOctaveAmountDisabled,
+  tweakParameter,
   isRandomized,
 }) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -53,7 +50,7 @@ const AudioCluster = ({
       >
         <TouchSliderIconControl
           value={amplitudeAmount}
-          updateValue={setAmplitudeAmount}
+          updateValue={val => tweakParameter('amplitudeAmount', val)}
           width={innerWidth}
           height={47}
           visualizationComponent={AmplitudeVisualization}
@@ -71,7 +68,7 @@ const AudioCluster = ({
       >
         <TouchSliderIconControl
           value={wavelength}
-          updateValue={setWavelength}
+          updateValue={val => tweakParameter('wavelength', val)}
           width={innerWidth}
           height={47}
           visualizationComponent={WavelengthVisualization}
@@ -89,7 +86,7 @@ const AudioCluster = ({
       >
         <TouchSliderIconControl
           value={octaveAmount}
-          updateValue={setOctaveAmount}
+          updateValue={val => tweakParameter('octaveAmount', val)}
           width={innerWidth}
           height={47}
           visualizationComponent={OctaveVisualization}
@@ -101,12 +98,9 @@ const AudioCluster = ({
   );
 };
 
-const OptimizedAudioCluster = memoWhileIgnoring(
-  ['setWavelength', 'setAmplitudeAmount', 'setOctaveAmount', 'isRandomized'],
-  AudioCluster
-);
+const OptimizedAudioCluster = React.memo(AudioCluster);
 
-const Container = ({ width }) => {
+const AudioContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
@@ -115,15 +109,13 @@ const Container = ({ width }) => {
       wavelength={slopesParams.wavelength}
       amplitudeAmount={slopesParams.amplitudeAmount}
       octaveAmount={slopesParams.octaveAmount}
-      setWavelength={slopesParams.setWavelength}
-      setAmplitudeAmount={slopesParams.setAmplitudeAmount}
-      setOctaveAmount={slopesParams.setOctaveAmount}
       isWavelengthDisabled={slopesParams.disabledParams.wavelength}
       isAmplitudeAmountDisabled={slopesParams.disabledParams.amplitudeAmount}
       isOctaveAmountDisabled={slopesParams.disabledParams.octaveAmount}
+      tweakParameter={slopesParams.tweakParameter}
       isRandomized={slopesParams.isRandomized}
     />
   );
 };
 
-export default Container;
+export default AudioContainer;

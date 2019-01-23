@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
@@ -14,24 +13,23 @@ import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
 import type { SetNumber } from '../../../types';
+import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
   width: number,
   spikyness: number,
-  setSpikyness: SetNumber,
   staticAmount: number,
-  setStaticAmount: SetNumber,
-  disabledParams: any,
+  isStaticAmountDisabled: boolean,
+  tweakParameter: TweakParameterAction,
   isRandomized: boolean,
 };
 
 const NoiseCluster = ({
   width,
   spikyness,
-  setSpikyness,
   staticAmount,
-  setStaticAmount,
-  disabledParams,
+  isStaticAmountDisabled,
+  tweakParameter,
   isRandomized,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
@@ -48,7 +46,7 @@ const NoiseCluster = ({
       <Row>
         <SliderVideoControl
           value={spikyness}
-          updateValue={setSpikyness}
+          updateValue={val => tweakParameter('spikyness', val)}
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={0}
@@ -58,14 +56,14 @@ const NoiseCluster = ({
         <Spacer size={UNIT} />
 
         <SliderIconControl
+          value={staticAmount}
+          updateValue={val => tweakParameter('staticAmount', val)}
           width={secondarySliderWidth}
           height={sliderHeight}
           padding={secondarySliderPadding}
-          value={staticAmount}
-          updateValue={setStaticAmount}
           visualizationComponent={StaticVisualization}
           numOfNotches={14}
-          isDisabled={disabledParams.staticAmount}
+          isDisabled={isStaticAmountDisabled}
           isAnimated={!isRandomized}
         />
       </Row>
@@ -73,22 +71,20 @@ const NoiseCluster = ({
   );
 };
 
-const OptimizedNoiseCluster = memoWhileIgnoring(
-  ['setSpikyness', 'setStaticAmount', 'disabledParams', 'isRandomized'],
-  NoiseCluster
-);
+const OptimizedNoiseCluster = React.memo(NoiseCluster);
 
-const Container = ({ width }) => {
+const NoiseContainer = ({ width }) => {
   const slopesParams = useContext(SlopesContext);
+
+  const isStaticAmountDisabled = slopesParams.disabledParams.staticAmount;
 
   return (
     <OptimizedNoiseCluster
       width={width}
       spikyness={slopesParams.spikyness}
-      setSpikyness={slopesParams.setSpikyness}
       staticAmount={slopesParams.staticAmount}
-      setStaticAmount={slopesParams.setStaticAmount}
-      disabledParams={slopesParams.disabledParams}
+      isStaticAmountDisabled={slopesParams.disabledParams.staticAmount}
+      tweakParameter={slopesParams.tweakParameter}
       isRandomized={slopesParams.isRandomized}
     />
   );
@@ -98,4 +94,4 @@ const Row = styled.div`
   display: flex;
 `;
 
-export default Container;
+export default NoiseContainer;
