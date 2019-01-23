@@ -193,7 +193,7 @@ const Container = (props: any) => {
   delete springParams.seed;
 
   return (
-    <Spring to={springParams} immediate={slopesParams.isRandomized}>
+    <Spring to={springParams} immediate={slopesParams.isShuffled}>
       {interpolatedParams => (
         <OptimizedSlopesCanvas
           {...slopesParams}

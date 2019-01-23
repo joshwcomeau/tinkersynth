@@ -5,7 +5,7 @@ import warningSrc from '../../images/warning.png';
 
 import BigRedButton from '../BigRedButton';
 
-const RandomizeButton = ({ handlePress }) => {
+const ShuffleButton = ({ handlePress }) => {
   return (
     <Wrapper style={{ backgroundImage: `url(${warningSrc})` }}>
       <InnerWrapper>
@@ -31,4 +31,4 @@ const InnerWrapper = styled.div`
   align-items: center;
 `;
 
-export default RandomizeButton;
+export default ShuffleButton;

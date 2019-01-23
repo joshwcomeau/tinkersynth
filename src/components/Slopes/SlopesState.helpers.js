@@ -1,6 +1,38 @@
 /**
  * Helpers for the SlopesState reducer + assorted state-management stuff
  */
+import { useEffect } from 'react';
+
+import { sample, random } from '../../utils';
+
+export const DEFAULT_PEAKS_CURVE = {
+  startPoint: [0.5, 0],
+  controlPoint1: [0.5, 0.5],
+  endPoint: [0.5, 1],
+};
+
+export const useUndo = handleUndo => {
+  // On mount, register the listener for the "undo" shortcut.
+  useEffect(() => {
+    const handleKeyup = ev => {
+      // Support cmd+z as well as ctrl+z
+      const modifierKeyPressed = ev.ctrlKey || ev.metaKey;
+
+      if (ev.key === 'z' && modifierKeyPressed) {
+        // Don't use the browser's standard "undo".
+        ev.preventDefault();
+
+        handleUndo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyup);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyup);
+    };
+  }, []);
+};
 
 export const getDerivedDisabledParams = params => {
   return {
@@ -12,75 +44,102 @@ export const getDerivedDisabledParams = params => {
   };
 };
 
-export const generateRandomValuesForParameters = () => {
-  return {};
+export const shuffleParameters = state => {
+  // We track when we've shuffled the parameters, so that we can disable
+  // secondary animations, for performance.
+  state.isShuffled = true;
 
-  isRandomized.current = true;
+  // We also need to add the current state to the history, so that the shuffle
+  // can be undone
+  state.history.push(state.parameters);
 
-  setSeed(getRandomSeed());
-  setPerspective(getRandomSliderValue());
+  // Every randomization will tweak the seed #
+  state.parameters.seed = getRandomSeed();
 
-  // Some parameters don't need to be updated on every tick.
+  // Other parameters will only be updated sometimes.
+  // This is mainly for performance, although being able to control the
+  // likeliness of specific parameters also allows us to curate the shuffle
+  // a bit.
   if (Math.random() > 0.5) {
-    setPeaksCurve(getRandomPeaksCurve());
+    state.parameters.perspective = getRandomSliderValue();
+  }
+  if (Math.random() > 0.5) {
+    state.parameters.peaksCurve = getRandomPeaksCurve();
   }
   if (Math.random() > 0.25) {
-    setPersonInflateAmount(getRandomSliderValue());
+    state.parameters.personInflateAmount = getRandomSliderValue();
   }
   if (Math.random() > 0.25) {
-    // Amplitudes below 25 or above 75 don't really look good
-    setAmplitudeAmount(random(25, 75));
+    // Amplitudes below 25 don't really look good
+    state.parameters.amplitudeAmount = random(25, 100);
   }
   if (Math.random() > 0.25) {
-    setWavelength(random(25, 75));
+    // High wavelengths look really busy, so let's keep the value low-ish.
+    state.parameters.wavelength = random(0, 70);
   }
-
-  setDotAmount(Math.random() > 0.75 ? getRandomSliderValue() : 0);
-
   if (Math.random() > 0.75) {
-    setOctaveAmount(Math.random() > 0.5 ? getRandomSliderValue() : 0);
+    state.parameters.octaveAmount =
+      Math.random() > 0.5 ? getRandomSliderValue() : 0;
   }
+
+  state.parameters.dotAmount = Math.random() > 0.5 ? getRandomSliderValue() : 0;
 
   // Certain parameters make more sense at one of the extremities, so let's
   // increase the chances of those.
-  const polarAmount = sample([0, 0, 0, 100, 100, getRandomSliderValue()]);
-  setPolarAmount(polarAmount);
+  state.parameters.polarAmount = sample([
+    0,
+    0,
+    0,
+    100,
+    100,
+    getRandomSliderValue(),
+  ]);
 
-  if (polarAmount > 0 && Math.random() > 0.5) {
-    setBallSize(getRandomSliderValue());
+  if (state.parameters.polarAmount > 0 && Math.random() > 0.5) {
+    state.parameters.ballSize = getRandomSliderValue();
   }
 
-  const omega =
-    polarAmount === 0 ? 0 : sample([0, 100, getRandomSliderValue()]);
-  setOmega(omega);
+  state.parameters.omega =
+    state.parameters.polarAmount === 0
+      ? 0
+      : sample([0, 100, getRandomSliderValue()]);
 
-  const waterBoilAmount = sample([100, getRandomSliderValue()]);
-  setWaterBoilAmount(waterBoilAmount);
+  state.parameters.waterBoilAmount = sample([100, getRandomSliderValue()]);
 
-  const spikyness = sample([0, 0, 0, 100, getRandomSliderValue()]);
-  setSpikyness(spikyness);
+  state.parameters.spikyness = sample([0, 0, 0, 100, getRandomSliderValue()]);
 
-  if (spikyness > 0) {
-    setStaticAmount(Math.random() > 0.5 ? getRandomSliderValue() : 0);
+  if (state.parameters.spikyness > 0) {
+    state.parameters.staticAmount =
+      Math.random() > 0.5 ? getRandomSliderValue() : 0;
   } else {
-    setStaticAmount(0);
+    state.parameters.staticAmount = 0;
   }
 
   // splitUniverse is _such_ a drastic effect. Let's make it stick to 0
   // most of the time.
-  const splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
-  setSplitUniverse(splitUniverse);
+  state.parameters.splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
 
   // Performance suffers when we add lots of lines. Let's keep it generally
   // to a pretty low number
-  setLineAmount(
-    sample([5, 10, 20, 30, 35, 40, 40, 50, 50, 50, 60, getRandomSliderValue()])
-  );
+  state.parameters.lineAmount = sample([
+    5,
+    10,
+    20,
+    30,
+    35,
+    40,
+    40,
+    50,
+    50,
+    50,
+    60,
+    getRandomSliderValue(),
+  ]);
 
   // If we're splitting the universe, we almost always want occlusion to be
   // off.
-  const enableOcclusion =
-    splitUniverse > 0
+  state.parameters.enableOcclusion =
+    state.parameters.splitUniverse > 0
       ? sample([
           false,
           false,
@@ -94,5 +153,52 @@ export const generateRandomValuesForParameters = () => {
           true,
         ])
       : getRandomBooleanValue();
-  setEnableOcclusion(enableOcclusion);
+
+  return state;
+};
+
+export const getRandomSeed = () =>
+  // Seeds are 16-bit, with 65,536 possible values (from 0-65535)
+  Math.round(Math.random() * 65535);
+
+const getRandomSliderValue = () =>
+  // All sliders ought to be 0-100
+  Math.round(Math.random() * 100);
+
+const getRandomBooleanValue = () => sample([true, false]);
+
+const getRandomPeaksCurve = () => {
+  // Let's have some sensible "standard" curves to sample from.
+  const presetCurves = [
+    DEFAULT_PEAKS_CURVE,
+    {
+      // This one is a straight line along the top
+      startPoint: [0, 1],
+      controlPoint1: [0.5, 1],
+      endPoint: [1, 1],
+    },
+    {
+      // Rainbow
+      startPoint: [0.1, 0.2],
+      controlPoint1: [0.5, 1],
+      endPoint: [0.9, 0.2],
+    },
+    {
+      // Diagonal line (polar corkscrew)
+      startPoint: [0, 1],
+      controlPoint1: [0.55, 0.55],
+      endPoint: [1, 0],
+    },
+  ];
+
+  // Let's also add a chance to generate one totally at random
+  const shouldUseRandomCurve = Math.random() > 0.5;
+
+  return shouldUseRandomCurve
+    ? {
+        startPoint: [Math.random(), Math.random()],
+        controlPoint1: [Math.random(), Math.random()],
+        endPoint: [Math.random(), Math.random()],
+      }
+    : sample(presetCurves);
 };

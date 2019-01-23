@@ -21,7 +21,7 @@ type Props = {
   staticAmount: number,
   isStaticAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
-  isRandomized: boolean,
+  isShuffled: boolean,
 };
 
 const NoiseCluster = ({
@@ -30,7 +30,7 @@ const NoiseCluster = ({
   staticAmount,
   isStaticAmountDisabled,
   tweakParameter,
-  isRandomized,
+  isShuffled,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -64,7 +64,7 @@ const NoiseCluster = ({
           visualizationComponent={StaticVisualization}
           numOfNotches={14}
           isDisabled={isStaticAmountDisabled}
-          isAnimated={!isRandomized}
+          isAnimated={!isShuffled}
         />
       </Row>
     </InstrumentCluster>
@@ -85,7 +85,7 @@ const NoiseContainer = ({ width }) => {
       staticAmount={slopesParams.staticAmount}
       isStaticAmountDisabled={slopesParams.disabledParams.staticAmount}
       tweakParameter={slopesParams.tweakParameter}
-      isRandomized={slopesParams.isRandomized}
+      isShuffled={slopesParams.isShuffled}
     />
   );
 };

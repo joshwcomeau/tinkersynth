@@ -16,7 +16,7 @@ type Props = {
   width: number,
   waterBoilAmount: number,
   isWaterBoilAmountDisabled: boolean,
-  isRandomized: boolean,
+  isShuffled: boolean,
   tweakParameter: TweakParameterAction,
 };
 
@@ -24,7 +24,7 @@ const SimilarityCluster = ({
   width,
   waterBoilAmount,
   isWaterBoilAmountDisabled,
-  isRandomized,
+  isShuffled,
   tweakParameter,
 }: Props) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -42,7 +42,7 @@ const SimilarityCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={SimilarityVisualization}
-          isAnimated={!isRandomized}
+          isAnimated={!isShuffled}
         />
       </ControlCompartment>
     </InstrumentCluster>
@@ -59,7 +59,7 @@ const SimilarityContainer = ({ width }) => {
       width={width}
       waterBoilAmount={slopesParams.waterBoilAmount}
       isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
-      isRandomized={slopesParams.isRandomized}
+      isShuffled={slopesParams.isShuffled}
       tweakParameter={slopesParams.tweakParameter}
     />
   );

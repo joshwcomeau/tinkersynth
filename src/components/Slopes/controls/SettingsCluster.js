@@ -7,7 +7,7 @@ import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SeedPicker from '../../SeedPicker';
-import RandomizeButton from '../../RandomizeButton';
+import ShuffleButton from '../../ShuffleButton';
 import Spacer from '../../Spacer';
 
 import type { TweakParameterAction } from '../SlopesState';
@@ -15,17 +15,17 @@ import type { TweakParameterAction } from '../SlopesState';
 type Props = {
   seed: number,
   tweakParameter: TweakParameterAction,
-  randomize: () => void,
+  shuffle: () => void,
 };
 
-const SettingsCluster = ({ seed, tweakParameter, randomize }: Props) => {
+const SettingsCluster = ({ seed, tweakParameter, shuffle }: Props) => {
   return (
     <InstrumentCluster>
       <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
 
       <Spacer size={UNIT * 2} />
 
-      <RandomizeButton handlePress={randomize} />
+      <ShuffleButton handlePress={shuffle} />
     </InstrumentCluster>
   );
 };
@@ -40,7 +40,7 @@ const SettingsContainer = ({ width }) => {
       width={width}
       seed={slopesParams.seed}
       tweakParameter={slopesParams.tweakParameter}
-      randomize={slopesParams.randomize}
+      shuffle={slopesParams.shuffle}
     />
   );
 };
