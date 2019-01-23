@@ -69,6 +69,8 @@ const Wrapper = styled.div`
 `;
 
 const Machine = styled.div`
+  position: sticky;
+  top: 0;
   perspective: 200px;
   user-select: none;
   padding: ${UNIT}px;

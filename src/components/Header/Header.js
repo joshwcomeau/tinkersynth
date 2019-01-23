@@ -47,7 +47,7 @@ const OuterWrapper = styled.div`
   right: 0;
   z-index: 2;
   background: ${COLORS.white};
-  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+  /* box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25); */
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`

@@ -8,11 +8,17 @@ import Paragraph from '../components/Paragraph';
 
 const SlopesIndex = () => (
   <LayoutSidePage title="Frequently Asked Questions">
-    <QuestionAndAnswer question="What is this?">
+    <QuestionAndAnswer question="Er, so, what is this?">
       <Paragraph>
         Tinkersynth is an experimental set* of software machines you can use to
         create art.
       </Paragraph>
+    </QuestionAndAnswer>
+
+    <QuestionAndAnswer question="Why's it so slow?">
+      <Paragraph>In an ideal world,</Paragraph>
+
+      <Paragraph />
     </QuestionAndAnswer>
   </LayoutSidePage>
 );
