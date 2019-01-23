@@ -47,7 +47,7 @@ const BigRedButton = ({ size = 40, handlePress }) => {
           />
           <path
             d="M40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20ZM4.81942 20C4.81942 28.384 11.616 35.1806 20 35.1806C28.384 35.1806 35.1806 28.384 35.1806 20C35.1806 11.616 28.384 4.81942 20 4.81942C11.616 4.81942 4.81942 11.616 4.81942 20Z"
-            fill="url(#big-red-button-2)"
+            fill="url(#bigredbutton-outer-ring)"
           />
           <g filter="url(#big-red-button-3)">
             <path
@@ -89,7 +89,9 @@ const BigRedButton = ({ size = 40, handlePress }) => {
                 cy="20"
                 r="13"
                 fill="url(#big-red-button-3d-effect)"
-                style={{ mixBlendMode: 'hard-light' }}
+                style={{
+                  mixBlendMode: 'hard-light',
+                }}
               />
             </g>
           </g>
@@ -146,7 +148,7 @@ const BigRedButton = ({ size = 40, handlePress }) => {
             <stop offset="1" stopColor="white" stopOpacity="0" />
           </linearGradient>
           <radialGradient
-            id="big-red-button-2"
+            id="bigredbutton-outer-ring"
             cx="0"
             cy="0"
             r="1"

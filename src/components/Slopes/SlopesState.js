@@ -8,7 +8,11 @@ import {
   getDerivedDisabledParams,
   shuffleParameters,
   getRandomSeed,
+  isUpdatePartOfGroup,
 } from './SlopesState.helpers';
+import { sum, mean } from '../../utils';
+
+import type { Curve } from '../../types';
 
 const HISTORY_SIZE_LIMIT = 5;
 
@@ -17,6 +21,11 @@ export const SlopesContext = React.createContext({});
 export type ToggleParameterAction = (parameterName: string) => void;
 export type TweakParameterAction = (key: string, value: any) => void;
 export type RandomizeAction = () => void;
+
+type HistorySnapshot = {
+  parameters: any,
+  timestamp: number, // Unix epoch
+};
 
 const initialState = {
   history: [],
@@ -44,65 +53,119 @@ const initialState = {
   },
 };
 
-const reducer = produce((state, action) => {
-  switch (action.type) {
-    case 'TOGGLE_PARAMETER': {
-      const { parameterName } = action;
+type State = {
+  history: Array<HistorySnapshot>,
+  isShuffled: boolean,
+  parameters: {
+    seed: number,
+    enableDarkMode: boolean,
+    enableMargins: boolean,
+    enableOcclusion: boolean,
+    amplitudeAmount: number,
+    wavelength: number,
+    octaveAmount: number,
+    perspective: number,
+    lineAmount: number,
+    spikyness: number,
+    staticAmount: number,
+    polarAmount: number,
+    omega: number,
+    splitUniverse: number,
+    personInflateAmount: number,
+    waterBoilAmount: number,
+    ballSize: number,
+    dotAmount: number,
+    peaksCurve: Curve,
+  },
+};
 
-      const currentValue = state.parameters[parameterName];
+let times = [];
 
-      state.parameters[parameterName] = !currentValue;
+const reducer = produce(
+  (state: State, action): State => {
+    switch (action.type) {
+      case 'TOGGLE_PARAMETER': {
+        const { parameterName } = action;
 
-      return state;
-    }
+        const currentValue = state.parameters[parameterName];
 
-    case 'TWEAK_PARAMETER': {
-      // TODO: Should I have a single action per parameter? Would I save a bunch
-      // of re-renders if I did that?
-      state.isShuffled = false;
+        state.parameters[parameterName] = !currentValue;
 
-      state.history.push(state.parameters);
-      if (state.history.length > HISTORY_SIZE_LIMIT) {
-        state.history.shift();
-      }
-
-      state.parameters = {
-        ...state.parameters,
-        ...action.payload,
-      };
-
-      return state;
-    }
-
-    case 'SHUFFLE': {
-      // NOTE: I'm mutating the `state` object passed in, but that's OK since
-      // it's using immer.
-      return shuffleParameters(state);
-    }
-
-    case 'UNDO': {
-      if (state.history.length === 0) {
         return state;
       }
 
-      console.log(state.history);
+      case 'TWEAK_PARAMETER': {
+        // TODO: Should I have a single action per parameter? Would I save a bunch
+        // of re-renders if I did that?
+        state.isShuffled = false;
 
-      const lastState = state.history.pop();
+        // If this is the first action in a "burst", we want to push the state
+        // onto the history stack, for undoing.
+        //
+        // I don't want to just save every action, because while a user drags
+        // a slider, it can create dozens of subtle state changes.
+        //
+        // The easiest thing is just to debounce it, only tracking the first in a
+        // batch.
+        const lastHistorySnapshot = state.history[state.history.length - 1];
+        const isFirstInBatch =
+          !lastHistorySnapshot || !isUpdatePartOfGroup(lastHistorySnapshot);
 
-      state.parameters = {
-        ...state.parameters,
-        ...lastState,
-      };
+        if (isFirstInBatch) {
+          const newHistorySnapshot = {
+            parameters: action.payload,
+            timestamp: Date.now(),
+          };
 
-      return state;
+          state.history.push(newHistorySnapshot);
 
-      // TODO
+          if (state.history.length > HISTORY_SIZE_LIMIT) {
+            state.history.shift();
+          }
+        } else {
+          // If this is just one of many in the batch, I should update the
+          // timestamp
+          if (lastHistorySnapshot) {
+            lastHistorySnapshot.timestamp = Date.now();
+          }
+        }
+
+        // Update the state, by copying every value in the payload into state.
+        Object.keys(action.payload).forEach(key => {
+          state.parameters[key] = action.payload[key];
+        });
+
+        return state;
+      }
+
+      case 'SHUFFLE': {
+        // NOTE: I'm mutating the `state` object passed in, but that's OK since
+        // it's using immer.
+        return shuffleParameters(state);
+      }
+
+      case 'UNDO': {
+        if (state.history.length === 0) {
+          return state;
+        }
+
+        const lastState = state.history.pop();
+
+        state.parameters = {
+          ...state.parameters,
+          ...lastState.parameters,
+        };
+
+        return state;
+
+        // TODO
+      }
+
+      default:
+        return state;
     }
-
-    default:
-      return state;
   }
-});
+);
 
 export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

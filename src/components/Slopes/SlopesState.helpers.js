@@ -51,7 +51,10 @@ export const shuffleParameters = state => {
 
   // We also need to add the current state to the history, so that the shuffle
   // can be undone
-  state.history.push(state.parameters);
+  state.history.push({
+    parameters: { ...state.parameters },
+    timestamp: Date.now(),
+  });
 
   // Every randomization will tweak the seed #
   state.parameters.seed = getRandomSeed();
@@ -201,4 +204,11 @@ const getRandomPeaksCurve = () => {
         endPoint: [Math.random(), Math.random()],
       }
     : sample(presetCurves);
+};
+
+const DEBOUNCE_CUTOFF = 500;
+export const isUpdatePartOfGroup = lastSnapshot => {
+  const timeDeltaMs = Date.now() - lastSnapshot.timestamp;
+
+  return timeDeltaMs < DEBOUNCE_CUTOFF;
 };
