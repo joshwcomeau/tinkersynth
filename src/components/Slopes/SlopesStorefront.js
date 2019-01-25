@@ -3,19 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import { COLORS, UNIT } from '../../constants';
+import actions from '../../actions';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
-import CanvasToggle from '../CanvasToggle';
 
-import { SlopesProvider } from './SlopesState';
-import SlopesCanvasWrapper from './SlopesCanvasWrapper';
-import SlopesCanvas from './SlopesCanvas';
-import SlopesControls from './SlopesControls';
-import SlopesExport from './SlopesExport';
-
-const Slopes = ({ printWidth, printHeight }) => {
+const SlopesStorefront = ({ printWidth, printHeight }) => {
   const windowDimensions = useWindowDimensions();
 
   // Our aspect ratio depends on the size selected.
@@ -66,13 +59,13 @@ const StorefrontWrapper = styled.div`
   margin-top: ${UNIT}px;
 `;
 
-const mapStateToProps = state => {
-  const { width: printWidth, height: printHeight } = state.output.slopes.size;
+const mapStateToProps = state => ({
+  storeData: state.store.slopes,
+});
 
-  return {
-    printWidth,
-    printHeight,
-  };
+const mapDispatchToProps = {
+  selectFormat: actions.selectFormat,
+  selectSize: actions.selectSize,
 };
 
-export default connect(mapStateToProps)(Slopes);
+export default connect(mapStateToProps)(SlopesStorefront);
