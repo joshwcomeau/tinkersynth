@@ -38,7 +38,7 @@ const initialState = {
     amplitudeAmount: 50,
     wavelength: 25,
     octaveAmount: 0,
-    perspective: 40,
+    perspective: 45,
     lineAmount: 45,
     spikyness: 0,
     staticAmount: 0,

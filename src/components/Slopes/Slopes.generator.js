@@ -65,7 +65,7 @@ const reuseRandomValues = () => {
 const sketch = ({
   width,
   height,
-  margins,
+  bottomOffset,
   distanceBetweenRows,
   perlinRatio,
   staticRatio,
@@ -88,9 +88,7 @@ const sketch = ({
   numOfOctaves = 1,
   seed,
 }) => {
-  const [verticalMargin, horizontalMargin] = margins;
-
-  const distanceBetweenSamples = (width - horizontalMargin * 2) / samplesPerRow;
+  const distanceBetweenSamples = width / samplesPerRow;
 
   const sampleData = {
     width,
@@ -101,7 +99,6 @@ const sketch = ({
     rowHeight,
     perlinRangePerRow,
     staticRatio,
-    horizontalMargin,
     perlinRatio,
     polarRatio,
     polarTanRatio,
@@ -142,7 +139,7 @@ const sketch = ({
       rowIndex,
       width,
       height,
-      verticalMargin,
+      bottomOffset,
       distanceBetweenRows,
       polarRatio,
       polarHoleSize
@@ -300,13 +297,13 @@ const getRowOffset = (
   rowIndex,
   width,
   height,
-  verticalMargin,
+  bottomOffset,
   distanceBetweenRows,
   polarRatio,
   polarHoleSize
 ) => {
   const cartesianValue =
-    height - verticalMargin * 2 - rowIndex * distanceBetweenRows;
+    height - bottomOffset * 2 - rowIndex * distanceBetweenRows;
 
   const polarValue = polarHoleSize + rowIndex * distanceBetweenRows;
 
@@ -324,7 +321,6 @@ const getSampleCoordinates = (
     distanceBetweenSamples,
     numOfRows,
     rowHeight,
-    horizontalMargin,
     amplitudeRatio,
     perlinRangePerRow,
     staticRatio,
@@ -401,7 +397,7 @@ const getSampleCoordinates = (
     rowOffset;
 
   const cartesianPoint = [
-    sampleIndex * distanceBetweenSamples + horizontalMargin,
+    sampleIndex * distanceBetweenSamples,
 
     mix(tangentY, cartesianY, polarTanRatio),
   ];
