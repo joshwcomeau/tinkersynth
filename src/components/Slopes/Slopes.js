@@ -14,6 +14,7 @@ import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvas from './SlopesCanvas';
 import SlopesControls from './SlopesControls';
 import SlopesExport from './SlopesExport';
+import SlopesStorefront from './SlopesStorefront';
 
 const Slopes = ({ printWidth, printHeight }) => {
   const windowDimensions = useWindowDimensions();
@@ -67,7 +68,7 @@ const StorefrontWrapper = styled.div`
 `;
 
 const mapStateToProps = state => {
-  const { width: printWidth, height: printHeight } = state.output.slopes.size;
+  const { width: printWidth, height: printHeight } = state.store.slopes.size;
 
   return {
     printWidth,

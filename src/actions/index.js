@@ -31,6 +31,7 @@ export const selectFormat = format => ({
   type: 'SELECT_FORMAT',
   format,
 });
+
 export const selectSize = (width, height) => ({
   type: 'SELECT_FORMAT',
   size: { width, height },
