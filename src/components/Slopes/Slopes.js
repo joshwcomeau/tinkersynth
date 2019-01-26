@@ -40,7 +40,14 @@ const Slopes = ({ size }) => {
       <MachineWrapper>
         <Row>
           <SlopesCanvasWrapper width={canvasWidth} height={canvasHeight}>
-            <SlopesCanvas width={canvasWidth} height={canvasHeight} />
+            <SlopesCanvas
+              // Whenever the size changes, we want to redraw the canvas.
+              // Easiest way to do this with the web-worker and offscreenCanvas
+              // is to just re-mount the component
+              key={size}
+              width={canvasWidth}
+              height={canvasHeight}
+            />
           </SlopesCanvasWrapper>
 
           <SlopesControls width={600} />

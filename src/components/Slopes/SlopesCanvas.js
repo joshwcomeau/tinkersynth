@@ -16,11 +16,6 @@ import { SlopesContext } from './SlopesState';
 import Worker from './SlopesCanvas.worker';
 import { getRenderOptions } from './SlopesCanvas.helpers';
 
-let worker;
-if (typeof window !== 'undefined') {
-  worker = new Worker();
-}
-
 type Props = {
   width: number,
   height: number,
@@ -34,9 +29,11 @@ const useCanvasDrawing = (
   params
 ) => {
   // In SSR mode, we don't want to try and do any of this.
-  if (!worker) {
+  if (typeof window === 'undefined') {
     return;
   }
+
+  const worker = useRef(new Worker());
 
   // For aesthetic reasons, I don't want the lines to start at the very bottom
   // of the page, in cartesian mode.
@@ -82,7 +79,7 @@ const useCanvasDrawing = (
       const context = canvasRef.current.getContext('2d');
       context.scale(devicePixelRatio, devicePixelRatio);
 
-      worker.onmessage = function({ data }) {
+      worker.current.onmessage = function({ data }) {
         const { lines, ...passedData } = data;
 
         if (!lines) {
@@ -132,7 +129,7 @@ const useCanvasDrawing = (
       hasSentCanvas.current = true;
     }
 
-    worker.postMessage(messageData, transfer);
+    worker.current.postMessage(messageData, transfer);
   });
 };
 
