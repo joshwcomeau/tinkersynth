@@ -1,18 +1,15 @@
 // @flow
 import React, { useRef, useEffect, useContext } from 'react';
-import { Spring } from 'react-spring';
 
 import { COLORS } from '../../constants';
-import { clamp, mix, extractTypeFromObject, normalize } from '../../utils';
+import { clamp, mix, normalize } from '../../utils';
 import { renderPolylines } from '../../vendor/polylines';
 import {
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
-import memoWhileIgnoring from '../../hocs/memo-while-ignoring';
 
 import transformParameters from './Slopes.params';
-import { SlopesContext } from './SlopesState';
 import Worker from './SlopesCanvas.worker';
 import { getRenderOptions } from './SlopesCanvas.helpers';
 
@@ -95,7 +92,7 @@ const useCanvasDrawing = (
   }, []);
 
   // Redraw on every render.
-  // `memoWhileIgnoring` should ensure that only the pertinent updates cause
+  // `React.memo` should ensure that only the pertinent updates cause
   // a re-render.
   useEffect(() => {
     // The user can tweak "high-level parameters" like spikyness, perspective,
@@ -153,53 +150,5 @@ const SlopesCanvas = ({ width, height, ...params }: Props) => {
   );
 };
 
-const OptimizedSlopesCanvas = memoWhileIgnoring(
-  [
-    'disabledParams',
-    'setSeed',
-    'toggleDarkMode',
-    'toggleMargins',
-    'setAmplitudeAmount',
-    'setOctaveAmount',
-    'setPerspective',
-    'setLineAmount',
-    'setSpikyness',
-    'setStaticAmount',
-    'setPolarAmount',
-    'setOmega',
-    'setSplitUniverse',
-    'setEnableOcclusion',
-    'setPeaksCurve',
-    'setPersonInflateAmount',
-    'setWavelength',
-    'setWaterBoilAmount',
-    'setBallSize',
-    'setdotAmount',
-    'randomize',
-  ],
-  SlopesCanvas
-);
-
-const Container = (props: any) => {
-  const slopesParams = useContext(SlopesContext);
-
-  const springParams = extractTypeFromObject(slopesParams, 'number');
-
-  // I generally want to spring all params, but I don't want to spring the seed;
-  // fractional seeds don't make sense, and it would be too chaotic anyway.
-  delete springParams.seed;
-
-  return (
-    <Spring to={springParams} immediate={slopesParams.isRandomized}>
-      {interpolatedParams => (
-        <OptimizedSlopesCanvas
-          {...slopesParams}
-          {...interpolatedParams}
-          {...props}
-        />
-      )}
-    </Spring>
-  );
-};
-
-export default Container;
+// $FlowIgnore
+export default React.memo(SlopesCanvas);

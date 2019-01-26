@@ -5,7 +5,7 @@ import produce from 'immer';
 import {
   DEFAULT_PEAKS_CURVE,
   useUndo,
-  getDerivedDisabledParams,
+  updateDisabledParams,
   shuffleParameters,
   getRandomSeed,
   isUpdatePartOfGroup,
@@ -199,6 +199,9 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
 
   useUndo(undo.current);
 
+  const disabledParams = useRef({});
+  updateDisabledParams(disabledParams, state.parameters);
+
   return (
     <SlopesContext.Provider
       value={{
@@ -228,7 +231,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
 
         isShuffled: state.isShuffled,
 
-        disabledParams: getDerivedDisabledParams(state.parameters),
+        disabledParams: disabledParams.current,
       }}
     >
       {children}

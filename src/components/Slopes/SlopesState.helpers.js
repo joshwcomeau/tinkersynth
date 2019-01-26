@@ -34,15 +34,13 @@ export const useUndo = handleUndo => {
   }, []);
 };
 
-export const getDerivedDisabledParams = params => {
-  return {
-    ballSize: params.polarAmount === 0,
-    amplitudeAmount: params.splitUniverse === 100,
-    octaveAmount: params.splitUniverse === 100,
-    wavelength: params.splitUniverse === 100,
-    waterBoilAmount: params.splitUniverse === 100,
-    omega: params.polarAmount === 0,
-  };
+export const updateDisabledParams = (disabledObj, params) => {
+  disabledObj.current.ballSize = params.polarAmount === 0;
+  disabledObj.current.amplitudeAmount = params.splitUniverse === 100;
+  disabledObj.current.octaveAmount = params.splitUniverse === 100;
+  disabledObj.current.wavelength = params.splitUniverse === 100;
+  disabledObj.current.waterBoilAmount = params.splitUniverse === 100;
+  disabledObj.current.omega = params.polarAmount === 0;
 };
 
 export const shuffleParameters = state => {

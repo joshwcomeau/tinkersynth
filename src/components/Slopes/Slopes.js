@@ -12,7 +12,7 @@ import Spacer from '../Spacer';
 
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
-import SlopesCanvas from './SlopesCanvas';
+import SlopesCanvasMachine from './SlopesCanvas.machine';
 import SlopesControls from './SlopesControls';
 import SlopesExport from './SlopesExport';
 import SlopesStorefront from './SlopesStorefront';
@@ -40,7 +40,7 @@ const Slopes = ({ size }) => {
       <MachineWrapper>
         <Row>
           <SlopesCanvasWrapper width={canvasWidth} height={canvasHeight}>
-            <SlopesCanvas
+            <SlopesCanvasMachine
               // Whenever the size changes, we want to redraw the canvas.
               // Easiest way to do this with the web-worker and offscreenCanvas
               // is to just re-mount the component

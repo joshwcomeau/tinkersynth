@@ -6,11 +6,15 @@ import styled from 'styled-components';
 import { COLORS, UNIT } from '../../constants';
 import * as actions from '../../actions';
 
+import consoleTableSrc from '../../images/wide-console-table.svg';
+import pottedPlantSrc from '../../images/potted-plant.svg';
+
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import Heading from '../Heading';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
+import SlopesCanvasPreview from './SlopesCanvas.preview';
 
 const BACKDROP_HEIGHT = 300;
 
@@ -31,7 +35,7 @@ const SlopesStorefront = ({
             <Heading size={1}>Magnificent!</Heading>
             <Spacer size={UNIT * 4} />
             <Paragraph style={{ fontSize: 24 }}>
-              You've created a unique piece of art.
+              You’ve created a unique piece of art.
               <br />
               Display it proudly!
             </Paragraph>
@@ -89,7 +93,11 @@ const SlopesStorefront = ({
           <Spacer size={500} />
         </Column>
 
-        <Column />
+        <Column>
+          <ConsoleTable src={consoleTableSrc} />
+          <PottedPlant src={pottedPlantSrc} />
+          <SlopesCanvasPreview width={100} height={200} />
+        </Column>
       </MainContent>
     </Wrapper>
   );
@@ -115,6 +123,7 @@ const MainContent = styled(MaxWidthWrapper)`
 `;
 
 const Column = styled.div`
+  position: relative;
   flex: 1;
 `;
 
@@ -132,6 +141,20 @@ const mapDispatchToProps = {
   selectFormat: actions.selectFormat,
   selectSize: actions.selectSize,
 };
+
+const ConsoleTable = styled.img`
+  position: absolute;
+  width: 735px;
+  top: 400px;
+  left: 45px;
+`;
+
+const PottedPlant = styled.img`
+  position: absolute;
+  width: 128px;
+  top: 242px;
+  left: 400px;
+`;
 
 export default connect(
   mapStateToProps,

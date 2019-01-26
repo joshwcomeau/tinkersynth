@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';

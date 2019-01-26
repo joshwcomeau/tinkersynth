@@ -39,12 +39,18 @@ export const normalize = (
   return (newScaleMax - newScaleMin) * standardNormalization + newScaleMin;
 };
 
-export const debounce = (callback, wait, timeoutId = null) => (...args) => {
-  window.clearTimeout(timeoutId);
+export const debounce = (callback, wait, timeoutId = null) => {
+  const debounceFn = (...args) => {
+    window.clearTimeout(timeoutId);
 
-  timeoutId = setTimeout(() => {
-    callback.apply(null, args);
-  }, wait);
+    timeoutId = setTimeout(() => {
+      callback.apply(null, args);
+    }, wait);
+  };
+
+  debounceFn.cancel = () => window.clearTimeout(timeoutId);
+
+  return debounceFn;
 };
 
 export const compose = (...fns) =>

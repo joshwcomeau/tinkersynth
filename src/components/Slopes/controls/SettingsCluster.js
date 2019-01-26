@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 
 import { UNIT } from '../../../constants';
-import memoWhileIgnoring from '../../../hocs/memo-while-ignoring';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
