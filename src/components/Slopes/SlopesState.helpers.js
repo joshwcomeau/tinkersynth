@@ -41,6 +41,7 @@ export const getDerivedDisabledParams = params => {
     octaveAmount: params.splitUniverse === 100,
     wavelength: params.splitUniverse === 100,
     waterBoilAmount: params.splitUniverse === 100,
+    omega: params.polarAmount === 0,
   };
 };
 

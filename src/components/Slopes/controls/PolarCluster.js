@@ -29,6 +29,7 @@ type Props = {
   tweakParameter: TweakParameterAction,
   isShuffled: boolean,
   isBallSizeDisabled: boolean,
+  isOmegaDisabled: boolean,
 };
 
 const PolarCluster = ({
@@ -39,6 +40,7 @@ const PolarCluster = ({
   splitUniverse,
   tweakParameter,
   isBallSizeDisabled,
+  isOmegaDisabled,
   isShuffled,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
@@ -85,14 +87,20 @@ const PolarCluster = ({
       <Spacer size={UNIT} />
 
       <Row>
-        <TouchSliderIconControl
-          value={omega}
-          updateValue={val => tweakParameter('omega', val)}
-          width={innerWidth}
-          height={40}
-          visualizationComponent={OmegaVisualization}
-          isAnimated={!isShuffled}
-        />
+        <ControlCompartment
+          orientation="horizontal"
+          numOfDoors={2}
+          isDisabled={isOmegaDisabled}
+        >
+          <TouchSliderIconControl
+            value={omega}
+            updateValue={val => tweakParameter('omega', val)}
+            width={innerWidth}
+            height={40}
+            visualizationComponent={OmegaVisualization}
+            isAnimated={!isShuffled}
+          />
+        </ControlCompartment>
       </Row>
 
       <Spacer size={UNIT} />
@@ -129,6 +137,7 @@ const PolarContainer = ({ width }) => {
       splitUniverse={slopesParams.splitUniverse}
       tweakParameter={slopesParams.tweakParameter}
       isBallSizeDisabled={slopesParams.disabledParams.ballSize}
+      isOmegaDisabled={slopesParams.disabledParams.omega}
       isShuffled={slopesParams.isShuffled}
     />
   );

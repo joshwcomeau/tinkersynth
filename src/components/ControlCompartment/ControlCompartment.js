@@ -1,23 +1,24 @@
 // @flow
 import React, { useRef } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
+import Icon from 'react-icons-kit';
+import { alertCircle } from 'react-icons-kit/feather/alertCircle';
 
+import * as actions from '../../actions';
 import { COLORS } from '../../constants';
+import UnstyledButton from '../UnstyledButton';
 
 type Props = {
   orientation: 'horizontal' | 'vertical',
   numOfDoors?: 1 | 2,
   isDisabled: boolean,
+  clickDisabledCompartment: () => void,
   children: React$Node,
 };
 
 const RADIUS = '3px';
-
-const verticalTextStyles = {
-  writingMode: 'vertical-rl',
-  transform: 'rotate(180deg)',
-};
 
 const getDoorTranslateString = (offset, orientation, numOfDoors, doorIndex) => {
   const translate = orientation === 'horizontal' ? 'translateY' : 'translateX';
@@ -41,9 +42,10 @@ const ControlCompartment = ({
   orientation,
   isDisabled,
   numOfDoors = 2,
+  clickDisabledCompartment,
   children,
 }: Props) => {
-  const wrapperRef = useRef(null);
+  const iconButtonRef = useRef();
 
   const doorSpring = useSpring({
     offset: isDisabled ? 0 : 150,
@@ -63,7 +65,7 @@ const ControlCompartment = ({
   });
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper>
       <Doors
         orientation={orientation}
         style={{
@@ -79,9 +81,12 @@ const ControlCompartment = ({
             ),
           }}
         >
-          <span style={orientation === 'vertical' ? verticalTextStyles : {}}>
-            Control Disabled
-          </span>
+          <UnstyledButton
+            ref={iconButtonRef}
+            onClick={() => clickDisabledCompartment(iconButtonRef.current)}
+          >
+            <Icon icon={alertCircle} />
+          </UnstyledButton>
         </FirstDoor>
         {numOfDoors === 2 && (
           <LastDoor
@@ -122,6 +127,7 @@ const Wrapper = styled.div`
 
 const Doors = styled.div`
   position: absolute;
+  display: block;
   z-index: 3;
   top: 0;
   left: 0;
@@ -136,7 +142,7 @@ const Doors = styled.div`
 
 const Door = styled(animated.div)`
   background: ${COLORS.gray[100]};
-  border: 1px solid ${COLORS.gray[300]};
+  border: 1px solid ${COLORS.gray[500]};
   flex: 1;
 `;
 
@@ -144,8 +150,6 @@ const FirstDoor = styled(Door)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 10px;
-  font-weight: 600;
   color: ${COLORS.gray[500]};
   text-transform: uppercase;
 `;
@@ -171,4 +175,11 @@ const ChildrenShadow = styled(animated.div)`
   pointer-events: none;
 `;
 
-export default ControlCompartment;
+const mapDispatchToProps = {
+  clickDisabledCompartment: actions.clickDisabledCompartment,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ControlCompartment);

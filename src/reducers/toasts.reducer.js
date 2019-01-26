@@ -4,6 +4,7 @@ const initialState = [];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'CLICK_DISABLED_COMPARTMENT':
     case 'BREAK_MACHINE_WITH_KEYBOARD': {
       return [...state, action.toast];
     }
