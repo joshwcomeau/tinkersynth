@@ -130,7 +130,6 @@ class BezierCurve extends PureComponent<Props> {
 
       const pointIndex = pointId.slice(1) - 1;
       const [x, y] = points[pointIndex];
-      console.log(x, y);
 
       let newX = x;
       let newY = y;

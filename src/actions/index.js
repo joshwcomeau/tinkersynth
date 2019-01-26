@@ -42,17 +42,19 @@ export const clickDisabledCompartment = (triggerRef: ?HTMLElement) => ({
   },
 });
 
-export const dismissToast = toastId => ({
+export const dismissToast = (toastId: string) => ({
   type: 'DISMISS_TOAST',
   toastId,
 });
 
-export const selectFormat = format => ({
+export const selectFormat = (machineName: string, format: string) => ({
   type: 'SELECT_FORMAT',
+  machineName,
   format,
 });
 
-export const selectSize = (width, height) => ({
-  type: 'SELECT_FORMAT',
-  size: { width, height },
+export const selectSize = (machineName: string, size: string) => ({
+  type: 'SELECT_SIZE',
+  machineName,
+  size,
 });

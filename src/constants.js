@@ -228,3 +228,9 @@ export const Z_INDICES = {
 
 export const MIN_NUM_ROWS = 1;
 export const MAX_NUM_ROWS = 75;
+
+export const PRINT_SIZES = {
+  small: { width: 12, height: 18 },
+  medium: { width: 18, height: 24 },
+  large: { width: 24, height: 36 },
+};

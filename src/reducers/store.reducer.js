@@ -1,4 +1,3 @@
-// @flow
 /**
  * This reducer holds the specifics of the current requested printing
  * dimensions.
@@ -24,10 +23,7 @@ type State = {
 const initialState = {
   slopes: {
     format: 'print',
-    size: {
-      width: 24,
-      height: 36,
-    },
+    size: 'medium',
   },
 };
 
@@ -37,10 +33,12 @@ const reducer = produce((state = initialState, action) => {
   switch (type) {
     case 'SELECT_FORMAT': {
       state[machineName].format = action.format;
+      return state;
     }
 
     case 'SELECT_SIZE': {
       state[machineName].size = action.size;
+      return state;
     }
 
     default:

@@ -25,8 +25,8 @@ const Heading = ({ size, children }: Props) => {
 };
 
 const H1 = styled.h1`
-  font-size: 60px;
-  font-weight: 900;
+  font-size: 72px;
+  font-weight: 700;
   letter-spacing: -1px;
 `;
 const H2 = styled.h1`
