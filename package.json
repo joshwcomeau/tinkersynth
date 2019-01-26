@@ -4,6 +4,15 @@
   "description": "Create art through serendipitous experimentation",
   "version": "0.1.0",
   "author": "Josh Comeau <joshwcomeau@gmail.com>",
+  "scripts": {
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "build-and-serve": "gatsby build && gatsby serve",
+    "develop": "gatsby develop",
+    "start": "npm run develop",
+    "format": "prettier --write \"src/**/*.js\"",
+    "test": "node scripts/test.js"
+  },
   "dependencies": {
     "@loadable/component": "^5.2.2",
     "canvas-sketch-util": "1.5.0",
@@ -40,15 +49,6 @@
     "styled-components": "4.1.2"
   },
   "license": "MIT",
-  "scripts": {
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "build-and-serve": "gatsby build && gatsby serve",
-    "develop": "gatsby develop",
-    "start": "npm run develop",
-    "format": "prettier --write \"src/**/*.js\"",
-    "test": "node scripts/test.js"
-  },
   "devDependencies": {
     "prettier": "^1.15.2",
     "worker-loader": "2.0.0"
