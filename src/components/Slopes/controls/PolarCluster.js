@@ -80,6 +80,7 @@ const PolarCluster = ({
             visualizationComponent={BallSizeVisualization}
             numOfNotches={14}
             isAnimated={!isShuffled}
+            isDisabled={isBallSizeDisabled}
           />
         </ControlCompartment>
       </Row>

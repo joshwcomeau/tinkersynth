@@ -83,6 +83,7 @@ const ControlCompartment = ({
         >
           <UnstyledButton
             ref={iconButtonRef}
+            tabIndex={isDisabled ? undefined : -1}
             onClick={() => clickDisabledCompartment(iconButtonRef.current)}
           >
             <Icon icon={alertCircle} />

@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -40,6 +40,8 @@ const Slider = ({
   isMachineBroken,
   breakMachineWithKeyboard,
 }: Props) => {
+  const handleRef = useRef(null);
+
   const [dragging, setDragging] = useState(false);
   const [animateTransition, setAnimateTransition] = useState(true);
 
@@ -90,13 +92,15 @@ const Slider = ({
   const handleMarginTop = -handleHeight / 2;
 
   const handleDisplacement = normalize(value, min, max, height, 0);
-  const handleColor = isDisabled ? COLORS.gray[300] : COLORS.pink[300];
+  const handleColor = COLORS.pink[300];
 
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
       <Decorations numOfNotches={numOfNotches} />
 
       <HandleWrapper
+        ref={handleRef}
+        tabIndex={isDisabled ? -1 : undefined}
         onMouseDown={ev => {
           ev.stopPropagation();
 
@@ -133,7 +137,7 @@ const Slider = ({
             // Mark the machine as "broken".
             // This just displays a toast for the user, and keeps track of
             // that state, so that we don't keep showing them the toast.
-            breakMachineWithKeyboard();
+            breakMachineWithKeyboard(handleRef.current);
           }
         }}
         style={{

@@ -10,6 +10,9 @@ import {
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
+
+import UnstyledButton from '../UnstyledButton';
+
 import type { Colorway } from './TouchSlider.helpers';
 
 type Props = {
@@ -173,7 +176,25 @@ const TouchSlider = (props: Props) => {
   );
 
   return (
-    <div ref={ref}>
+    <UnstyledButton
+      ref={ref}
+      onKeyDown={ev => {
+        const incrementAmount = 3;
+
+        switch (ev.key) {
+          case 'ArrowLeft': {
+            const newValue = clamp(value - incrementAmount, 0, 100);
+            updateValue(newValue);
+            break;
+          }
+          case 'ArrowRight': {
+            const newValue = clamp(value + incrementAmount, 0, 100);
+            updateValue(newValue);
+            break;
+          }
+        }
+      }}
+    >
       <Canvas
         ref={canvasRef}
         {...scaledCanvasProps}
@@ -192,7 +213,7 @@ const TouchSlider = (props: Props) => {
           setHoveredValue(null);
         }}
       />
-    </div>
+    </UnstyledButton>
   );
 };
 

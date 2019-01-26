@@ -19,8 +19,6 @@ import SlopesStorefront from './SlopesStorefront';
 const Slopes = ({ printWidth = 500, printHeight = 500 }) => {
   const windowDimensions = useWindowDimensions();
 
-  console.log('RENDERRR');
-
   // Our aspect ratio depends on the size selected.
   // By default, our size is 18 x 24.
   const aspectRatio = printWidth / printHeight;
