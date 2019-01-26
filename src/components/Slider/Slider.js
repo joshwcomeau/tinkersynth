@@ -10,6 +10,7 @@ import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import RectangularHandle from '../RectangularHandle';
 import Decorations from './Decorations';
+import UnstyledButton from '../UnstyledButton';
 
 type Props = {
   value: number,
@@ -172,10 +173,8 @@ const Wrapper = styled.div`
   border-radius: 3px;
 `;
 
-const HandleWrapper = styled.button`
+const HandleWrapper = styled(UnstyledButton)`
   position: absolute;
-  border: none;
-  background: transparent;
   /*
     The wrapper is given some padding, so that user clicks don't have to be
     perfect. It's an invisible barrier around the handle.

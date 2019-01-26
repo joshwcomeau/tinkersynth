@@ -102,6 +102,7 @@ class BezierCurve extends PureComponent<Props> {
   render() {
     const {
       points,
+      updatePoint,
       width,
       height,
       isAnimated,
@@ -123,6 +124,37 @@ class BezierCurve extends PureComponent<Props> {
     ]);
 
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
+
+    const handleKeyDown = (ev, pointId) => {
+      const STEP_SIZE = 0.03;
+
+      const pointIndex = pointId.slice(1) - 1;
+      const [x, y] = points[pointIndex];
+      console.log(x, y);
+
+      let newX = x;
+      let newY = y;
+      switch (ev.key) {
+        case 'ArrowLeft': {
+          newX = x - STEP_SIZE;
+          break;
+        }
+        case 'ArrowRight': {
+          newX = x + STEP_SIZE;
+          break;
+        }
+        case 'ArrowUp': {
+          newY = y + STEP_SIZE;
+          break;
+        }
+        case 'ArrowDown': {
+          newY = y - STEP_SIZE;
+          break;
+        }
+      }
+
+      updatePoint(pointId, [newX, newY]);
+    };
 
     return (
       <Spring native to={{ p1, p2, p3 }} immediate={!isAnimated}>
@@ -162,13 +194,13 @@ class BezierCurve extends PureComponent<Props> {
                 strokeWidth={strokeWidth}
               />
 
-              {/* Start point */}
+              {/* End point */}
               <PointWrapper
-                onMouseDown={this.handleSelectPoint('p1')}
-                tabIndex={1}
-                transform={sprung.p1.interpolate(
-                  (x, y) =>
-                    `
+                onMouseDown={this.handleSelectPoint('p3')}
+                onKeyDown={ev => handleKeyDown(ev, 'p3')}
+                tabIndex={0}
+                transform={sprung.p3.interpolate(
+                  (x, y) => `
                     translate(
                       ${x - svgWidth / 2},
                       ${y - HANDLE_RADIUS}
@@ -176,13 +208,14 @@ class BezierCurve extends PureComponent<Props> {
                   `
                 )}
               >
-                <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
+                <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
               </PointWrapper>
 
               {/* Control point 1 */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p2')}
-                tabIndex={2}
+                onKeyDown={ev => handleKeyDown(ev, 'p2')}
+                tabIndex={0}
                 transform={sprung.p2.interpolate(
                   (x, y) =>
                     `
@@ -201,12 +234,14 @@ class BezierCurve extends PureComponent<Props> {
                 />
               </PointWrapper>
 
-              {/* End point */}
+              {/* Start point */}
               <PointWrapper
-                onMouseDown={this.handleSelectPoint('p3')}
-                tabIndex={3}
-                transform={sprung.p3.interpolate(
-                  (x, y) => `
+                onMouseDown={this.handleSelectPoint('p1')}
+                onKeyDown={ev => handleKeyDown(ev, 'p1')}
+                tabIndex={0}
+                transform={sprung.p1.interpolate(
+                  (x, y) =>
+                    `
                     translate(
                       ${x - svgWidth / 2},
                       ${y - HANDLE_RADIUS}
@@ -214,7 +249,7 @@ class BezierCurve extends PureComponent<Props> {
                   `
                 )}
               >
-                <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+                <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
               </PointWrapper>
             </Svg>
           </Wrapper>
@@ -243,6 +278,15 @@ const PointWrapper = styled(animated.g)`
 
   &:active {
     cursor: grabbing;
+  }
+
+  &:focus {
+    outline: 2px solid ${COLORS.pink[300]};
+    outline-offset: 2px;
+  }
+
+  &:focus:not(.focus-visible) {
+    outline: none;
   }
 `;
 
