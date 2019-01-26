@@ -100,6 +100,7 @@ const PolarCluster = ({
             height={40}
             visualizationComponent={OmegaVisualization}
             isAnimated={!isShuffled}
+            isDisabled={isOmegaDisabled}
           />
         </ControlCompartment>
       </Row>

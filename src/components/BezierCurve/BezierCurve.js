@@ -165,6 +165,7 @@ class BezierCurve extends PureComponent<Props> {
               {/* Start point */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p1')}
+                tabIndex={1}
                 transform={sprung.p1.interpolate(
                   (x, y) =>
                     `
@@ -181,6 +182,7 @@ class BezierCurve extends PureComponent<Props> {
               {/* Control point 1 */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p2')}
+                tabIndex={2}
                 transform={sprung.p2.interpolate(
                   (x, y) =>
                     `
@@ -202,6 +204,7 @@ class BezierCurve extends PureComponent<Props> {
               {/* End point */}
               <PointWrapper
                 onMouseDown={this.handleSelectPoint('p3')}
+                tabIndex={3}
                 transform={sprung.p3.interpolate(
                   (x, y) => `
                     translate(

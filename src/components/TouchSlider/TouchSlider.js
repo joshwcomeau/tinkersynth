@@ -20,6 +20,7 @@ type Props = {
   updateValue: (num: number) => void,
   width: number,
   height: number,
+  isDisabled?: boolean,
   // Aesthetic choices
   dotSize: number,
   colorway: Colorway,
@@ -36,7 +37,8 @@ const useOffscreenCanvasIfAvailable = (
   height,
   value,
   hoveredValue,
-  props
+  dotSize,
+  colorway
 ) => {
   // No SSR
   if (typeof window === 'undefined') {
@@ -71,8 +73,6 @@ const useOffscreenCanvasIfAvailable = (
       return;
     }
 
-    const { dotSize, colorway } = props;
-
     const { dotCoords, numOfCols } = generateDotCoords(width, height, dotSize);
 
     const numOfSelectedDots = Math.round(dotCoords.length * (value / max));
@@ -103,9 +103,15 @@ const useOffscreenCanvasIfAvailable = (
   useEffect(throttle(handleUpdate, 25));
 };
 
-const TouchSlider = (props: Props) => {
-  const { value, updateValue, width, height, colorway } = props;
-
+const TouchSlider = ({
+  value,
+  updateValue,
+  width,
+  height,
+  isDisabled,
+  dotSize,
+  colorway,
+}: Props) => {
   if (typeof width !== 'number') {
     throw new Error('Please give TouchSlider an explicit width');
   }
@@ -125,11 +131,12 @@ const TouchSlider = (props: Props) => {
     height,
     value,
     hoveredValue,
-    props
+    dotSize,
+    colorway
   );
 
   const calculateAndSetNewValue = (ev, setter = updateValue) => {
-    if (!boundingBox) {
+    if (!boundingBox || isDisabled) {
       return;
     }
 
@@ -178,6 +185,7 @@ const TouchSlider = (props: Props) => {
   return (
     <UnstyledButton
       ref={ref}
+      tabIndex={isDisabled ? -1 : undefined}
       onKeyDown={ev => {
         const incrementAmount = 3;
 
