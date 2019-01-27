@@ -39,6 +39,7 @@
     "react-redux": "^6.0.0",
     "react-retro-hit-counter": "^1.0.1",
     "react-spring": "7.1.2",
+    "react-tippy": "^1.2.3",
     "redux": "^4.0.1",
     "redux-devtools": "^3.5.0",
     "redux-devtools-dock-monitor": "^1.1.3",

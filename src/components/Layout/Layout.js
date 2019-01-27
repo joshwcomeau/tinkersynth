@@ -12,6 +12,7 @@ import ToastManager from '../ToastManager';
 import Header from '../Header';
 
 import 'focus-visible';
+import 'react-tippy/dist/tippy.css';
 
 const store = configureStore();
 

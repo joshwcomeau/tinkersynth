@@ -12,6 +12,7 @@ import pottedPlantSrc from '../../images/potted-plant.svg';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import Heading from '../Heading';
+import Asterisk from '../Asterisk';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
@@ -21,6 +22,9 @@ import SlopesCanvasPreview from './SlopesCanvas.preview';
 import Pricetag from '../Pricetag/Pricetag';
 
 const BACKDROP_HEIGHT = 300;
+
+const numOfCombinationsString =
+  "There are >10³² possible creations with this machine. For comparison, there's only about 10¹⁹ grains of sand on the planet. It's a safe bet that your creation is one-of-a-kind.";
 
 const SlopesStorefront = ({
   printWidth,
@@ -40,7 +44,8 @@ const SlopesStorefront = ({
             <Heading size={1}>Magnificent!</Heading>
             <Spacer size={UNIT * 4} />
             <Paragraph style={{ fontSize: 24 }}>
-              You’ve created a unique piece of art.
+              You’ve created a unique
+              <Asterisk tooltip={numOfCombinationsString} /> piece of art.
               <br />
               Display it proudly!
             </Paragraph>

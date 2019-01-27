@@ -103,6 +103,12 @@ const GlobalStyles = createGlobalStyle`
     border-collapse: collapse;
     border-spacing: 0;
   }
+
+  /* Styles for the Tippy tooltip library */
+  .tippy-tooltip {
+    line-height: 1.5 !important;
+    padding: 1rem !important;
+  }
 `;
 
 export default GlobalStyles;
