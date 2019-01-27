@@ -14,6 +14,7 @@ import Heading from '../Heading';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
+import StorefrontPreviewDecorations from '../StorefrontPreviewDecorations';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
 
 const BACKDROP_HEIGHT = 300;
@@ -98,6 +99,8 @@ const SlopesStorefront = ({
           <PottedPlant src={pottedPlantSrc} />
 
           <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
+
+          <StorefrontPreviewDecorations size={storeData.size} />
         </Column>
       </MainContent>
     </Wrapper>
