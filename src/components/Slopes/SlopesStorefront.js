@@ -105,6 +105,8 @@ const SlopesStorefront = ({
 
 const Wrapper = styled.div`
   position: relative;
+  max-width: 100vw;
+  overflow-x: hidden;
 `;
 
 const Backdrop = styled.div`
