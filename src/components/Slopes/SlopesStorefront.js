@@ -18,6 +18,12 @@ import SlopesCanvasPreview from './SlopesCanvas.preview';
 
 const BACKDROP_HEIGHT = 300;
 
+const PREVIEW_SIZES = {
+  small: { width: 171, height: 221 },
+  medium: { width: 231, height: 299 },
+  large: { width: 294, height: 380 },
+};
+
 const SlopesStorefront = ({
   printWidth,
   printHeight,
@@ -25,6 +31,8 @@ const SlopesStorefront = ({
   selectFormat,
   selectSize,
 }) => {
+  const previewSize = PREVIEW_SIZES[storeData.size];
+
   return (
     <Wrapper>
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
@@ -96,7 +104,13 @@ const SlopesStorefront = ({
         <Column>
           <ConsoleTable src={consoleTableSrc} />
           <PottedPlant src={pottedPlantSrc} />
-          <SlopesCanvasPreview width={100} height={200} />
+          <HangingCanvas>
+            <SlopesCanvasPreview
+              key={storeData.size}
+              width={previewSize.width}
+              height={previewSize.height}
+            />
+          </HangingCanvas>
         </Column>
       </MainContent>
     </Wrapper>
@@ -147,15 +161,26 @@ const mapDispatchToProps = {
 const ConsoleTable = styled.img`
   position: absolute;
   width: 735px;
-  top: 400px;
+  top: 510px;
   left: 45px;
 `;
 
 const PottedPlant = styled.img`
   position: absolute;
   width: 128px;
-  top: 242px;
+  top: 352px;
   left: 400px;
+`;
+
+const HangingCanvas = styled.div`
+  position: absolute;
+  /* TODO: solve for different sizes */
+  left: 100px;
+  top: 100px;
+  padding: 5px;
+  background-color: ${COLORS.white};
+  border: 4px solid ${COLORS.gray[700]};
+  border-radius: 2px;
 `;
 
 export default connect(

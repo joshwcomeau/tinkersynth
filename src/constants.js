@@ -201,7 +201,7 @@ export const FONT_WEIGHTS = {
 export const BREAKPOINT_SIZES = {
   sm: 540,
   md: 900,
-  lg: 1275,
+  lg: 1125,
 };
 
 export const BREAKPOINTS = {

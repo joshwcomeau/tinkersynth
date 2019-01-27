@@ -49,8 +49,10 @@ const Slopes = ({ size }) => {
               height={canvasHeight}
             />
           </SlopesCanvasWrapper>
-
-          <SlopesControls width={600} />
+          <ControlsWrapper>
+            <Spacer size={UNIT} />
+            <SlopesControls width={600} />
+          </ControlsWrapper>
         </Row>
       </MachineWrapper>
 
@@ -69,8 +71,13 @@ const MachineWrapper = styled.div`
   padding-bottom: ${UNIT * 8}px;
 `;
 
+const ControlsWrapper = styled.div`
+  display: flex;
+`;
+
 const Row = styled(MaxWidthWrapper)`
   display: flex;
+  justify-content: space-between;
 `;
 
 const mapStateToProps = state => {
