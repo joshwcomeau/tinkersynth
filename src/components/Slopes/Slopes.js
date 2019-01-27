@@ -56,7 +56,7 @@ const Slopes = ({ size }) => {
         </Row>
       </MachineWrapper>
 
-      <Spacer size={UNIT} />
+      <Spacer size={UNIT * 2} />
 
       <SlopesStorefront />
 
@@ -68,7 +68,7 @@ const Slopes = ({ size }) => {
 const MachineWrapper = styled.div`
   position: relative;
   background: ${COLORS.gray[700]};
-  padding-bottom: ${UNIT * 8}px;
+  padding-bottom: ${UNIT * 16}px;
 `;
 
 const ControlsWrapper = styled.div`

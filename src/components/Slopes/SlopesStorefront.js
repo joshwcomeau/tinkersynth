@@ -14,6 +14,7 @@ import Heading from '../Heading';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
+import HangingCanvas from '../HangingCanvas';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
 
 const BACKDROP_HEIGHT = 300;
@@ -104,7 +105,8 @@ const SlopesStorefront = ({
         <Column>
           <ConsoleTable src={consoleTableSrc} />
           <PottedPlant src={pottedPlantSrc} />
-          <HangingCanvas>
+
+          <HangingCanvas size={storeData.size}>
             <SlopesCanvasPreview
               key={storeData.size}
               width={previewSize.width}
@@ -119,8 +121,6 @@ const SlopesStorefront = ({
 
 const Wrapper = styled.div`
   position: relative;
-  max-width: 100vw;
-  overflow-x: hidden;
 `;
 
 const Backdrop = styled.div`
@@ -170,17 +170,6 @@ const PottedPlant = styled.img`
   width: 128px;
   top: 352px;
   left: 400px;
-`;
-
-const HangingCanvas = styled.div`
-  position: absolute;
-  /* TODO: solve for different sizes */
-  left: 100px;
-  top: 100px;
-  padding: 5px;
-  background-color: ${COLORS.white};
-  border: 4px solid ${COLORS.gray[700]};
-  border-radius: 2px;
 `;
 
 export default connect(
