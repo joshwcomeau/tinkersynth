@@ -17,7 +17,7 @@ const SlopesCanvasMachine = (props: any) => {
   delete springParams.seed;
 
   return (
-    <Spring to={springParams} immediate={slopesParams.isRandomized}>
+    <Spring to={springParams} immediate={slopesParams.isShuffled}>
       {interpolatedParams => (
         <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
       )}
