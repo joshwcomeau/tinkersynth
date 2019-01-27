@@ -23,9 +23,6 @@ import Pricetag from '../Pricetag/Pricetag';
 
 const BACKDROP_HEIGHT = 300;
 
-const numOfCombinationsString =
-  "There are >10³² possible creations with this machine. For comparison, there's only about 10¹⁹ grains of sand on the planet. It's a safe bet that your creation is one-of-a-kind.";
-
 const SlopesStorefront = ({
   printWidth,
   printHeight,
@@ -34,6 +31,16 @@ const SlopesStorefront = ({
   selectFormat,
   selectSize,
 }) => {
+  const asteriskTooltipContents = (
+    <span style={{ display: 'block', maxWidth: 360 }}>
+      There are >10³² possible creations with this machine. For comparison,
+      there's only about 10¹⁹ grains of sand on the planet.
+      <br />
+      <br />
+      It's a safe bet that your creation is one-of-a-kind.
+    </span>
+  );
+
   return (
     <Wrapper>
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
@@ -43,9 +50,9 @@ const SlopesStorefront = ({
           <Header style={{ height: BACKDROP_HEIGHT }}>
             <Heading size={1}>Magnificent!</Heading>
             <Spacer size={UNIT * 4} />
-            <Paragraph style={{ fontSize: 24 }}>
+            <Paragraph as="div" style={{ fontSize: 24 }}>
               You’ve created a unique
-              <Asterisk tooltip={numOfCombinationsString} /> piece of art.
+              <Asterisk tooltip={asteriskTooltipContents} /> piece of art.
               <br />
               Display it proudly!
             </Paragraph>

@@ -22,7 +22,7 @@ const Asterisk = ({ tooltip }: Props) => {
         animateFill={false}
         followCursor={true}
         arrow={true}
-        title={tooltip}
+        html={tooltip}
         style={{
           lineHeight: 1.4,
         }}
@@ -40,14 +40,14 @@ const Wrapper = styled.span`
 
 const AsteriskGlyph = styled.span`
   position: relative;
-  /* display: inline-block; */
   font-size: inherit;
   font-weight: 900;
   color: ${COLORS.pink[500]};
 `;
 
-const TouchArea = styled.div`
+const TouchArea = styled.span`
   position: absolute;
+  display: block;
   top: -10px;
   left: -10px;
   right: -10px;
