@@ -16,3 +16,5 @@ export type Toast = {
   title?: string,
   message: string,
 };
+
+export type CanvasSize = 'small' | 'medium' | 'large';

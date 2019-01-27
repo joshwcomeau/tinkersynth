@@ -3,10 +3,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
 
-import { COLORS, UNIT } from '../../constants';
+import {
+  COLORS,
+  UNIT,
+  DARK_BACKGROUND,
+  LIGHT_BACKGROUND,
+} from '../../constants';
+
+import type { CanvasSize } from '../../types';
 
 type Props = {
-  size: 'small' | 'medium' | 'large',
+  size: CanvasSize,
+  enableDarkMode: boolean,
   children: React$Node,
 };
 
@@ -45,7 +53,9 @@ const FRAME_OFFSETS = {
 // entire right-hand side (with the console table and plant), or I should
 // split it up so that `HangingCanvas` is just the frame, and a separate
 // component exists for the circles.
-const HangingCanvas = ({ size, children }: Props) => {
+const HangingCanvas = ({ size, enableDarkMode, children }: Props) => {
+  const backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+
   const frameOffset = FRAME_OFFSETS[size];
 
   const aquaSpring = useSpring({
@@ -79,7 +89,9 @@ const HangingCanvas = ({ size, children }: Props) => {
 
   return (
     <Wrapper>
-      <Frame style={frameOffset}>{children}</Frame>
+      <Frame style={frameOffset}>
+        <CanvasWrapper style={{ backgroundColor }}>{children}</CanvasWrapper>
+      </Frame>
       <Decorations>
         <Circle size={138} color={COLORS.aqua[300]} style={aquaSpring} />
         <Circle size={192} color={COLORS.pink[300]} style={pinkSpring} />
@@ -103,10 +115,13 @@ const Wrapper = styled.div`
 const Frame = styled.div`
   position: absolute;
   z-index: 2;
-  padding: 5px;
-  background-color: ${COLORS.white};
   border: 3px solid ${COLORS.gray[900]};
   border-radius: 2px;
+`;
+
+const CanvasWrapper = styled.div`
+  position: relative;
+  border: 5px solid ${COLORS.white};
 `;
 
 const Decorations = styled.div`

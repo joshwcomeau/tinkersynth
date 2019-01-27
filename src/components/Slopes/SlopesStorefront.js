@@ -14,16 +14,9 @@ import Heading from '../Heading';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
-import HangingCanvas from '../HangingCanvas';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
 
 const BACKDROP_HEIGHT = 300;
-
-const PREVIEW_SIZES = {
-  small: { width: 171, height: 221 },
-  medium: { width: 231, height: 299 },
-  large: { width: 294, height: 380 },
-};
 
 const SlopesStorefront = ({
   printWidth,
@@ -32,8 +25,6 @@ const SlopesStorefront = ({
   selectFormat,
   selectSize,
 }) => {
-  const previewSize = PREVIEW_SIZES[storeData.size];
-
   return (
     <Wrapper>
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
@@ -106,13 +97,7 @@ const SlopesStorefront = ({
           <ConsoleTable src={consoleTableSrc} />
           <PottedPlant src={pottedPlantSrc} />
 
-          <HangingCanvas size={storeData.size}>
-            <SlopesCanvasPreview
-              key={storeData.size}
-              width={previewSize.width}
-              height={previewSize.height}
-            />
-          </HangingCanvas>
+          <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
         </Column>
       </MainContent>
     </Wrapper>
