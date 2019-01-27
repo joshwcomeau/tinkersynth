@@ -5,9 +5,11 @@ import { Icon } from 'react-icons-kit';
 import { chevronUp } from 'react-icons-kit/feather/chevronUp';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 import { u2049 as bangQuestion } from 'react-icons-kit/noto_emoji_regular/u2049';
+
 import { COLORS, UNIT } from '../../constants';
 
 import Spacer from '../Spacer';
+import UnstyledButton from '../UnstyledButton';
 
 const HEIGHT = 54;
 
@@ -92,8 +94,7 @@ const Actions = styled.div`
   justify-content: space-between;
 `;
 
-const IncrementDecrementButton = styled.button`
-  all: unset;
+const IncrementDecrementButton = styled(UnstyledButton)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,15 +105,6 @@ const IncrementDecrementButton = styled.button`
 
   &:active {
     background: ${COLORS.pink[300]};
-  }
-
-  &:focus {
-    outline: auto;
-    outline-color: ${COLORS.pink[300]};
-  }
-
-  &:focus:not(.focus-visible) {
-    outline: none;
   }
 
   &:disabled {

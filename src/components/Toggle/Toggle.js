@@ -2,8 +2,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import RoundHandle from '../RoundHandle';
 import { COLORS } from '../../constants';
+
+import RoundHandle from '../RoundHandle';
+import UnstyledButton from '../UnstyledButton';
 
 type Props = {
   width: number,
@@ -53,16 +55,8 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
   );
 };
 
-const Button = styled.button`
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
+const Button = styled(UnstyledButton)`
   cursor: pointer;
-
-  &:focus:not(.focus-visible) {
-    outline: none;
-  }
 `;
 
 const InnerWrapper = styled.div`
