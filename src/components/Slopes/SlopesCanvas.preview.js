@@ -29,7 +29,11 @@ const SlopesCanvasPreview = ({ size }: Props) => {
 
   return (
     <Debounce length={1400}>
-      <HangingCanvas size={size} enableDarkMode={enableDarkMode}>
+      <HangingCanvas
+        previewSizes={PREVIEW_SIZES}
+        size={size}
+        enableDarkMode={enableDarkMode}
+      >
         <SlopesCanvasMargins
           width={width}
           height={height}

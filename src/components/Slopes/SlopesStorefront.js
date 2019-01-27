@@ -22,6 +22,7 @@ import SlopesCanvasPreview from './SlopesCanvas.preview';
 import Pricetag from '../Pricetag/Pricetag';
 
 const BACKDROP_HEIGHT = 300;
+const SECOND_COLUMN_CUTOFF = 975;
 
 const SlopesStorefront = ({
   printWidth,
@@ -46,7 +47,7 @@ const SlopesStorefront = ({
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
 
       <MainContent>
-        <Column style={{ minWidth: 650 }}>
+        <FirstColumn>
           <Header style={{ height: BACKDROP_HEIGHT }}>
             <Heading size={1}>Magnificent!</Heading>
             <Spacer size={UNIT * 4} />
@@ -117,16 +118,16 @@ const SlopesStorefront = ({
 
           {/* TEMP */}
           <Spacer size={500} />
-        </Column>
+        </FirstColumn>
 
-        <Column>
+        <SecondColumn>
           <ConsoleTable src={consoleTableSrc} />
           <PottedPlant src={pottedPlantSrc} />
 
           <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
 
           <StorefrontPreviewDecorations size={storeData.size} />
-        </Column>
+        </SecondColumn>
       </MainContent>
     </Wrapper>
   );
@@ -155,6 +156,25 @@ const MainContent = styled(MaxWidthWrapper)`
 const Column = styled.div`
   position: relative;
   flex: 1;
+`;
+
+const FirstColumn = styled(Column)`
+  /*
+  In desktop mode, we want to ensure our column takes up exactly 650px, so that
+  the options display correctly
+  */
+  min-width: 650px;
+
+  /* In mobile, though, it just becomes 100% of the width */
+  @media (max-width: 650px) {
+    min-width: auto;
+  }
+`;
+
+const SecondColumn = styled(Column)`
+  @media (max-width: ${SECOND_COLUMN_CUTOFF}px) {
+    display: none;
+  }
 `;
 
 const Header = styled.header`

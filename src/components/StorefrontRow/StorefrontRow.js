@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
 
-  @media ${BREAKPOINTS.sm} {
+  @media (max-width: 700px) {
     flex-direction: column;
   }
 `;
@@ -41,7 +41,7 @@ const TitleCell = styled.div`
   width: 270px;
   color: ${COLORS.gray[900]};
 
-  @media ${BREAKPOINTS.sm} {
+  @media (max-width: 700px) {
     width: 100%;
   }
 `;
