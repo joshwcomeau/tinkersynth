@@ -14,7 +14,6 @@ import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
 import SlopesControls from './SlopesControls';
-import SlopesExport from './SlopesExport';
 import SlopesStorefront from './SlopesStorefront';
 
 const Slopes = ({ size }) => {
@@ -31,9 +30,6 @@ const Slopes = ({ size }) => {
   // TODO: Should I make this responsive? Shrink when the window is too short?
   const canvasHeight = 552;
   const canvasWidth = canvasHeight * aspectRatio;
-
-  const exportHeight = windowDimensions.height;
-  const exportWidth = exportHeight * aspectRatio;
 
   return (
     <SlopesProvider>
@@ -59,8 +55,6 @@ const Slopes = ({ size }) => {
       <Spacer size={UNIT * 2} />
 
       <SlopesStorefront />
-
-      <SlopesExport width={exportWidth} height={exportHeight} />
     </SlopesProvider>
   );
 };

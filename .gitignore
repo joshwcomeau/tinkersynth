@@ -67,3 +67,7 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# Our build files, outside of gatsby
+# used exclusively for the server-side
+dist

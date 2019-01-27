@@ -8,6 +8,8 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "build-and-serve": "gatsby build && gatsby serve",
+    "build-server": "babel ./src --out-dir ./dist",
+    "watch-server": "babel --watch ./src --out-dir ./dist",
     "develop": "gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",
@@ -51,6 +53,14 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "prettier": "^1.15.2",
     "worker-loader": "2.0.0"
   },

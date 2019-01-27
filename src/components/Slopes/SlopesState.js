@@ -31,7 +31,7 @@ const initialState = {
   history: [],
   isShuffled: false,
   parameters: {
-    seed: getRandomSeed(),
+    seed: 12345, // getRandomSeed(),
     enableDarkMode: false,
     enableMargins: true,
     enableOcclusion: true,

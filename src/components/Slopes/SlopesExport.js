@@ -21,12 +21,6 @@ type Props = {
 const SlopesExport = ({ width, height }: Props) => {
   const slopesParams = useContext(SlopesContext);
 
-  const topMargin = (height / 11) * 1;
-  const leftMargin = (width / 8.5) * 1;
-  const margins = [topMargin, leftMargin];
-
-  const samplesPerRow = Math.ceil(width);
-
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -58,8 +52,6 @@ const SlopesExport = ({ width, height }: Props) => {
   let lines = generator({
     width,
     height,
-    margins,
-    samplesPerRow,
     ...drawingVariables,
   });
 

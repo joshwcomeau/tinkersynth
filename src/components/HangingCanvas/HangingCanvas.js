@@ -34,8 +34,6 @@ const calculateOffset = (frameBoundingBox, previewSizes) => {
   const buffer = 10;
   const rightmostOffset = frameBoundingBox.right;
 
-  console.log(windowWidth, rightmostOffset);
-
   if (windowWidth < rightmostOffset + buffer) {
     return rightmostOffset + buffer - windowWidth;
   } else {

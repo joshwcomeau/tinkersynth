@@ -32,33 +32,6 @@ const useCanvasDrawing = (
 
   const worker = useRef(new Worker());
 
-  // For aesthetic reasons, I don't want the lines to start at the very bottom
-  // of the page, in cartesian mode.
-  // The amount being offset is currently set to an arbitrary amount, maybe it
-  // should become a param?
-  const bottomOffset = height / 12;
-
-  // I want `samplesPerRow` to be as high as possible, so that curves aren't
-  // choppy and gross. But, the higher it is, the more expensive / slow it is
-  // to compute.
-  // In standard "cartesian" mode, using width * 0.5 is fine (1 point every 2
-  // pixels). In Polar mode, though, a single line does a big loop around the
-  // canvas, so we need more than 1 point per width-pixel to represent it.
-  const samplesPerRowWidthMultiplier = mix(1, 0.5, params.polarAmount / 100);
-
-  // When our `dotAmount` value gets really low, we actually want to decrease
-  // the samples per row. In combination with tweaking the lineWIdth, this will
-  // give us bigger dots, spaced further apart.
-  const dotAmountMultiplier = clamp(
-    normalize(params.dotAmount, 0, 100, 1, 0.2),
-    0,
-    1
-  );
-
-  const samplesPerRow = Math.ceil(
-    width * samplesPerRowWidthMultiplier * dotAmountMultiplier
-  );
-
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
 
@@ -108,8 +81,6 @@ const useCanvasDrawing = (
     let messageData = {
       width,
       height,
-      bottomOffset,
-      samplesPerRow,
       supportsOffscreenCanvas,
       ...drawingVariables,
     };

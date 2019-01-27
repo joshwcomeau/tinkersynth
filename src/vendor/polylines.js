@@ -26,7 +26,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
     throw new Error('Must specify "width" and "height" options');
   }
 
-  var units = opt.units || 'px';
+  var units = 'px';
 
   var commands = [];
 
@@ -45,20 +45,19 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var strokeStyle = opt.lineColor || 'black';
   var lineWidth = opt.lineWidth || 1;
 
-  return [
-    '    <g>',
-    '      <path d="' +
-      svgPath +
-      '" fill="' +
-      fillStyle +
-      '" stroke="' +
-      strokeStyle +
-      '" stroke-width="' +
-      lineWidth +
-      units +
-      '" />',
-    '    </g>',
-  ].join('\n');
+  return `
+<svg
+  width="${viewWidth}"
+  height="${viewHeight}"
+  viewBox="0 0 ${viewWidth} ${viewHeight}"
+>
+  <path
+    d="${svgPath}"
+    fill="${fillStyle}"
+    stroke="${strokeStyle}"
+    stroke-width="${lineWidth}${units}"
+  />
+</svg>`;
 };
 
 export const renderPolylines = function(polylines, opt: Options) {

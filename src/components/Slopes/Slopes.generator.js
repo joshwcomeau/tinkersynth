@@ -56,16 +56,15 @@ const reuseRandomValues = () => {
  *
  *
  *
- * MAIN SKETCH METHOD
+ * MAIN GENERATOR METHOD
  *
  *
  *
  *
  */
-const sketch = ({
+const generator = ({
   width,
   height,
-  bottomOffset,
   distanceBetweenRows,
   perlinRatio,
   staticRatio,
@@ -73,21 +72,43 @@ const sketch = ({
   polarRatio,
   polarTanRatio,
   polarTanMultiplier,
-  omegaRatio,
-  omegaRadiusSubtractAmount,
-  enableOcclusion,
   numOfRows,
-  samplesPerRow,
-  peaksCurve,
+  numOfOctaves = 1,
+  omegaRatio,
   peaksCurveStrength,
   perlinRangePerRow,
+  omegaRadiusSubtractAmount,
   amplitudeRatio,
-  selfSimilarity,
   polarHoleSize,
   dotRatio,
-  numOfOctaves = 1,
+  enableOcclusion,
+  peaksCurve,
+  selfSimilarity,
   seed,
 }) => {
+  // For aesthetic reasons, I don't want the lines to start at the very bottom
+  // of the page, in cartesian mode.
+  // The amount being offset is currently set to an arbitrary amount, maybe it
+  // should become a param?
+  const bottomOffset = height / 12;
+
+  // I want `samplesPerRow` to be as high as possible, so that curves aren't
+  // choppy and gross. But, the higher it is, the more expensive / slow it is
+  // to compute.
+  // In standard "cartesian" mode, using width * 0.5 is fine (1 point every 2
+  // pixels). In Polar mode, though, a single line does a big loop around the
+  // canvas, so we need more than 1 point per width-pixel to represent it.
+  const samplesPerRowWidthMultiplier = mix(1, 0.5, polarRatio);
+
+  // When our `dotAmount` value gets really low, we actually want to decrease
+  // the samples per row. In combination with tweaking the lineWIdth, this will
+  // give us bigger dots, spaced further apart.
+  const dotAmountMultiplier = clamp(normalize(dotRatio, 0, 1, 1, 0.2), 0, 1);
+
+  const samplesPerRow = Math.ceil(
+    width * samplesPerRowWidthMultiplier * dotAmountMultiplier
+  );
+
   const distanceBetweenSamples = width / samplesPerRow;
 
   const sampleData = {
@@ -421,4 +442,4 @@ const getSampleCoordinates = (
   return mixPoints(polarPoint, cartesianPoint, polarRatio);
 };
 
-export default sketch;
+export default generator;
