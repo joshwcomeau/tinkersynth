@@ -3,8 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { COLORS, UNIT } from '../../constants';
 import * as actions from '../../actions';
+import { COLORS, UNIT } from '../../constants';
+import { getCost } from '../../reducers/store.reducer';
 
 import consoleTableSrc from '../../images/wide-console-table.svg';
 import pottedPlantSrc from '../../images/potted-plant.svg';
@@ -14,8 +15,10 @@ import Heading from '../Heading';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
+import StorefrontRow from '../StorefrontRow';
 import StorefrontPreviewDecorations from '../StorefrontPreviewDecorations';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
+import Pricetag from '../Pricetag/Pricetag';
 
 const BACKDROP_HEIGHT = 300;
 
@@ -23,6 +26,7 @@ const SlopesStorefront = ({
   printWidth,
   printHeight,
   storeData,
+  cost,
   selectFormat,
   selectSize,
 }) => {
@@ -90,6 +94,15 @@ const SlopesStorefront = ({
             </>
           )}
 
+          <Spacer size={UNIT * 6} />
+
+          <StorefrontRow
+            title="Total:"
+            subtitle="(Includes shipping worldwide)"
+          >
+            <Pricetag cost={cost} />
+          </StorefrontRow>
+
           {/* TEMP */}
           <Spacer size={500} />
         </Column>
@@ -118,6 +131,7 @@ const Backdrop = styled.div`
   left: 0;
   right: 0;
   background: #f3f3f5;
+  box-shadow: inset 0px 20px 50px rgba(0, 0, 0, 0.05);
 `;
 
 const MainContent = styled(MaxWidthWrapper)`
@@ -137,15 +151,6 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-const mapStateToProps = state => ({
-  storeData: state.store.slopes,
-});
-
-const mapDispatchToProps = {
-  selectFormat: actions.selectFormat,
-  selectSize: actions.selectSize,
-};
-
 const ConsoleTable = styled.img`
   position: absolute;
   width: 735px;
@@ -159,6 +164,16 @@ const PottedPlant = styled.img`
   top: 352px;
   left: 400px;
 `;
+
+const mapStateToProps = state => ({
+  storeData: state.store.slopes,
+  cost: getCost('slopes')(state),
+});
+
+const mapDispatchToProps = {
+  selectFormat: actions.selectFormat,
+  selectSize: actions.selectSize,
+};
 
 export default connect(
   mapStateToProps,

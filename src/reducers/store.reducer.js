@@ -46,4 +46,22 @@ const reducer = produce((state = initialState, action) => {
   }
 });
 
+// Selectors
+export const getSlopes = state => state.store.slopes;
+
+export const getCost = machineName => state => {
+  const { format, size } = state.store[machineName];
+
+  if (format === 'image') {
+    return 20;
+  } else {
+    // prettier-ignore
+    switch (size) {
+      case 'small': return 95;
+      case 'medium': return 125;
+      case 'large': return 150;
+    }
+  }
+};
+
 export default reducer;

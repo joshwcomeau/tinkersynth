@@ -6,6 +6,7 @@ import { UNIT, COLORS, BREAKPOINTS } from '../../constants';
 
 import ToggleButton from '../ToggleButton';
 import Spacer from '../Spacer';
+import StorefrontRow from '../StorefrontRow';
 
 type Option = {
   label: string,
@@ -28,60 +29,34 @@ const OrderOption = ({
   handleChange,
 }: Props) => {
   const lastOptionId = options[options.length - 1].id;
+
   return (
-    <Wrapper>
-      <LabelCell>{label}</LabelCell>
-      <OptionsCell>
-        <Options>
-          {options.map(({ label, id }, index) => (
-            <React.Fragment key={id}>
-              <ToggleButton
-                id={id}
-                isToggled={selectedId === id}
-                onClick={() => handleChange(id)}
-              >
-                {label}
-              </ToggleButton>
+    <StorefrontRow title={label}>
+      <Options>
+        {options.map(({ label, id }, index) => (
+          <React.Fragment key={id}>
+            <ToggleButton
+              id={id}
+              isToggled={selectedId === id}
+              onClick={() => handleChange(id)}
+            >
+              {label}
+            </ToggleButton>
 
-              {id !== lastOptionId && <Spacer size={UNIT * 4} />}
-            </React.Fragment>
-          ))}
-        </Options>
+            {id !== lastOptionId && <Spacer size={UNIT * 4} />}
+          </React.Fragment>
+        ))}
+      </Options>
 
-        {comment && (
-          <>
-            <Spacer size={UNIT * 4} />
-            <Comment>{comment}</Comment>
-          </>
-        )}
-      </OptionsCell>
-    </Wrapper>
+      {comment && (
+        <>
+          <Spacer size={UNIT * 4} />
+          <Comment>{comment}</Comment>
+        </>
+      )}
+    </StorefrontRow>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  @media ${BREAKPOINTS.sm} {
-    flex-direction: column;
-  }
-`;
-
-const LabelCell = styled.div`
-  width: 270px;
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 600;
-
-  @media ${BREAKPOINTS.sm} {
-    width: 100%;
-  }
-`;
-
-const OptionsCell = styled.div`
-  flex: 1;
-`;
 
 const Options = styled.div`
   display: flex;
