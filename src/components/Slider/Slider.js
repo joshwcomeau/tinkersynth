@@ -21,6 +21,8 @@ type Props = {
   handleWidth?: number,
   handleHeight?: number,
   isDisabled: boolean,
+  isMachineBroken: boolean,
+  breakMachineWithKeyboard: () => void,
 };
 
 const HANDLE_BUFFER = 2;
@@ -75,15 +77,19 @@ const Slider = ({
       };
 
       window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchend', handleMouseUp);
 
       window.addEventListener('mousemove', updatePosition);
+      window.addEventListener('touchmove', updatePosition);
 
       return () => {
         // $FlowIgnore
         document.body.style.cursor = null;
 
         window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('touchend', handleMouseUp);
         window.removeEventListener('mousemove', updatePosition);
+        window.removeEventListener('touchmove', updatePosition);
       };
     },
     [dragging]
@@ -95,6 +101,18 @@ const Slider = ({
   const handleDisplacement = normalize(value, min, max, height, 0);
   const handleColor = COLORS.pink[300];
 
+  const handleMouseDown = ev => {
+    ev.stopPropagation();
+
+    if (isDisabled) {
+      return;
+    }
+
+    setAnimateTransition(false);
+
+    setDragging(true);
+  };
+
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
       <Decorations numOfNotches={numOfNotches} />
@@ -102,17 +120,8 @@ const Slider = ({
       <HandleWrapper
         ref={handleRef}
         tabIndex={isDisabled ? -1 : undefined}
-        onMouseDown={ev => {
-          ev.stopPropagation();
-
-          if (isDisabled) {
-            return;
-          }
-
-          setAnimateTransition(false);
-
-          setDragging(true);
-        }}
+        onTouchStart={handleMouseDown}
+        onMouseDown={handleMouseDown}
         onKeyDown={ev => {
           // Allow keyboard navigators to break out of the range by 20% in
           // either direction :o this is an easter egg!

@@ -2,7 +2,7 @@ export const SLOPES_BREAKPOINTS = {
   xlarge: 1130,
   large: 1024,
   medium: 620,
-  small: 414,
+  small: 500,
 };
 
 export const getSlopesBreakpoint = windowWidth => {

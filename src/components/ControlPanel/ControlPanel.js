@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { COLORS, UNIT } from '../../constants';
 
 import ScrewRow from './ScrewRow';
+import { SLOPES_BREAKPOINTS } from '../Slopes/Slopes.constants';
 
 type Props = {
   width: number,
@@ -43,8 +44,12 @@ const ControlPanel = ({ width, padding, children }: Props) => {
 
 const Wrapper = styled.div`
   position: relative;
-  perspective: 200px;
   user-select: none;
+  perspective: 200px;
+
+  @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
+    perspective: 400px;
+  }
 `;
 
 const InnerWrapper = styled.div`

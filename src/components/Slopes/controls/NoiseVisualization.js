@@ -47,6 +47,13 @@ const generateLine = (numOfPoints, smoothPoints, randomLines, ratio) => {
 
       const randomLine = randomLines.current[i];
 
+      // While resizing the window, we can wind up with less lines than
+      // we originally expect.
+      // Ignore this situation.
+      if (!randomLine) {
+        return acc;
+      }
+
       const previousPoint = mixPoints(
         smoothPoints[i - 1],
         randomLine[0],
