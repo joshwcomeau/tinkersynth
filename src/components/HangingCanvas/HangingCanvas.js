@@ -24,13 +24,12 @@ const FRAME_OFFSETS = {
   large: { top: 40, left: 85 },
 };
 
-const calculateOffset = (frameBoundingBox, previewSizes) => {
+const calculateOffset = frameBoundingBox => {
   const windowWidth = window.innerWidth;
 
   // On mount, we figure out where the center of our frame is.
   // Our frame's size can change, but for now I think I can just worry about
   // the largest one, and have some extra padding for smaller ones.
-  const largestCanvasWidth = 310;
   const buffer = 10;
   const rightmostOffset = frameBoundingBox.right;
 
@@ -47,7 +46,8 @@ const HangingCanvas = ({
   enableDarkMode,
   children,
 }: Props) => {
-  const [offset, setOffset] = useState(0);
+  const defaultOffset = 0;
+  const [offset, setOffset] = useState(defaultOffset);
   const frameRef = useRef(null);
 
   useEffect(() => {
@@ -62,14 +62,17 @@ const HangingCanvas = ({
       return;
     }
 
-    const frameBoundingBox = frameRef.current.getBoundingClientRect();
+    let frameBoundingBox = frameRef.current.getBoundingClientRect();
 
-    const nextOffset = calculateOffset(frameBoundingBox);
-    if (nextOffset !== offset) {
-      setOffset(nextOffset);
+    const initialOffset = calculateOffset(frameBoundingBox);
+
+    if (initialOffset !== defaultOffset) {
+      setOffset(initialOffset);
     }
 
     const handleResize = () => {
+      frameBoundingBox = frameRef.current.getBoundingClientRect();
+
       const nextOffset = calculateOffset(frameBoundingBox);
       if (nextOffset !== offset) {
         setOffset(nextOffset);

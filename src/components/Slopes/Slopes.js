@@ -10,11 +10,32 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
 
+import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
 import SlopesControls from './SlopesControls';
 import SlopesStorefront from './SlopesStorefront';
+
+const getMachineWidth = (slopesBreakpoint, windowWidth) => {
+  switch (slopesBreakpoint) {
+    // By default, make it nice and wide
+    case 'xlarge':
+      return 600;
+
+    // Shrink it a little to fit at 1024x768
+    case 'large':
+      return 550;
+
+    // Below 1024, the two stack again, so we can widen it up until we hit
+    // mobile dimensions
+    case 'medium':
+      return 620;
+
+    default:
+      return windowWidth;
+  }
+};
 
 const Slopes = ({ size }) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
@@ -30,6 +51,8 @@ const Slopes = ({ size }) => {
   // TODO: Should I make this responsive? Shrink when the window is too short?
   const canvasHeight = 552;
   const canvasWidth = canvasHeight * aspectRatio;
+
+  const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
 
   return (
     <SlopesProvider>
@@ -47,7 +70,10 @@ const Slopes = ({ size }) => {
           </SlopesCanvasWrapper>
           <ControlsWrapper>
             <Spacer size={UNIT} />
-            <SlopesControls width={600} />
+            <SlopesControls
+              key={slopesBreakpoint}
+              width={getMachineWidth(slopesBreakpoint, windowDimensions.width)}
+            />
           </ControlsWrapper>
         </Row>
       </MachineWrapper>
@@ -72,6 +98,20 @@ const ControlsWrapper = styled.div`
 const Row = styled(MaxWidthWrapper)`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: ${SLOPES_BREAKPOINTS.xlarge}px) {
+    padding-left: ${UNIT}px;
+    padding-right: ${UNIT}px;
+    justify-content: space-around;
+  }
+
+  @media (max-width: ${SLOPES_BREAKPOINTS.large}px) {
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: column;
+    align-items: center;
+    padding-top: ${UNIT * 2}px;
+  }
 `;
 
 const mapStateToProps = state => {

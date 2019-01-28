@@ -7,6 +7,7 @@ import { UNIT } from '../../constants';
 import ControlPanel from '../ControlPanel';
 import Spacer from '../Spacer';
 
+import { SLOPES_BREAKPOINTS } from './Slopes.constants';
 import SlopesPlacard from './SlopesPlacard';
 import Engraving from './Engraving';
 import PerspectiveCluster from './controls/PerspectiveCluster';
@@ -27,9 +28,13 @@ const SlopesControls = ({ width }: Props) => {
 
   const padding = UNIT * 2;
 
+  const numOfColumns = width <= SLOPES_BREAKPOINTS.small ? 1 : 2;
+
+  const totalPadding = numOfColumns === 2 ? padding * 3 : padding * 2;
+
   // We want our control panel to have two columns, and to have equal spacing
   // on both sides (so 3 units of spacing total: left, between, right).
-  const columnWidth = (width - padding * 3) / 2;
+  const columnWidth = (width - totalPadding) / numOfColumns;
 
   return (
     <ControlPanel width={width} padding={padding}>
@@ -60,7 +65,7 @@ const SlopesControls = ({ width }: Props) => {
 
       <Row>
         <LineCluster columnWidth={columnWidth} />
-        <SettingsCluster />
+        <SettingsCluster squeeze={columnWidth <= 550} />
       </Row>
     </ControlPanel>
   );
@@ -69,6 +74,10 @@ const SlopesControls = ({ width }: Props) => {
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
+    flex-direction: column;
+  }
 `;
 
 const Column = styled.div`

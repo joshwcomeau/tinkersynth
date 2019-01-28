@@ -32,7 +32,9 @@ const useBoundingBox = () => {
     }
 
     const recalculate = debounce(() => {
-      setBoundingBox(ref.current.getBoundingClientRect());
+      if (ref.current) {
+        setBoundingBox(ref.current.getBoundingClientRect());
+      }
     }, 250);
 
     window.addEventListener('scroll', recalculate);

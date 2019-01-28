@@ -12,17 +12,18 @@ import Spacer from '../../Spacer';
 import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
+  squeeze: boolean,
   seed: number,
   tweakParameter: TweakParameterAction,
   shuffle: () => void,
 };
 
-const SettingsCluster = ({ seed, tweakParameter, shuffle }: Props) => {
+const SettingsCluster = ({ squeeze, seed, tweakParameter, shuffle }: Props) => {
   return (
     <InstrumentCluster>
       <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
 
-      <Spacer size={UNIT * 2} />
+      <Spacer size={squeeze ? UNIT : UNIT * 2} />
 
       <ShuffleButton handlePress={shuffle} />
     </InstrumentCluster>
@@ -31,12 +32,12 @@ const SettingsCluster = ({ seed, tweakParameter, shuffle }: Props) => {
 
 const OptimizedSettingsCluster = React.memo(SettingsCluster);
 
-const SettingsContainer = ({ width }) => {
+const SettingsContainer = ({ squeeze }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedSettingsCluster
-      width={width}
+      squeeze={squeeze}
       seed={slopesParams.seed}
       tweakParameter={slopesParams.tweakParameter}
       shuffle={slopesParams.shuffle}
