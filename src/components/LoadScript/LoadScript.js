@@ -15,7 +15,6 @@ type Props = {
 };
 
 const LoadScript = ({ src, onLoad }: Props) => {
-  console.log('Render script', src);
   React.useEffect(
     () => {
       const script = document.createElement('script');

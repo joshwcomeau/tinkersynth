@@ -37,8 +37,9 @@ app.get('/purchase/fulfill', (req, res) => {
     url: '',
   });
 });
-const PORT = config.PORT;
+
+const { PORT } = config;
 
 app.listen(PORT, () => {
-  console.log(`server running on port ${PORT}`);
+  console.info(`server running on port ${PORT}`);
 });
