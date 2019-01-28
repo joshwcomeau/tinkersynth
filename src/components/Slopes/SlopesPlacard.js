@@ -52,7 +52,7 @@ const SlopesPlacard = ({ width, height }) => {
           strokeLinejoin="round"
         />
         <mask
-          id="mask0"
+          id="slopes-placard-0"
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
           x="8"
@@ -62,7 +62,7 @@ const SlopesPlacard = ({ width, height }) => {
         >
           <rect x="8" y="17" width="136" height="49" rx="2" fill="#C4C4C4" />
         </mask>
-        <g mask="url(#mask0)">
+        <g mask="url(#slopes-placard-0)">
           <path
             d="M145.708 51.3223C145.45 52.2048 144.992 53.0161 144.37 53.6936C143.748 54.371 142.978 54.8963 142.121 55.2291C141.264 55.5618 140.341 55.693 139.425 55.6126C138.509 55.5321 137.624 55.2422 136.837 54.7651C136.051 54.288 135.385 53.6366 134.891 52.8611C134.396 52.0857 134.087 51.2069 133.986 50.2928C133.885 49.3787 133.996 48.4537 134.31 47.5892C134.623 46.7247 135.132 45.9438 135.795 45.307"
             stroke="#FFEB33"

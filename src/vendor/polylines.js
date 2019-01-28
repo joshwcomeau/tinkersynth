@@ -31,8 +31,8 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var commands = [];
 
   polylines.forEach(function(line) {
-    line.forEach(function(point, j) {
-      var type = j === 0 ? 'M' : 'L';
+    line.forEach(function(point, index) {
+      var type = index === 0 ? 'M' : 'L';
       const [x, y] = point;
       commands.push(type + x + ' ' + y);
     });
