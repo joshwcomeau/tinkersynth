@@ -10,7 +10,7 @@ type Option = {
 };
 
 type Props = {
-  title: string,
+  title?: string,
   subtitle?: string,
   children: React$Node,
 };
@@ -19,7 +19,7 @@ const StorefrontRow = ({ title, subtitle, children }: Props) => {
   return (
     <Wrapper>
       <TitleCell>
-        <Title>{title}</Title>
+        {title && <Title>{title}</Title>}
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </TitleCell>
 

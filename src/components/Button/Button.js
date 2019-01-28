@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import styled from 'styled-components';
 
@@ -5,6 +6,14 @@ import { COLORS, UNIT } from '../../constants';
 import { clamp } from '../../utils';
 
 import UnstyledButton from '../UnstyledButton';
+
+type ButtonSize = 'medium' | 'large';
+
+type Props = {
+  color: string,
+  size?: ButtonSize,
+  children: React$Node,
+};
 
 const getLowlightColor = (color, alpha) => {
   const hslMatcher = /hsl\(([\d]+),\s*([\d]+)%,\s*([\d]+)%\)/i;
@@ -22,42 +31,54 @@ const getLowlightColor = (color, alpha) => {
   return `hsla(${hue}, ${saturation}%, ${newLightness}%, ${alpha})`;
 };
 
-const Button = React.forwardRef(({ color, children, ...delegated }, ref) => {
-  const darkerColor = getLowlightColor(color, 0.5);
-  const darkerColorInvisible = getLowlightColor(color, 0);
+// $FlowFixMe - ugh idk
+const Button = React.forwardRef(
+  ({ color, size = 'medium', children, ...delegated }: Props, ref) => {
+    const darkerColor = getLowlightColor(color, 0.5);
+    const darkerColorInvisible = getLowlightColor(color, 0);
 
-  return (
-    <Wrapper
-      ref={ref}
-      {...delegated}
-      style={{
-        backgroundColor: color,
-        textShadow: `1px 1px 0px ${darkerColor}`,
-        ...(delegated || {}),
-      }}
-    >
-      <Effects>
-        <Highlight />
+    const Component = size === 'medium' ? MediumButton : LargeButton;
 
-        <Lowlight fromColor={darkerColorInvisible} toColor={darkerColor} />
-        <EffectDampener style={{ backgroundColor: color }} />
-      </Effects>
+    return (
+      <Component
+        ref={ref}
+        {...delegated}
+        style={{
+          backgroundColor: color,
+          textShadow: `1px 1px 0px ${darkerColor}`,
+          ...(delegated || {}),
+        }}
+      >
+        <Effects>
+          <Highlight />
 
-      <Children>{children}</Children>
-    </Wrapper>
-  );
-});
+          <Lowlight fromColor={darkerColorInvisible} toColor={darkerColor} />
+          <EffectDampener style={{ backgroundColor: color }} />
+        </Effects>
+
+        <Children>{children}</Children>
+      </Component>
+    );
+  }
+);
 
 const Wrapper = styled(UnstyledButton)`
   position: relative;
-  font-size: 14px;
-  height: 38px;
   color: white;
   padding-left: ${UNIT * 4}px;
   padding-right: ${UNIT * 4}px;
   border-radius: 4px;
-  font-size: 15px;
   font-weight: 600;
+`;
+
+const MediumButton = styled(Wrapper)`
+  height: 38px;
+  font-size: 15px;
+`;
+
+const LargeButton = styled(Wrapper)`
+  height: 48px;
+  font-size: 18px;
 `;
 
 const Children = styled.div`

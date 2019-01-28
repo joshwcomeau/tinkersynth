@@ -234,3 +234,8 @@ export const PRINT_SIZES = {
   medium: { width: 18, height: 24 },
   large: { width: 24, height: 36 },
 };
+
+export const STRIPE_PUBLIC_KEY =
+  process.env.NODE_ENV === 'production'
+    ? 'pk_live_LWOKEhuPwrSpdlcAvCdK6hhf'
+    : 'pk_test_gDdRrVU2WlqLzp2lN9W4JppB';

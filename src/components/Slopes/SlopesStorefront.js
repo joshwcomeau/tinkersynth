@@ -19,7 +19,11 @@ import OrderOption from '../OrderOption';
 import StorefrontRow from '../StorefrontRow';
 import StorefrontPreviewDecorations from '../StorefrontPreviewDecorations';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
-import Pricetag from '../Pricetag/Pricetag';
+import Pricetag from '../Pricetag';
+import UnstyledButton from '../UnstyledButton';
+import MountUponEnteringViewport from '../MountUponEnteringViewport';
+import LoadScript from '../LoadScript';
+import SlopesPurchaseButton from './SlopesPurchaseButton';
 
 const BACKDROP_HEIGHT = 300;
 const SECOND_COLUMN_CUTOFF = 975;
@@ -116,6 +120,22 @@ const SlopesStorefront = ({
             <Pricetag cost={cost} />
           </StorefrontRow>
 
+          <Spacer size={UNIT * 6} />
+
+          <StorefrontRow>
+            <PurchaseRowContents>
+              <SlopesPurchaseButton />
+              <Spacer size={UNIT * 6} />
+              <MultiplePurchaseInfoButton>
+                Want to buy multiple?
+              </MultiplePurchaseInfoButton>
+
+              <MountUponEnteringViewport>
+                <LoadScript src="https://js.stripe.com/v3/" />
+              </MountUponEnteringViewport>
+            </PurchaseRowContents>
+          </StorefrontRow>
+
           {/* TEMP */}
           <Spacer size={500} />
         </FirstColumn>
@@ -196,6 +216,12 @@ const PottedPlant = styled.img`
   top: 352px;
   left: 400px;
 `;
+
+const PurchaseRowContents = styled.div`
+  display: flex;
+`;
+
+const MultiplePurchaseInfoButton = styled(UnstyledButton)``;
 
 const mapStateToProps = state => ({
   storeData: state.store.slopes,
