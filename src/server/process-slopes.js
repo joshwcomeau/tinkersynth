@@ -14,6 +14,8 @@
  */
 const fs = require('fs');
 
+const svg2img = require('svg2img');
+
 import { polylinesToSVG } from '../vendor/polylines';
 
 import {
@@ -83,7 +85,17 @@ const process = (size, params) => {
   // TODO: maybe I ought to push these to Amazon s3 or something?
   fs.writeFileSync('test.svg', svgMarkup);
 
-  console.log('done');
+  // Create a raster PNG as well
+  // We want our raster image to be printable at 300dpi.
+  const rasterWidth = printWidth * 300;
+  const rasterHeight = printHeight * 300;
+  svg2img(
+    svgMarkup,
+    { width: rasterWidth, height: rasterHeight },
+    (error, buffer) => {
+      fs.writeFileSync('test.png', buffer);
+    }
+  );
 };
 
 process('small', MOCK_PARAMS);

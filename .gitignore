@@ -71,3 +71,6 @@ yarn-error.log
 # Our build files, outside of gatsby
 # used exclusively for the server-side
 dist
+
+# Ignore secret keys, server-side
+src/server/config/prod.js
