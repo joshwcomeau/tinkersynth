@@ -3,18 +3,14 @@ import React from 'react';
 import loadable from '@loadable/component';
 
 import Layout from '../../components/Layout';
-import LoadingMachine from '../../components/LoadingMachine';
+import Loading from '../../components/Slopes/Loading';
 
 const Slopes = loadable(() => import('../../components/Slopes'));
 
 const SlopesIndex = () => (
   <Layout>
-    <Slopes
-      fallback={
-        // TODO: Custom spinner
-        <LoadingMachine />
-      }
-    />
+    <Loading />
+    {/* <Slopes fallback={<Loading />} /> */}
   </Layout>
 );
 

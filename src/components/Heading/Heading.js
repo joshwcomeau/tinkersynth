@@ -18,10 +18,10 @@ const getElementForSize = size => {
   }
 };
 
-const Heading = ({ size, children }: Props) => {
+const Heading = ({ size, children, ...delegated }: Props) => {
   const Component = getElementForSize(size);
 
-  return <Component>{children}</Component>;
+  return <Component {...delegated}>{children}</Component>;
 };
 
 const H1 = styled.h1`
