@@ -1,7 +1,18 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+
+import Spacer from '../Spacer';
+
 import LoadingCase from './LoadingCase';
+import LoadingSine from './LoadingSine';
+import LoadingTouchSlider from './LoadingTouchSlider';
+import LoadingBezier from './LoadingBezier';
+import LoadingPolar from './LoadingPolar';
+import LoadingSlider from './LoadingSlider';
+import LoadingLilButtons from './LoadingLilButtons';
+import LoadingStatus from './LoadingStatus';
+import LoadingEarth from './LoadingEarth';
 
 // TODO: Should I support a `size` prop? Is it worth it?
 type Props = {};
@@ -20,7 +31,38 @@ const LoadingMachine = ({  }: Props) => {
       </Background>
 
       <Foreground style={{ width: PANEL_WIDTH, height: PANEL_HEIGHT }}>
-        {/* TODO */}
+        <Row>
+          <LoadingSine />
+          <Spacer size={8} />
+          <Column>
+            <LoadingTouchSlider />
+            <LoadingTouchSlider />
+          </Column>
+        </Row>
+
+        <Spacer size={8} />
+
+        <Row>
+          <LoadingBezier />
+          <Spacer size={8} />
+          <LoadingPolar />
+        </Row>
+
+        <Spacer size={8} />
+
+        <Row>
+          <Sliders>
+            <LoadingSlider />
+            <LoadingSlider />
+          </Sliders>
+          <Spacer size={8} />
+          <LoadingEarth />
+          <Spacer size={8} />
+          <Column>
+            <LoadingLilButtons />
+            <LoadingStatus />
+          </Column>
+        </Row>
       </Foreground>
     </Wrapper>
   );
@@ -40,6 +82,22 @@ const Background = styled.div`
 const Foreground = styled.div`
   position: relative;
   z-index: 2;
+  padding: 10px;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Sliders = styled.div`
+  display: flex;
 `;
 
 export default LoadingMachine;
