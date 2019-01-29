@@ -39,4 +39,5 @@ const Track = styled.div`
   border-radius: 2px;
 `;
 
+// $FlowIgnore
 export default React.memo(Decorations);

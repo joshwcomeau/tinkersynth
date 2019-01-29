@@ -10,6 +10,7 @@ type Props = {
   squishiness: number,
   gravity: number,
   dropFrom: number,
+  isAnimated: boolean,
 };
 
 const Ball = ({

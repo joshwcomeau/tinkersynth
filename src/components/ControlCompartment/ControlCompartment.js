@@ -14,7 +14,7 @@ type Props = {
   orientation: 'horizontal' | 'vertical',
   numOfDoors?: 1 | 2,
   isDisabled: boolean,
-  clickDisabledCompartment: () => void,
+  clickDisabledCompartment: (elem: HTMLElement) => void,
   children: React$Node,
 };
 
@@ -84,7 +84,10 @@ const ControlCompartment = ({
           <UnstyledButton
             ref={iconButtonRef}
             tabIndex={isDisabled ? undefined : -1}
-            onClick={() => clickDisabledCompartment(iconButtonRef.current)}
+            onClick={() =>
+              iconButtonRef.current &&
+              clickDisabledCompartment(iconButtonRef.current)
+            }
           >
             <Icon icon={alertCircle} />
           </UnstyledButton>

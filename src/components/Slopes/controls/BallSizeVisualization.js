@@ -21,6 +21,7 @@ const images = [
 type Props = {
   size: number,
   value: number,
+  isAnimated: boolean,
 };
 
 const getDataForValue = (value: number) => {

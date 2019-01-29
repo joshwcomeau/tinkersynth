@@ -49,6 +49,10 @@ const useCanvasDrawing = (
       const context = canvasRef.current.getContext('2d');
       context.scale(devicePixelRatio, devicePixelRatio);
 
+      if (!worker.current) {
+        return;
+      }
+
       worker.current.onmessage = function({ data }) {
         const { lines, ...passedData } = data;
 
@@ -73,6 +77,7 @@ const useCanvasDrawing = (
     // calculation. There is not a 1:1 mapping between them: a single
     // high-level param might tweak several low-level vars, and the same
     // variable might be affected by multiple params.
+    // $FlowFixMe
     const drawingVariables = transformParameters({
       height,
       ...params,
@@ -90,11 +95,17 @@ const useCanvasDrawing = (
     // to send it along, using the cumbersome "data and transfer" API.
     // More info: https://developers.google.com/web/updates/2018/08/offscreen-canvas
     if (supportsOffscreenCanvas && !hasSentCanvas.current) {
+      // $FlowFixMe
       messageData.canvas = canvasRef.current;
+      // $FlowFixMe
       messageData.devicePixelRatio = devicePixelRatio;
       transfer = [canvasRef.current];
 
       hasSentCanvas.current = true;
+    }
+
+    if (!worker.current) {
+      return;
     }
 
     worker.current.postMessage(messageData, transfer);

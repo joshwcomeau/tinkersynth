@@ -7,7 +7,12 @@ import { COLORS } from '../../constants';
 import Svg from '../Svg';
 import UnstyledButton from '../UnstyledButton';
 
-const BigRedButton = ({ size = 40, handlePress }) => {
+type Props = {
+  size: number,
+  handlePress: (ev: any) => void,
+};
+
+const BigRedButton = ({ size = 40, handlePress }: Props) => {
   const [isActive, setIsActive] = useState(false);
 
   return (

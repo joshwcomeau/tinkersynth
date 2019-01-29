@@ -71,9 +71,10 @@ const NoiseCluster = ({
   );
 };
 
+// $FlowIgnore
 const OptimizedNoiseCluster = React.memo(NoiseCluster);
 
-const NoiseContainer = ({ width }) => {
+const NoiseContainer = ({ width }: { width: number }) => {
   const slopesParams = useContext(SlopesContext);
 
   const isStaticAmountDisabled = slopesParams.disabledParams.staticAmount;

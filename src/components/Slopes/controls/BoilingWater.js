@@ -16,6 +16,7 @@ type Props = {
   width: number,
   height: number,
   perlinRow: number,
+  isAnimated: boolean,
 };
 
 const PERLIN_MULTIPLE = 0.25;

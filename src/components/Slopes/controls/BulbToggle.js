@@ -12,7 +12,7 @@ type Props = {
   handleToggle: () => void,
 };
 
-const BulbToggle = ({ size = 38, isActive, handleToggle }) => {
+const BulbToggle = ({ size = 38, isActive, handleToggle }: Props) => {
   const visualizationSize = size - 6;
 
   return (

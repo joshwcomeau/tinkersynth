@@ -16,6 +16,7 @@ import type { Curve } from '../../types';
 
 const HISTORY_SIZE_LIMIT = 5;
 
+// $FlowIgnore
 export const SlopesContext = React.createContext({});
 
 export type ToggleParameterAction = (parameterName: string) => void;

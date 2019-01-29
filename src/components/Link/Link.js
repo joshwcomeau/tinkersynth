@@ -3,9 +3,13 @@ import React from 'react';
 import { Link as ReachRouterLink } from '@reach/router';
 import styled from 'styled-components';
 
-export const checkIfLinkIsExternal = to => to.match(/^https?:\/\//i);
+export const checkIfLinkIsExternal = (to: string) => to.match(/^https?:\/\//i);
 
-const LinkThing = ({ to, ...delegated }) => {
+type Props = {
+  to: string,
+};
+
+const LinkThing = ({ to, ...delegated }: Props) => {
   const isExternal = checkIfLinkIsExternal(to);
 
   if (isExternal) {

@@ -22,7 +22,7 @@ type Props = {
   handleHeight?: number,
   isDisabled: boolean,
   isMachineBroken: boolean,
-  breakMachineWithKeyboard: () => void,
+  breakMachineWithKeyboard: (ev: HTMLElement) => void,
 };
 
 const HANDLE_BUFFER = 2;
@@ -143,7 +143,7 @@ const Slider = ({
             }
           }
 
-          if (!isMachineBroken && hasBrokenOutOfRange) {
+          if (!isMachineBroken && hasBrokenOutOfRange && handleRef.current) {
             // Mark the machine as "broken".
             // This just displays a toast for the user, and keeps track of
             // that state, so that we don't keep showing them the toast.
