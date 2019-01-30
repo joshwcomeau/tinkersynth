@@ -1,16 +1,105 @@
 import React from 'react';
 
-const LoadingSine = () => {
+import useToggle from '../../hooks/toggle.hook';
+import { random, range, normalize } from '../../utils';
+
+const RESOLUTION = 2;
+
+const useOscillation = (totalWidth, totalHeight) => {
+  const padding = 8;
+  const left = padding;
+  const top = padding;
+  const innerWidth = totalWidth - padding * 2;
+  const innerHeight = totalHeight - padding * 2;
+
+  const numOfPoints = innerWidth / RESOLUTION;
+
+  const maxVal = 3 * Math.PI;
+
+  const [offset, setOffset] = React.useState(0);
+
+  // Speed in hertz: how many times should the wave cycle per second?
+  const speed = 1;
+
+  React.useEffect(() => {
+    let animationFrameId;
+    let lastTickAt = performance.now();
+
+    const tick = () => {
+      const now = performance.now();
+
+      const timeDelta = (now - lastTickAt) / 1000;
+
+      setOffset(offset + timeDelta / (1 / speed));
+
+      animationFrameId = window.requestAnimationFrame(tick);
+    };
+
+    tick();
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  const points = range(numOfPoints).map(i => {
+    const ratio = i / numOfPoints;
+    const x = left + ratio * innerWidth;
+
+    const y =
+      top +
+      innerHeight / 2 +
+      Math.sin(normalize(ratio + offset, 0, 1, 0, maxVal)) * (innerHeight / 2);
+
+    return [x, y];
+  });
+
+  return points;
+};
+
+const LoadingSine = ({ width = 48, height = 34 }) => {
+  const [hasBegun, toggleBegun] = useToggle(false);
+
+  const points = useOscillation(width, height);
+
+  React.useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      toggleBegun();
+    }, random(200, 500));
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <svg width="48" height="34" viewBox="0 0 48 34" fill="none">
+    <svg width={width} height={height} viewBox="0 0 48 34" fill="none">
       <rect width="48" height="34" rx="4" fill="#2B2B2B" />
-      <path
+      <polyline
+        data-layer-name="sine-wave"
+        points={points.map(p => p.join(',')).join(' ')}
+        stroke="#32FF98"
+        strokeWidth="2"
+        strokeLinecap="round"
+        style={{
+          opacity: hasBegun ? 1 : 0,
+          transition: 'opacity 350ms',
+        }}
+        // style={{
+        //   transition: '1500ms cubic-bezier(0.08, 1, 0.2, 1)',
+        // }}
+      />
+      {/* <path
         d="M7.67993 27.625C7.67993 27.625 12.7073 6.375 22.0799 6.375C31.4525 6.375 36.4799 27.625 36.4799 27.625"
         stroke="#32FF98"
         strokeWidth="2"
-      />
+        style={{
+          opacity: hasBegun ? 1 : 0,
+          transition: 'opacity 350ms',
+        }}
+      /> */}
     </svg>
   );
 };
 
-export default LoadingSine;
+export default React.memo(LoadingSine);
