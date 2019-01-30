@@ -1,8 +1,35 @@
 import React from 'react';
+import { useSpring, animated } from 'react-spring/hooks';
 
-const LoadingSlider = () => {
+import { random, range, normalize } from '../../utils';
+
+import Svg from '../Svg';
+
+const LoadingSlider = ({ width = 20, height = 52 }) => {
+  const [value, setValue] = React.useState(0);
+
+  React.useEffect(() => {
+    let timeoutId;
+
+    const update = () => {
+      setValue(random(0, 100));
+
+      timeoutId = window.setTimeout(update, random(500, 1000));
+    };
+
+    update();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  const spring = useSpring({
+    value,
+  });
+
   return (
-    <svg width="20" height="52" viewBox="0 0 20 52" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 20 52" fill="none">
       <rect x="2" width="16" height="52" rx="4" fill="#2B2B2B" />
       <line
         x1="6"
@@ -76,8 +103,19 @@ const LoadingSlider = () => {
         strokeOpacity="0.51"
         strokeWidth="2"
       />
-      <rect y="14" width="20" height="8" rx="4" fill="#FF27FF" />
-    </svg>
+      <animated.rect
+        y={height - 8}
+        width="20"
+        height="8"
+        rx="4"
+        fill="#FF27FF"
+        style={{
+          transform: spring.value.interpolate(
+            val => `translateY(${normalize(val, 0, 100, 4, -height + 4)}px)`
+          ),
+        }}
+      />
+    </Svg>
   );
 };
 

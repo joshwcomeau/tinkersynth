@@ -56,10 +56,10 @@ const LoadingPolar = ({ width = 36, height = 38, padding = 4 }) => {
         }}
       >
         <PolarAmountVisualization
-          width={width}
-          height={height}
-          horizontalPadding={padding}
-          verticalPadding={padding}
+          width={width - padding * 2}
+          height={height - padding * 2}
+          horizontalPadding={0}
+          verticalPadding={0}
           numOfLines={3}
           value={isPolar ? 100 : 0}
         />
