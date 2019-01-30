@@ -12,6 +12,9 @@ import Svg from '../../Svg';
 type Props = {
   width: number,
   height: number,
+  horizontalPadding?: number,
+  verticalPadding?: number,
+  numOfLines?: number,
   value: number,
 };
 
@@ -26,7 +29,7 @@ const SPRING_CONFIG = {
 const calculatePointsForLine = (value, width, height, rowIndex, numOfLines) => {
   const omegaRatio = value / 100;
 
-  const numOfPointsPerLine = Math.round(width / MAX_DENSITY);
+  const numOfPointsPerLine = Math.ceil(width / MAX_DENSITY);
 
   const rowHeight = height / numOfLines;
 
@@ -57,7 +60,19 @@ const calculatePointsForLine = (value, width, height, rowIndex, numOfLines) => {
 const getPolylinePointsAsString = points =>
   points.map(point => `${point[0]},${point[1]}`).join(' ');
 
-const getColorForLineIndex = (index: number) => {
+const getColorForLineIndex = (index: number, numOfLines: number) => {
+  // HACK: Refactor
+  if (numOfLines === 3) {
+    switch (index) {
+      case 0:
+        return COLORS.aqua[300];
+      case 1:
+        return COLORS.yellow[300];
+      default:
+        return COLORS.red[300];
+    }
+  }
+
   switch (index) {
     case 0:
       return COLORS.aqua[300];
@@ -72,11 +87,16 @@ const getColorForLineIndex = (index: number) => {
   }
 };
 
-const PolarAmountVisualization = ({ width, height, value }: Props) => {
-  const innerWidth = width - 20;
-  const innerHeight = height - 40;
-
-  const numOfLines = 5;
+const PolarAmountVisualization = ({
+  width,
+  height,
+  horizontalPadding = 20,
+  verticalPadding = 40,
+  numOfLines = 5,
+  value,
+}: Props) => {
+  const innerWidth = width - horizontalPadding;
+  const innerHeight = height - verticalPadding;
 
   const spring = useSpring({ value, config: SPRING_CONFIG });
 
@@ -95,7 +115,7 @@ const PolarAmountVisualization = ({ width, height, value }: Props) => {
             );
             return getPolylinePointsAsString(line);
           })}
-          stroke={getColorForLineIndex(rowIndex)}
+          stroke={getColorForLineIndex(rowIndex, numOfLines)}
           strokeWidth={devicePixelRatio > 1 ? 2.5 : 2}
           strokeLinecap="round"
         />

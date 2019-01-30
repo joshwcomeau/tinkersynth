@@ -1,16 +1,83 @@
 import React from 'react';
+import styled from 'styled-components';
 
-const LoadingPolar = () => {
+import useToggle from '../../hooks/toggle.hook';
+import { random, range, sample, normalize } from '../../utils';
+
+import PolarAmountVisualization from '../Slopes/controls/PolarAmountVisualization';
+
+const useAnimatedPolarity = () => {
+  const [isPolar, setIsPolar] = React.useState(false);
+
+  React.useEffect(() => {
+    let timeoutId;
+
+    const update = () => {
+      setIsPolar(isPolar => !isPolar);
+
+      timeoutId = window.setTimeout(update, 1000);
+    };
+
+    update();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return isPolar;
+};
+
+const LoadingPolar = ({ width = 36, height = 38, padding = 4 }) => {
+  const [hasBegun, toggleBegun] = useToggle(false);
+
+  const isPolar = useAnimatedPolarity();
+
+  React.useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      toggleBegun();
+    }, random(400, 800));
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <svg width="36" height="38" viewBox="0 0 36 38" fill="none">
-      <rect width="36" height="38" rx="4" fill="#2B2B2B" />
-      <line x1="6" y1="7" x2="30" y2="7" stroke="#1AD9FF" strokeWidth="2" />
-      <line x1="6" y1="13" x2="30" y2="13" stroke="#32FF98" strokeWidth="2" />
-      <line x1="6" y1="19" x2="30" y2="19" stroke="#FFEB33" strokeWidth="2" />
-      <line x1="6" y1="25" x2="30" y2="25" stroke="#FF791A" strokeWidth="2" />
-      <line x1="6" y1="31" x2="30" y2="31" stroke="#FF2D1A" strokeWidth="2" />
-    </svg>
+    <Wrapper style={{ padding }}>
+      <Visualization
+        style={{
+          opacity: hasBegun ? 1 : 0,
+          transition: 'opacity 350ms',
+          // HACK HACK HACK
+          // centering because with such low `numOfPointsPerLine`, it doesnt
+          // appear centered by default
+          transform: isPolar ? 'translateX(0)' : 'translateX(1px)',
+        }}
+      >
+        <PolarAmountVisualization
+          width={width}
+          height={height}
+          horizontalPadding={padding}
+          verticalPadding={padding}
+          numOfLines={3}
+          value={isPolar ? 100 : 0}
+        />
+      </Visualization>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  border-radius: 4px;
+  background: #2b2b2b;
+`;
+
+const Visualization = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
 
 export default LoadingPolar;
