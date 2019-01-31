@@ -9,8 +9,8 @@ const Slopes = loadable(() => import('../../components/Slopes'));
 
 const SlopesIndex = () => (
   <Layout>
-    <Loading />
-    {/* <Slopes fallback={<Loading />} /> */}
+    {/* <Loading /> */}
+    <Slopes fallback={<Loading />} />
   </Layout>
 );
 

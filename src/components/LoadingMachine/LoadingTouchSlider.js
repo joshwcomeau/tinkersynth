@@ -17,7 +17,7 @@ const useBlinkingLights = (initialValue, maxNum) => {
       timeoutId = window.setTimeout(update, random(700, 1000));
     };
 
-    window.setTimeout(update, random(700, 1000));
+    timeoutId = window.setTimeout(update, random(700, 1000));
 
     return () => {
       window.clearTimeout(timeoutId);
