@@ -175,6 +175,8 @@ const generator = ({
     rowOffsets
   );
 
+  const splitPoint = Math.round(numOfRows / 2);
+
   // Generate some data!
   range(numOfUsableRows).forEach(function iterateRows(rowIndex) {
     let row = [];
@@ -183,6 +185,10 @@ const generator = ({
     // parallel lines :o
     // Our old 'Y' values will now be the 'r', and the sampleIndex will become
     // the degrees.
+
+    if (rowIndex < splitPoint) {
+      return;
+    }
 
     range(samplesPerRow).forEach(function iterateSamples(sampleIndex) {
       if (sampleIndex === 0) {
@@ -280,6 +286,34 @@ const generator = ({
       });
     });
   }
+
+  lines.forEach((row, rowIndex) => {
+    const mirroredRow = [];
+
+    row.forEach((line, lineIndex) => {
+      if (!line) {
+        return;
+      }
+
+      // Ensure no point in this line is above the halfway point.
+      const halfwayPoint = height / 2;
+      if (line[0][1] > halfwayPoint) {
+        line[0][1] = halfwayPoint;
+      }
+
+      if (line[1][1] > halfwayPoint) {
+        line[1][1] = halfwayPoint;
+      }
+
+      const flippedLine = line.map(point => {
+        return [point[0], height - point[1]];
+      });
+
+      mirroredRow.push(flippedLine);
+    });
+
+    lines.push(mirroredRow);
+  });
 
   lines = flatten(lines).filter(line => !!line);
 
