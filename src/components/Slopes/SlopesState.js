@@ -32,7 +32,7 @@ const initialState = {
   history: [],
   isShuffled: false,
   parameters: {
-    seed: 12345, // getRandomSeed(),
+    seed: getRandomSeed(),
     enableDarkMode: false,
     enableMargins: true,
     enableOcclusion: true,
@@ -51,6 +51,7 @@ const initialState = {
     ballSize: 50,
     dotAmount: 0,
     peaksCurve: DEFAULT_PEAKS_CURVE,
+    enableMirrored: false, // SECRET PARAM :o
   },
 };
 
@@ -77,6 +78,7 @@ type State = {
     ballSize: number,
     dotAmount: number,
     peaksCurve: Curve,
+    enableMirrored: boolean,
   },
 };
 
@@ -225,6 +227,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
         waterBoilAmount: state.parameters.waterBoilAmount,
         ballSize: state.parameters.ballSize,
         dotAmount: state.parameters.dotAmount,
+        enableMirrored: state.parameters.enableMirrored,
 
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,

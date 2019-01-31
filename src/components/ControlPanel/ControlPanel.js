@@ -24,7 +24,18 @@ const ControlPanel = ({ width, padding, children }: Props) => {
             <ScrewRow />
           </DecorativeHeader>
 
-          <MainContents style={{ padding }}>{children}</MainContents>
+          <MainContents
+            style={{
+              padding,
+              // HACK: Our placard has a bunch of top padding, plus we need to
+              // translate it down (see PlacardCluster in Slopes).
+              // A better solution would be to fix the image or apply some
+              // negative margin there, but I'm taking the shortcut for now.
+              paddingTop: 0,
+            }}
+          >
+            {children}
+          </MainContents>
 
           <DecorativeFooter>
             <ScrewRow />
