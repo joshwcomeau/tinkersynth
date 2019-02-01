@@ -8,7 +8,7 @@ import ControlPanel from '../ControlPanel';
 import Spacer from '../Spacer';
 
 import { SLOPES_BREAKPOINTS } from './Slopes.constants';
-import PlacardCluster from './controls/PlacardCluster';
+import PlacardArea from './controls/PlacardArea';
 import Engraving from './Engraving';
 import PerspectiveCluster from './controls/PerspectiveCluster';
 import PeaksCluster from './controls/PeaksCluster';
@@ -39,7 +39,7 @@ const SlopesControls = ({ width }: Props) => {
   return (
     <ControlPanel width={width} padding={padding}>
       <Row style={{ zIndex: 2 }}>
-        <PlacardCluster width={170} height={70} />
+        <PlacardArea width={170} height={70} />
         <Engraving />
       </Row>
       <Spacer size={UNIT * 2} />
