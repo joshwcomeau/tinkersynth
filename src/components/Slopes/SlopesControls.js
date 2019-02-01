@@ -38,7 +38,7 @@ const SlopesControls = ({ width }: Props) => {
 
   return (
     <ControlPanel width={width} padding={padding}>
-      <Row>
+      <Row style={{ zIndex: 2 }}>
         <PlacardCluster width={170} height={70} />
         <Engraving />
       </Row>
@@ -72,6 +72,8 @@ const SlopesControls = ({ width }: Props) => {
 };
 
 const Row = styled.div`
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
 

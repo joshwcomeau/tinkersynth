@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Screw from './Screw';
+import Screw from '../Screw';
 import { range } from '../../utils';
 
 type Props = {
@@ -13,7 +13,7 @@ const ScrewRow = ({ numOfScrews = 3 }: Props) => {
   return (
     <Wrapper>
       {range(numOfScrews).map(i => (
-        <Screw key={i} />
+        <Screw size={7} key={i} />
       ))}
     </Wrapper>
   );
