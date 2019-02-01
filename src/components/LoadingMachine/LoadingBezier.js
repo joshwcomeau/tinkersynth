@@ -65,7 +65,7 @@ const LoadingBezier = ({ width = 64, height = 38 }) => {
   React.useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       toggleBegun();
-    }, random(200, 500));
+    }, 1600);
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -95,7 +95,7 @@ const LoadingBezier = ({ width = 64, height = 38 }) => {
         strokeLinecap="round"
         style={{
           opacity: hasBegun ? 1 : 0,
-          transition: 'opacity 350ms',
+          transition: 'opacity 750ms',
         }}
       />
     </svg>

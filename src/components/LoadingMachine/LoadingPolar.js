@@ -7,7 +7,7 @@ import { random, range, sample, normalize } from '../../utils';
 import PolarAmountVisualization from '../Slopes/controls/PolarAmountVisualization';
 
 const useAnimatedPolarity = () => {
-  const [isPolar, setIsPolar] = React.useState(false);
+  const [isPolar, setIsPolar] = React.useState(true);
 
   React.useEffect(() => {
     let timeoutId;
@@ -15,7 +15,7 @@ const useAnimatedPolarity = () => {
     const update = () => {
       setIsPolar(isPolar => !isPolar);
 
-      timeoutId = window.setTimeout(update, 1000);
+      timeoutId = window.setTimeout(update, random(1000, 3200));
     };
 
     update();
@@ -36,7 +36,7 @@ const LoadingPolar = ({ width = 36, height = 38, padding = 4 }) => {
   React.useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       toggleBegun();
-    }, random(400, 800));
+    }, 1000);
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -62,6 +62,10 @@ const LoadingPolar = ({ width = 36, height = 38, padding = 4 }) => {
           verticalPadding={0}
           numOfLines={3}
           value={isPolar ? 100 : 0}
+          springConfig={{
+            tension: 40,
+            friction: 18,
+          }}
         />
       </Visualization>
     </Wrapper>

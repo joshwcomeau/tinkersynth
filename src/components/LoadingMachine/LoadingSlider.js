@@ -17,7 +17,7 @@ const LoadingSlider = ({ width = 20, height = 52 }) => {
       timeoutId = window.setTimeout(update, random(500, 1000));
     };
 
-    update();
+    timeoutId = window.setTimeout(update, random(1000, 2500));
 
     return () => {
       window.clearTimeout(timeoutId);

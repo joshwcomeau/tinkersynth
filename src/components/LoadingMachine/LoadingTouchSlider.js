@@ -17,7 +17,7 @@ const useBlinkingLights = (initialValue, maxNum) => {
       timeoutId = window.setTimeout(update, random(700, 1000));
     };
 
-    timeoutId = window.setTimeout(update, random(700, 1000));
+    timeoutId = window.setTimeout(update, random(500, 2000));
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -69,7 +69,7 @@ const LoadingTouchSlider = ({ width = 52, height = 16, count = 16 }) => {
                 r={2}
                 fill={getColorForCircle(i)}
                 style={{
-                  opacity: numToShow >= i ? 1 : 0,
+                  opacity: numToShow > i ? 1 : 0,
                 }}
               />
             );

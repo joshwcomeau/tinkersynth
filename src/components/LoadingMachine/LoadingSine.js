@@ -65,7 +65,7 @@ const LoadingSine = ({ width = 48, height = 34 }) => {
   React.useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       toggleBegun();
-    }, random(200, 500));
+    }, 900);
 
     return () => {
       window.clearTimeout(timeoutId);

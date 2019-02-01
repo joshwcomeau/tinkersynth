@@ -13,9 +13,9 @@ const Loading = () => {
     <Wrapper>
       <LoadingMachine />
       <Spacer size={UNIT * 4} />
-      <Heading size={4} style={{ color: COLORS.white }}>
+      {/* <Heading size={4} style={{ color: COLORS.white }}>
         Loading...
-      </Heading>
+      </Heading> */}
     </Wrapper>
   );
 };

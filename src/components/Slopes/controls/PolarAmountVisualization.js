@@ -16,6 +16,7 @@ type Props = {
   verticalPadding?: number,
   numOfLines?: number,
   value: number,
+  springConfig: any,
 };
 
 const devicePixelRatio = getDevicePixelRatio();
@@ -94,11 +95,12 @@ const PolarAmountVisualization = ({
   verticalPadding = 40,
   numOfLines = 5,
   value,
+  springConfig = SPRING_CONFIG,
 }: Props) => {
   const innerWidth = width - horizontalPadding;
   const innerHeight = height - verticalPadding;
 
-  const spring = useSpring({ value, config: SPRING_CONFIG });
+  const spring = useSpring({ value, config: springConfig });
 
   return (
     <Svg width={innerWidth} height={innerHeight}>
