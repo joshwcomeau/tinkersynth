@@ -9,6 +9,7 @@ import Slider from '../Slider';
 
 type Props = {
   value: number,
+  updateValue: (val: number) => void,
   width: number,
   height: number,
   spacing?: number,
@@ -19,6 +20,7 @@ type Props = {
 
 const SliderIconControl = ({
   value,
+  updateValue,
   width,
   height,
   spacing = 4,
@@ -38,6 +40,7 @@ const SliderIconControl = ({
     <Wrapper>
       <VisualizationWrapper
         style={{ width: sliderIconSize, height: sliderIconSize }}
+        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
       >
         <Visualization
           size={sliderIconSize}
@@ -49,6 +52,7 @@ const SliderIconControl = ({
       <SliderWrapper style={{ width, padding: spacing }}>
         <Slider
           value={value}
+          updateValue={updateValue}
           width={sliderWidth}
           height={sliderHeight}
           isDisabled={isDisabled}

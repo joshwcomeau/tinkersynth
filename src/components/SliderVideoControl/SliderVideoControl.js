@@ -41,7 +41,10 @@ const SliderVideoControl = ({
 
   return (
     <Wrapper style={{ width, height }}>
-      <VisualizationWrapper style={{ padding: spacing }}>
+      <VisualizationWrapper
+        style={{ padding: spacing }}
+        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
+      >
         <Visualization
           value={value}
           width={visualizationWidth}

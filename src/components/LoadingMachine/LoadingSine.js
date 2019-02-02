@@ -85,19 +85,7 @@ const LoadingSine = ({ width = 48, height = 34 }) => {
           opacity: hasBegun ? 1 : 0,
           transition: 'opacity 350ms',
         }}
-        // style={{
-        //   transition: '1500ms cubic-bezier(0.08, 1, 0.2, 1)',
-        // }}
       />
-      {/* <path
-        d="M7.67993 27.625C7.67993 27.625 12.7073 6.375 22.0799 6.375C31.4525 6.375 36.4799 27.625 36.4799 27.625"
-        stroke="#32FF98"
-        strokeWidth="2"
-        style={{
-          opacity: hasBegun ? 1 : 0,
-          transition: 'opacity 350ms',
-        }}
-      /> */}
     </svg>
   );
 };

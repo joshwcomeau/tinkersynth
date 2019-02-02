@@ -33,7 +33,10 @@ const TouchSliderIconControl = ({
 
   return (
     <Wrapper style={{ width }}>
-      <IconWrapper style={{ width: iconSize, height: iconSize }}>
+      <IconWrapper
+        style={{ width: iconSize, height: iconSize }}
+        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
+      >
         <Visualization value={value} size={iconSize} isAnimated={isAnimated} />
       </IconWrapper>
 

@@ -33,7 +33,10 @@ const ToggleControl = ({
 
   return (
     <Wrapper style={{ width, height }}>
-      <VisualizationWrapper style={{ height: height * visualizationRatio }}>
+      <VisualizationWrapper
+        style={{ height: height * visualizationRatio }}
+        onClick={() => updateValue(!value)}
+      >
         <Visualization
           value={value}
           width={visualizationWidth}

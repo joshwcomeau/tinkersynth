@@ -68,7 +68,7 @@ const generateLine = (numOfPoints, smoothPoints, randomLines, ratio) => {
     .join('\n');
 };
 
-const NoiseVisualization = ({ width, height, value }: Props) => {
+const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
   const ratio = value / 100;
 
   const horizontalPadding = 30;
@@ -196,8 +196,10 @@ const NoiseVisualization = ({ width, height, value }: Props) => {
 
   const springs = [spring1, spring2, spring3, spring4, spring5];
 
+  console.log({ onClick });
+
   return (
-    <Svg width={width} height={height}>
+    <Svg width={width} height={height} onClick={() => console.log('Click')}>
       {lineColors.map((color, index) => (
         <animated.path
           key={index}

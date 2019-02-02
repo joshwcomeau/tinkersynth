@@ -85,6 +85,7 @@ const generator = ({
   peaksCurve,
   selfSimilarity,
   seed,
+  enableMirrored,
 }) => {
   // For aesthetic reasons, I don't want the lines to start at the very bottom
   // of the page, in cartesian mode.
@@ -181,12 +182,7 @@ const generator = ({
   range(numOfUsableRows).forEach(function iterateRows(rowIndex) {
     let row = [];
 
-    // We can set each row to be a radius around a center point, instead of
-    // parallel lines :o
-    // Our old 'Y' values will now be the 'r', and the sampleIndex will become
-    // the degrees.
-
-    if (rowIndex < splitPoint) {
+    if (enableMirrored && rowIndex < splitPoint) {
       return;
     }
 
@@ -287,33 +283,35 @@ const generator = ({
     });
   }
 
-  lines.forEach((row, rowIndex) => {
-    const mirroredRow = [];
+  if (enableMirrored) {
+    lines.forEach((row, rowIndex) => {
+      const mirroredRow = [];
 
-    row.forEach((line, lineIndex) => {
-      if (!line) {
-        return;
-      }
+      row.forEach((line, lineIndex) => {
+        if (!line) {
+          return;
+        }
 
-      // Ensure no point in this line is above the halfway point.
-      const halfwayPoint = height / 2;
-      if (line[0][1] > halfwayPoint) {
-        line[0][1] = halfwayPoint;
-      }
+        // Ensure no point in this line is above the halfway point.
+        const halfwayPoint = height / 2;
+        if (line[0][1] > halfwayPoint) {
+          line[0][1] = halfwayPoint;
+        }
 
-      if (line[1][1] > halfwayPoint) {
-        line[1][1] = halfwayPoint;
-      }
+        if (line[1][1] > halfwayPoint) {
+          line[1][1] = halfwayPoint;
+        }
 
-      const flippedLine = line.map(point => {
-        return [point[0], height - point[1]];
+        const flippedLine = line.map(point => {
+          return [point[0], height - point[1]];
+        });
+
+        mirroredRow.push(flippedLine);
       });
 
-      mirroredRow.push(flippedLine);
+      lines.push(mirroredRow);
     });
-
-    lines.push(mirroredRow);
-  });
+  }
 
   lines = flatten(lines).filter(line => !!line);
 
