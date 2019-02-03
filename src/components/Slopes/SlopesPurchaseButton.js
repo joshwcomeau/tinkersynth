@@ -14,16 +14,24 @@ type Props = {};
 
 const purchaseMachine = {
   idle: {
-    CLICK: 'generatingSession',
+    CLICK: 'purchasing',
   },
-  generatingSession: {
-    SESSION_SUCCESS: 'checkout',
-    SESSION_FAILURE: 'idle',
-  },
-  checkout: {
-    // Final state
+  purchasing: {
+    SUCCESS: 'idle',
+    FAILURE: 'idle',
   },
 };
+
+const handler = StripeCheckout.configure({
+  key: 'pk_test_gDdRrVU2WlqLzp2lN9W4JppB',
+  image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+  locale: 'auto',
+  token: function(token, args) {
+    console.log({ token, args });
+    // You can access the token ID with `token.id`.
+    // Get the token ID to your server-side code for use.
+  },
+});
 
 const SlopesPurchaseButton = ({ params }: Props) => {
   const [status, setStatus] = React.useState('idle');
@@ -34,28 +42,39 @@ const SlopesPurchaseButton = ({ params }: Props) => {
     setStatus(nextStateKey);
 
     // Manage side-effects
-    if (nextStateKey === 'generatingSession') {
+    if (nextStateKey === 'purchasing') {
       const slopesData = { ...params };
       delete slopesData.disabledParams;
       delete slopesData.isShuffled;
 
-      console.log({ slopesData });
+      handler.open({
+        name: 'Tinkersynth',
+        description: 'Custom Art',
+        zipCode: true,
+        currency: 'usd',
+        shippingAddress: true,
+        amount: 2000,
+        closed: () => {
+          transition('SUCCESS');
+        },
+      });
 
-      window
-        .fetch('http://localhost:1337/purchase/create-session', {
-          method: 'POST',
-          mode: 'cors',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-            // "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: JSON.stringify(slopesData),
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Got response', data);
-        });
+      // window
+      //   .fetch('http://localhost:1337/purchase/create-session', {
+      //     method: 'POST',
+      //     mode: 'cors',
+      //     cache: 'no-cache',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       // "Content-Type": "application/x-www-form-urlencoded",
+      //     },
+      //     body: JSON.stringify(slopesData),
+      //   })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     console.log('Got response', data);
+
+      //   });
     }
   };
 
@@ -67,7 +86,7 @@ const SlopesPurchaseButton = ({ params }: Props) => {
       disabled={status !== 'idle'}
       onClick={() => transition('CLICK')}
     >
-      {status === 'generatingSession' ? (
+      {status === 'purchasing' ? (
         <Spin>
           <Icon
             icon={loader}

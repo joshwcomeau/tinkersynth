@@ -17,7 +17,7 @@ const SlopesIndex = () => (
       TODO: Register a callback for when the script is loaded,
       use this as one indicator to end the spinner and show the thing.
     */}
-    <LoadScript src="https://js.stripe.com/v3/" />
+    <LoadScript src="https://checkout.stripe.com/checkout.js" />
   </Layout>
 );
 
