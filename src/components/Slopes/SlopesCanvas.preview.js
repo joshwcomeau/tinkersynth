@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import styled from 'styled-components';
 import { Spring } from 'react-spring';
 
 import Debounce from '../Debounce';
@@ -10,11 +11,13 @@ import HangingCanvas from '../HangingCanvas';
 
 import type { CanvasSize } from '../../types';
 
-const PREVIEW_SIZES = {
-  small: { width: 171, height: 221 },
-  medium: { width: 231, height: 299 },
-  large: { width: 294, height: 380 },
+const PREVIEW_SIZE_INFO = {
+  small: { scaledHeight: 210, aspectRatio: 0.66666666 },
+  medium: { scaledHeight: 280, aspectRatio: 0.75 },
+  large: { scaledHeight: 420, aspectRatio: 0.66666666 },
 };
+
+const ACTUAL_HEIGHT = 552;
 
 type Props = {
   size: CanvasSize,
@@ -25,25 +28,45 @@ const SlopesCanvasPreview = ({ size }: Props) => {
 
   const { enableMargins, enableDarkMode } = slopesParams;
 
-  const { width, height } = PREVIEW_SIZES[size];
+  const { scaledHeight, aspectRatio } = PREVIEW_SIZE_INFO[size];
+
+  const scaleRatio = scaledHeight / ACTUAL_HEIGHT;
+
+  const width = ACTUAL_HEIGHT * aspectRatio;
 
   return (
     <Debounce length={1400}>
-      <HangingCanvas
-        previewSizes={PREVIEW_SIZES}
-        size={size}
-        enableDarkMode={enableDarkMode}
+      <Wrapper
+        style={{
+          transform: `scale(${scaleRatio}, ${scaleRatio})`,
+          transformOrigin: 'center center',
+        }}
       >
-        <SlopesCanvasMargins
-          width={width}
-          height={height}
-          enableMargins={enableMargins}
+        <HangingCanvas
+          size={size}
+          scaleRatio={scaleRatio}
           enableDarkMode={enableDarkMode}
-        />
-        <SlopesCanvas {...slopesParams} width={width} height={height} />
-      </HangingCanvas>
+        >
+          <SlopesCanvasMargins
+            width={width}
+            height={ACTUAL_HEIGHT}
+            enableMargins={enableMargins}
+            enableDarkMode={enableDarkMode}
+          />
+          <SlopesCanvas
+            {...slopesParams}
+            width={width}
+            height={ACTUAL_HEIGHT}
+          />
+        </HangingCanvas>
+      </Wrapper>
     </Debounce>
   );
 };
+
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 2;
+`;
 
 export default SlopesCanvasPreview;

@@ -26,7 +26,7 @@ import LoadScript from '../LoadScript';
 import SlopesPurchaseButton from './SlopesPurchaseButton';
 
 const BACKDROP_HEIGHT = 300;
-const SECOND_COLUMN_CUTOFF = 975;
+const SECOND_COLUMN_CUTOFF = 1104;
 
 const SlopesStorefront = ({
   printWidth,
@@ -141,12 +141,16 @@ const SlopesStorefront = ({
         </FirstColumn>
 
         <SecondColumn>
-          <ConsoleTable src={consoleTableSrc} />
-          <PottedPlant src={pottedPlantSrc} />
+          <Foreground>
+            <ConsoleTable src={consoleTableSrc} />
+            <PottedPlant src={pottedPlantSrc} />
+          </Foreground>
 
-          <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
+          <Background>
+            <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
 
-          <StorefrontPreviewDecorations size={storeData.size} />
+            <StorefrontPreviewDecorations size={storeData.size} />
+          </Background>
         </SecondColumn>
       </MainContent>
     </Wrapper>
@@ -167,6 +171,14 @@ const Backdrop = styled.div`
   box-shadow: inset 0px 20px 50px rgba(0, 0, 0, 0.05);
 `;
 
+const Foreground = styled.div`
+  position: relative;
+  z-index: 2;
+`;
+const Background = styled.div`
+  position: relative;
+  z-index: 1;
+`;
 const MainContent = styled(MaxWidthWrapper)`
   position: relative;
   z-index: 2;
@@ -184,10 +196,17 @@ const FirstColumn = styled(Column)`
   the options display correctly
   */
   min-width: 650px;
+  max-width: 650px;
+
+  /* In mobile, though, it just becomes 100% of the width */
+  @media (max-width: ${SECOND_COLUMN_CUTOFF}px) {
+    margin: auto;
+  }
 
   /* In mobile, though, it just becomes 100% of the width */
   @media (max-width: 650px) {
-    min-width: auto;
+    min-width: 100%;
+    max-width: 100%;
   }
 `;
 
@@ -206,14 +225,14 @@ const Header = styled.header`
 const ConsoleTable = styled.img`
   position: absolute;
   width: 735px;
-  top: 510px;
+  top: 525px;
   left: 45px;
 `;
 
 const PottedPlant = styled.img`
   position: absolute;
   width: 128px;
-  top: 352px;
+  top: 367px;
   left: 400px;
 `;
 

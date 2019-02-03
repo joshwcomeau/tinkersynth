@@ -13,15 +13,15 @@ import type { CanvasSize } from '../../types';
 
 type Props = {
   size: CanvasSize,
-  previewSizes: any,
+  scaleRatio: number,
   enableDarkMode: boolean,
   children: React$Node,
 };
 
 const FRAME_OFFSETS = {
-  small: { top: 150, left: 130 },
-  medium: { top: 95, left: 105 },
-  large: { top: 40, left: 85 },
+  small: { top: 130, left: 160 },
+  medium: { top: 95, left: 120 },
+  large: { top: 20, left: 105 },
 };
 
 const calculateOffset = frameBoundingBox => {
@@ -42,7 +42,7 @@ const calculateOffset = frameBoundingBox => {
 
 const HangingCanvas = ({
   size,
-  previewSizes,
+  scaleRatio,
   enableDarkMode,
   children,
 }: Props) => {
@@ -50,55 +50,31 @@ const HangingCanvas = ({
   const [offset, setOffset] = useState(defaultOffset);
   const frameRef = useRef(null);
 
-  useEffect(() => {
-    // Don't worry about this during SSR.
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    // We should always have a frameRef on mount, but if we don't, this
-    // calculation would be moot anyway
-    if (!frameRef.current) {
-      return;
-    }
-
-    let frameBoundingBox = frameRef.current.getBoundingClientRect();
-
-    const initialOffset = calculateOffset(frameBoundingBox);
-
-    if (initialOffset !== defaultOffset) {
-      setOffset(initialOffset);
-    }
-
-    const handleResize = () => {
-      frameBoundingBox = frameRef.current.getBoundingClientRect();
-
-      const nextOffset = calculateOffset(frameBoundingBox);
-      if (nextOffset !== offset) {
-        setOffset(nextOffset);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 
   const frameOffset = FRAME_OFFSETS[size];
+
+  const borderWidth = 3 * (1 / scaleRatio);
+  const padding = 5 * (1 / scaleRatio);
 
   return (
     <Frame
       ref={frameRef}
       style={{
         ...frameOffset,
+        borderWidth,
+        padding,
         transform: `translateX(-${offset}px)`,
       }}
     >
-      <CanvasWrapper style={{ backgroundColor }}>{children}</CanvasWrapper>
+      <CanvasWrapper
+        style={{
+          backgroundColor,
+          boxShadow: !enableDarkMode && '1px 1px 1px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        {children}
+      </CanvasWrapper>
     </Frame>
   );
 };
@@ -106,13 +82,14 @@ const HangingCanvas = ({
 const Frame = styled.div`
   position: absolute;
   z-index: 2;
-  border: 3px solid ${COLORS.gray[900]};
+  border-style: solid;
+  border-color: ${COLORS.gray[900]};
+  background-color: ${COLORS.white};
   border-radius: 2px;
 `;
 
 const CanvasWrapper = styled.div`
   position: relative;
-  border: 5px solid ${COLORS.white};
 `;
 
 export default HangingCanvas;
