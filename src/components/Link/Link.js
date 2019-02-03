@@ -3,14 +3,15 @@ import React from 'react';
 import { Link as ReachRouterLink } from '@reach/router';
 import styled from 'styled-components';
 
-export const checkIfLinkIsExternal = (to: string) => to.match(/^https?:\/\//i);
+export const shouldUseTraditionalAnchorTag = (to: string) =>
+  to.match(/^https?:\/\//i) || to.match(/^#/);
 
 type Props = {
   to: string,
 };
 
 const LinkThing = ({ to, ...delegated }: Props) => {
-  const isExternal = checkIfLinkIsExternal(to);
+  const isExternal = shouldUseTraditionalAnchorTag(to);
 
   if (isExternal) {
     return <Anchor href={to} {...delegated} />;

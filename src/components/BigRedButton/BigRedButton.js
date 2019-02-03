@@ -83,12 +83,7 @@ const BigRedButton = ({ size = 40, handlePress }: Props) => {
                 `,
               }}
             >
-              <circle
-                cx="20"
-                cy="20"
-                r="15"
-                fill={isActive ? COLORS.red[500] : COLORS.red[300]}
-              />
+              <circle cx="20" cy="20" r="15" fill={COLORS.red[300]} />
               <circle
                 cx="20"
                 cy="20"
@@ -96,6 +91,7 @@ const BigRedButton = ({ size = 40, handlePress }: Props) => {
                 fill="url(#big-red-button-3d-effect)"
                 style={{
                   mixBlendMode: 'hard-light',
+                  opacity: isActive ? 1 : 0,
                 }}
               />
             </g>

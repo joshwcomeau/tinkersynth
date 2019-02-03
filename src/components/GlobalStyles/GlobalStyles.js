@@ -1,6 +1,7 @@
 // @flow
 import { createGlobalStyle } from 'styled-components';
 
+import { COLORS } from '../../constants';
 import circularBook from '../../fonts/CircularStd-Book.woff2';
 import circularMedium from '../../fonts/CircularStd-Medium.woff2';
 import circularBold from '../../fonts/CircularStd-Bold.woff2';
@@ -35,6 +36,15 @@ const GlobalStyles = createGlobalStyle`
     font-style: normal;
   }
 
+  ::-moz-selection { /* Code for Firefox */
+    color: #000;
+    background: ${COLORS.aqua[300]};
+  }
+
+  ::selection {
+    color: #000;
+    background: ${COLORS.aqua[300]};
+  }
 
   *,
   *:before,
