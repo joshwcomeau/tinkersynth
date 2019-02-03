@@ -15,23 +15,23 @@ type Props = {
 // I should probably make them all relative to the frame size and offset?
 const AQUA_CIRCLE_OFFSET = {
   small: { transform: `translate(110px, 310px)` },
-  medium: { transform: `translate(285px,130px)` },
-  large: { transform: `translate(160px, -5px)` },
+  medium: { transform: `translate(310px, 90px)` },
+  large: { transform: `translate(185px, -5px)` },
 };
 const PINK_CIRCLE_OFFSET = {
   small: { transform: `translate(220px, 35px)` },
-  medium: { transform: `translate(200px, 20px)` },
-  large: { transform: `translate(240px, -30px)` },
+  medium: { transform: `translate(225px, 25px)` },
+  large: { transform: `translate(265px, -30px)` },
 };
 const YELLOW_CIRCLE_OFFSET = {
   small: { transform: `translate(180px, 90px)` },
-  medium: { transform: `translate(70px,375px)` },
-  large: { transform: `translate(120px, 420px)` },
+  medium: { transform: `translate(120px,350px)` },
+  large: { transform: `translate(165px, 430px)` },
 };
 const GREEN_CIRCLE_OFFSET = {
   small: { transform: `translate(60px, 225px)` },
-  medium: { transform: `translate(20px,235px)` },
-  large: { transform: `translate(30px, 300px)` },
+  medium: { transform: `translate(45px, 230px)` },
+  large: { transform: `translate(40px, 300px)` },
 };
 
 const StorefrontPreviewDecorations = ({ size }: Props) => {
@@ -91,6 +91,7 @@ const Circle = styled(animated.div)`
   mix-blend-mode: multiply;
   background-color: ${props => props.color};
   opacity: 0.9;
+  will-change: transform;
 `;
 
 export default StorefrontPreviewDecorations;

@@ -19,9 +19,9 @@ type Props = {
 };
 
 const FRAME_OFFSETS = {
-  small: { top: 130, left: 160 },
-  medium: { top: 95, left: 120 },
-  large: { top: 20, left: 105 },
+  small: { top: 360, left: 115 },
+  medium: { top: 200, left: 100 },
+  large: { top: 45, left: 100 },
 };
 
 const calculateOffset = frameBoundingBox => {
