@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Screw from '../Screw';
+import Screw from './Screw';
 import { range } from '../../utils';
 
 type Props = {

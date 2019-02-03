@@ -500,6 +500,8 @@ export const getNumOfUsableRows = (
   height,
   numOfRows,
   polarRatio,
+  polarTanRatio,
+  omegaRatio,
   rowOffsets
 ) => {
   // If the user has spaced out the rows a bunch, some might be spilling off
@@ -507,6 +509,12 @@ export const getNumOfUsableRows = (
   // addition to the potential perf win of not computing unused lines, it
   // also means we can apply the Bezier curve dampening in an intuitive way.
   let index;
+
+  // Note that `omegaRatio` and `polarTanRatio` are harder to predict.
+  // If these values are >0, we shouldn't try and optimize.
+  if (polarTanRatio > 0 || omegaRatio > 0) {
+    return numOfRows;
+  }
 
   if (polarRatio < 0.1) {
     // The first 10% of the range is cartesian-like.

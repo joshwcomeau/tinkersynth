@@ -173,6 +173,8 @@ const generator = ({
     height,
     numOfRows,
     polarRatio,
+    polarTanRatio,
+    omegaRatio,
     rowOffsets
   );
 
