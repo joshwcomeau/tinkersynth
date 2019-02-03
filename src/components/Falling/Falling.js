@@ -69,4 +69,5 @@ const Falling = ({ isFalling, children }: Props) => {
   );
 };
 
-export default Falling;
+// $FlowIgnore
+export default React.memo(Falling);

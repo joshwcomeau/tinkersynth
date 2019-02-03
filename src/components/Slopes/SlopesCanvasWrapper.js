@@ -20,11 +20,17 @@ type Props = {
   width: number,
   height: number,
   children: React$Node,
+  enableDarkMode: boolean,
+  enableMargins: boolean,
 };
 
-const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
-  const slopesParams = React.useContext(SlopesContext);
-
+const SlopesCanvasWrapper = ({
+  width,
+  height,
+  children,
+  enableDarkMode,
+  enableMargins,
+}: Props) => {
   return (
     <Wrapper>
       <Machine>
@@ -33,7 +39,7 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
         <InnerWrapper>
           <ChildWrapper
             style={{
-              backgroundColor: slopesParams.enableDarkMode
+              backgroundColor: enableDarkMode
                 ? DARK_BACKGROUND
                 : LIGHT_BACKGROUND,
             }}
@@ -43,8 +49,8 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
           <SlopesCanvasMargins
             width={width}
             height={height}
-            enableDarkMode={slopesParams.enableDarkMode}
-            enableMargins={slopesParams.enableMargins}
+            enableDarkMode={enableDarkMode}
+            enableMargins={enableMargins}
           />
         </InnerWrapper>
 
@@ -59,6 +65,21 @@ const SlopesCanvasWrapper = ({ width, height, children, toggles }: Props) => {
         </Footer>
       </Machine>
     </Wrapper>
+  );
+};
+
+// $FlowIgnore
+const OptimizedSlopesCanvasWrapper = React.memo(SlopesCanvasWrapper);
+
+const SlopesCanvasWrapperContainer = (props: any) => {
+  const slopesParams = React.useContext(SlopesContext);
+
+  return (
+    <OptimizedSlopesCanvasWrapper
+      {...props}
+      enableDarkMode={slopesParams.enableDarkMode}
+      enableMargins={slopesParams.enableMargins}
+    />
   );
 };
 
@@ -105,4 +126,4 @@ const Footer = styled.div`
 
 const Toggles = styled.div``;
 
-export default SlopesCanvasWrapper;
+export default SlopesCanvasWrapperContainer;

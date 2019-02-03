@@ -38,6 +38,7 @@ const PageCluster = ({ enableDarkMode, enableMargins, toggleParameter }) => (
   </Wrapper>
 );
 
+// $FlowIgnore
 const OptimizedPageCluster = React.memo(PageCluster);
 
 const PageContainer = () => {
