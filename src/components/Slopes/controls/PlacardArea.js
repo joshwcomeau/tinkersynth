@@ -1,27 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import useToggle from '../../../hooks/toggle.hook';
+
 import SlopesPlacard from '../SlopesPlacard';
 import HiddenCluster from './HiddenCluster';
-
-import type { ToggleParameterAction } from '../SlopesState';
 
 type Props = {
   width: number,
   height: number,
-  enableMirrored: boolean,
-  toggleParameter: ToggleParameterAction,
 };
 
 const PlacardArea = ({ width, height }: Props) => {
+  const [isHiddenClusterUsable, toggleHiddenCluster] = useToggle(false);
+
   return (
     <Wrapper>
-      <PlacardWrapper>
-        <SlopesPlacard />
+      <PlacardWrapper
+        style={{ pointerEvents: isHiddenClusterUsable ? 'none' : 'auto' }}
+      >
+        <SlopesPlacard handleRemoval={toggleHiddenCluster} />
       </PlacardWrapper>
 
       <HiddenClusterWrapper>
-        <HiddenCluster width={146} height={60} />
+        <HiddenCluster
+          width={146}
+          height={60}
+          isUsable={isHiddenClusterUsable}
+        />
       </HiddenClusterWrapper>
     </Wrapper>
   );

@@ -30,8 +30,10 @@ const getPlacardContainerStyles = hangingOffside => {
   }
 };
 
-type Props = {};
-const SlopesPlacard = ({  }: Props) => {
+type Props = {
+  handleRemoval: () => void,
+};
+const SlopesPlacard = ({ handleRemoval }: Props) => {
   const [isFalling, setIsFalling] = React.useState(false);
   const [hangingOffSide, setHangingOffSide] = React.useState(null);
 
@@ -56,6 +58,7 @@ const SlopesPlacard = ({  }: Props) => {
     // prettier-ignore
     if (attachedScrews.left === false && attachedScrews.right === false) {
       setAfterDelay(() => setIsFalling(true));
+      handleRemoval();
     } else if (attachedScrews.left === true && attachedScrews.right === false) {
       setAfterDelay(() => setHangingOffSide('left'));
     } else if (attachedScrews.left === false && attachedScrews.right === true) {

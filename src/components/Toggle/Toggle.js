@@ -11,10 +11,17 @@ type Props = {
   width: number,
   height: number,
   isToggled: boolean,
+  isDisabled?: boolean,
   handleToggle: (newVal: boolean) => void,
 };
 
-const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
+const Toggle = ({
+  width,
+  height,
+  isToggled,
+  isDisabled,
+  handleToggle,
+}: Props) => {
   const controlBorder = 1;
   const controlPadding = 1;
   const handleSize = height - controlPadding * 2 - controlBorder;
@@ -26,6 +33,7 @@ const Toggle = ({ width, height, isToggled, handleToggle }: Props) => {
     <Button
       style={{ width, height }}
       onMouseDown={() => handleToggle(!isToggled)}
+      tabIndex={isDisabled ? -1 : 0}
       onKeyPress={ev => {
         if (ev.key === 'Enter') {
           handleToggle(!isToggled);

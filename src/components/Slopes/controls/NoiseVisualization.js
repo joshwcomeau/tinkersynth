@@ -196,10 +196,8 @@ const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
 
   const springs = [spring1, spring2, spring3, spring4, spring5];
 
-  console.log({ onClick });
-
   return (
-    <Svg width={width} height={height} onClick={() => console.log('Click')}>
+    <Svg width={width} height={height}>
       {lineColors.map((color, index) => (
         <animated.path
           key={index}

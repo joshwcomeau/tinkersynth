@@ -6,7 +6,7 @@ type Props = {
   children: React$Node,
 };
 
-const GRAVITY = 20; // # of pixels per second of downward acceleration
+const GRAVITY = 35; // # of pixels per second of downward acceleration
 
 const fallenStyles = {
   opacity: 0,

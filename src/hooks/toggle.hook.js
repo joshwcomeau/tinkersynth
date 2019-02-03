@@ -1,7 +1,7 @@
 // @flow
 import { useState, useEffect } from 'react';
 
-const useToggle = defaultValue => {
+const useToggle = (defaultValue: boolean) => {
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => setValue(!value);

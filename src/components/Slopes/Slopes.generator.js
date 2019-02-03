@@ -337,9 +337,7 @@ const generator = ({
   const requiresTrimming = polarTanRatio > 0;
 
   if (requiresTrimming) {
-    const s = performance.now();
     lines = removeTroublesomeLines(width, height, lines);
-    console.log(performance.now() - s);
   }
 
   if (DEBUG_PERF) {
