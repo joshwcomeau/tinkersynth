@@ -32,7 +32,7 @@ const handleClickPurchase = () => {
   const storefrontVerticalOffset = storefrontEl.getBoundingClientRect().top;
 
   window.scrollTo({
-    top: storefrontVerticalOffset,
+    top: storefrontVerticalOffset + window.pageYOffset,
     left: 0,
     behavior: 'smooth',
   });
