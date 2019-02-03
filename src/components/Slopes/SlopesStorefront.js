@@ -129,10 +129,6 @@ const SlopesStorefront = ({
               <MultiplePurchaseInfoButton>
                 Want to buy multiple?
               </MultiplePurchaseInfoButton>
-
-              <MountUponEnteringViewport>
-                <LoadScript src="https://js.stripe.com/v3/" />
-              </MountUponEnteringViewport>
             </PurchaseRowContents>
           </StorefrontRow>
 

@@ -33,9 +33,14 @@ const getLowlightColor = (color, alpha) => {
 
 // $FlowFixMe - ugh idk
 const Button = React.forwardRef(
-  ({ color, size = 'medium', children, ...delegated }: Props, ref) => {
-    const darkerColor = getLowlightColor(color, 0.5);
-    const darkerColorInvisible = getLowlightColor(color, 0);
+  (
+    { color, disabled, size = 'medium', children, ...delegated }: Props,
+    ref
+  ) => {
+    const actualColor = disabled ? COLORS.gray[700] : color;
+
+    const darkerColor = getLowlightColor(actualColor, 0.5);
+    const darkerColorInvisible = getLowlightColor(actualColor, 0);
 
     const Component = size === 'medium' ? MediumButton : LargeButton;
 
@@ -43,17 +48,18 @@ const Button = React.forwardRef(
       <Component
         ref={ref}
         {...delegated}
+        disabled={disabled}
         style={{
-          backgroundColor: color,
+          backgroundColor: actualColor,
           textShadow: `1px 1px 0px ${darkerColor}`,
-          ...(delegated || {}),
+          ...(delegated.style || {}),
         }}
       >
         <Effects>
           <Highlight />
 
           <Lowlight fromColor={darkerColorInvisible} toColor={darkerColor} />
-          <EffectDampener style={{ backgroundColor: color }} />
+          <EffectDampener style={{ backgroundColor: actualColor }} />
         </Effects>
 
         <Children>{children}</Children>
@@ -69,6 +75,13 @@ const Wrapper = styled(UnstyledButton)`
   padding-right: ${UNIT * 4}px;
   border-radius: 4px;
   font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const MediumButton = styled(Wrapper)`
@@ -86,7 +99,7 @@ const Children = styled.div`
   position: relative;
   z-index: 1;
 
-  ${Wrapper}:active & {
+  ${Wrapper}:active:not(:disabled) & {
     transform: scale(0.95, 0.95);
   }
 `;
@@ -101,7 +114,7 @@ const Effects = styled.div`
   /* Don't allow the EffectDampener blur to leak out into the button */
   overflow: hidden;
 
-  ${Wrapper}:active & {
+  ${Wrapper}:active:not(:disabled) & {
     transform: rotate(180deg);
     opacity: 0.6;
   }

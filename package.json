@@ -11,7 +11,7 @@
     "build-server": "babel ./src --out-dir ./dist",
     "watch-server": "babel --watch ./src --out-dir ./dist",
     "develop": "gatsby develop",
-    "start": "concurrently --kill-others \"npm run develop\" \"npm run watch-server\" \"node dist/server/index.js\"",
+    "start": "concurrently --kill-others \"npm run develop\" \"npm run watch-server\" \"nodemon dist/server/index.js\"",
     "format": "prettier --write \"src/**/*.js\"",
     "test": "node scripts/test.js"
   },
@@ -65,7 +65,9 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
+    "nodemon": "^1.18.9",
     "prettier": "^1.15.2",
     "worker-loader": "2.0.0"
   },
