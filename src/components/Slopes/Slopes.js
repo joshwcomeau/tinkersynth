@@ -57,7 +57,15 @@ const Slopes = ({ size }) => {
   return (
     <SlopesProvider>
       <MachineWrapper>
-        <Row>
+        <MainRow>
+          <ControlsWrapper>
+            <Spacer size={UNIT} />
+            <SlopesControls
+              key={slopesBreakpoint}
+              width={getMachineWidth(slopesBreakpoint, windowDimensions.width)}
+            />
+          </ControlsWrapper>
+
           <SlopesCanvasWrapper width={canvasWidth} height={canvasHeight}>
             <SlopesCanvasMachine
               // Whenever the size changes, we want to redraw the canvas.
@@ -68,14 +76,7 @@ const Slopes = ({ size }) => {
               height={canvasHeight}
             />
           </SlopesCanvasWrapper>
-          <ControlsWrapper>
-            <Spacer size={UNIT} />
-            <SlopesControls
-              key={slopesBreakpoint}
-              width={getMachineWidth(slopesBreakpoint, windowDimensions.width)}
-            />
-          </ControlsWrapper>
-        </Row>
+        </MainRow>
       </MachineWrapper>
 
       <Spacer size={UNIT * 2} />
@@ -95,8 +96,14 @@ const ControlsWrapper = styled.div`
   display: flex;
 `;
 
-const Row = styled(MaxWidthWrapper)`
+const MainRow = styled(MaxWidthWrapper)`
   display: flex;
+  /*
+    Reversing because the DOM order is backwards, with the control panel
+    before the canvas. This is to ensure they overlap properly on mobile.
+    No fussing with z-indices required!
+  */
+  flex-direction: row-reverse;
   justify-content: space-between;
 
   @media (max-width: ${SLOPES_BREAKPOINTS.xlarge}px) {
@@ -108,7 +115,8 @@ const Row = styled(MaxWidthWrapper)`
   @media (max-width: ${SLOPES_BREAKPOINTS.large}px) {
     padding-left: 0;
     padding-right: 0;
-    flex-direction: column;
+    /* See comment above about row-reverse */
+    flex-direction: column-reverse;
     align-items: center;
     padding-top: ${UNIT * 2}px;
   }
