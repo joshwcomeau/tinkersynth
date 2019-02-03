@@ -47,7 +47,7 @@ const SlopesStorefront = ({
   );
 
   return (
-    <Wrapper>
+    <Wrapper id="slopes-storefront">
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
 
       <MainContent>

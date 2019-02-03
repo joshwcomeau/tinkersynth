@@ -24,6 +24,20 @@ type Props = {
   enableMargins: boolean,
 };
 
+const handleClickPurchase = () => {
+  // HACK: I've totally broken out of React's abstraction here, because the
+  // alternative is more work.
+  const storefrontEl = document.querySelector('#slopes-storefront');
+
+  const storefrontVerticalOffset = storefrontEl.getBoundingClientRect().top;
+
+  window.scrollTo({
+    top: storefrontVerticalOffset,
+    left: 0,
+    behavior: 'smooth',
+  });
+};
+
 const SlopesCanvasWrapper = ({
   width,
   height,
@@ -61,7 +75,9 @@ const SlopesCanvasWrapper = ({
             <PageCluster />
           </Toggles>
 
-          <Button color={COLORS.blue[500]}>Purchase</Button>
+          <Button color={COLORS.blue[500]} onClick={handleClickPurchase}>
+            Purchase
+          </Button>
         </Footer>
       </Machine>
     </Wrapper>
