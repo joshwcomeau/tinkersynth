@@ -581,3 +581,18 @@ export const joinLineSegments = lines => {
     return acc;
   }, []);
 };
+
+const createBoundaryChecker = (width, height) => point => {
+  const outsideX = point[0] > 0 && point[0] < width;
+  const outsideY = point[1] > 0 && point[1] < height;
+
+  return outsideX && outsideY;
+};
+
+export const removeTroublesomeLines = (width, height, lines) => {
+  const checkBoundaries = createBoundaryChecker(width, height);
+
+  return lines.filter(([p1, p2]) => {
+    return checkBoundaries(p1) || checkBoundaries(p2);
+  });
+};

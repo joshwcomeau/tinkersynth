@@ -13,6 +13,7 @@ import {
   takeStaticIntoAccount,
   getNumOfUsableRows,
   joinLineSegments,
+  removeTroublesomeLines,
 } from './Slopes.helpers';
 
 // This flag allows us to log out how long each cycle takes, to compare perf
@@ -327,6 +328,18 @@ const generator = ({
   const isMostlyContiguous = perlinRatio === 1 && dotRatio === 1;
   if (isMostlyContiguous) {
     lines = joinLineSegments(lines);
+  }
+
+  // `polarTanRatio` can create lines with values far outside the canvas.
+  // This would normally be fine, except then their rendering is really
+  // unpredictable - the lines change depending on the window size, for example.
+  // We should remove any "troublesome" line, to make rendering consistent.
+  const requiresTrimming = polarTanRatio > 0;
+
+  if (requiresTrimming) {
+    const s = performance.now();
+    lines = removeTroublesomeLines(width, height, lines);
+    console.log(performance.now() - s);
   }
 
   if (DEBUG_PERF) {
