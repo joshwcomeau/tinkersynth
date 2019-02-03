@@ -5,4 +5,4 @@ if (process.env.NODE_ENV === 'production') {
   config = require('./dev.js');
 }
 
-export default config;
+module.exports = config;

@@ -38,6 +38,10 @@ app.get('/purchase/fulfill', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.status(200).send({ ok: true, time: Date.now() });
+});
+
 const { PORT } = config;
 
 app.listen(PORT, () => {
