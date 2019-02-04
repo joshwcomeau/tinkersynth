@@ -30,7 +30,15 @@ const useCanvasDrawing = (
     return;
   }
 
-  const worker = useRef(new Worker());
+  // Create a worker. This will be a long-lived worker, we use for all drawing.
+  const worker = useRef(null);
+  useEffect(() => {
+    worker.current = new Worker();
+
+    return () => {
+      worker.current.terminate();
+    };
+  }, []);
 
   const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
   const hasSentCanvas = useRef(false);
