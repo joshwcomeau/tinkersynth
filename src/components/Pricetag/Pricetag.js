@@ -7,9 +7,16 @@ type Props = {
   cost: number,
 };
 
-// HACK: I'm assuming all pricetags are round numbers, so I can just append
-// zero cents.
-const formatCost = number => `${number}.00`;
+const formatCost = number => {
+  const dollars = number / 100;
+  let cents = String(number % 100);
+
+  if (cents.length === 1) {
+    cents = `${cents}0`;
+  }
+
+  return `${dollars}.${cents}`;
+};
 
 const Pricetag = ({ cost }: Props) => {
   return (

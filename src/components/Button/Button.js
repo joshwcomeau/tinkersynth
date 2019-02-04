@@ -51,7 +51,6 @@ const Button = React.forwardRef(
         disabled={disabled}
         style={{
           backgroundColor: actualColor,
-          textShadow: `1px 1px 0px ${darkerColor}`,
           ...(delegated.style || {}),
         }}
       >

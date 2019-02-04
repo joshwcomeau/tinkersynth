@@ -1,97 +1,92 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import { loader } from 'react-icons-kit/feather/loader';
 
 import { COLORS } from '../../constants';
+import { getCost } from '../../reducers/store.reducer';
+import {
+  createStripeConnection,
+  submitCharge,
+} from '../../helpers/stripe.helpers';
 
 import Button from '../Button';
 import Spin from '../Spin';
 import { SlopesContext } from './SlopesState';
 
-type Props = {};
+type Props = {
+  // Lazy AF
+  artParams: any,
+  storeData: any,
+  cost: number,
+};
 
 const purchaseMachine = {
   idle: {
-    CLICK: 'purchasing',
+    SUBMIT: 'purchasing',
   },
   purchasing: {
-    SUCCESS: 'idle',
+    SUCCESS: 'success',
     FAILURE: 'idle',
+  },
+  success: {
+    FINISHED: 'idle',
   },
 };
 
-const handler = StripeCheckout.configure({
-  key: 'pk_test_gDdRrVU2WlqLzp2lN9W4JppB',
-  image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-  locale: 'auto',
-  token: function(token, args) {
-    console.log({ token, args });
-    // You can access the token ID with `token.id`.
-    // Get the token ID to your server-side code for use.
-  },
-});
+const stripe = createStripeConnection();
 
-const SlopesPurchaseButton = ({ params }: Props) => {
+const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const [status, setStatus] = React.useState('idle');
 
   const transition = action => {
     const nextStateKey = purchaseMachine[status][action];
 
     setStatus(nextStateKey);
+  };
 
-    // Manage side-effects
-    if (nextStateKey === 'purchasing') {
-      const slopesData = { ...params };
-      delete slopesData.disabledParams;
-      delete slopesData.isShuffled;
+  const openStripe = () => {
+    const productName =
+      storeData.format === 'print' ? 'Art print' : 'Art download';
 
-      handler.open({
-        name: 'Tinkersynth',
-        description: 'Custom Art',
-        zipCode: true,
-        currency: 'usd',
-        shippingAddress: true,
-        amount: 2000,
-        closed: () => {
-          transition('SUCCESS');
-        },
-      });
+    stripe.open({
+      name: 'Tinkersynth',
+      description: productName,
+      currency: 'usd',
+      zipCode: true,
+      billingAddress: true,
+      shippingAddress: true,
+      amount: cost,
+      token: (token, args) => {
+        const body = {
+          artParams,
+          format: storeData.format,
+          size: storeData.size,
+          cost,
+          token,
+        };
+        setStatus('SUBMIT');
 
-      // window
-      //   .fetch('http://localhost:1337/purchase/create-session', {
-      //     method: 'POST',
-      //     mode: 'cors',
-      //     cache: 'no-cache',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       // "Content-Type": "application/x-www-form-urlencoded",
-      //     },
-      //     body: JSON.stringify(slopesData),
-      //   })
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     console.log('Got response', data);
-
-      //   });
-    }
+        submitCharge(body).then(() => {
+          setStatus('SUCCESS');
+        });
+      },
+    });
   };
 
   return (
     <Button
       size="large"
       color={COLORS.blue[500]}
-      style={{ width: 100 }}
+      style={{ width: 85 }}
       disabled={status !== 'idle'}
-      onClick={() => transition('CLICK')}
+      onClick={openStripe}
     >
       {status === 'purchasing' ? (
         <Spin>
-          <Icon
-            icon={loader}
-            style={{ display: 'block', verticalAlign: 'initial' }}
-          />
+          <Icon icon={loader} />
         </Spin>
       ) : (
         'Purchase'
@@ -100,10 +95,25 @@ const SlopesPurchaseButton = ({ params }: Props) => {
   );
 };
 
-const SlopesPurchaseButtonContainer = () => {
+const SlopesPurchaseButtonContainer = ({ storeData, cost }) => {
   const slopesParams = React.useContext(SlopesContext);
 
-  return <SlopesPurchaseButton params={slopesParams} />;
+  const artParams = { ...slopesParams };
+  delete artParams.disabledParams;
+  delete artParams.isShuffled;
+
+  return (
+    <SlopesPurchaseButton
+      artParams={artParams}
+      storeData={storeData}
+      cost={cost}
+    />
+  );
 };
 
-export default SlopesPurchaseButtonContainer;
+const mapStateToProps = state => ({
+  storeData: state.store.slopes,
+  cost: getCost('slopes')(state),
+});
+
+export default connect(mapStateToProps)(SlopesPurchaseButtonContainer);

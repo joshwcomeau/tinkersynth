@@ -53,13 +53,13 @@ export const getCost = machineName => state => {
   const { format, size } = state.store[machineName];
 
   if (format === 'image') {
-    return 20;
+    return 2000;
   } else {
     // prettier-ignore
     switch (size) {
-      case 'small': return 95;
-      case 'medium': return 125;
-      case 'large': return 150;
+      case 'small': return 9500;
+      case 'medium': return 12500;
+      case 'large': return 15000;
     }
   }
 };
