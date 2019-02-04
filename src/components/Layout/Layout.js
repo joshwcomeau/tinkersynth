@@ -18,12 +18,13 @@ const store = configureStore();
 
 type Props = {
   children: React$Node,
+  noHeader?: boolean,
 };
 
-const Layout = ({ children }: Props) => (
+const Layout = ({ children, noHeader }: Props) => (
   <Provider store={store}>
     <ToastManager />
-    <Header />
+    {!noHeader && <Header />}
     <MainContentWrapper>{children}</MainContentWrapper>
 
     <GlobalStyles />

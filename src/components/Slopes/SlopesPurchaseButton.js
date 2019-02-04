@@ -36,10 +36,14 @@ const purchaseMachine = {
   },
 };
 
-const stripe = createStripeConnection();
+let stripe;
 
 const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const [status, setStatus] = React.useState('idle');
+
+  React.useEffect(() => {
+    stripe = createStripeConnection();
+  }, []);
 
   const transition = action => {
     const nextStateKey = purchaseMachine[status][action];
