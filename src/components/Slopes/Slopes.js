@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import { COLORS, UNIT, PRINT_SIZES } from '../../constants';
+import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import CanvasToggle from '../CanvasToggle';
@@ -88,6 +88,7 @@ const Slopes = ({ size }) => {
 
 const MachineWrapper = styled.div`
   position: relative;
+  min-height: calc(100vh - ${HEADER_HEIGHT}px);
   background: ${COLORS.gray[700]};
   padding-bottom: ${UNIT * 16}px;
 `;
