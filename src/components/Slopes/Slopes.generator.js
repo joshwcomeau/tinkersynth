@@ -280,55 +280,55 @@ const generator = ({
     });
   }
 
-  // if (enableMirrored) {
-  //   lines.forEach((row, rowIndex) => {
-  //     const mirroredRow = [];
+  if (enableMirrored) {
+    lines.forEach((row, rowIndex) => {
+      const mirroredRow = [];
 
-  //     row.forEach((line, lineIndex) => {
-  //       if (!line) {
-  //         return;
-  //       }
+      row.forEach((line, lineIndex) => {
+        if (!line) {
+          return;
+        }
 
-  //       const halfwayPoint = height / 2;
+        const halfwayPoint = height / 2;
 
-  //       // If both points are above the halfway point, we don't need to render
-  //       // this line at all.
-  //       if (line[0][1] > halfwayPoint && line[1][1] > halfwayPoint) {
-  //         lines[rowIndex][lineIndex] = null;
-  //         return;
-  //       }
+        // If both points are above the halfway point, we don't need to render
+        // this line at all.
+        if (line[0][1] > halfwayPoint && line[1][1] > halfwayPoint) {
+          lines[rowIndex][lineIndex] = null;
+          return;
+        }
 
-  //       // If only 1 of the 2 points is above, we need to do some maths, to work
-  //       // out where the intersection with the halfway point is, and truncate
-  //       // the line there.
-  //       if (line[1][1] > halfwayPoint) {
-  //         const deltaX = line[1][0] - line[0][0];
-  //         const deltaY = line[1][1] - line[0][1];
-  //         const deltaYHalfway = halfwayPoint - line[0][1];
-  //         const ratio = deltaYHalfway / deltaY;
+        // If only 1 of the 2 points is above, we need to do some maths, to work
+        // out where the intersection with the halfway point is, and truncate
+        // the line there.
+        if (line[1][1] > halfwayPoint) {
+          const deltaX = line[1][0] - line[0][0];
+          const deltaY = line[1][1] - line[0][1];
+          const deltaYHalfway = halfwayPoint - line[0][1];
+          const ratio = deltaYHalfway / deltaY;
 
-  //         line[1] = [line[1][0] + deltaX * ratio, halfwayPoint];
-  //       }
+          line[1] = [line[1][0] + deltaX * ratio, halfwayPoint];
+        }
 
-  //       if (line[0][1] > halfwayPoint) {
-  //         const deltaX = line[1][0] - line[0][0];
-  //         const deltaY = line[1][1] - line[0][1];
-  //         const deltaYHalfway = halfwayPoint - line[0][1];
-  //         const ratio = deltaYHalfway / deltaY;
+        if (line[0][1] > halfwayPoint) {
+          const deltaX = line[1][0] - line[0][0];
+          const deltaY = line[1][1] - line[0][1];
+          const deltaYHalfway = halfwayPoint - line[0][1];
+          const ratio = deltaYHalfway / deltaY;
 
-  //         line[0] = [line[0][0] + deltaX * ratio, halfwayPoint];
-  //       }
+          line[0] = [line[0][0] + deltaX * ratio, halfwayPoint];
+        }
 
-  //       const flippedLine = line.map(point => {
-  //         return [point[0], height - point[1]];
-  //       });
+        const flippedLine = line.map(point => {
+          return [point[0], height - point[1]];
+        });
 
-  //       mirroredRow.push(flippedLine);
-  //     });
+        mirroredRow.push(flippedLine);
+      });
 
-  //     lines.push(mirroredRow);
-  //   });
-  // }
+      lines.push(mirroredRow);
+    });
+  }
 
   lines = flatten(lines).filter(line => !!line);
 

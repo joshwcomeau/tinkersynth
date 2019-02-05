@@ -9,7 +9,7 @@ const LoadingStatus = () => {
   React.useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       setStatus('OK');
-    }, 5000);
+    }, 3500);
 
     return () => {
       window.clearTimeout(timeoutId);
