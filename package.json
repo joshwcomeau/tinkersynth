@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@loadable/component": "^5.2.2",
+    "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.3.1",
     "canvas-sketch-util": "1.5.0",
     "express": "^4.16.4",
@@ -29,6 +30,7 @@
     "gatsby-plugin-offline": "^2.0.16",
     "gatsby-plugin-react-helmet": "^3.0.2",
     "gatsby-plugin-sharp": "^2.0.14",
+    "gatsby-plugin-styled-components": "^3.0.5",
     "gatsby-source-filesystem": "^2.0.8",
     "gatsby-transformer-sharp": "^2.1.8",
     "immer": "^1.12.0",

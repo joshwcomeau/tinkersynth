@@ -21,6 +21,13 @@ module.exports = {
     `gatsby-plugin-flow`,
 
     {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        displayName: true,
+      },
+    },
+
+    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `gatsby-starter-default`,
