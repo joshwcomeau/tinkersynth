@@ -33,7 +33,7 @@ const HiddenCluster = ({
     <InstrumentCluster style={{ borderRadius: 4 }}>
       <Wrapper style={{ width: innerWidth, height: innerHeight }}>
         <VisualizationWrapper>
-          <HiddenVisualization />
+          <HiddenVisualization isEnabled={enableMirrored} />
         </VisualizationWrapper>
 
         <ToggleWrapper>
@@ -76,6 +76,9 @@ const Wrapper = styled.div`
 
 const VisualizationWrapper = styled.div`
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ToggleWrapper = styled.div`
