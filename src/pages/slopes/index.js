@@ -6,7 +6,7 @@ import SEO from '../../components/SEO';
 import SlopesIndex from '../../components/Slopes/SlopesIndex';
 
 const Page = () => (
-  <Layout>
+  <Layout pageId="slopes">
     <SEO title="Slopes" keywords={['generative art', 'art', 'online store']} />
 
     <SlopesIndex />

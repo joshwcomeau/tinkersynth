@@ -36,6 +36,7 @@
     "immer": "^1.12.0",
     "jest": "23.6.0",
     "line-intersect": "2.2.0",
+    "mixpanel-browser": "^2.26.0",
     "prop-types": "^15.6.2",
     "random-seed": "^0.3.0",
     "react": "16.7.0-alpha.2",

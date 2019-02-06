@@ -4,24 +4,42 @@ const DISTINCT_ID_KEY = 'tinkersynth-user-id';
 const NUM_OF_VISITS_KEY = 'tinkersynth-num-of-visits';
 
 export const getDistinctId = () => {
-  let distinctId = localStorage.getItem(DISTINCT_ID_KEY);
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  let distinctId = window.localStorage.getItem(DISTINCT_ID_KEY);
 
   if (distinctId === undefined || distinctId === null) {
     distinctId = uuid();
-    localStorage.setItem(DISTINCT_ID_KEY, distinctId);
+    window.localStorage.setItem(DISTINCT_ID_KEY, distinctId);
   }
 
   return distinctId;
 };
 
 export const getNumberOfVisits = distinctId => {
+  if (typeof window === 'undefined') {
+    return 0;
+  }
+
   distinctId = distinctId || getDistinctId();
 
-  let numOfVisits = localStorage.getItem(NUM_OF_VISITS_KEY);
+  let numOfVisits = window.localStorage.getItem(NUM_OF_VISITS_KEY);
 
   if (numOfVisits === undefined || numOfVisits === null) {
     numOfVisits = 0;
   }
 
-  return numOfVisits;
+  return Number(numOfVisits);
+};
+
+export const markNewVisit = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const numOfVisits = getNumberOfVisits();
+
+  window.localStorage.setItem(NUM_OF_VISITS_KEY, numOfVisits + 1);
 };

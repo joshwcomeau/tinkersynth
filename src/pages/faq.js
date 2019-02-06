@@ -10,7 +10,7 @@ import List from '../components/List';
 import TextLink from '../components/TextLink';
 
 const SlopesIndex = () => (
-  <LayoutSidePage title="Frequently Asked Questions">
+  <LayoutSidePage pageId="faq" title="Frequently Asked Questions">
     <QuestionAndAnswer id="what-is-this" question="Er, so, what is this?">
       <Paragraph>
         Tinkersynth is an experimental tool. It lets you create unique [FIND A

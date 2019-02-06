@@ -40,9 +40,15 @@ let stripe;
 
 const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const [status, setStatus] = React.useState('idle');
+  const [canPurchase, setCanPurchase] = React.useState(true);
 
   React.useEffect(() => {
-    stripe = createStripeConnection();
+    try {
+      stripe = createStripeConnection();
+    } catch (err) {
+      setCanPurchase(false);
+      console.error('Could not load Stripe', err);
+    }
   }, []);
 
   const transition = action => {

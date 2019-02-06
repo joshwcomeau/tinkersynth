@@ -9,7 +9,7 @@ import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 
 const Finished = () => (
-  <Layout noHeader>
+  <Layout pageId="thanks" noHeader>
     <Wrapper>
       <img src={thanksSrc} />
       <Spacer size={40} />

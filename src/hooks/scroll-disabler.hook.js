@@ -2,6 +2,10 @@
 import React from 'react';
 
 const useScrollDisabler = (disableScrolling: boolean) => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
   // Capture the "original" values for certain things, so that we can
   // effectively repeal this effect on unmount, or on toggling the effect off.
   const originalStyles = React.useRef({

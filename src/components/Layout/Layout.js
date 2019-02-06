@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import configureStore from '../../store';
+import analytics from '../../services/analytics.service';
 
 import GlobalStyles from '../GlobalStyles';
 import DevTools from '../DevTools';
@@ -21,16 +22,22 @@ type Props = {
   noHeader?: boolean,
 };
 
-const Layout = ({ children, noHeader }: Props) => (
-  <Provider store={store}>
-    <ToastManager />
-    {!noHeader && <Header />}
-    <MainContentWrapper>{children}</MainContentWrapper>
+const Layout = ({ pageId, children, noHeader }: Props) => {
+  React.useEffect(() => {
+    analytics.logEvent('visit-page', { pageId });
+  }, []);
 
-    <GlobalStyles />
-    <DevTools />
-  </Provider>
-);
+  return (
+    <Provider store={store}>
+      <ToastManager />
+      {!noHeader && <Header />}
+      <MainContentWrapper>{children}</MainContentWrapper>
+
+      <GlobalStyles />
+      <DevTools />
+    </Provider>
+  );
+};
 
 const MainContentWrapper = styled.div`
   position: relative;

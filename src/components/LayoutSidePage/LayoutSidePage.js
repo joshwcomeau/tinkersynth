@@ -8,9 +8,9 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import Spacer from '../Spacer';
 import PageHeader from '../PageHeader';
 
-const LayoutSidePage = ({ title, children }) => {
+const LayoutSidePage = ({ pageId, title, children }) => {
   return (
-    <Layout>
+    <Layout pageId={pageId}>
       <Wrapper maxWidth="1000px">
         <PageHeader>{title}</PageHeader>
 
