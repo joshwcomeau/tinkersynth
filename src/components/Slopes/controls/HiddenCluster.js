@@ -32,7 +32,7 @@ const HiddenCluster = ({
   return (
     <InstrumentCluster style={{ borderRadius: 4 }}>
       <Wrapper style={{ width: innerWidth, height: innerHeight }}>
-        <VisualizationWrapper>
+        <VisualizationWrapper onClick={() => toggleParameter('enableMirrored')}>
           <HiddenVisualization isEnabled={enableMirrored} />
         </VisualizationWrapper>
 
