@@ -3,10 +3,10 @@ import React from 'react';
 import { useSpring, animated, interpolate } from 'react-spring/hooks';
 
 import { createSvgPathForCurve } from '../../../helpers/line.helpers';
-import { normalize } from '../../../utils';
+import { normalize, clamp } from '../../../utils';
 import createNoiseGenerator from '../../../vendor/noise';
 
-const { perlin2 } = createNoiseGenerator(9);
+const { perlin2 } = createNoiseGenerator(16);
 
 type Props = {
   value: number,
@@ -50,13 +50,13 @@ const BoilingWater = ({
         perlin2(value * PERLIN_MULTIPLE, perlinRow),
         -1,
         1,
-        top - 5 * ratio,
-        top + 5 * ratio
+        top - 10 * ratio,
+        top + 12 * ratio
       ) + boiledAwayOffset,
     c1x: normalize(
       perlin2(
         value * PERLIN_MULTIPLE + PERLIN_OFFSET_BETWEEN_POINTS,
-        perlinRow
+        perlinRow * 10
       ),
       -1,
       1,
@@ -67,17 +67,17 @@ const BoilingWater = ({
       normalize(
         perlin2(
           value * PERLIN_MULTIPLE + PERLIN_OFFSET_BETWEEN_POINTS,
-          perlinRow
+          perlinRow * 10
         ),
         -1,
         1,
         top - 8 * ratio,
-        top + 8 * ratio
+        top + 16 * ratio
       ) + boiledAwayOffset,
     c2x: normalize(
       perlin2(
         value * PERLIN_MULTIPLE + PERLIN_OFFSET_BETWEEN_POINTS * 2,
-        perlinRow
+        perlinRow * 100
       ),
       -1,
       1,
@@ -88,28 +88,33 @@ const BoilingWater = ({
       normalize(
         perlin2(
           value * PERLIN_MULTIPLE + PERLIN_OFFSET_BETWEEN_POINTS * 2,
-          perlinRow
+          perlinRow * 100
         ),
         -1,
         1,
-        top - 5 * ratio,
+        top - 15 * ratio,
         top + 10 * ratio
       ) + boiledAwayOffset,
       top + height
     ),
     ex: left + width,
-    ey:
+    ey: clamp(
       normalize(
         perlin2(
           value * PERLIN_MULTIPLE + PERLIN_OFFSET_BETWEEN_POINTS * 3,
-          perlinRow
+          perlinRow * 1000
         ),
         -1,
         1,
-        top - 4 * ratio,
-        top + 4 * ratio
+        top - 12 * ratio,
+        top + 10 * ratio
       ) + boiledAwayOffset,
+      0,
+      top
+    ),
   });
+
+  const limiter = val => clamp(val, 0, top + height);
 
   return (
     <animated.path
@@ -126,10 +131,10 @@ const BoilingWater = ({
         ],
         (sx, sy, c1x, c1y, c2x, c2y, ex, ey) => {
           const curve = {
-            startPoint: [sx, sy],
-            controlPoint1: [c1x, c1y],
-            controlPoint2: [c2x, c2y],
-            endPoint: [ex, ey],
+            startPoint: [limiter(sx), limiter(sy)],
+            controlPoint1: [limiter(c1x), limiter(c1y)],
+            controlPoint2: [limiter(c2x), limiter(c2y)],
+            endPoint: [limiter(ex), limiter(ey)],
           };
 
           const curvePath = createSvgPathForCurve(curve);
@@ -138,7 +143,7 @@ const BoilingWater = ({
             ${curvePath}
             V ${top + height}
             H ${left}
-            V ${sy}
+            V ${limiter(sy)}
             Z`;
         }
       )}
