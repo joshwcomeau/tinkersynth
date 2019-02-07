@@ -11,6 +11,7 @@ import GlobalStyles from '../GlobalStyles';
 import DevTools from '../DevTools';
 import ToastManager from '../ToastManager';
 import Header from '../Header';
+import Footer from '../Footer';
 
 import 'focus-visible';
 import 'react-tippy/dist/tippy.css';
@@ -30,8 +31,12 @@ const Layout = ({ pageId, children, noHeader }: Props) => {
   return (
     <Provider store={store}>
       <ToastManager />
+
       {!noHeader && <Header />}
+
       <MainContentWrapper>{children}</MainContentWrapper>
+
+      <Footer />
 
       <GlobalStyles />
       <DevTools />

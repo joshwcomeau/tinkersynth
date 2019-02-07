@@ -10,22 +10,14 @@ import Spacer from '../Spacer';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
+import LogoWithName from '../LogoWithName';
 
 const Header = () => {
   return (
     <OuterWrapper>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-          <SiteTitleWrapper>
-            <Logo height={28} />
-
-            <Spacer size={UNIT} />
-            <SiteTitle>
-              Tinker·S<span style={{ letterSpacing: 1 }}>y</span>
-              <span style={{ letterSpacing: 1.5 }}>n</span>
-              <span style={{ letterSpacing: 1.5 }}>t</span>h
-            </SiteTitle>
-          </SiteTitleWrapper>
+          <LogoWithName id="site-header" />
         </Link>
 
         <Navigation>
@@ -57,21 +49,8 @@ const InnerWrapper = styled(MaxWidthWrapper)`
   height: ${HEADER_HEIGHT}px;
 `;
 
-const SiteTitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
-
 const Navigation = styled.ul`
   display: flex;
-`;
-
-const SiteTitle = styled.h1`
-  font-size: 16px;
-  color: ${COLORS.gray[900]};
-  text-transform: uppercase;
-  letter-spacing: 2px;
 `;
 
 export default Header;

@@ -131,9 +131,6 @@ const SlopesStorefront = ({
               </MultiplePurchaseInfoButton>
             </PurchaseRowContents>
           </StorefrontRow>
-
-          {/* TEMP */}
-          <Spacer size={500} />
         </FirstColumn>
 
         <SecondColumn>
@@ -149,6 +146,12 @@ const SlopesStorefront = ({
           </Background>
         </SecondColumn>
       </MainContent>
+
+      {/*
+        HACK: Need enough space for the table to not be obfuscated by the
+              site footer
+      */}
+      <Spacer size={UNIT * 24} />
     </Wrapper>
   );
 };
