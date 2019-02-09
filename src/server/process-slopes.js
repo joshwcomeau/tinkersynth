@@ -12,10 +12,8 @@
  * that supports huge file attachments?). I might also want to add a cron job
  * that deletes the JPEG after a time. But whatever.
  */
-import fs from 'fs';
 import path from 'path';
 
-import { Storage } from '@google-cloud/storage';
 import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
 
@@ -27,15 +25,12 @@ import {
 } from '../helpers/line.helpers';
 import generator from '../components/Slopes/Slopes.generator';
 import transformParameters from '../components/Slopes/Slopes.params';
+
+import { parallel, writeFile } from './utils';
+import { upload } from './google-cloud';
 import rasterize from './rasterization';
-import { parallel } from './utils';
 
 // We use Google Cloud Platform storage to save all image assets.
-const gcpProjectId = 'tinkersynth';
-const gcpBucketName = 'tinkersynth-art';
-const storage = new Storage({
-  projectId: gcpProjectId,
-});
 
 const writeFile = (...args) => {
   return new Promise((resolve, reject) => {
@@ -102,20 +97,10 @@ const process = async (size, params) => {
     // Push both to storage in the same call
     const cacheControl = 'public, max-age=31536000';
 
+    // prettier-ignore
     await parallel(
-      storage.bucket(gcpBucketName).upload(svgPath, {
-        gzip: true,
-        metadata: {
-          contentType: 'image/svg+xml',
-          cacheControl,
-        },
-      }),
-      storage.bucket(gcpBucketName).upload(pngPath, {
-        metadata: {
-          contentType: 'image/png',
-          cacheControl,
-        },
-      })
+      upload(svgPath, 'svg'),
+      upload(pngPath, 'png'),
     );
   } catch (err) {
     console.error('Could not save to GCP', err);
