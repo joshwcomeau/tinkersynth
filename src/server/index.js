@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import config from './config';
 import { createCharge } from './stripe';
 import processSlopes from './process-slopes';
+import database from './database';
 
 // Set up the express app
 const app = express();
@@ -24,13 +25,14 @@ app.use(function(req, res, next) {
 // which will hit this path, containing all the info needed to produce the
 // image, send the user an email, and mail them the print (if applicable).
 app.post('/purchase/fulfill', (req, res) => {
-  const { artParams, format, size, cost, token } = req.body;
+  const { artParams, userId, format, size, cost, token } = req.body;
 
   createCharge(req.body)
-    .then((...args) => {
-      console.log('Success', args);
+    .then(charge => {
+      const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
+      const userName = charge.source.name;
 
-      processSlopes(size, artParams);
+      processSlopes(size, format, userId, userName, userEmail, artParams);
 
       res.status(200).send({
         success: 'true',

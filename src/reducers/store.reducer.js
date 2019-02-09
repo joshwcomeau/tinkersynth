@@ -13,10 +13,7 @@ type State = {
   // Keyed by machine name.
   [string]: {
     format: 'print' | 'vector',
-    size: {
-      width: number,
-      height: number,
-    },
+    size: 'small' | 'medium' | 'large',
   },
 };
 

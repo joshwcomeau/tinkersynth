@@ -28,23 +28,11 @@ import transformParameters from '../components/Slopes/Slopes.params';
 
 import { parallel, writeFile } from './utils';
 import { upload } from './google-cloud';
+import { sendArtVectorEmail } from './email';
 import rasterize from './rasterization';
+import { User } from './database';
 
-// We use Google Cloud Platform storage to save all image assets.
-
-const writeFile = (...args) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(...args, err => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve();
-    });
-  });
-};
-
-const process = async (size, params) => {
+const process = async (size, format, userId, userName, userEmail, params) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
 
   // Our aspect ratio depends on the size selected.
@@ -87,26 +75,38 @@ const process = async (size, params) => {
   const buffer = await rasterize(svgMarkup, rasterWidth, rasterHeight);
 
   try {
-    // Write the .png and .svg to disk in parallel
-    await parallel(writeFile(svgPath, svgMarkup), writeFile(pngPath, buffer));
+    // prettier-ignore
+    await parallel(
+      writeFile(svgPath, svgMarkup),
+      writeFile(pngPath, buffer)
+    );
   } catch (err) {
     console.error('Could not save to local disk', err);
   }
 
   try {
-    // Push both to storage in the same call
-    const cacheControl = 'public, max-age=31536000';
-
     // prettier-ignore
     await parallel(
       upload(svgPath, 'svg'),
-      upload(pngPath, 'png'),
+      upload(pngPath, 'png')
     );
   } catch (err) {
     console.error('Could not save to GCP', err);
   }
 
-  console.log('Done!');
+  // Create a User, if we don't already have one.
+  const [user, wasJustCreated] = await User.findOrCreate({
+    where: { id: userId },
+    defaults: { email: userEmail, name: userName },
+  });
+
+  console.log(user.email);
+
+  const svgUrl = `https://storage.googleapis.com/tinkersynth-art/${filename}.svg`;
+  const pngUrl = `https://storage.googleapis.com/tinkersynth-art/${filename}.png`;
+
+  // Email the customer!
+  sendArtVectorEmail(user.name, user.email, format, svgUrl, pngUrl);
 };
 
 export default process;

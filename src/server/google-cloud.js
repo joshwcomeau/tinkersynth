@@ -7,6 +7,8 @@ const storage = new Storage({
 });
 
 const getOptionsForType = type => {
+  const cacheControl = 'public, max-age=31536000';
+
   switch (type) {
     case 'svg': {
       return {
