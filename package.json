@@ -16,6 +16,7 @@
     "test": "node scripts/test.js"
   },
   "dependencies": {
+    "@google-cloud/storage": "^2.4.2",
     "@loadable/component": "^5.2.2",
     "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.3.1",

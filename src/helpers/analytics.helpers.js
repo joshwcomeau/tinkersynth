@@ -7,7 +7,6 @@
  */
 
 import mixpanel from 'mixpanel-browser';
-import uuid from 'uuid/v1';
 
 import { getDistinctId } from './local-storage.helpers';
 

@@ -72,5 +72,9 @@ yarn-error.log
 # used exclusively for the server-side
 dist
 
+# Images generated through the app
+output
+
 # Ignore secret keys, server-side
 src/server/config/prod.js
+gcp-keys.json

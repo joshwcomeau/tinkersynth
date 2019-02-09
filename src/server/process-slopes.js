@@ -12,47 +12,29 @@
  * that supports huge file attachments?). I might also want to add a cron job
  * that deletes the JPEG after a time. But whatever.
  */
-const fs = require('fs');
+import fs from 'fs';
+import path from 'path';
 
-const svg2img = require('svg2img');
-
+import { Storage } from '@google-cloud/storage';
+import svg2img from 'svg2img';
+import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
 
+import { PRINT_SIZES } from '../constants';
 import {
   clipLinesWithMargin,
   groupPolylines,
   retraceLines,
 } from '../helpers/line.helpers';
-import { PRINT_SIZES } from '../constants';
 import generator from '../components/Slopes/Slopes.generator';
 import transformParameters from '../components/Slopes/Slopes.params';
 
-const MOCK_PARAMS = {
-  amplitudeAmount: 50,
-  ballSize: 50,
-  dotAmount: 0,
-  enableDarkMode: false,
-  enableMargins: true,
-  enableOcclusion: true,
-  isShuffled: false,
-  lineAmount: 45,
-  octaveAmount: 0,
-  omega: 0,
-  peaksCurve: {
-    controlPoint1: [0.5, 0.5],
-    endPoint: [0.5, 1],
-    startPoint: [0.5, 0],
-  },
-  personInflateAmount: 50,
-  perspective: 45,
-  polarAmount: 0,
-  seed: 12345,
-  spikyness: 0,
-  splitUniverse: 0,
-  staticAmount: 0,
-  waterBoilAmount: 100,
-  wavelength: 25,
-};
+// We use Google Cloud Platform storage to save all image assets.
+const gcpProjectId = 'tinkersynth';
+const gcpBucketName = 'tinkersynth-art';
+const storage = new Storage({
+  projectId: gcpProjectId,
+});
 
 const writeFile = (...args) => {
   return new Promise((resolve, reject) => {
@@ -92,10 +74,16 @@ const process = async (size, params) => {
   // Trim any lines that fall outside the SVG size
   lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
 
+  const filename = uuid();
+
   const svgMarkup = polylinesToSVG(lines, { width, height });
 
-  // TODO: maybe I ought to push these to Amazon s3 or something?
-  await writeFile('test.svg', svgMarkup);
+  const fileOutputPath = path.join(__dirname, '../../output');
+
+  const svgPath = path.join(fileOutputPath, `${filename}.svg`);
+  const pngPath = path.join(fileOutputPath, `${filename}.png`);
+
+  await writeFile(svgPath, svgMarkup);
 
   // Create a raster PNG as well
   // We want our raster image to be printable at 300dpi.
@@ -105,7 +93,7 @@ const process = async (size, params) => {
     svgMarkup,
     { width: rasterWidth, height: rasterHeight },
     async (error, buffer) => {
-      await writeFile('test.png', buffer);
+      await writeFile(pngPath, buffer);
     }
   );
 };
