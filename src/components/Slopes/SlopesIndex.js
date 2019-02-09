@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import loadable from '@loadable/component';
 
-import { COLORS } from '../../constants';
+import { COLORS, HEADER_HEIGHT } from '../../constants';
 import analytics from '../../services/analytics.service';
 import {
   getNumberOfVisits,
@@ -61,9 +61,8 @@ const SlopesIndex = () => {
 
   return (
     <>
-      {loadingElements}
-      {/* {showLoading && loadingElements}
-      {showSlopes && <Slopes fallback={loadingElements} />} */}
+      {showLoading && loadingElements}
+      {showSlopes && <Slopes fallback={loadingElements} />}
 
       <LoadScript
         src="https://checkout.stripe.com/checkout.js"
@@ -74,12 +73,8 @@ const SlopesIndex = () => {
 };
 
 const LoadingWrapper = styled.div`
-  position: fixed;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
+  height: calc(100vh - ${HEADER_HEIGHT}px);
   display: flex;
   flex-direction: column;
   justify-content: center;
