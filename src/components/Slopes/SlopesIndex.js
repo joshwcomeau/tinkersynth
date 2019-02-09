@@ -61,8 +61,9 @@ const SlopesIndex = () => {
 
   return (
     <>
-      {showLoading && loadingElements}
-      {showSlopes && <Slopes fallback={loadingElements} />}
+      {loadingElements}
+      {/* {showLoading && loadingElements}
+      {showSlopes && <Slopes fallback={loadingElements} />} */}
 
       <LoadScript
         src="https://checkout.stripe.com/checkout.js"
@@ -74,7 +75,7 @@ const SlopesIndex = () => {
 
 const LoadingWrapper = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   left: 0;
   right: 0;

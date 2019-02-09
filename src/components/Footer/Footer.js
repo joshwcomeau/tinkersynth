@@ -26,6 +26,7 @@ const Footer = () => {
           <strong>© 2019-present Josh Comeau.</strong> All rights reserved.
         </Copyright>
       </InnerWrapper>
+      <ScrollOverflow />
     </Wrapper>
   );
 };
@@ -57,6 +58,15 @@ const Copyright = styled.div`
   @media (max-width: 600px) {
     margin-top: ${UNIT * 2}px;
   }
+`;
+
+const ScrollOverflow = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -100px;
+  height: 100px;
+  background: ${COLORS.gray[900]};
 `;
 
 export default Footer;
