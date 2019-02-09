@@ -16,7 +16,6 @@ import fs from 'fs';
 import path from 'path';
 
 import { Storage } from '@google-cloud/storage';
-import svg2img from 'svg2img';
 import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
 
@@ -28,6 +27,8 @@ import {
 } from '../helpers/line.helpers';
 import generator from '../components/Slopes/Slopes.generator';
 import transformParameters from '../components/Slopes/Slopes.params';
+import rasterize from './rasterization';
+import { parallel } from './utils';
 
 // We use Google Cloud Platform storage to save all image assets.
 const gcpProjectId = 'tinkersynth';
@@ -72,6 +73,7 @@ const process = async (size, params) => {
   lines = groupPolylines(lines);
 
   // Trim any lines that fall outside the SVG size
+  // TODO: change margin depending on `enableMargins`
   lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
 
   const filename = uuid();
@@ -83,19 +85,43 @@ const process = async (size, params) => {
   const svgPath = path.join(fileOutputPath, `${filename}.svg`);
   const pngPath = path.join(fileOutputPath, `${filename}.png`);
 
-  await writeFile(svgPath, svgMarkup);
-
   // Create a raster PNG as well
   // We want our raster image to be printable at 300dpi.
   const rasterWidth = printWidth * 300;
   const rasterHeight = printHeight * 300;
-  svg2img(
-    svgMarkup,
-    { width: rasterWidth, height: rasterHeight },
-    async (error, buffer) => {
-      await writeFile(pngPath, buffer);
-    }
-  );
+  const buffer = await rasterize(svgMarkup, rasterWidth, rasterHeight);
+
+  try {
+    // Write the .png and .svg to disk in parallel
+    await parallel(writeFile(svgPath, svgMarkup), writeFile(pngPath, buffer));
+  } catch (err) {
+    console.error('Could not save to local disk', err);
+  }
+
+  try {
+    // Push both to storage in the same call
+    const cacheControl = 'public, max-age=31536000';
+
+    await parallel(
+      storage.bucket(gcpBucketName).upload(svgPath, {
+        gzip: true,
+        metadata: {
+          contentType: 'image/svg+xml',
+          cacheControl,
+        },
+      }),
+      storage.bucket(gcpBucketName).upload(pngPath, {
+        metadata: {
+          contentType: 'image/png',
+          cacheControl,
+        },
+      })
+    );
+  } catch (err) {
+    console.error('Could not save to GCP', err);
+  }
+
+  console.log('Done!');
 };
 
 export default process;
