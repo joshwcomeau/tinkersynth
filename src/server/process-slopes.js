@@ -4,10 +4,10 @@
  * It will take the set of parameters used on the client-side to build their
  * piece of art, and will generate an SVG similar to SlopesExports.
  *
- * It will also save it to disk, and produce a super-big JPEG which can be
+ * It will also save it to disk, and produce a super-big PNG which can be
  * emailed to the user.
  *
- * Both the SVG and JPEG will be saved to disk, so that the transactional
+ * Both the SVG and PNG will be saved to disk, so that the transactional
  * email sent to the user can link to them (seems easier than finding an ESP
  * that supports huge file attachments?). I might also want to add a cron job
  * that deletes the JPEG after a time. But whatever.
@@ -54,7 +54,19 @@ const MOCK_PARAMS = {
   wavelength: 25,
 };
 
-const process = (size, params) => {
+const writeFile = (...args) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(...args, err => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve();
+    });
+  });
+};
+
+const process = async (size, params) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
 
   // Our aspect ratio depends on the size selected.
@@ -83,7 +95,7 @@ const process = (size, params) => {
   const svgMarkup = polylinesToSVG(lines, { width, height });
 
   // TODO: maybe I ought to push these to Amazon s3 or something?
-  fs.writeFileSync('test.svg', svgMarkup);
+  await writeFile('test.svg', svgMarkup);
 
   // Create a raster PNG as well
   // We want our raster image to be printable at 300dpi.
@@ -92,10 +104,10 @@ const process = (size, params) => {
   svg2img(
     svgMarkup,
     { width: rasterWidth, height: rasterHeight },
-    (error, buffer) => {
-      fs.writeFileSync('test.png', buffer);
+    async (error, buffer) => {
+      await writeFile('test.png', buffer);
     }
   );
 };
 
-process('small', MOCK_PARAMS);
+export default process;

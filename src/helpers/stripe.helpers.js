@@ -1,11 +1,7 @@
 import storeImageSrc from '../images/stripe-logo.png';
+import { STRIPE_PUBLIC_KEY } from '../constants';
 
 let handler;
-
-const key =
-  process.env.NODE_ENV === 'production'
-    ? ''
-    : 'pk_test_gDdRrVU2WlqLzp2lN9W4JppB';
 
 export const createStripeConnection = () => {
   // Idempotent function
@@ -16,7 +12,7 @@ export const createStripeConnection = () => {
   // Dependent on a global variable x_x.
   // Nothin' I can do about it, that's how Stripe rolls.
   handler = window.StripeCheckout.configure({
-    key,
+    key: STRIPE_PUBLIC_KEY,
     image: storeImageSrc,
   });
 

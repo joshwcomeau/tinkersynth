@@ -237,5 +237,5 @@ export const PRINT_SIZES = {
 
 export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'
-    ? 'pk_live_LWOKEhuPwrSpdlcAvCdK6hhf'
-    : 'pk_test_gDdRrVU2WlqLzp2lN9W4JppB';
+    ? 'TODO'
+    : 'pk_test_tYzaDp1UlScq9ZMnITWadUQb';

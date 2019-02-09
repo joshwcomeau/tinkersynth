@@ -1,8 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import { createCharge } from './stripe';
 import config from './config';
+import { createCharge } from './stripe';
+import processSlopes from './process-slopes';
 
 // Set up the express app
 const app = express();
@@ -28,6 +29,8 @@ app.post('/purchase/fulfill', (req, res) => {
   createCharge(req.body)
     .then((...args) => {
       console.log('Success', args);
+
+      processSlopes(size, artParams);
 
       res.status(200).send({
         success: 'true',
