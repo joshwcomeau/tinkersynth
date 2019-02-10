@@ -1,52 +1,115 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import Icon from 'react-icons-kit';
+import { facebook_1 as facebookIcon } from 'react-icons-kit/ikons/facebook_1';
+import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
 
-import thanksSrc from '../images/thanks.svg';
+import { UNIT, COLORS } from '../constants';
+
 import Layout from '../components/Layout';
+import Heading from '../components/Heading';
 import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
+import MountainsBg from '../components/MountainsBg';
 
 const Finished = () => (
   <Layout pageId="thanks" noHeader>
-    <Wrapper>
-      <img src={thanksSrc} />
-      <Spacer size={40} />
-      <Paragraph style={{ fontSize: 24 }}>
-        Your purchase has been registered, and your art is on the way! Check
-        your email shortly.
-      </Paragraph>
-      <Paragraph style={{ fontSize: 24 }}>
-        You’re one of the very first people to use this tool, and I’m thrilled
-        to have you as a customer.
-      </Paragraph>
-      <Paragraph style={{ fontSize: 24 }}>
-        If you enjoyed creating art with the machine, it’d be awesome if you
-        could share it with friends!
-      </Paragraph>
+    <Background>
+      <MountainsBg />
+    </Background>
+    <Foreground>
+      <Wrapper>
+        <MainContent>
+          <Heading size={1}>Success!</Heading>
+          <Spacer size={40} />
+          <Paragraph style={{ fontSize: 21 }}>
+            At this very moment, a computer in a server farm in Toronto is hard
+            at work creating some high-resolution versions of your artwork.
+            Within a few minutes, you should receive an email with links to
+            download them!
+          </Paragraph>
 
-      <Spacer size={60} />
+          <Paragraph style={{ fontSize: 21 }}>
+            Your purchase is really appreciated. Thank you for being an early
+            adopter!
+          </Paragraph>
 
-      <ButtonsRow>
-        <Button color="hsl(203, 89%, 53%)">Twitter</Button>
-        <Spacer size={20} />
-        <Button color="hsl(221, 44%, 41%)">Facebook</Button>
-      </ButtonsRow>
-    </Wrapper>
+          <Spacer size={50} />
+
+          <Paragraph style={{ fontSize: 21 }}>
+            If you enjoyed creating art with this machine, spread the word!
+            These buttons will help show your art to the world:
+          </Paragraph>
+
+          <Spacer size={20} />
+
+          <ButtonsRow>
+            <Button style="flat" color="hsl(203, 89%, 53%)">
+              <Icon icon={twitterIcon} /> <Spacer inline size={UNIT} /> Twitter
+            </Button>
+            <Spacer size={20} />
+            <Button style="flat" color="hsl(221, 44%, 41%)">
+              <Icon icon={facebookIcon} /> <Spacer inline size={UNIT} />{' '}
+              Facebook
+            </Button>
+          </ButtonsRow>
+        </MainContent>
+
+        <Spacer size={UNIT * 2} />
+
+        <ArtPreview />
+      </Wrapper>
+    </Foreground>
   </Layout>
 );
 
+const Background = styled.div`
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #9a9fa2;
+`;
+
+const Foreground = styled.div`
+  position: relative;
+  z-index: 1;
+  padding-top: 10vh;
+  height: 100vh;
+`;
+
 const Wrapper = styled.div`
-  width: 525px;
+  width: 90%;
+  max-width: 960px;
   margin: auto;
-  margin-top: 100px;
-  text-align: center;
+  display: flex;
+  background: #fff;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.16);
+  padding: ${UNIT}px;
+  border-radius: 8px;
+`;
+
+const MainContent = styled.div`
+  flex: 1;
+  padding: ${UNIT * 4}px;
+`;
+
+const ArtPreview = styled.div`
+  width: 320px;
+  background: ${COLORS.gray[100]};
+  border-radius: 4px;
+
+  @media (max-width: 830px) {
+    display: none;
+  }
 `;
 
 const ButtonsRow = styled.div`
   display: flex;
-  justify-content: center;
 `;
 
 export default Finished;

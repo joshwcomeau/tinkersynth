@@ -11,6 +11,7 @@ type ButtonSize = 'medium' | 'large';
 
 type Props = {
   color: string,
+  style?: 'flat' | '3d',
   size?: ButtonSize,
   children: React$Node,
 };
@@ -34,7 +35,14 @@ const getLowlightColor = (color, alpha) => {
 // $FlowFixMe - ugh idk
 const Button = React.forwardRef(
   (
-    { color, disabled, size = 'medium', children, ...delegated }: Props,
+    {
+      color,
+      disabled,
+      style = '3d',
+      size = 'medium',
+      children,
+      ...delegated
+    }: Props,
     ref
   ) => {
     const actualColor = disabled ? COLORS.gray[700] : color;
@@ -54,12 +62,14 @@ const Button = React.forwardRef(
           ...(delegated.style || {}),
         }}
       >
-        <Effects>
-          <Highlight />
+        {style === '3d' && (
+          <Effects>
+            <Highlight />
 
-          <Lowlight fromColor={darkerColorInvisible} toColor={darkerColor} />
-          <EffectDampener style={{ backgroundColor: actualColor }} />
-        </Effects>
+            <Lowlight fromColor={darkerColorInvisible} toColor={darkerColor} />
+            <EffectDampener style={{ backgroundColor: actualColor }} />
+          </Effects>
+        )}
 
         <Children>{children}</Children>
       </Component>
