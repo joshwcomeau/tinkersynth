@@ -30,7 +30,7 @@ import { getMarginSize } from '../components/Slopes/Slopes.helpers';
 import { parallel, writeFile } from './utils';
 import rasterize from './rasterization';
 
-const processSlopes = async (size, format, params) => {
+const processSlopes = async (size, format, artParams) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
 
   // Our aspect ratio depends on the size selected.
@@ -41,7 +41,7 @@ const processSlopes = async (size, format, params) => {
   const width = height * aspectRatio;
   const drawingVariables = transformParameters({
     height,
-    ...params,
+    ...artParams,
   });
 
   let lines = generator({
@@ -55,9 +55,10 @@ const processSlopes = async (size, format, params) => {
 
   // Trim any lines that fall outside of our SVG (or our margins)
   const fullMarginSize = getMarginSize(height);
-  const actualMarginSize = params.enableMargins
+  const actualMarginSize = artParams.enableMargins
     ? fullMarginSize
     : fullMarginSize * 0.1;
+
   lines = clipLinesWithMargin({
     lines,
     width,
@@ -67,8 +68,8 @@ const processSlopes = async (size, format, params) => {
 
   const fileId = uuid();
 
-  const lineColor = params.enableDarkMode ? '#FFFFFF' : '#000000';
-  const backgroundColor = params.enableDarkMode ? '#000000' : '#FFFFFF';
+  const lineColor = artParams.enableDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = artParams.enableDarkMode ? '#000000' : '#FFFFFF';
 
   // Create two copies: one with a transparent background, and one with an
   // appropriately contrasted background

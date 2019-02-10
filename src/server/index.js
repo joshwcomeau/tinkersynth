@@ -34,6 +34,10 @@ app.post('/purchase/fulfill', async (req, res) => {
   try {
     const charge = await createCharge(req.body);
 
+    // Create a small raster preview for the user
+    // TODO: Refactor `processSlopes` to accept multiple kinds of output.
+    // Clean up the below stuff as well (and move it to another module)
+
     const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
     const userName = charge.source.name;
 
@@ -72,8 +76,7 @@ app.post('/purchase/fulfill', async (req, res) => {
     );
 
     res.status(200).send({
-      success: 'true',
-      url: '',
+      previewUrl: pngUrlOpaque,
     });
   } catch (err) {
     console.error(err);

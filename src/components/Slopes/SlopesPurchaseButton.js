@@ -77,8 +77,8 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
         };
         setStatus('SUBMIT');
 
-        submitCharge(body).then(() => {
-          setStatus('SUCCESS');
+        submitCharge(body).then(args => {
+          console.log('response', args);
         });
       },
     });

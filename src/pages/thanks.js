@@ -15,11 +15,11 @@ import Button from '../components/Button';
 import MountainsBg from '../components/MountainsBg';
 import LoadScript from '../components/LoadScript/LoadScript';
 
-var getWindowOptions = function() {
-  var width = 500;
-  var height = 350;
-  var left = window.innerWidth / 2 - width / 2;
-  var top = window.innerHeight / 2 - height / 2;
+const getWindowOptions = () => {
+  const width = 500;
+  const height = 350;
+  const left = window.innerWidth / 2 - width / 2;
+  const top = window.innerHeight / 2 - height / 2;
 
   return [
     'resizable,scrollbars,status',
@@ -30,7 +30,7 @@ var getWindowOptions = function() {
   ].join();
 };
 
-const Finished = () => {
+const Thanks = () => {
   const text = encodeURIComponent(
     'I just made some generative art with Tinkersynth :o'
   );
@@ -163,4 +163,4 @@ const ButtonsRow = styled.div`
   display: flex;
 `;
 
-export default Finished;
+export default Thanks;
