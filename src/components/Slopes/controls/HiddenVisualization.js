@@ -27,8 +27,6 @@ const HiddenVisualization = ({ width, height, isEnabled }) => {
     [isEnabled]
   );
 
-  console.log({ rotate });
-
   const spring = useSpring({
     transform: `rotate(${rotate}deg)`,
     config: {

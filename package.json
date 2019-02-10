@@ -10,6 +10,9 @@
     "build-and-serve": "gatsby build && gatsby serve",
     "build-server": "babel ./src --out-dir ./dist",
     "watch-server": "babel --watch ./src --out-dir ./dist",
+    "deploy-server": "NODE_ENV=production fly deploy:production",
+    "build-and-deploy-server": "NODE_ENV=production npm run build-server && NODE_ENV=production fly deploy:production",
+    "start-server": "pm2 start dist/index.js",
     "develop": "gatsby develop",
     "start": "concurrently --kill-others \"npm run develop\" \"npm run watch-server\" \"nodemon dist/server/index.js\"",
     "format": "prettier --write \"src/**/*.js\"",
@@ -76,6 +79,8 @@
     "@babel/preset-react": "^7.0.0",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
+    "flightplan": "^0.6.19",
+    "moment": "^2.24.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.2",
     "worker-loader": "2.0.0"
