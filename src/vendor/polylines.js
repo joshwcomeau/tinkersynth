@@ -51,9 +51,15 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   height="${viewHeight}"
   viewBox="0 0 ${viewWidth} ${viewHeight}"
 >
+  <rect
+    x="0"
+    y="0"
+    width="${viewWidth}"
+    height="${viewHeight}"
+    fill="${fillStyle}"
+  />
   <path
     d="${svgPath}"
-    fill="${fillStyle}"
     stroke="${strokeStyle}"
     stroke-width="${lineWidth}${units}"
   />

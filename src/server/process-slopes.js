@@ -67,30 +67,60 @@ const processSlopes = async (size, format, params) => {
 
   const fileId = uuid();
 
-  const svgMarkup = polylinesToSVG(lines, { width, height });
+  const lineColor = params.enableDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = params.enableDarkMode ? '#000000' : '#FFFFFF';
+
+  // Create two copies: one with a transparent background, and one with an
+  // appropriately contrasted background
+  const svgMarkupTransparent = polylinesToSVG(lines, {
+    width,
+    height,
+    lineColor,
+  });
+  const svgMarkupOpaque = polylinesToSVG(lines, {
+    width,
+    height,
+    lineColor,
+    background: backgroundColor,
+  });
 
   const fileOutputPath = path.join(__dirname, '../../output');
 
   const svgPath = path.join(fileOutputPath, `${fileId}.svg`);
-  const pngPath = path.join(fileOutputPath, `${fileId}.png`);
+  const pngPathTransparent = path.join(
+    fileOutputPath,
+    `${fileId}.transparent.png`
+  );
+  const pngPathOpaque = path.join(fileOutputPath, `${fileId}.opaque.png`);
 
   // Create a raster PNG as well
   // We want our raster image to be printable at 300dpi.
   const rasterWidth = printWidth * 300;
   const rasterHeight = printHeight * 300;
-  const buffer = await rasterize(svgMarkup, rasterWidth, rasterHeight);
+
+  const bufferTransparent = await rasterize(
+    svgMarkupTransparent,
+    rasterWidth,
+    rasterHeight
+  );
+  const bufferOpaque = await rasterize(
+    svgMarkupOpaque,
+    rasterWidth,
+    rasterHeight
+  );
 
   try {
     // prettier-ignore
     await parallel(
-      writeFile(svgPath, svgMarkup),
-      writeFile(pngPath, buffer)
+      writeFile(svgPath, svgMarkupTransparent),
+      writeFile(pngPathTransparent, bufferTransparent),
+      writeFile(pngPathOpaque, bufferOpaque)
     );
   } catch (err) {
     console.error('Could not save to local disk', err);
   }
 
-  return { fileId, svgPath, pngPath };
+  return { fileId, svgPath, pngPathTransparent, pngPathOpaque };
 };
 
 export default processSlopes;

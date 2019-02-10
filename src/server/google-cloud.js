@@ -42,9 +42,5 @@ export const upload = (path, type) => {
     .upload(path, options)
     .catch(err => {
       throw new Error(`Could not upload to GCP: ${err}`);
-    })
-    .then((...args) => {
-      console.log('upload', ...args);
-      return args;
     });
 };

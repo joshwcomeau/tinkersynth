@@ -37,16 +37,18 @@ app.post('/purchase/fulfill', async (req, res) => {
     const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
     const userName = charge.source.name;
 
-    const { fileId, svgPath, pngPath } = await processSlopes(
-      size,
-      format,
-      artParams
-    );
+    const {
+      fileId,
+      svgPath,
+      pngPathTransparent,
+      pngPathOpaque,
+    } = await processSlopes(size, format, artParams);
 
     // prettier-ignore
     await parallel(
       upload(svgPath, 'svg'),
-      upload(pngPath, 'png')
+      upload(pngPathTransparent, 'png'),
+      upload(pngPathOpaque, 'png'),
     );
 
     // Create a User, if we don't already have one.
@@ -56,10 +58,18 @@ app.post('/purchase/fulfill', async (req, res) => {
     });
 
     const svgUrl = `https://storage.googleapis.com/tinkersynth-art/${fileId}.svg`;
-    const pngUrl = `https://storage.googleapis.com/tinkersynth-art/${fileId}.png`;
+    const pngUrlTransparent = `https://storage.googleapis.com/tinkersynth-art/${fileId}.transparent.png`;
+    const pngUrlOpaque = `https://storage.googleapis.com/tinkersynth-art/${fileId}.opaque.png`;
 
     // Email the customer!
-    sendArtVectorEmail(user.name, user.email, format, svgUrl, pngUrl);
+    sendArtVectorEmail(
+      user.name,
+      user.email,
+      format,
+      svgUrl,
+      pngUrlTransparent,
+      pngUrlOpaque
+    );
 
     res.status(200).send({
       success: 'true',

@@ -47,7 +47,13 @@ const getFormatSpecificCopy = format => {
   }
 };
 
-const PurchaseTemplate = ({ format, name, svgUrl, pngUrl }) => (
+const PurchaseTemplate = ({
+  format,
+  name,
+  svgUrl,
+  pngUrlTransparent,
+  pngUrlOpaque,
+}) => (
   <Wrapper>
     <h1>Your art is ready for download</h1>
 
@@ -57,10 +63,10 @@ const PurchaseTemplate = ({ format, name, svgUrl, pngUrl }) => (
 
     <ul>
       <li>
-        <a href={pngUrl}>Raster image (solid background)</a>
+        <a href={pngUrlOpaque}>Raster image (solid background)</a>
       </li>
       <li>
-        <a href={pngUrl}>Raster image (transparent background)</a>
+        <a href={pngUrlTransparent}>Raster image (transparent background)</a>
       </li>
       <li>
         <a href={svgUrl}>Vector image</a>
