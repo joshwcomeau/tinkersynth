@@ -25,14 +25,12 @@ import {
 } from '../helpers/line.helpers';
 import generator from '../components/Slopes/Slopes.generator';
 import transformParameters from '../components/Slopes/Slopes.params';
+import { getMarginSize } from '../components/Slopes/Slopes.helpers';
 
 import { parallel, writeFile } from './utils';
-import { upload } from './google-cloud';
-import { sendArtVectorEmail } from './email';
 import rasterize from './rasterization';
-import { User } from './database';
 
-const process = async (size, format, userId, userName, userEmail, params) => {
+const processSlopes = async (size, format, params) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
 
   // Our aspect ratio depends on the size selected.
@@ -55,18 +53,26 @@ const process = async (size, format, userId, userName, userEmail, params) => {
   // Create a smaller SVG by joining lines
   lines = groupPolylines(lines);
 
-  // Trim any lines that fall outside the SVG size
-  // TODO: change margin depending on `enableMargins`
-  lines = clipLinesWithMargin({ lines, width, height, margins: [0, 0] });
+  // Trim any lines that fall outside of our SVG (or our margins)
+  const fullMarginSize = getMarginSize(height);
+  const actualMarginSize = params.enableMargins
+    ? fullMarginSize
+    : fullMarginSize * 0.1;
+  lines = clipLinesWithMargin({
+    lines,
+    width,
+    height,
+    margins: [actualMarginSize, actualMarginSize],
+  });
 
-  const filename = uuid();
+  const fileId = uuid();
 
   const svgMarkup = polylinesToSVG(lines, { width, height });
 
   const fileOutputPath = path.join(__dirname, '../../output');
 
-  const svgPath = path.join(fileOutputPath, `${filename}.svg`);
-  const pngPath = path.join(fileOutputPath, `${filename}.png`);
+  const svgPath = path.join(fileOutputPath, `${fileId}.svg`);
+  const pngPath = path.join(fileOutputPath, `${fileId}.png`);
 
   // Create a raster PNG as well
   // We want our raster image to be printable at 300dpi.
@@ -84,29 +90,7 @@ const process = async (size, format, userId, userName, userEmail, params) => {
     console.error('Could not save to local disk', err);
   }
 
-  try {
-    // prettier-ignore
-    await parallel(
-      upload(svgPath, 'svg'),
-      upload(pngPath, 'png')
-    );
-  } catch (err) {
-    console.error('Could not save to GCP', err);
-  }
-
-  // Create a User, if we don't already have one.
-  const [user, wasJustCreated] = await User.findOrCreate({
-    where: { id: userId },
-    defaults: { email: userEmail, name: userName },
-  });
-
-  console.log(user.email);
-
-  const svgUrl = `https://storage.googleapis.com/tinkersynth-art/${filename}.svg`;
-  const pngUrl = `https://storage.googleapis.com/tinkersynth-art/${filename}.png`;
-
-  // Email the customer!
-  sendArtVectorEmail(user.name, user.email, format, svgUrl, pngUrl);
+  return { fileId, svgPath, pngPath };
 };
 
-export default process;
+export default processSlopes;

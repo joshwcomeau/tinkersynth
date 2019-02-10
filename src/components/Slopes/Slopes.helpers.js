@@ -279,6 +279,13 @@ export const occludeLineIfNecessary = (
   return [start, end];
 };
 
+export const getMarginSize = height => {
+  // Change the size of margins by tweaking this number:
+  const WIDTH_IN_INCHES = 1;
+
+  return Math.round((height / 11) * WIDTH_IN_INCHES);
+};
+
 export const getPossiblyOccludingRowIndices = ({
   rowIndex,
   rowHeight,

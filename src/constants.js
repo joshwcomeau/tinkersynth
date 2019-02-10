@@ -239,3 +239,5 @@ export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'
     ? 'pk_test_tYzaDp1UlScq9ZMnITWadUQb'
     : 'pk_test_tYzaDp1UlScq9ZMnITWadUQb';
+
+export const DEV_SERVER_PORT = 3000;

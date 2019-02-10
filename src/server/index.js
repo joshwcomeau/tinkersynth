@@ -2,9 +2,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import config from './config';
+import { parallel } from './utils';
+import { User } from './database';
+import { upload } from './google-cloud';
 import { createCharge } from './stripe';
 import processSlopes from './process-slopes';
 import database from './database';
+import { sendArtVectorEmail } from './email';
 
 // Set up the express app
 const app = express();
@@ -24,29 +28,51 @@ app.use(function(req, res, next) {
 // After successfully completing a purchase, Stripe will fire a webhook,
 // which will hit this path, containing all the info needed to produce the
 // image, send the user an email, and mail them the print (if applicable).
-app.post('/purchase/fulfill', (req, res) => {
+app.post('/purchase/fulfill', async (req, res) => {
   const { artParams, userId, format, size, cost, token } = req.body;
 
-  createCharge(req.body)
-    .then(charge => {
-      const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
-      const userName = charge.source.name;
+  try {
+    const charge = await createCharge(req.body);
 
-      processSlopes(size, format, userId, userName, userEmail, artParams);
+    const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
+    const userName = charge.source.name;
 
-      res.status(200).send({
-        success: 'true',
-        url: '',
-      });
-    })
-    .catch(err => {
-      console.error(err);
+    const { fileId, svgPath, pngPath } = await processSlopes(
+      size,
+      format,
+      artParams
+    );
 
-      res.status(500).send({
-        success: 'false',
-        url: '',
-      });
+    // prettier-ignore
+    await parallel(
+      upload(svgPath, 'svg'),
+      upload(pngPath, 'png')
+    );
+
+    // Create a User, if we don't already have one.
+    const [user, wasJustCreated] = await User.findOrCreate({
+      where: { id: userId },
+      defaults: { email: userEmail, name: userName },
     });
+
+    const svgUrl = `https://storage.googleapis.com/tinkersynth-art/${fileId}.svg`;
+    const pngUrl = `https://storage.googleapis.com/tinkersynth-art/${fileId}.png`;
+
+    // Email the customer!
+    sendArtVectorEmail(user.name, user.email, format, svgUrl, pngUrl);
+
+    res.status(200).send({
+      success: 'true',
+      url: '',
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).send({
+      success: 'false',
+      url: '',
+    });
+  }
 });
 
 app.get('/ping', (req, res) => {

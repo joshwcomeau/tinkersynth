@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
 
 import { UNIT, LIGHT_BACKGROUND, DARK_BACKGROUND } from '../../constants';
+import { getMarginSize } from './Slopes.helpers';
 
 const ACTION_SIZE = 38;
 
@@ -12,8 +13,7 @@ const SlopesCanvasMargins = ({
   enableMargins,
   enableDarkMode,
 }) => {
-  const WIDTH_IN_INCHES = 1;
-  const marginSize = Math.round((height / 11) * WIDTH_IN_INCHES);
+  const marginSize = getMarginSize(height);
 
   const spring = useSpring({
     marginScale: enableMargins ? 1 : 0.1,

@@ -47,11 +47,11 @@ const getFormatSpecificCopy = format => {
   }
 };
 
-const PurchaseTemplate = ({ format, userName, svgUrl, pngUrl }) => (
+const PurchaseTemplate = ({ format, name, svgUrl, pngUrl }) => (
   <Wrapper>
     <h1>Your art is ready for download</h1>
 
-    <p>Hi {userName}!</p>
+    <p>Hi {name}!</p>
 
     {getFormatSpecificCopy(format)}
 

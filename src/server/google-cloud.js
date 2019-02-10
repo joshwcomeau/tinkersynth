@@ -37,5 +37,14 @@ const getOptionsForType = type => {
 export const upload = (path, type) => {
   const options = getOptionsForType(type);
 
-  return storage.bucket(gcpBucketName).upload(path, options);
+  return storage
+    .bucket(gcpBucketName)
+    .upload(path, options)
+    .catch(err => {
+      throw new Error(`Could not upload to GCP: ${err}`);
+    })
+    .then((...args) => {
+      console.log('upload', ...args);
+      return args;
+    });
 };

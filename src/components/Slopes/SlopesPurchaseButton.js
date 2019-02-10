@@ -7,10 +7,8 @@ import { loader } from 'react-icons-kit/feather/loader';
 
 import { COLORS } from '../../constants';
 import { getCost } from '../../reducers/store.reducer';
-import {
-  createStripeConnection,
-  submitCharge,
-} from '../../helpers/stripe.helpers';
+import { createStripeConnection } from '../../helpers/stripe.helpers';
+import { submitCharge } from '../../helpers/api.helpers';
 
 import Button from '../Button';
 import Spin from '../Spin';
@@ -28,8 +26,8 @@ const purchaseMachine = {
     SUBMIT: 'purchasing',
   },
   purchasing: {
-    SUCCESS: 'success',
-    FAILURE: 'idle',
+    SUCCESS: 'idle',
+    FAILURE: 'idle', // TODO
   },
   success: {
     FINISHED: 'idle',
