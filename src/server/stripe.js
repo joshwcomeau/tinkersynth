@@ -1,6 +1,6 @@
 import config from './config';
 
-const stripe = require('stripe')(config.STRIPE_KEY);
+const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
 
 export const createCharge = ({ artParams, format, size, cost, token }) => {
   let description = `Slopes - ${format}`;
