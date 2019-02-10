@@ -13,57 +13,108 @@ import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import MountainsBg from '../components/MountainsBg';
+import LoadScript from '../components/LoadScript/LoadScript';
 
-const Finished = () => (
-  <Layout pageId="thanks" noHeader>
-    <Background>
-      <MountainsBg />
-    </Background>
-    <Foreground>
-      <Wrapper>
-        <MainContent>
-          <Heading size={1}>Success!</Heading>
-          <Spacer size={40} />
-          <Paragraph style={{ fontSize: 21 }}>
-            At this very moment, a computer in a server farm in Toronto is hard
-            at work creating some high-resolution versions of your artwork.
-            Within a few minutes, you should receive an email with links to
-            download them!
-          </Paragraph>
+var getWindowOptions = function() {
+  var width = 500;
+  var height = 350;
+  var left = window.innerWidth / 2 - width / 2;
+  var top = window.innerHeight / 2 - height / 2;
 
-          <Paragraph style={{ fontSize: 21 }}>
-            Your purchase is really appreciated. Thank you for being an early
-            adopter!
-          </Paragraph>
+  return [
+    'resizable,scrollbars,status',
+    'height=' + height,
+    'width=' + width,
+    'left=' + left,
+    'top=' + top,
+  ].join();
+};
 
-          <Spacer size={50} />
+const Finished = () => {
+  const text = encodeURIComponent(
+    'I just made some generative art with Tinkersynth :o'
+  );
+  const homeUrl = 'https://tinkersynth.com';
+  var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
 
-          <Paragraph style={{ fontSize: 21 }}>
-            If you enjoyed creating art with this machine, spread the word!
-            These buttons will help show your art to the world:
-          </Paragraph>
+  return (
+    <Layout pageId="thanks" noHeader>
+      <Background>
+        <MountainsBg />
+      </Background>
+      <Foreground>
+        <Wrapper>
+          <MainContent>
+            <Heading size={1}>Success!</Heading>
+            <Spacer size={40} />
+            <Paragraph style={{ fontSize: 21 }}>
+              At this very moment, a computer in a server farm in Toronto is
+              hard at work creating some high-resolution versions of your
+              artwork. Within a few minutes, you should receive an email with
+              links to download them!
+            </Paragraph>
 
-          <Spacer size={20} />
+            <Paragraph style={{ fontSize: 21 }}>
+              Your purchase is really appreciated. Thank you for being an early
+              adopter!
+            </Paragraph>
 
-          <ButtonsRow>
-            <Button style="flat" color="hsl(203, 89%, 53%)">
-              <Icon icon={twitterIcon} /> <Spacer inline size={UNIT} /> Twitter
-            </Button>
+            <Spacer size={50} />
+
+            <Paragraph style={{ fontSize: 21 }}>
+              If you enjoyed creating art with this machine, spread the word!
+              These buttons will help show your art to the world:
+            </Paragraph>
+
             <Spacer size={20} />
-            <Button style="flat" color="hsl(221, 44%, 41%)">
-              <Icon icon={facebookIcon} /> <Spacer inline size={UNIT} />{' '}
-              Facebook
-            </Button>
-          </ButtonsRow>
-        </MainContent>
 
-        <Spacer size={UNIT * 2} />
+            <ButtonsRow>
+              <Button
+                style="flat"
+                color="hsl(203, 89%, 53%)"
+                onClick={ev => {
+                  ev.preventDefault();
+                  const win = window.open(
+                    twitterShareUrl,
+                    'ShareOnTwitter',
+                    getWindowOptions()
+                  );
+                  win.opener = null;
+                }}
+              >
+                <Icon icon={twitterIcon} /> <Spacer inline size={UNIT} />{' '}
+                Twitter
+              </Button>
+              <Spacer size={20} />
+              <Button
+                style="flat"
+                color="hsl(221, 44%, 41%)"
+                onClick={ev => {
+                  ev.preventDefault();
 
-        <ArtPreview />
-      </Wrapper>
-    </Foreground>
-  </Layout>
-);
+                  const win = window.open(
+                    `https://www.facebook.com/sharer/sharer.php?u=${homeUrl}`,
+                    'facebook-share-dialog',
+                    'width=800,height=600'
+                  );
+
+                  win.opener = null;
+                }}
+              >
+                <Icon icon={facebookIcon} /> <Spacer inline size={UNIT} />{' '}
+                Facebook
+              </Button>
+            </ButtonsRow>
+          </MainContent>
+
+          <Spacer size={UNIT * 2} />
+
+          <ArtPreview />
+        </Wrapper>
+      </Foreground>
+    </Layout>
+  );
+};
 
 const Background = styled.div`
   position: fixed;
