@@ -75,6 +75,12 @@ dist
 # Images generated through the app
 output
 
+# The SQLite database shouldn't be in source control?
+db.sqlite
+
 # Ignore secret keys, server-side
 src/server/config/prod.js
 gcp-keys.json
+
+# Info about the server login and stuff
+secret-info.md
