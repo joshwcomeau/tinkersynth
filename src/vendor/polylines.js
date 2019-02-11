@@ -10,7 +10,7 @@ type Options = {
   height: number,
   context?: CanvasRenderingContext2D,
   lineWidth?: number,
-  background?: string,
+  backgroundColor?: string,
   lineColor?: string,
 };
 
@@ -41,7 +41,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var svgPath = commands.join(' ');
   var viewWidth = `${width}px`;
   var viewHeight = `${height}px`;
-  var fillStyle = opt.background || 'none';
+  var fillStyle = opt.backgroundColor || 'none';
   var strokeStyle = opt.lineColor || 'black';
   var lineWidth = opt.lineWidth || 1;
 
@@ -83,7 +83,7 @@ export const renderPolylines = function(polylines, opt: Options) {
   context.clearRect(0, 0, width, height);
 
   // Fill with white
-  context.fillStyle = opt.background || 'white';
+  context.fillStyle = opt.backgroundColor || 'white';
   context.fillRect(0, 0, width, height);
 
   // Draw lines

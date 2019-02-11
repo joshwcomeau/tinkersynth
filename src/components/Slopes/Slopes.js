@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
+import {
+  COLORS,
+  UNIT,
+  PRINT_SIZES,
+  CANVAS_DISPLAY_HEIGHT,
+  HEADER_HEIGHT,
+} from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import CanvasToggle from '../CanvasToggle';
@@ -46,10 +52,7 @@ const Slopes = ({ size }) => {
   // By default, our size is 18 x 24.
   const aspectRatio = printWidth / printHeight;
 
-  // By default, canvases are 552px tall.
-  // This odd number is a factor of both aspect ratios (0.75 and 0.66).
-  // TODO: Should I make this responsive? Shrink when the window is too short?
-  const canvasHeight = 552;
+  const canvasHeight = CANVAS_DISPLAY_HEIGHT;
   const canvasWidth = canvasHeight * aspectRatio;
 
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);

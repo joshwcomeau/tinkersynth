@@ -2,8 +2,10 @@ import { Storage } from '@google-cloud/storage';
 
 const gcpProjectId = 'tinkersynth';
 const gcpBucketName = 'tinkersynth-art';
+
 const storage = new Storage({
   projectId: gcpProjectId,
+  keyFilename: './gcp-keys.json',
 });
 
 const getOptionsForType = type => {
@@ -35,6 +37,8 @@ const getOptionsForType = type => {
 };
 
 export const upload = (path, type) => {
+  // TODO: I should be able to infer the type by getting the file extension
+  // with a regex.
   const options = getOptionsForType(type);
 
   return storage

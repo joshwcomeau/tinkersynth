@@ -235,6 +235,11 @@ export const PRINT_SIZES = {
   large: { width: 24, height: 36 },
 };
 
+// For calculating line information, and displaying the preview, assume canvases
+// are 552px tall. This odd number is a factor of both aspect ratios
+// (0.75 and 0.66).
+export const CANVAS_DISPLAY_HEIGHT = 552;
+
 export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'
     ? 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'

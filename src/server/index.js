@@ -6,7 +6,7 @@ import { parallel } from './utils';
 import { User } from './database';
 import { upload } from './google-cloud';
 import { createCharge } from './stripe';
-import processSlopes from './process-slopes';
+import { createRasterImage, createVectorImage } from './image-processing';
 import database from './database';
 import { sendArtVectorEmail } from './email';
 
@@ -41,18 +41,22 @@ app.post('/purchase/fulfill', async (req, res) => {
     const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
     const userName = charge.source.name;
 
-    const {
-      fileId,
-      svgPath,
-      pngPathTransparent,
-      pngPathOpaque,
-    } = await processSlopes(size, format, artParams);
+    const vectorFile = await createVectorImage(size, artParams);
+
+    const rasterFileOpaque = await createRasterImage(size, artParams, {
+      opaqueBackground: true,
+      pixelsPerInch: 300,
+    });
+    const rasterFileTransparent = await createRasterImage(size, artParams, {
+      opaqueBackground: false,
+      pixelsPerInch: 300,
+    });
 
     // prettier-ignore
     await parallel(
-      upload(svgPath, 'svg'),
-      upload(pngPathTransparent, 'png'),
-      upload(pngPathOpaque, 'png'),
+      upload(vectorFile.path, 'svg'),
+      upload(rasterFileOpaque.path, 'png'),
+      upload(rasterFileTransparent.path, 'png'),
     );
 
     // Create a User, if we don't already have one.
@@ -61,9 +65,10 @@ app.post('/purchase/fulfill', async (req, res) => {
       defaults: { email: userEmail, name: userName },
     });
 
-    const svgUrl = `https://storage.googleapis.com/tinkersynth-art/${fileId}.svg`;
-    const pngUrlTransparent = `https://storage.googleapis.com/tinkersynth-art/${fileId}.transparent.png`;
-    const pngUrlOpaque = `https://storage.googleapis.com/tinkersynth-art/${fileId}.opaque.png`;
+    const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
+    const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
+    const pngUrlOpaque = `${urlPrefix}/${rasterFileOpaque.path}.png`;
+    const pngUrlTransparent = `${urlPrefix}/${rasterFileTransparent.path}.png`;
 
     // Email the customer!
     sendArtVectorEmail(
