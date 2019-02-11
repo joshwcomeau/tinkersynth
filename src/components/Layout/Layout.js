@@ -23,7 +23,7 @@ type Props = {
   noHeader?: boolean,
 };
 
-const Layout = ({ pageId, children, noHeader }: Props) => {
+const Layout = ({ pageId, children, noHeader, transparentFooter }: Props) => {
   React.useEffect(() => {
     analytics.logEvent('visit-page', { pageId });
   }, []);
@@ -36,7 +36,7 @@ const Layout = ({ pageId, children, noHeader }: Props) => {
 
       <MainContentWrapper>{children}</MainContentWrapper>
 
-      <Footer />
+      <Footer transparentBackground={transparentFooter} />
 
       <GlobalStyles />
       <DevTools />

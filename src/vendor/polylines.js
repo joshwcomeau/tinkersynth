@@ -62,6 +62,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
     d="${svgPath}"
     stroke="${strokeStyle}"
     stroke-width="${lineWidth}${units}"
+    fill="none"
   />
 </svg>`;
 };
@@ -83,7 +84,7 @@ export const renderPolylines = function(polylines, opt: Options) {
   context.clearRect(0, 0, width, height);
 
   // Fill with white
-  context.fillStyle = opt.backgroundColor || 'white';
+  context.fillStyle = opt.background || 'white';
   context.fillRect(0, 0, width, height);
 
   // Draw lines

@@ -11,7 +11,7 @@ type ButtonSize = 'medium' | 'large';
 
 type Props = {
   color: string,
-  style?: 'flat' | '3d',
+  kind?: 'flat' | '3d',
   size?: ButtonSize,
   children: React$Node,
 };
@@ -38,7 +38,7 @@ const Button = React.forwardRef(
     {
       color,
       disabled,
-      style = '3d',
+      kind = '3d',
       size = 'medium',
       children,
       ...delegated
@@ -62,7 +62,7 @@ const Button = React.forwardRef(
           ...(delegated.style || {}),
         }}
       >
-        {style === '3d' && (
+        {kind === '3d' && (
           <Effects>
             <Highlight />
 

@@ -36,11 +36,15 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     const previewImage = await createRasterImage(size, artParams, {
       opaqueBackground: true,
-      pixelsPerInch: 20, // TODO: find the right number
+      pixelsPerInch: 25, // TODO: find the right number
     });
 
+    const previewUrl = await upload(previewImage.path);
+
     return res.status(200).send({
-      previewUrl: previewImage.path,
+      previewUrl,
+      width: previewImage.width,
+      height: previewImage.height,
     });
 
     // Once the charge and the initial preview image are completed, we can

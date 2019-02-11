@@ -14,6 +14,7 @@ import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import MountainsBg from '../components/MountainsBg';
+import CanvasFrame from '../components/CanvasFrame';
 import LoadScript from '../components/LoadScript/LoadScript';
 
 const getWindowOptions = () => {
@@ -32,7 +33,7 @@ const getWindowOptions = () => {
 };
 
 const Thanks = ({ location }) => {
-  const { previewUrl } = queryString.parse(location.search);
+  const { previewUrl, width, height } = queryString.parse(location.search);
 
   console.log({ previewUrl });
 
@@ -43,7 +44,7 @@ const Thanks = ({ location }) => {
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
 
   return (
-    <Layout pageId="thanks" noHeader>
+    <Layout pageId="thanks" noHeader transparentFooter>
       <Background>
         <MountainsBg />
       </Background>
@@ -75,7 +76,7 @@ const Thanks = ({ location }) => {
 
             <ButtonsRow>
               <Button
-                style="flat"
+                kind="flat"
                 color="hsl(203, 89%, 53%)"
                 onClick={ev => {
                   ev.preventDefault();
@@ -92,7 +93,7 @@ const Thanks = ({ location }) => {
               </Button>
               <Spacer size={20} />
               <Button
-                style="flat"
+                kind="flat"
                 color="hsl(221, 44%, 41%)"
                 onClick={ev => {
                   ev.preventDefault();
@@ -114,7 +115,16 @@ const Thanks = ({ location }) => {
 
           <Spacer size={UNIT * 2} />
 
-          <ArtPreview>{previewUrl && <img src={previewUrl} />}</ArtPreview>
+          <ArtPreview>
+            {previewUrl && (
+              <CanvasFrame>
+                <img
+                  src={previewUrl}
+                  style={{ width: width / 2, height: height / 2 }}
+                />
+              </CanvasFrame>
+            )}
+          </ArtPreview>
         </Wrapper>
       </Foreground>
     </Layout>
@@ -128,7 +138,7 @@ const Background = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: #9a9fa2;
+  background: hsl(0, 0%, 12%);
 `;
 
 const Foreground = styled.div`
@@ -155,8 +165,11 @@ const MainContent = styled.div`
 `;
 
 const ArtPreview = styled.div`
-  width: 320px;
-  background: ${COLORS.gray[100]};
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: ${UNIT * 5}px;
+  background: hsl(0, 0%, 94%);
   border-radius: 4px;
 
   @media (max-width: 830px) {

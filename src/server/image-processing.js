@@ -148,5 +148,10 @@ export const createRasterImage = async (
     throw new Error('Could not write file to disk: ' + err);
   }
 
-  return { id: fileId, path: filePath };
+  return {
+    id: fileId,
+    path: filePath,
+    width: rasterWidth,
+    height: rasterHeight,
+  };
 };

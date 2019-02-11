@@ -9,6 +9,8 @@ import {
   LIGHT_BACKGROUND,
 } from '../../constants';
 
+import CanvasFrame from '../CanvasFrame';
+
 import type { CanvasSize } from '../../types';
 
 type Props = {
@@ -54,7 +56,7 @@ const HangingCanvas = ({
 
   const frameOffset = FRAME_OFFSETS[size];
 
-  const borderWidth = 3 * (1 / scaleRatio);
+  const borderWidth = 6 * (1 / scaleRatio);
   const padding = 5 * (1 / scaleRatio);
 
   return (
@@ -79,13 +81,9 @@ const HangingCanvas = ({
   );
 };
 
-const Frame = styled.div`
+const Frame = styled(CanvasFrame)`
   position: absolute;
   z-index: 2;
-  border-style: solid;
-  border-color: ${COLORS.gray[900]};
-  background-color: ${COLORS.white};
-  border-radius: 2px;
 `;
 
 const CanvasWrapper = styled.div`

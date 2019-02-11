@@ -2,9 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
+import queryString from 'query-string';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import { loader } from 'react-icons-kit/feather/loader';
+import { check } from 'react-icons-kit/feather/check';
 
 import { COLORS } from '../../constants';
 import { getCost } from '../../reducers/store.reducer';
@@ -24,14 +26,13 @@ type Props = {
 
 const purchaseMachine = {
   idle: {
-    SUBMIT: 'purchasing',
+    SUBMIT: 'preauthorizing',
   },
-  purchasing: {
-    SUCCESS: 'idle',
-    FAILURE: 'idle', // TODO
+  preauthorizing: {
+    SUCCESS: 'success',
   },
   success: {
-    FINISHED: 'idle',
+    // End state. User will be redirected at this point.
   },
 };
 
@@ -41,8 +42,20 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const [status, setStatus] = React.useState('idle');
   const [canPurchase, setCanPurchase] = React.useState(true);
 
-  const handleSuccessfulPurchase = ({ previewUrl }) => {
-    navigate(`/thanks?previewUrl=${previewUrl}`);
+  const transition = (status, action) => {
+    const nextStateKey = purchaseMachine[status][action];
+
+    setStatus(nextStateKey);
+  };
+
+  const handleSuccessfulPurchase = ({ previewUrl, width, height }) => {
+    // Whatever, the machine isn't working
+    setStatus('success');
+
+    window.setTimeout(() => {
+      const urlParams = queryString.stringify({ previewUrl, width, height });
+      navigate(`/thanks?${urlParams}`);
+    }, 500);
   };
 
   const handleFailedPurchase = ({ err }) => {
@@ -57,12 +70,6 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
       console.error('Could not load Stripe', err);
     }
   }, []);
-
-  const transition = action => {
-    const nextStateKey = purchaseMachine[status][action];
-
-    setStatus(nextStateKey);
-  };
 
   const openStripe = () => {
     const productName =
@@ -84,7 +91,8 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
           cost,
           token,
         };
-        setStatus('SUBMIT');
+
+        transition(status, 'SUBMIT');
 
         submitCharge(body)
           .then(handleSuccessfulPurchase)
@@ -96,18 +104,21 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   return (
     <Button
       size="large"
-      color={COLORS.blue[500]}
+      color={status === 'success' ? COLORS.green[500] : COLORS.blue[500]}
       style={{ width: 85 }}
-      disabled={status !== 'idle'}
+      kind="flat"
+      disabled={status === 'preauthorizing'}
       onClick={openStripe}
     >
-      {status === 'purchasing' ? (
+      {status === 'idle' && 'Purchase'}
+
+      {status === 'preauthorizing' && (
         <Spin>
           <Icon icon={loader} />
         </Spin>
-      ) : (
-        'Purchase'
       )}
+
+      {status === 'success' && <Icon icon={check} />}
     </Button>
   );
 };

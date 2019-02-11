@@ -7,9 +7,9 @@ import { UNIT, COLORS } from '../../constants';
 import LogoWithName from '../LogoWithName';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 
-const Footer = () => {
+const Footer = ({ transparentBackground }) => {
   return (
-    <Wrapper>
+    <Wrapper style={{ background: !transparentBackground && COLORS.gray[900] }}>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName
@@ -35,7 +35,6 @@ const Wrapper = styled.div`
   position: relative;
   z-index: 2;
   padding: ${UNIT * 4}px 0px;
-  background: ${COLORS.gray[900]};
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`

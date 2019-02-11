@@ -8,10 +8,20 @@ const storage = new Storage({
   keyFilename: './gcp-keys.json',
 });
 
-const getOptionsForType = type => {
+const getExtension = str => {
+  const match = str.match(/\.([^\W]+)$/);
+
+  if (!match) {
+    throw new Error('Path appears to not have a file extension: ' + str);
+  }
+
+  return match[1];
+};
+
+const getOptionsForExtension = extension => {
   const cacheControl = 'public, max-age=31536000';
 
-  switch (type) {
+  switch (extension) {
     case 'svg': {
       return {
         gzip: true,
@@ -36,15 +46,26 @@ const getOptionsForType = type => {
   }
 };
 
-export const upload = (path, type) => {
-  // TODO: I should be able to infer the type by getting the file extension
-  // with a regex.
-  const options = getOptionsForType(type);
+export const upload = path => {
+  const extension = getExtension(path);
+  const options = getOptionsForExtension(extension);
+
+  const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
 
   return storage
     .bucket(gcpBucketName)
     .upload(path, options)
     .catch(err => {
       throw new Error(`Could not upload to GCP: ${err}`);
+    })
+    .then(args => {
+      console.log(args);
+
+      const pathSegments = path.split('/');
+      const filename = pathSegments[pathSegments.length - 1];
+
+      console.log({ filename });
+
+      return `${urlPrefix}/${filename}`;
     });
 };

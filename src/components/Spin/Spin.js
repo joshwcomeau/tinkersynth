@@ -15,7 +15,8 @@ const Wrapper = styled.div`
   transform-origin: center center;
 
   /* HACK */
-  & svg {
+  & svg,
+  & > div {
     display: block !important;
   }
 `;
