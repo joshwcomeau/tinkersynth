@@ -44,6 +44,7 @@
     "mixpanel-browser": "^2.26.0",
     "postmark": "^2.2.4",
     "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
     "random-seed": "^0.3.0",
     "react": "16.7.0-alpha.2",
     "react-dom": "16.7.0-alpha.2",

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import queryString from 'query-string';
 import Icon from 'react-icons-kit';
 import { facebook_1 as facebookIcon } from 'react-icons-kit/ikons/facebook_1';
 import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
@@ -30,7 +31,11 @@ const getWindowOptions = () => {
   ].join();
 };
 
-const Thanks = () => {
+const Thanks = ({ location }) => {
+  const { previewUrl } = queryString.parse(location.search);
+
+  console.log({ previewUrl });
+
   const text = encodeURIComponent(
     'I just made some generative art with Tinkersynth :o'
   );
@@ -109,7 +114,7 @@ const Thanks = () => {
 
           <Spacer size={UNIT * 2} />
 
-          <ArtPreview />
+          <ArtPreview>{previewUrl && <img src={previewUrl} />}</ArtPreview>
         </Wrapper>
       </Foreground>
     </Layout>

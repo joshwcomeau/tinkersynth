@@ -34,55 +34,60 @@ app.post('/purchase/fulfill', async (req, res) => {
   try {
     const charge = await createCharge(req.body);
 
-    // Create a small raster preview for the user
-    // TODO: Refactor `processSlopes` to accept multiple kinds of output.
-    // Clean up the below stuff as well (and move it to another module)
-
-    const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
-    const userName = charge.source.name;
-
-    const vectorFile = await createVectorImage(size, artParams);
-
-    const rasterFileOpaque = await createRasterImage(size, artParams, {
+    const previewImage = await createRasterImage(size, artParams, {
       opaqueBackground: true,
-      pixelsPerInch: 300,
-    });
-    const rasterFileTransparent = await createRasterImage(size, artParams, {
-      opaqueBackground: false,
-      pixelsPerInch: 300,
+      pixelsPerInch: 20, // TODO: find the right number
     });
 
-    // prettier-ignore
-    await parallel(
-      upload(vectorFile.path, 'svg'),
-      upload(rasterFileOpaque.path, 'png'),
-      upload(rasterFileTransparent.path, 'png'),
-    );
-
-    // Create a User, if we don't already have one.
-    const [user, wasJustCreated] = await User.findOrCreate({
-      where: { id: userId },
-      defaults: { email: userEmail, name: userName },
+    return res.status(200).send({
+      previewUrl: previewImage.path,
     });
 
-    const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
-    const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
-    const pngUrlOpaque = `${urlPrefix}/${rasterFileOpaque.path}.png`;
-    const pngUrlTransparent = `${urlPrefix}/${rasterFileTransparent.path}.png`;
+    // Once the charge and the initial preview image are completed, we can
+    // return this stuff to the user. THere's more to do, but that can happen
+    // asynchronously.
 
-    // Email the customer!
-    sendArtVectorEmail(
-      user.name,
-      user.email,
-      format,
-      svgUrl,
-      pngUrlTransparent,
-      pngUrlOpaque
-    );
+    // const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
+    // const userName = charge.source.name;
 
-    res.status(200).send({
-      previewUrl: pngUrlOpaque,
-    });
+    // const vectorFile = await createVectorImage(size, artParams);
+
+    // const rasterFileOpaque = await createRasterImage(size, artParams, {
+    //   opaqueBackground: true,
+    //   pixelsPerInch: 300,
+    // });
+    // const rasterFileTransparent = await createRasterImage(size, artParams, {
+    //   opaqueBackground: false,
+    //   pixelsPerInch: 300,
+    // });
+
+    // // prettier-ignore
+    // await parallel(
+    //   upload(vectorFile.path, 'svg'),
+    //   upload(rasterFileOpaque.path, 'png'),
+    //   upload(rasterFileTransparent.path, 'png'),
+    // );
+
+    // // Create a User, if we don't already have one.
+    // const [user, wasJustCreated] = await User.findOrCreate({
+    //   where: { id: userId },
+    //   defaults: { email: userEmail, name: userName },
+    // });
+
+    // const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
+    // const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
+    // const pngUrlOpaque = `${urlPrefix}/${rasterFileOpaque.path}.png`;
+    // const pngUrlTransparent = `${urlPrefix}/${rasterFileTransparent.path}.png`;
+
+    // // Email the customer!
+    // sendArtVectorEmail(
+    //   user.name,
+    //   user.email,
+    //   format,
+    //   svgUrl,
+    //   pngUrlTransparent,
+    //   pngUrlOpaque
+    // );
   } catch (err) {
     console.error(err);
 

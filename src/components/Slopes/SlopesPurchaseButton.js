@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import { loader } from 'react-icons-kit/feather/loader';
@@ -40,6 +41,14 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const [status, setStatus] = React.useState('idle');
   const [canPurchase, setCanPurchase] = React.useState(true);
 
+  const handleSuccessfulPurchase = ({ previewUrl }) => {
+    navigate(`/thanks?previewUrl=${previewUrl}`);
+  };
+
+  const handleFailedPurchase = ({ err }) => {
+    // TODO
+  };
+
   React.useEffect(() => {
     try {
       stripe = createStripeConnection();
@@ -77,9 +86,9 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
         };
         setStatus('SUBMIT');
 
-        submitCharge(body).then(args => {
-          console.log('response', args);
-        });
+        submitCharge(body)
+          .then(handleSuccessfulPurchase)
+          .catch(handleFailedPurchase);
       },
     });
   };

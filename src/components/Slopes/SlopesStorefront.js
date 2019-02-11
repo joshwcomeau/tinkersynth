@@ -56,7 +56,7 @@ const SlopesStorefront = ({
             <Heading size={1}>Magnificent!</Heading>
             <Spacer size={UNIT * 4} />
             <Paragraph as="div" style={{ fontSize: 24 }}>
-              You’ve created a unique
+              You have created a unique
               <Asterisk tooltip={asteriskTooltipContents} /> piece of art.
               <br />
               Display it proudly!
