@@ -43,7 +43,8 @@ app.post('/purchase/fulfill', async (req, res) => {
     // Kick-start the real business of sending emails and creating orders in
     // the local database... but we don't have to wait for it to complete.
     // It's slow.
-    fulfill(size, artParams, userId, charge);
+    console.log(cost, token, charge);
+    fulfill(format, size, artParams, cost, userId, charge);
 
     return res.status(200).send({
       previewUrl,

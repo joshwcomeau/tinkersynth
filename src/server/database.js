@@ -23,18 +23,19 @@ export const User = sequelize.define('user', {
 
 export const Order = sequelize.define('order', {
   id: { type: Sequelize.UUID, primaryKey: true },
-  artParams: Sequelize.JSON,
   format: Sequelize.ENUM('print', 'vector'),
   size: Sequelize.ENUM('small', 'medium', 'large'),
   cost: Sequelize.INTEGER,
+  artParams: Sequelize.JSON,
   stripeToken: Sequelize.STRING,
 });
 
 User.hasMany(Order);
+Order.belongsTo(User);
 
 // prettier-ignore
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log('Database created!');
   });

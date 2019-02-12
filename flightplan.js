@@ -67,13 +67,10 @@ plan.local('deploy', local => {
   local.log('Copying files to remote');
 
   const dist = local.find('dist', { silent: true }).stdout.split('\n');
-  const gcpKeys = local
-    .find('gcp-keys.json', { silent: true })
-    .stdout.split('\n');
   const packageJson = local
     .find('package.json', { silent: true })
     .stdout.split('\n');
-  const files = [...dist, ...gcpKeys, ...packageJson];
+  const files = [...dist, ...packageJson];
 
   local.transfer(files, `/tmp/${newDirectoryName}`);
 });

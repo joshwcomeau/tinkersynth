@@ -6,13 +6,20 @@
  *   - Email the user with the assets
  *   - Email me to let me know about the order
  */
-import { User } from './database';
+import { User, Order } from './database';
 import { upload } from './google-cloud';
 import { parallel } from './utils';
 import { createRasterImage, createVectorImage } from './image-processing';
 import { sendArtVectorEmail } from './email';
 
-export default async function fulfill(size, artParams, userId, charge) {
+export default async function fulfill(
+  format,
+  size,
+  artParams,
+  cost,
+  userId,
+  charge
+) {
   // Once the charge and the initial preview image are completed, we can
   // return this stuff to the user. THere's more to do, but that can happen
   // asynchronously.
@@ -42,6 +49,16 @@ export default async function fulfill(size, artParams, userId, charge) {
     where: { id: userId },
     defaults: { email: userEmail, name: userName },
   });
+
+  // Associate an Order with this user
+  // const order = await Order.create({
+  //   userId: user.id,
+  //   format,
+  //   size,
+  //   cost,
+  //   artParams,
+  //   stripeToken:
+  // })
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
   const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
