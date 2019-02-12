@@ -69,7 +69,7 @@ const SlopesStorefront = ({
             label="Choose an option:"
             options={[
               { label: 'Giclée print', id: 'print' },
-              { label: 'Vector image', id: 'image' },
+              { label: 'Vector image', id: 'vector' },
             ]}
             comment={
               storeData.format === 'print' ? (

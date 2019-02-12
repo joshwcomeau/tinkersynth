@@ -49,7 +49,7 @@ export const getSlopes = state => state.store.slopes;
 export const getCost = machineName => state => {
   const { format, size } = state.store[machineName];
 
-  if (format === 'image') {
+  if (format === 'vector') {
     return 2000;
   } else {
     // prettier-ignore

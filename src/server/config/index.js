@@ -4,7 +4,11 @@ import path from 'path';
 
 import { DEV_SERVER_PORT } from '../../constants';
 
-require('dotenv').config();
+// TODO: Can I kill this entirely?
+// require('dotenv').config();
+
+console.log('SECRET KEY', process.env.TS_STRIPE_SECRET_KEY);
+console.log('Node port', process.env.TS_PORT_NODE);
 
 const config = {
   STRIPE_SECRET_KEY:
