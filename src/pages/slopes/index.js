@@ -7,7 +7,11 @@ import SlopesIndex from '../../components/Slopes/SlopesIndex';
 
 const Page = () => (
   <Layout pageId="slopes">
-    <SEO title="Slopes" keywords={['generative art', 'art', 'online store']} />
+    <SEO
+      title="Slopes"
+      ogTitle="Slopes Mk.1 Generative Art Machine"
+      keywords={['generative art', 'art', 'online store']}
+    />
 
     <SlopesIndex />
   </Layout>

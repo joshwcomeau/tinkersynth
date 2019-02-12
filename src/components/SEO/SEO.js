@@ -5,7 +5,7 @@ import { StaticQuery, graphql } from 'gatsby';
 
 import sampleImage from '../../images/sample.png';
 
-const SEO = ({ description, lang, meta, keywords, title, url }) => (
+const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
   <StaticQuery
     query={detailsQuery}
     render={data => {
@@ -30,7 +30,7 @@ const SEO = ({ description, lang, meta, keywords, title, url }) => (
             },
             {
               property: `og:title`,
-              content: title,
+              content: ogTitle || title,
             },
             {
               property: `og:description`,
@@ -62,7 +62,11 @@ const SEO = ({ description, lang, meta, keywords, title, url }) => (
             },
             {
               name: `twitter:card`,
-              content: `summary`,
+              content: `summary_large_image`,
+            },
+            {
+              name: `twitter:image`,
+              content: sampleImage,
             },
             {
               name: `twitter:creator`,
