@@ -81,11 +81,12 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
       currency: 'usd',
       zipCode: true,
       billingAddress: true,
-      shippingAddress: true,
+      shippingAddress: storeData.format === 'print',
       amount: cost,
-      token: (token, args) => {
-        const body = {
+      token: (token, addressData) => {
+        const data = {
           artParams,
+          addressData,
           format: storeData.format,
           size: storeData.size,
           cost,
@@ -94,7 +95,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
 
         transition(status, 'SUBMIT');
 
-        submitCharge(body)
+        submitCharge(data)
           .then(handleSuccessfulPurchase)
           .catch(handleFailedPurchase);
       },

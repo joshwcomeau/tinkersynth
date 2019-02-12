@@ -16,6 +16,7 @@ export default async function fulfill(
   format,
   size,
   artParams,
+  shippingAddress,
   cost,
   userId,
   charge

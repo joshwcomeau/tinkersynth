@@ -28,7 +28,15 @@ app.use(function(req, res, next) {
 // which will hit this path, containing all the info needed to produce the
 // image, send the user an email, and mail them the print (if applicable).
 app.post('/purchase/fulfill', async (req, res) => {
-  const { artParams, userId, format, size, cost, token } = req.body;
+  const {
+    artParams,
+    shippingAddress,
+    userId,
+    format,
+    size,
+    cost,
+    token,
+  } = req.body;
 
   try {
     const charge = await createCharge(req.body);
@@ -43,8 +51,7 @@ app.post('/purchase/fulfill', async (req, res) => {
     // Kick-start the real business of sending emails and creating orders in
     // the local database... but we don't have to wait for it to complete.
     // It's slow.
-    console.log(cost, token, charge);
-    fulfill(format, size, artParams, cost, userId, charge);
+    fulfill(format, size, artParams, shippingAddress, cost, userId, charge);
 
     return res.status(200).send({
       previewUrl,

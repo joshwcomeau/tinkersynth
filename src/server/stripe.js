@@ -2,7 +2,14 @@ import config from './config';
 
 const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
 
-export const createCharge = ({ artParams, format, size, cost, token }) => {
+export const createCharge = ({
+  artParams,
+  shippingAddress,
+  format,
+  size,
+  cost,
+  token,
+}) => {
   let description = `Slopes - ${format}`;
 
   if (format === 'print') {
@@ -14,6 +21,7 @@ export const createCharge = ({ artParams, format, size, cost, token }) => {
     currency: 'usd',
     description,
     source: token.id,
+    metadata: shippingAddress,
   });
 };
 
