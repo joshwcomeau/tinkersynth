@@ -15,3 +15,9 @@ from this computer with the rest of the code
 - Create a file at `src/server/config/prod.js` with secrets for the STRIPE_KEY and the PORT.
 
 - Create a file at `gcp-keys.json`, and add secret key for Google Cloud Platform storage. You can create a new key here: https://console.cloud.google.com/apis/credentials/serviceaccountkey?project=tinkersynth&folder&organizationId
+
+### Restart server
+
+To restart the node server, `yarn restart-server`
+
+To restart nginx, SSH in (`ssh deploy@api.tinkersynth.com`) and `sudo systemctl restart nginx`

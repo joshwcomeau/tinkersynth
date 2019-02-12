@@ -5,6 +5,7 @@
  * this can be reused for other machines in the future.
  */
 import path from 'path';
+import fs from 'fs';
 
 import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
@@ -70,6 +71,31 @@ const generateLines = (width, height, artParams) => {
   });
 };
 
+const getOrCreateOutputDirectory = () => {
+  const outputDirectoryPath = path.join(__dirname, '../../output');
+
+  return new Promise((resolve, reject) => {
+    fs.stat(outputDirectoryPath, err => {
+      // If getting the stats for a directory throw an error, that suggests
+      // that the directory doesn't exist.
+      // fs.exists is so much more semantic, but apparently it's deprecated :/
+      const directoryExists = !err;
+
+      if (directoryExists) {
+        resolve(outputDirectoryPath);
+      }
+
+      fs.mkdir(outputDirectoryPath, err => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(outputDirectoryPath);
+      });
+    });
+  });
+};
+
 // Utility to create an SVG, given the requested size (small|medium|large) and
 // the art params.
 export const createVectorImage = async (size, artParams) => {
@@ -82,10 +108,10 @@ export const createVectorImage = async (size, artParams) => {
 
   const fileId = uuid();
   const fileExtension = 'svg';
-  const filePath = path.join(
-    __dirname,
-    `../../output/${fileId}.${fileExtension}`
-  );
+  const outputDirectory = await getOrCreateOutputDirectory();
+  const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
+
+  console.log(filePath);
 
   const markup = polylinesToSVG(lines, {
     width,
@@ -124,10 +150,10 @@ export const createRasterImage = async (
 
   const fileId = uuid();
   const fileExtension = 'png';
-  const filePath = path.join(
-    __dirname,
-    `../../output/${fileId}.${fileExtension}`
-  );
+  const outputDirectory = await getOrCreateOutputDirectory();
+  const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
+
+  console.log(filePath);
 
   const markup = polylinesToSVG(lines, {
     width,
