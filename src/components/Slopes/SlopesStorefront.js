@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import Waypoint from 'react-waypoint';
 
 import * as actions from '../../actions';
 import { COLORS, UNIT } from '../../constants';
@@ -33,8 +34,10 @@ const SlopesStorefront = ({
   printHeight,
   storeData,
   cost,
+  isAwareOfPurchaseOptions,
   selectFormat,
   selectSize,
+  discoverStorefront,
 }) => {
   const asteriskTooltipContents = (
     <span style={{ display: 'block', maxWidth: 360 }}>
@@ -45,6 +48,8 @@ const SlopesStorefront = ({
       It's a safe bet that your creation is one-of-a-kind.
     </span>
   );
+
+  console.log({ Waypoint });
 
   return (
     <Wrapper id="slopes-storefront">
@@ -124,8 +129,22 @@ const SlopesStorefront = ({
 
           <StorefrontRow>
             <PurchaseRowContents>
-              <SlopesPurchaseButton />
+              <Waypoint
+                onEnter={() => {
+                  if (isAwareOfPurchaseOptions) {
+                    return;
+                  }
+
+                  discoverStorefront();
+                }}
+              >
+                <span>
+                  <SlopesPurchaseButton />
+                </span>
+              </Waypoint>
+
               <Spacer size={UNIT * 6} />
+
               <MultiplePurchaseInfoButton>
                 Want to buy multiple?
               </MultiplePurchaseInfoButton>
@@ -243,12 +262,14 @@ const MultiplePurchaseInfoButton = styled(UnstyledButton)``;
 
 const mapStateToProps = state => ({
   storeData: state.store.slopes,
+  isAwareOfPurchaseOptions: state.machine.isAwareOfPurchaseOptions,
   cost: getCost('slopes')(state),
 });
 
 const mapDispatchToProps = {
   selectFormat: actions.selectFormat,
   selectSize: actions.selectSize,
+  discoverStorefront: actions.discoverStorefront,
 };
 
 export default connect(

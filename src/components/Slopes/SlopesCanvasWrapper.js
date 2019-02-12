@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -8,10 +9,10 @@ import {
   LIGHT_BACKGROUND,
   DARK_BACKGROUND,
 } from '../../constants';
+import * as actions from '../../actions';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
-
 import { SlopesContext } from './SlopesState';
 import PageCluster from './controls/PageCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
@@ -22,6 +23,7 @@ type Props = {
   children: React$Node,
   enableDarkMode: boolean,
   enableMargins: boolean,
+  clickMachinePurchaseButton: () => void,
 };
 
 const handleClickPurchase = () => {
@@ -44,6 +46,7 @@ const SlopesCanvasWrapper = ({
   children,
   enableDarkMode,
   enableMargins,
+  clickMachinePurchaseButton,
 }: Props) => {
   return (
     <Wrapper>
@@ -75,7 +78,15 @@ const SlopesCanvasWrapper = ({
             <PageCluster />
           </Toggles>
 
-          <Button color={COLORS.blue[500]} onClick={handleClickPurchase}>
+          <Button
+            color={COLORS.blue[500]}
+            onClick={() => {
+              // Fire off the redux action
+              clickMachinePurchaseButton();
+
+              handleClickPurchase();
+            }}
+          >
             Purchase
           </Button>
         </Footer>
@@ -142,4 +153,11 @@ const Footer = styled.div`
 
 const Toggles = styled.div``;
 
-export default SlopesCanvasWrapperContainer;
+const mapStateToProps = state => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  { clickMachinePurchaseButton: actions.clickMachinePurchaseButton }
+)(SlopesCanvasWrapperContainer);

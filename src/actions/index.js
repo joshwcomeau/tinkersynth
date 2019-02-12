@@ -42,6 +42,14 @@ export const clickDisabledCompartment = (triggerRef: ?HTMLElement) => ({
   },
 });
 
+export const clickMachinePurchaseButton = () => ({
+  type: 'CLICK_MACHINE_PURCHASE_BUTTON',
+});
+
+export const discoverStorefront = () => ({
+  type: 'DISCOVER_STOREFRONT',
+});
+
 export const dismissToast = (toastId: string) => ({
   type: 'DISMISS_TOAST',
   toastId,
