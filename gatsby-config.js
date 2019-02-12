@@ -3,7 +3,8 @@ const faviconPath = `./src/images/favicon.${process.env.NODE_ENV}.png`;
 module.exports = {
   siteMetadata: {
     title: `Tinkersynth`,
-    description: `Experimental machines for generating unique artwork.`,
+    description:
+      'Tinkersynth is an experimental art store. Create unique prints by manipulating inscrutable, whimsical machines, and making serendipitous discoveries.',
     author: `@joshwcomeau`,
   },
   plugins: [

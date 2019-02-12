@@ -62,7 +62,7 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
             },
             {
               name: `twitter:card`,
-              content: `summary_large_image`,
+              content: `summary`,
             },
             {
               name: `twitter:image`,
@@ -74,7 +74,7 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
             },
             {
               name: `twitter:title`,
-              content: title,
+              content: ogTitle || title,
             },
             {
               name: `twitter:description`,
