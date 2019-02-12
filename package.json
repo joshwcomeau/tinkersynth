@@ -11,6 +11,7 @@
     "build-server": "babel ./src --out-dir ./dist",
     "watch-server": "babel --watch ./src --out-dir ./dist",
     "deploy-server": "NODE_ENV=production fly deploy:production",
+    "restart-server": "NODE_ENV=production fly restart:production",
     "build-and-deploy-server": "NODE_ENV=production npm run build-server && NODE_ENV=production fly deploy:production",
     "start-server": "pm2 start dist/index.js",
     "develop": "gatsby develop",

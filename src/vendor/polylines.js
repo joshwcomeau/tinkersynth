@@ -63,6 +63,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
     stroke="${strokeStyle}"
     stroke-width="${lineWidth}${units}"
     fill="none"
+    stroke-linecap="round"
   />
 </svg>`;
 };
