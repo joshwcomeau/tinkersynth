@@ -20,40 +20,83 @@ const SlopesIndex = () => (
         </Heading>
       </Header>
       <Questions>
-        <QuestionAndAnswer id="what-is-this" question="Er, so, what is this?">
+        <QuestionAndAnswer id="what-is-this" question="What is this exactly?">
           <Paragraph>
-            Tinkersynth is an experimental tool. It lets you create unique [FIND
-            A LINK]generative art[/].
+            Tinkersynth is a collection of software machines that can be used to
+            produce unique{' '}
+            <TextLink to="https://en.wikipedia.org/wiki/Generative_art">
+              generative art
+            </TextLink>{' '}
+            via serendipitous experimentation.
           </Paragraph>
 
           <Paragraph>
-            Generative art is an umbrella term for art created by writing
-            software that generates it. In this case, I wrote code that uses
-            Perlin noise and trigonometry to create sloped lines.
+            More concretely, Tinkersynth is an art store where you build art by
+            poking at sliders and buttons. The goal isn't to provide a linear
+            path to a specific piece of art, but rather to encourage
+            experimentation. Tinkersynth prioritizes being delighted by
+            unexpected effects rather than creating an intuitive, predictable
+            tool.
           </Paragraph>
 
           <Paragraph>
-            The code for this project has parameters that can be tweaked.
-            Initially these parameters were pretty straightforward, things like
-            the distance between each line... but I kept having ideas for
-            alternative ways that the code could work, and as the number of
-            parameters grew, the number of possible combinations exploded.
+            Once you're satisfied with your creation, you can{' '}
+            <TextLink to="#purchase-options">purchase it</TextLink>! You can
+            choose to buy a high-quality vector/raster download pack, a premium
+            Giclée print, or both.
+          </Paragraph>
+        </QuestionAndAnswer>
+
+        <QuestionAndAnswer
+          id="what-is-generative-art"
+          question="How does it work?"
+        >
+          <Paragraph>
+            The machines on Tinkersynth are examples of generative art. Unlike
+            most traditional forms of visual art, generative art is produced by
+            an algorithm.
           </Paragraph>
 
           <Paragraph>
-            I started to realize that this wasn't just making small tweaks to a
-            generally consistent experience anymore; entirely different pieces
-            of art could be created, by experimenting with different
-            combinations. This is kind of like a hyper-specialized Photoshop;
-            it's a tool to create, not just subtly alter.
+            An algorithm is a fancy computer word, but really it just means that
+            the art is produced by following a set of discrete, repeatable
+            steps. For example, the
+            <TextLink to="https://en.wikipedia.org/wiki/Spirograph">
+              Spirograph
+            </TextLink>{' '}
+            produces generative art by following an algorithm as well. You can
+            produce 10 identical pieces by following the same steps, and you can
+            produce different pieces by modifying those steps, or changing the
+            input parameters (like which gear to use).
           </Paragraph>
 
           <Paragraph>
-            In addition to creating art through the tool, you can also{' '}
-            <TextLink to="#purchase-options">purchase it</TextLink>! This is the
-            mechanism I'm using to fund the time I invested creating this tool.
-            If it does well, that'll encourage me to create new machines, with
-            different settings and possible outputs.
+            The Slopes machine uses an algorithm inspired by{' '}
+            <TextLink to="https://blogs.scientificamerican.com/blogs/assets/sa-visual/Image/SciAm_pulsar.jpg">
+              data visualizations of electromagnetic radiation
+            </TextLink>
+            . In its simplest form, it draws each row 1 at a time, using a form
+            of randomization known as perlin noise to come up with the slopes.
+          </Paragraph>
+
+          <Paragraph>
+            The controls on the Slopes machine turn what would otherwise be a
+            fairly static piece into something dynamic and unpredictable. There
+            are 22 individual controls which each affect the algorithm. Some,
+            like the "perspective" slider in the top left, are reasonably
+            predictable: it controls the height and distance between rows.
+            Others are more inscrutable, like the "split earth" control which
+            uses the tangent function to remarkable effect. Each control affects
+            how the others behave, and the result is that there are over
+            1,000,000,000,000,000,000,000,000,000,000 possible outputs.
+          </Paragraph>
+
+          <Paragraph>
+            If you're interested in learning more about creating generative art,{' '}
+            <TextLink to="https://twitter.com/JoshWComeau">
+              hit me up on Twitter
+            </TextLink>
+            !
           </Paragraph>
         </QuestionAndAnswer>
       </Questions>
