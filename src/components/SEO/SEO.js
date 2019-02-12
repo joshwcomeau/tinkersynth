@@ -3,11 +3,19 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
 
-const SEO = ({ description, lang, meta, keywords, title }) => (
+import sampleImage from '../../images/sample.png';
+
+const SEO = ({ description, lang, meta, keywords, title, url }) => (
   <StaticQuery
     query={detailsQuery}
     render={data => {
       const metaDescription = description || data.site.siteMetadata.description;
+
+      const backupOgUrl =
+        typeof window === 'undefined'
+          ? 'https://tinkersynth.com/slopes/'
+          : window.location.href;
+
       return (
         <Helmet
           htmlAttributes={{
@@ -29,8 +37,28 @@ const SEO = ({ description, lang, meta, keywords, title }) => (
               content: metaDescription,
             },
             {
+              property: `og:url`,
+              content: url || backupOgUrl,
+            },
+            {
               property: `og:type`,
               content: `website`,
+            },
+            {
+              property: `og:image`,
+              content: sampleImage,
+            },
+            {
+              property: `og:image:type`,
+              content: 'image/png',
+            },
+            {
+              property: `og:image:width`,
+              content: '1200',
+            },
+            {
+              property: `og:image:height`,
+              content: '1600',
             },
             {
               name: `twitter:card`,

@@ -59,12 +59,8 @@ export const upload = path => {
       throw new Error(`Could not upload to GCP: ${err}`);
     })
     .then(args => {
-      console.log(args);
-
       const pathSegments = path.split('/');
       const filename = pathSegments[pathSegments.length - 1];
-
-      console.log({ filename });
 
       return `${urlPrefix}/${filename}`;
     });

@@ -9,6 +9,7 @@ import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
 import { UNIT, COLORS } from '../constants';
 
 import Layout from '../components/Layout';
+import SEO from '../components/SEO';
 import Heading from '../components/Heading';
 import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
@@ -35,8 +36,6 @@ const getWindowOptions = () => {
 const Thanks = ({ location }) => {
   const { previewUrl, width, height } = queryString.parse(location.search);
 
-  console.log({ previewUrl });
-
   const text = encodeURIComponent(
     'I just made some generative art with Tinkersynth :o'
   );
@@ -45,6 +44,7 @@ const Thanks = ({ location }) => {
 
   return (
     <Layout pageId="thanks" noHeader transparentFooter>
+      <SEO title="Slopes" url="https://tinkersynth.com/slopes/" />
       <Background>
         <MountainsBg />
       </Background>

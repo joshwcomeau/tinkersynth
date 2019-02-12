@@ -2,13 +2,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import config from './config';
-import { parallel } from './utils';
-import { User } from './database';
 import { upload } from './google-cloud';
+import fulfill from './fulfillment';
 import { createCharge } from './stripe';
 import { createRasterImage, createVectorImage } from './image-processing';
-import database from './database';
-import { sendArtVectorEmail } from './email';
+
+import './database';
 
 // Set up the express app
 const app = express();
@@ -41,57 +40,16 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     const previewUrl = await upload(previewImage.path);
 
+    // Kick-start the real business of sending emails and creating orders in
+    // the local database... but we don't have to wait for it to complete.
+    // It's slow.
+    fulfill(size, artParams, userId, charge);
+
     return res.status(200).send({
       previewUrl,
       width: previewImage.width,
       height: previewImage.height,
     });
-
-    // Once the charge and the initial preview image are completed, we can
-    // return this stuff to the user. THere's more to do, but that can happen
-    // asynchronously.
-
-    // const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
-    // const userName = charge.source.name;
-
-    // const vectorFile = await createVectorImage(size, artParams);
-
-    // const rasterFileOpaque = await createRasterImage(size, artParams, {
-    //   opaqueBackground: true,
-    //   pixelsPerInch: 300,
-    // });
-    // const rasterFileTransparent = await createRasterImage(size, artParams, {
-    //   opaqueBackground: false,
-    //   pixelsPerInch: 300,
-    // });
-
-    // // prettier-ignore
-    // await parallel(
-    //   upload(vectorFile.path, 'svg'),
-    //   upload(rasterFileOpaque.path, 'png'),
-    //   upload(rasterFileTransparent.path, 'png'),
-    // );
-
-    // // Create a User, if we don't already have one.
-    // const [user, wasJustCreated] = await User.findOrCreate({
-    //   where: { id: userId },
-    //   defaults: { email: userEmail, name: userName },
-    // });
-
-    // const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
-    // const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
-    // const pngUrlOpaque = `${urlPrefix}/${rasterFileOpaque.path}.png`;
-    // const pngUrlTransparent = `${urlPrefix}/${rasterFileTransparent.path}.png`;
-
-    // // Email the customer!
-    // sendArtVectorEmail(
-    //   user.name,
-    //   user.email,
-    //   format,
-    //   svgUrl,
-    //   pngUrlTransparent,
-    //   pngUrlOpaque
-    // );
   } catch (err) {
     console.error(err);
 

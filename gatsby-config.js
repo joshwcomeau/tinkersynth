@@ -2,8 +2,8 @@ const faviconPath = `./src/images/favicon.${process.env.NODE_ENV}.png`;
 
 module.exports = {
   siteMetadata: {
-    title: `Tinkersynth generative art machines`,
-    description: `Experimental machines for generating art.`,
+    title: `Tinkersynth`,
+    description: `Experimental machines for generating unique artwork.`,
     author: `@joshwcomeau`,
   },
   plugins: [

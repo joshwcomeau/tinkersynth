@@ -34,7 +34,7 @@ User.hasMany(Order);
 
 // prettier-ignore
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log('Database created!');
   });
