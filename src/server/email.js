@@ -16,8 +16,9 @@ export const sendArtVectorEmail = (
   pngUrlTransparent,
   pngUrlOpaque
 ) => {
-  if (process.env.NODE_ENV !== 'production') {
-    email = 'josh@tinkersynth.com';
+  // Don't send email in development
+  if (process.env.node_env !== 'production') {
+    return;
   }
 
   client.sendEmail({
@@ -33,5 +34,27 @@ export const sendArtVectorEmail = (
         pngUrlOpaque={pngUrlOpaque}
       />
     ),
+  });
+};
+
+export const notifyMe = (name, email, format, cost, chargeId) => {
+  // Don't send email in development
+  if (process.env.node_env !== 'production') {
+    return;
+  }
+
+  client.sendEmail({
+    From: 'josh@tinkersynth.com',
+    To: email,
+    Subject: 'New purchase on Tinkersynth!',
+    TextBody: ```
+Yay new order!
+
+chargeId: ${chargeId}
+name:     ${name}
+email:    ${email}
+format:   ${format}
+cost:     ${cost / 100}
+    ```,
   });
 };

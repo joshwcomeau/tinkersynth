@@ -27,7 +27,14 @@ export const Order = sequelize.define('order', {
   size: Sequelize.ENUM('small', 'medium', 'large'),
   cost: Sequelize.INTEGER,
   artParams: Sequelize.JSON,
-  stripeToken: Sequelize.STRING,
+  chargeId: Sequelize.STRING,
+  // Shipping address
+  shipTo: Sequelize.STRING,
+  streetAddress: Sequelize.STRING,
+  city: Sequelize.STRING,
+  state: Sequelize.STRING,
+  country: Sequelize.STRING,
+  zipCode: Sequelize.STRING,
 });
 
 User.hasMany(Order);
@@ -35,9 +42,9 @@ Order.belongsTo(User);
 
 // prettier-ignore
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
-    console.log('Database created!');
+    console.info('Database created!');
   });
 
 export default sequelize;

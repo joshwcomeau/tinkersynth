@@ -49,8 +49,6 @@ const SlopesStorefront = ({
     </span>
   );
 
-  console.log({ Waypoint });
-
   return (
     <Wrapper id="slopes-storefront">
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />

@@ -18,7 +18,7 @@ export const submitCharge = ({
   const userId = getDistinctId();
 
   const shippingAddress = {
-    name: addressData.shipping_name,
+    shipTo: addressData.shipping_name,
     streetAddress: addressData.shipping_address_line1,
     city: addressData.shipping_address_city,
     state: addressData.shipping_address_state,

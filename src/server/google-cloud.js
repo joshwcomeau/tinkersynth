@@ -5,13 +5,6 @@ import config from './config';
 const gcpProjectId = 'tinkersynth';
 const gcpBucketName = 'tinkersynth-art';
 
-console.log(
-  'KEYS PATH',
-  process.env.NODE_ENV === 'production'
-    ? '/home/deploy/app/gcp-keys.json'
-    : './gcp-keys.json'
-);
-
 const storage = new Storage({
   projectId: gcpProjectId,
   keyFilename:

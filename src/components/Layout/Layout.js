@@ -15,6 +15,7 @@ import Footer from '../Footer';
 
 import 'focus-visible';
 import 'react-tippy/dist/tippy.css';
+import { HEADER_HEIGHT } from '../../constants';
 
 const store = configureStore();
 
@@ -47,6 +48,7 @@ const Layout = ({ pageId, children, noHeader, transparentFooter }: Props) => {
 const MainContentWrapper = styled.div`
   position: relative;
   z-index: 1;
+  min-height: calc(100vh - ${HEADER_HEIGHT}px);
 `;
 
 export default Layout;

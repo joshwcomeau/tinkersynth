@@ -52,14 +52,21 @@ export default async function fulfill(
   });
 
   // Associate an Order with this user
-  // const order = await Order.create({
-  //   userId: user.id,
-  //   format,
-  //   size,
-  //   cost,
-  //   artParams,
-  //   stripeToken:
-  // })
+  const order = await Order.create({
+    format,
+    size,
+    cost,
+    artParams,
+    chargeId: charge.id,
+    shipTo: shippingAddress.shipTo,
+    streetAddress: shippingAddress.streetAddress,
+    city: shippingAddress.city,
+    state: shippingAddress.state,
+    country: shippingAddress.country,
+    zipCode: shippingAddress.zipCode,
+  });
+
+  await user.addOrder(order);
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
   const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;

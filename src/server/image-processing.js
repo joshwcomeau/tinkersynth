@@ -111,8 +111,6 @@ export const createVectorImage = async (size, artParams) => {
   const outputDirectory = await getOrCreateOutputDirectory();
   const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
 
-  console.log(filePath);
-
   const markup = polylinesToSVG(lines, {
     width,
     height,
@@ -152,8 +150,6 @@ export const createRasterImage = async (
   const fileExtension = 'png';
   const outputDirectory = await getOrCreateOutputDirectory();
   const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
-
-  console.log(filePath);
 
   const markup = polylinesToSVG(lines, {
     width,

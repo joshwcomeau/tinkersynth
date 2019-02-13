@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import config from './config';
+import { User, Order } from './database';
 import { upload } from './google-cloud';
 import fulfill from './fulfillment';
 import { createCharge } from './stripe';
@@ -66,10 +67,6 @@ app.post('/purchase/fulfill', async (req, res) => {
       url: '',
     });
   }
-});
-
-app.get('/ping', (req, res) => {
-  res.status(200).send({ ok: true, time: Date.now() });
 });
 
 const { PORT } = config;
