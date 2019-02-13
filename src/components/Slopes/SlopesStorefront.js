@@ -133,7 +133,7 @@ const SlopesStorefront = ({
                     return;
                   }
 
-                  discoverStorefront();
+                  window.setTimeout(discoverStorefront, 500);
                 }}
               >
                 <span>

@@ -27,7 +27,8 @@ type Props = {
   isAwareOfPurchaseOptions: boolean,
 };
 
-const SHOW_PURCHASE_TOOLTIP_AFTER = 5000;
+// Show the tooltip after 2 minutes
+const SHOW_PURCHASE_TOOLTIP_AFTER = 1000 * 60 * 2;
 
 const handleClickPurchase = () => {
   // HACK: I've totally broken out of React's abstraction here, because the
@@ -44,7 +45,7 @@ const handleClickPurchase = () => {
 };
 
 const useTooltip = isAwareOfPurchaseOptions => {
-  const [showTooltip, setShowTooltip] = React.useState(false);
+  const [showTooltip, setShowTooltip] = React.useState(true);
 
   const timeoutId = React.useRef(null);
 
@@ -58,9 +59,15 @@ const useTooltip = isAwareOfPurchaseOptions => {
     }, SHOW_PURCHASE_TOOLTIP_AFTER);
   }, []);
 
-  if (isAwareOfPurchaseOptions) {
-    window.clearTimeout(timeoutId.current);
-  }
+  React.useEffect(
+    () => {
+      if (isAwareOfPurchaseOptions) {
+        window.clearTimeout(timeoutId.current);
+        setShowTooltip(false);
+      }
+    },
+    [isAwareOfPurchaseOptions]
+  );
 
   return showTooltip;
 };
@@ -112,10 +119,15 @@ const SlopesCanvasWrapper = ({
             tabIndex={0}
             animateFill={false}
             arrow={true}
+            position="bottom"
             html={
               <>
-                <strong>Happy with your design?</strong> You can purchase it as
-                a print, or as a vector image.
+                <strong>Happy with your design?</strong>
+                <br />
+                <br />
+                You can purchase it as a print,
+                <br />
+                or as a vector image.
               </>
             }
             open={showTooltip}
