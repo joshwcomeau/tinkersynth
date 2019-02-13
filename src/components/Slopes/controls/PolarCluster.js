@@ -26,7 +26,7 @@ type Props = {
   omega: number,
   splitUniverse: number,
   tweakParameter: TweakParameterAction,
-  isShuffled: boolean,
+  animateTransitions: boolean,
   isBallSizeDisabled: boolean,
   isOmegaDisabled: boolean,
 };
@@ -40,7 +40,7 @@ const PolarCluster = ({
   tweakParameter,
   isBallSizeDisabled,
   isOmegaDisabled,
-  isShuffled,
+  animateTransitions,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -78,7 +78,7 @@ const PolarCluster = ({
             padding={polarHoleSliderPadding}
             visualizationComponent={BallSizeVisualization}
             numOfNotches={14}
-            isAnimated={!isShuffled}
+            isAnimated={!animateTransitions}
             isDisabled={isBallSizeDisabled}
           />
         </ControlCompartment>
@@ -98,7 +98,7 @@ const PolarCluster = ({
             width={innerWidth}
             height={40}
             visualizationComponent={OmegaVisualization}
-            isAnimated={!isShuffled}
+            isAnimated={!animateTransitions}
             isDisabled={isOmegaDisabled}
           />
         </ControlCompartment>
@@ -113,7 +113,7 @@ const PolarCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={SplitUniverseVisualization}
-          isAnimated={!isShuffled}
+          isAnimated={!animateTransitions}
         />
       </Row>
     </InstrumentCluster>
@@ -139,7 +139,7 @@ const PolarContainer = ({ width }) => {
       tweakParameter={slopesParams.tweakParameter}
       isBallSizeDisabled={slopesParams.disabledParams.ballSize}
       isOmegaDisabled={slopesParams.disabledParams.omega}
-      isShuffled={slopesParams.isShuffled}
+      animateTransitions={slopesParams.animateTransitions}
     />
   );
 };

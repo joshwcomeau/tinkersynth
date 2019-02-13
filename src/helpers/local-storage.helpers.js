@@ -2,6 +2,7 @@ import uuid from 'uuid/v1';
 
 const DISTINCT_ID_KEY = 'tinkersynth-user-id';
 const NUM_OF_VISITS_KEY = 'tinkersynth-num-of-visits';
+const SLOPES_STATE_KEY = 'tinkersynth-slopes-state';
 
 export const getDistinctId = () => {
   if (typeof window === 'undefined') {
@@ -42,4 +43,26 @@ export const markNewVisit = () => {
   const numOfVisits = getNumberOfVisits();
 
   window.localStorage.setItem(NUM_OF_VISITS_KEY, numOfVisits + 1);
+};
+
+export const getInitialSlopesParams = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const persistedState = window.localStorage.getItem(SLOPES_STATE_KEY);
+
+  if (!persistedState) {
+    return null;
+  }
+
+  return JSON.parse(persistedState);
+};
+
+export const setSlopesParams = params => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.setItem(SLOPES_STATE_KEY, JSON.stringify(params));
 };

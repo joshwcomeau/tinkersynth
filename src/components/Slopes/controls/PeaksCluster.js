@@ -20,7 +20,7 @@ type Props = {
   peaksCurve: Curve,
   personInflateAmount: number,
   tweakParameter: TweakParameterAction,
-  isShuffled: boolean,
+  animateTransitions: boolean,
 };
 
 const PeaksCluster = ({
@@ -28,7 +28,7 @@ const PeaksCluster = ({
   peaksCurve,
   personInflateAmount,
   tweakParameter,
-  isShuffled,
+  animateTransitions,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -47,7 +47,7 @@ const PeaksCluster = ({
         updateCurve={curve => tweakParameter('peaksCurve', curve)}
         width={bezierControlWidth}
         height={bezierControlHeight}
-        isAnimated={isShuffled}
+        isAnimated={animateTransitions}
       />
 
       <Spacer size={UNIT} />
@@ -59,7 +59,7 @@ const PeaksCluster = ({
         value={personInflateAmount}
         updateValue={val => tweakParameter('personInflateAmount', val)}
         visualizationComponent={PersonInflateVisualization}
-        isAnimated={!isShuffled}
+        isAnimated={!animateTransitions}
       />
     </InstrumentCluster>
   );
@@ -76,7 +76,7 @@ const PeaksContainer = ({ width }) => {
       peaksCurve={slopesParams.peaksCurve}
       personInflateAmount={slopesParams.personInflateAmount}
       tweakParameter={slopesParams.tweakParameter}
-      isShuffled={slopesParams.isShuffled}
+      animateTransitions={slopesParams.animateTransitions}
     />
   );
 };

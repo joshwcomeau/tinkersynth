@@ -129,7 +129,7 @@ const SlopesPurchaseButtonContainer = ({ storeData, cost }) => {
 
   const artParams = { ...slopesParams };
   delete artParams.disabledParams;
-  delete artParams.isShuffled;
+  delete artParams.animateTransitions;
 
   return (
     <SlopesPurchaseButton

@@ -23,7 +23,7 @@ type Props = {
   enableOcclusion: boolean,
   toggleParameter: ToggleParameterAction,
   tweakParameter: TweakParameterAction,
-  isShuffled: boolean,
+  animateTransitions: boolean,
 };
 
 const LineCluster = ({
@@ -32,7 +32,7 @@ const LineCluster = ({
   enableOcclusion,
   toggleParameter,
   tweakParameter,
-  isShuffled,
+  animateTransitions,
 }) => {
   const rowHeight = 54;
 
@@ -47,7 +47,7 @@ const LineCluster = ({
         width={innerWidth}
         height={54}
         visualizationComponent={LegoBrickVisualization}
-        isAnimated={!isShuffled}
+        isAnimated={!animateTransitions}
       />
       <Spacer size={UNIT} />
       <ToggleControl
@@ -73,7 +73,7 @@ const LineClusterContainer = ({ columnWidth }) => {
       enableOcclusion={slopesParams.enableOcclusion}
       toggleParameter={slopesParams.toggleParameter}
       tweakParameter={slopesParams.tweakParameter}
-      isShuffled={slopesParams.isShuffled}
+      animateTransitions={slopesParams.animateTransitions}
     />
   );
 };

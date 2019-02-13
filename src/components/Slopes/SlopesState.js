@@ -10,7 +10,11 @@ import {
   getRandomSeed,
   isUpdatePartOfGroup,
 } from './SlopesState.helpers';
-import { sum, mean, sample } from '../../utils';
+import {
+  getInitialSlopesParams,
+  setSlopesParams,
+} from '../../helpers/local-storage.helpers';
+import { sum, mean, sample, debounce } from '../../utils';
 
 import type { Curve } from '../../types';
 
@@ -28,36 +32,38 @@ type HistorySnapshot = {
   timestamp: number, // Unix epoch
 };
 
-const initialState = {
+const defaultParameters = {
+  seed: getRandomSeed(),
+  enableDarkMode: sample([true, false]),
+  enableMargins: sample([true, false]),
+  enableOcclusion: true,
+  amplitudeAmount: 50,
+  wavelength: 25,
+  octaveAmount: 0,
+  perspective: 45,
+  lineAmount: 45,
+  spikyness: 0,
+  staticAmount: 0,
+  polarAmount: 0,
+  omega: 0,
+  splitUniverse: 0,
+  personInflateAmount: 50,
+  waterBoilAmount: 100,
+  ballSize: 50,
+  dotAmount: 0,
+  peaksCurve: DEFAULT_PEAKS_CURVE,
+  enableMirrored: false, // SECRET PARAM :o
+};
+
+const defaultState = {
   history: [],
-  isShuffled: false,
-  parameters: {
-    seed: getRandomSeed(),
-    enableDarkMode: sample([true, false]),
-    enableMargins: sample([true, false]),
-    enableOcclusion: true,
-    amplitudeAmount: 50,
-    wavelength: 25,
-    octaveAmount: 0,
-    perspective: 45,
-    lineAmount: 45,
-    spikyness: 0,
-    staticAmount: 0,
-    polarAmount: 0,
-    omega: 0,
-    splitUniverse: 0,
-    personInflateAmount: 50,
-    waterBoilAmount: 100,
-    ballSize: 50,
-    dotAmount: 0,
-    peaksCurve: DEFAULT_PEAKS_CURVE,
-    enableMirrored: false, // SECRET PARAM :o
-  },
+  animateTransitions: false,
+  parameters: defaultParameters,
 };
 
 type State = {
   history: Array<HistorySnapshot>,
-  isShuffled: boolean,
+  animateTransitions: boolean,
   parameters: {
     seed: number,
     enableDarkMode: boolean,
@@ -100,7 +106,7 @@ const reducer = produce(
       case 'TWEAK_PARAMETER': {
         // TODO: Should I have a single action per parameter? Would I save a bunch
         // of re-renders if I did that?
-        state.isShuffled = false;
+        state.animateTransitions = false;
 
         // If this is the first action in a "burst", we want to push the state
         // onto the history stack, for undoing.
@@ -148,12 +154,8 @@ const reducer = produce(
       }
 
       case 'RESET_STATE': {
-        return {
-          ...initialState,
-          // HACK: this prop really just controls disabling/enabling animation.
-          // I should rename it, but lazy.
-          isShuffled: true,
-        };
+        state.animateTransitions = true;
+        state.parameters = defaultParameters;
       }
 
       case 'UNDO': {
@@ -176,6 +178,12 @@ const reducer = produce(
     }
   }
 );
+
+const initialState = {
+  history: [],
+  animateTransitions: true,
+  parameters: getInitialSlopesParams() || defaultParameters,
+};
 
 export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -218,6 +226,16 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const disabledParams = useRef({});
   updateDisabledParams(disabledParams, state.parameters);
 
+  const updateLocalStorage = useRef(
+    debounce(params => {
+      setSlopesParams(params);
+    }, 1000)
+  );
+
+  React.useEffect(() => {
+    updateLocalStorage.current(state.parameters);
+  });
+
   return (
     <SlopesContext.Provider
       value={{
@@ -247,7 +265,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
         shuffle: shuffle.current,
         resetState: resetState.current,
 
-        isShuffled: state.isShuffled,
+        animateTransitions: state.animateTransitions,
 
         disabledParams: disabledParams.current,
       }}

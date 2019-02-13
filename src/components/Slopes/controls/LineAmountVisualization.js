@@ -14,6 +14,7 @@ type Props = {
 };
 
 const LineAmountVisualization = ({ size, value }: Props) => {
+  console.log(value);
   const numOfLines = Math.round(
     normalize(value, 0, 100, MIN_NUM_ROWS, MAX_NUM_ROWS)
   );
