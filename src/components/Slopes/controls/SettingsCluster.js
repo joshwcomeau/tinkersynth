@@ -6,7 +6,6 @@ import { UNIT } from '../../../constants';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SeedPicker from '../../SeedPicker';
-import ShuffleButton from '../../ShuffleButton';
 import Spacer from '../../Spacer';
 
 import type { TweakParameterAction } from '../SlopesState';
@@ -15,18 +14,15 @@ type Props = {
   squeeze: boolean,
   seed: number,
   tweakParameter: TweakParameterAction,
-  shuffle: () => void,
 };
 
-const SettingsCluster = ({ squeeze, seed, tweakParameter, shuffle }: Props) => {
+const SettingsCluster = ({ squeeze, seed, tweakParameter }: Props) => {
   return (
-    <InstrumentCluster>
-      <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
-
-      <Spacer size={squeeze ? UNIT : UNIT * 2} />
-
-      <ShuffleButton handlePress={shuffle} />
-    </InstrumentCluster>
+    <div style={{ paddingTop: 15 }}>
+      <InstrumentCluster>
+        <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
+      </InstrumentCluster>
+    </div>
   );
 };
 
@@ -40,7 +36,6 @@ const SettingsContainer = ({ squeeze }) => {
       squeeze={squeeze}
       seed={slopesParams.seed}
       tweakParameter={slopesParams.tweakParameter}
-      shuffle={slopesParams.shuffle}
     />
   );
 };

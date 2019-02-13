@@ -18,6 +18,7 @@ import PolarCluster from './controls/PolarCluster';
 import NoiseCluster from './controls/NoiseCluster';
 import AudioCluster from './controls/AudioCluster';
 import LineCluster from './controls/LineCluster';
+import DestructiveCluster from './controls/DestructiveCluster';
 
 type Props = {
   width: number,
@@ -40,7 +41,7 @@ const SlopesControls = ({ width }: Props) => {
     <ControlPanel width={width} padding={padding}>
       <Row style={{ zIndex: 2 }}>
         <PlacardArea width={170} height={70} />
-        <Engraving />
+        <SettingsCluster squeeze={columnWidth <= 550} />
       </Row>
       <Spacer size={UNIT * 2} />
       <Row>
@@ -65,7 +66,7 @@ const SlopesControls = ({ width }: Props) => {
 
       <Row>
         <LineCluster columnWidth={columnWidth} />
-        <SettingsCluster squeeze={columnWidth <= 550} />
+        <DestructiveCluster />
       </Row>
     </ControlPanel>
   );

@@ -11,7 +11,7 @@ import { COLORS, UNIT } from '../../constants';
 import Spacer from '../Spacer';
 import UnstyledButton from '../UnstyledButton';
 
-const HEIGHT = 54;
+const HEIGHT = 44;
 
 const SeedPicker = ({ seed, setSeed }) => {
   return (
@@ -22,11 +22,11 @@ const SeedPicker = ({ seed, setSeed }) => {
       <MainContent>
         <RetroNumbers
           hits={seed}
-          size={23}
+          size={18}
           minLength={6}
           padding={0}
           digitSpacing={2}
-          segmentThickness={3}
+          segmentThickness={2}
           segmentSpacing={0.5}
           withBorder={false}
           segmentActiveColor={COLORS.pink[500]}
@@ -98,8 +98,8 @@ const IncrementDecrementButton = styled(UnstyledButton)`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   color: white;
   cursor: pointer;
 
