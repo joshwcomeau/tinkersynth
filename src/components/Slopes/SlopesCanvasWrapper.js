@@ -130,7 +130,7 @@ const SlopesCanvasWrapper = ({
                 or as a vector image.
               </>
             }
-            open={showTooltip}
+            open={false /*showTooltip */}
             style={{
               lineHeight: 1.4,
             }}
