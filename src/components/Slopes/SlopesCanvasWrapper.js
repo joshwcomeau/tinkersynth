@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { Tooltip } from 'react-tippy';
 import styled from 'styled-components';
 
 import {
@@ -23,8 +24,10 @@ type Props = {
   children: React$Node,
   enableDarkMode: boolean,
   enableMargins: boolean,
-  clickMachinePurchaseButton: () => void,
+  isAwareOfPurchaseOptions: boolean,
 };
+
+const SHOW_PURCHASE_TOOLTIP_AFTER = 5000;
 
 const handleClickPurchase = () => {
   // HACK: I've totally broken out of React's abstraction here, because the
@@ -40,14 +43,40 @@ const handleClickPurchase = () => {
   });
 };
 
+const useTooltip = isAwareOfPurchaseOptions => {
+  const [showTooltip, setShowTooltip] = React.useState(false);
+
+  const timeoutId = React.useRef(null);
+
+  React.useEffect(() => {
+    if (isAwareOfPurchaseOptions) {
+      return;
+    }
+
+    timeoutId.current = window.setTimeout(() => {
+      setShowTooltip(true);
+    }, SHOW_PURCHASE_TOOLTIP_AFTER);
+  }, []);
+
+  if (isAwareOfPurchaseOptions) {
+    window.clearTimeout(timeoutId.current);
+  }
+
+  return showTooltip;
+};
+
 const SlopesCanvasWrapper = ({
   width,
   height,
   children,
   enableDarkMode,
   enableMargins,
-  clickMachinePurchaseButton,
+  isAwareOfPurchaseOptions,
 }: Props) => {
+  const [showPurchaseTooltip, setShowPurchaseTooltip] = React.useState(false);
+
+  const showTooltip = useTooltip(isAwareOfPurchaseOptions);
+
   return (
     <Wrapper>
       <Machine>
@@ -78,17 +107,26 @@ const SlopesCanvasWrapper = ({
             <PageCluster />
           </Toggles>
 
-          <Button
-            color={COLORS.blue[500]}
-            onClick={() => {
-              // Fire off the redux action
-              clickMachinePurchaseButton();
-
-              handleClickPurchase();
+          <Tooltip
+            animation="fade"
+            tabIndex={0}
+            animateFill={false}
+            arrow={true}
+            html={
+              <>
+                <strong>Happy with your design?</strong> You can purchase it as
+                a print, or as a vector image.
+              </>
+            }
+            open={showTooltip}
+            style={{
+              lineHeight: 1.4,
             }}
           >
-            Purchase
-          </Button>
+            <Button color={COLORS.blue[500]} onClick={handleClickPurchase}>
+              Purchase
+            </Button>
+          </Tooltip>
         </Footer>
       </Machine>
     </Wrapper>
@@ -154,10 +192,9 @@ const Footer = styled.div`
 const Toggles = styled.div``;
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    isAwareOfPurchaseOptions: state.machine.isAwareOfPurchaseOptions,
+  };
 };
 
-export default connect(
-  mapStateToProps,
-  { clickMachinePurchaseButton: actions.clickMachinePurchaseButton }
-)(SlopesCanvasWrapperContainer);
+export default connect(mapStateToProps)(SlopesCanvasWrapperContainer);

@@ -42,10 +42,6 @@ export const clickDisabledCompartment = (triggerRef: ?HTMLElement) => ({
   },
 });
 
-export const clickMachinePurchaseButton = () => ({
-  type: 'CLICK_MACHINE_PURCHASE_BUTTON',
-});
-
 export const discoverStorefront = () => ({
   type: 'DISCOVER_STOREFRONT',
 });

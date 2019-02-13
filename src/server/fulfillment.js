@@ -10,7 +10,7 @@ import { User, Order } from './database';
 import { upload } from './google-cloud';
 import { parallel } from './utils';
 import { createRasterImage, createVectorImage } from './image-processing';
-import { sendArtVectorEmail } from './email';
+import { sendArtVectorEmail, notifyMe } from './email';
 
 export default async function fulfill(
   format,
@@ -82,4 +82,6 @@ export default async function fulfill(
     pngUrlTransparent,
     pngUrlOpaque
   );
+
+  notifyMe(user.name, user.email, format, cost, charge.id);
 }
