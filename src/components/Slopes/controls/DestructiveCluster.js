@@ -18,9 +18,10 @@ import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
   shuffle: () => void,
+  resetState: () => void,
 };
 
-const SettingsCluster = ({ squeeze, seed, tweakParameter, shuffle }: Props) => {
+const SettingsCluster = ({ shuffle, resetState }: Props) => {
   return (
     <ClusterWrapper>
       <InstrumentCluster>
@@ -44,7 +45,11 @@ const SettingsCluster = ({ squeeze, seed, tweakParameter, shuffle }: Props) => {
               <IconOuterWrapper>
                 <Icon icon={bombIcon} />
               </IconOuterWrapper>
-              <BigOminousButton id="reset" color="red" handlePress={shuffle} />
+              <BigOminousButton
+                id="reset"
+                color="red"
+                handlePress={resetState}
+              />
             </ButtonWrapper>
           </InnerWrapper>
         </Wrapper>
@@ -62,7 +67,12 @@ const OptimizedSettingsCluster = React.memo(SettingsCluster);
 const SettingsContainer = () => {
   const slopesParams = useContext(SlopesContext);
 
-  return <OptimizedSettingsCluster shuffle={slopesParams.shuffle} />;
+  return (
+    <OptimizedSettingsCluster
+      shuffle={slopesParams.shuffle}
+      resetState={slopesParams.resetState}
+    />
+  );
 };
 
 const ClusterWrapper = styled.div`

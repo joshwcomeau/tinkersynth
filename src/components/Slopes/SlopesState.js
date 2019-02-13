@@ -10,7 +10,7 @@ import {
   getRandomSeed,
   isUpdatePartOfGroup,
 } from './SlopesState.helpers';
-import { sum, mean } from '../../utils';
+import { sum, mean, sample } from '../../utils';
 
 import type { Curve } from '../../types';
 
@@ -33,8 +33,8 @@ const initialState = {
   isShuffled: false,
   parameters: {
     seed: getRandomSeed(),
-    enableDarkMode: false,
-    enableMargins: true,
+    enableDarkMode: sample([true, false]),
+    enableMargins: sample([true, false]),
     enableOcclusion: true,
     amplitudeAmount: 50,
     wavelength: 25,
@@ -147,6 +147,15 @@ const reducer = produce(
         return shuffleParameters(state);
       }
 
+      case 'RESET_STATE': {
+        return {
+          ...initialState,
+          // HACK: this prop really just controls disabling/enabling animation.
+          // I should rename it, but lazy.
+          isShuffled: true,
+        };
+      }
+
       case 'UNDO': {
         if (state.history.length === 0) {
           return state;
@@ -160,8 +169,6 @@ const reducer = produce(
         };
 
         return state;
-
-        // TODO
       }
 
       default:
@@ -191,6 +198,12 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const shuffle = useRef(() =>
     dispatch({
       type: 'SHUFFLE',
+    })
+  );
+
+  const resetState = useRef(() =>
+    dispatch({
+      type: 'RESET_STATE',
     })
   );
 
@@ -232,6 +245,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,
         shuffle: shuffle.current,
+        resetState: resetState.current,
 
         isShuffled: state.isShuffled,
 
