@@ -183,7 +183,7 @@ const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
     COLORS.yellow[500],
     COLORS.green[500],
     COLORS.blue[300],
-    COLORS.pink[300],
+    COLORS.white,
   ];
 
   const lines = [
@@ -208,9 +208,6 @@ const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
           strokeWidth={3}
           strokeLinecap="round"
           strokeOpacity={1}
-          // TODO: Figure out why content way further on the page becomes
-          // invisible when this line is uncommented o_O
-          style={{ mixBlendMode: 'color-dodge', willChange: 'opacity' }}
         />
       ))}
     </Svg>

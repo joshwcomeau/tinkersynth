@@ -134,7 +134,7 @@ const BigOminousButton = ({
                 fill="url(#bob-3d-effect)"
                 style={{
                   mixBlendMode: 'hard-light',
-                  opacity: isActive ? 1 : 0.3,
+                  opacity: isActive ? 1 : 0.5,
                 }}
               />
             </g>

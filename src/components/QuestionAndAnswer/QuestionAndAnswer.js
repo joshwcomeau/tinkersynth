@@ -18,11 +18,18 @@ type Props = {
   children: React$Node,
 };
 
-const QuestionAndAnswer = ({ question, children }: Props) => {
+const QuestionAndAnswer = ({ id, question, children }: Props) => {
   const [isExpanded, toggleExpanded] = useToggle(false);
+
+  React.useEffect(() => {
+    console.log('update!');
+  });
 
   return (
     <Wrapper>
+      {/* Add an anchor for linking to specific questions */}
+      <a id={id} />
+
       <Question onClick={toggleExpanded}>
         <Icon
           icon={isExpanded ? minus : plus}
@@ -46,9 +53,6 @@ const PADDING_SIZE = UNIT * 4;
 
 const Wrapper = styled.div`
   padding: ${PADDING_SIZE}px 0;
-  margin-left: ${-PADDING_SIZE}px;
-  margin-right: ${-PADDING_SIZE}px;
-  border-bottom: 1px solid #ccc;
 `;
 
 const Question = styled(UnstyledButton)`

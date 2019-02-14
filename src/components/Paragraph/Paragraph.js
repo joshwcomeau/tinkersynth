@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
 
-const Paragraph = styled.p`
+const Paragraph = styled.div`
   font-size: 18px;
   font-weight: 400;
   line-height: 1.3;

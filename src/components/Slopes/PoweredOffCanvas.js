@@ -14,7 +14,7 @@ import FadeIn from '../FadeIn';
 const PoweredOffCanvas = () => {
   return (
     <Wrapper duration={500}>
-      <FadeIn duration={500} delay={700}>
+      <FadeIn duration={500} delay={1200}>
         <MainContent>
           <Icon icon={zzzIcon} size={72} style={{ color: COLORS.gray[300] }} />
           <Spacer size={UNIT * 8} />

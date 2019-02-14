@@ -19,7 +19,7 @@ const Wrapper = styled.ul`
 
 const ListItemWrapper = styled.li`
   position: relative;
-  margin-bottom: ${UNIT * 2}px;
+  margin-bottom: ${UNIT * 4}px;
   margin-left: ${UNIT * 2}px;
   list-style: circle;
 `;
