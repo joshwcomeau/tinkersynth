@@ -6,6 +6,8 @@ import { UNIT } from '../../../constants';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
+
 import SliderVideoControl from '../../SliderVideoControl';
 import NoiseVisualization from './NoiseVisualization';
 import StaticVisualization from './StaticVisualization';
@@ -55,17 +57,23 @@ const NoiseCluster = ({
 
         <Spacer size={UNIT} />
 
-        <SliderIconControl
-          value={staticAmount}
-          updateValue={val => tweakParameter('staticAmount', val)}
-          width={secondarySliderWidth}
-          height={sliderHeight}
-          padding={secondarySliderPadding}
-          visualizationComponent={StaticVisualization}
-          numOfNotches={14}
+        <ControlCompartment
+          orientation="vertical"
+          numOfDoors={1}
           isDisabled={isStaticAmountDisabled}
-          isAnimated={!animateTransitions}
-        />
+        >
+          <SliderIconControl
+            value={staticAmount}
+            updateValue={val => tweakParameter('staticAmount', val)}
+            width={secondarySliderWidth}
+            height={sliderHeight}
+            padding={secondarySliderPadding}
+            visualizationComponent={StaticVisualization}
+            numOfNotches={14}
+            isDisabled={isStaticAmountDisabled}
+            isAnimated={!animateTransitions}
+          />
+        </ControlCompartment>
       </Row>
     </InstrumentCluster>
   );

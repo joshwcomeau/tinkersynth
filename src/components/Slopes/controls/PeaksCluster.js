@@ -5,6 +5,8 @@ import { UNIT } from '../../../constants';
 
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
+
 import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
@@ -19,6 +21,7 @@ type Props = {
   width: number,
   peaksCurve: Curve,
   personInflateAmount: number,
+  isPersonInflateAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
 };
@@ -27,6 +30,7 @@ const PeaksCluster = ({
   width,
   peaksCurve,
   personInflateAmount,
+  isPersonInflateAmountDisabled,
   tweakParameter,
   animateTransitions,
 }: Props) => {
@@ -52,15 +56,22 @@ const PeaksCluster = ({
 
       <Spacer size={UNIT} />
 
-      <SliderIconControl
-        width={sliderWidth}
-        height={sliderHeight}
-        padding={sliderPadding}
-        value={personInflateAmount}
-        updateValue={val => tweakParameter('personInflateAmount', val)}
-        visualizationComponent={PersonInflateVisualization}
-        isAnimated={!animateTransitions}
-      />
+      <ControlCompartment
+        orientation="vertical"
+        numOfDoors={1}
+        isDisabled={isPersonInflateAmountDisabled}
+      >
+        <SliderIconControl
+          width={sliderWidth}
+          height={sliderHeight}
+          padding={sliderPadding}
+          value={personInflateAmount}
+          updateValue={val => tweakParameter('personInflateAmount', val)}
+          visualizationComponent={PersonInflateVisualization}
+          disabled={isPersonInflateAmountDisabled}
+          isAnimated={!animateTransitions}
+        />
+      </ControlCompartment>
     </InstrumentCluster>
   );
 };
@@ -75,6 +86,9 @@ const PeaksContainer = ({ width }) => {
       width={width}
       peaksCurve={slopesParams.peaksCurve}
       personInflateAmount={slopesParams.personInflateAmount}
+      isPersonInflateAmountDisabled={
+        slopesParams.disabledParams.personInflateAmount
+      }
       tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
     />
