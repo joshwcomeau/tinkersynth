@@ -45,7 +45,7 @@ const handleClickPurchase = () => {
 };
 
 const useTooltip = isAwareOfPurchaseOptions => {
-  const [showTooltip, setShowTooltip] = React.useState(true);
+  const [showTooltip, setShowTooltip] = React.useState(false);
 
   const timeoutId = React.useRef(null);
 
@@ -130,7 +130,7 @@ const SlopesCanvasWrapper = ({
                 or as a vector image.
               </>
             }
-            open={false /*showTooltip */}
+            open={showTooltip}
             style={{
               lineHeight: 1.4,
             }}

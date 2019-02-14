@@ -5,17 +5,16 @@ import rootReducer from '../reducers';
 import createFocusManagerMiddleware from '../middlewares/focus-manager.middleware';
 import DevTools from '../components/DevTools';
 
+import { reduxLocalStorageConfig } from './redux-config';
+
 const focusManagerMiddleware = createFocusManagerMiddleware();
 
 export default function configureStore() {
   const store = createStore(
     rootReducer,
-    load(),
+    load(reduxLocalStorageConfig),
     compose(
-      applyMiddleware(
-        focusManagerMiddleware,
-        save(['toasts', 'machine', 'store'], 'tinkersynth-redux-state')
-      ),
+      applyMiddleware(focusManagerMiddleware, save(reduxLocalStorageConfig)),
       DevTools.instrument()
     )
   );
