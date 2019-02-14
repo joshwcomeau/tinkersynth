@@ -25,6 +25,7 @@ type Props = {
   isOctaveAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
+  isPoweredOn: boolean,
 };
 
 const AudioCluster = ({
@@ -37,6 +38,7 @@ const AudioCluster = ({
   isOctaveAmountDisabled,
   tweakParameter,
   animateTransitions,
+  isPoweredOn,
 }) => {
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
@@ -54,7 +56,8 @@ const AudioCluster = ({
           width={innerWidth}
           height={47}
           visualizationComponent={AmplitudeVisualization}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
           colorway="red"
         />
       </ControlCompartment>
@@ -72,7 +75,8 @@ const AudioCluster = ({
           width={innerWidth}
           height={47}
           visualizationComponent={WavelengthVisualization}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
           colorway="yellow"
         />
       </ControlCompartment>
@@ -90,7 +94,8 @@ const AudioCluster = ({
           width={innerWidth}
           height={47}
           visualizationComponent={OctaveVisualization}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
           colorway="blue"
         />
       </ControlCompartment>
@@ -114,6 +119,7 @@ const AudioContainer = ({ width }) => {
       isOctaveAmountDisabled={slopesParams.disabledParams.octaveAmount}
       tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
+      isPoweredOn={slopesParams.isPoweredOn}
     />
   );
 };

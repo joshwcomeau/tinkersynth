@@ -55,11 +55,21 @@ const defaultParameters = {
   enableMirrored: false, // SECRET PARAM :o
 };
 
-const defaultState = {
-  history: [],
-  animateTransitions: false,
-  isMachineOn: true,
-  parameters: defaultParameters,
+const poweredOffParameters = {
+  amplitudeAmount: 0,
+  wavelength: 0,
+  octaveAmount: 0,
+  perspective: 0,
+  lineAmount: 0,
+  spikyness: 0,
+  staticAmount: 0,
+  polarAmount: 0,
+  omega: 0,
+  splitUniverse: 0,
+  personInflateAmount: 0,
+  waterBoilAmount: 0,
+  ballSize: 0,
+  dotAmount: 0,
 };
 
 type Parameters = {
@@ -88,7 +98,7 @@ type Parameters = {
 type State = {
   history: Array<HistorySnapshot>,
   animateTransitions: boolean,
-  isMachineOn: boolean,
+  isPoweredOn: boolean,
   parameters: Parameters,
 };
 
@@ -108,9 +118,7 @@ const reducer = produce(
       }
 
       case 'TWEAK_PARAMETER': {
-        // TODO: Should I have a single action per parameter? Would I save a bunch
-        // of re-renders if I did that?
-        state.animateTransitions = false;
+        state.animateTransitions = true;
 
         // If this is the first action in a "burst", we want to push the state
         // onto the history stack, for undoing.
@@ -157,14 +165,30 @@ const reducer = produce(
         return shuffleParameters(state);
       }
 
-      case 'RESET_STATE': {
-        state.animateTransitions = true;
-        state.parameters = defaultParameters;
-        return state;
-      }
-
       case 'TOGGLE_MACHINE_POWER': {
-        state.isMachineOn = !state.isMachineOn;
+        // The first time the button is clicked, we turn the machine off.
+        // This will blank out all the controls, and reset them to a "bottom"
+        // value.
+        if (state.isPoweredOn) {
+          state.isPoweredOn = false;
+          state.animateTransitions = false;
+
+          Object.keys(poweredOffParameters).forEach(paramKey => {
+            state.parameters[paramKey] = poweredOffParameters[paramKey];
+          });
+
+          return state;
+        }
+
+        state.isPoweredOn = true;
+        state.animateTransitions = false;
+
+        state.parameters = {
+          ...defaultParameters,
+          enableDarkMode: state.parameters.enableDarkMode,
+          enableMargins: state.parameters.enableMargins,
+        };
+
         return state;
       }
 
@@ -199,6 +223,7 @@ export const SlopesProvider = ({
   const initialState = {
     history: [],
     animateTransitions: true,
+    isPoweredOn: true,
     parameters:
       orderParams || retrieveLastSessionSlopesParams() || defaultParameters,
   };
@@ -226,9 +251,9 @@ export const SlopesProvider = ({
     })
   );
 
-  const resetState = useRef(() =>
+  const toggleMachinePower = useRef(() =>
     dispatch({
-      type: 'RESET_STATE',
+      type: 'TOGGLE_MACHINE_POWER',
     })
   );
 
@@ -280,9 +305,10 @@ export const SlopesProvider = ({
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,
         shuffle: shuffle.current,
-        resetState: resetState.current,
+        toggleMachinePower: toggleMachinePower.current,
 
         animateTransitions: state.animateTransitions,
+        isPoweredOn: state.isPoweredOn,
 
         disabledParams: disabledParams.current,
       }}

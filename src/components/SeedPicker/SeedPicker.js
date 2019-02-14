@@ -13,13 +13,15 @@ import UnstyledButton from '../UnstyledButton';
 
 const HEIGHT = 44;
 
-const SeedPicker = ({ seed, setSeed }) => {
+const SeedPicker = ({ seed, setSeed, isPoweredOn }) => {
   return (
     <Wrapper>
       <Heading>
         <Label>Seed #</Label>
       </Heading>
-      <MainContent>
+      <MainContent
+        style={{ opacity: isPoweredOn ? 1 : 0, transition: 'opacity 600ms' }}
+      >
         <RetroNumbers
           hits={seed}
           size={18}
@@ -38,13 +40,13 @@ const SeedPicker = ({ seed, setSeed }) => {
 
         <Actions>
           <IncrementDecrementButton
-            disabled={seed === 65535}
+            disabled={seed === 65535 || !isPoweredOn}
             onClick={() => setSeed(seed + 1)}
           >
             <Icon icon={chevronUp} size={16} />
           </IncrementDecrementButton>
           <IncrementDecrementButton
-            disabled={seed === 0}
+            disabled={seed === 0 || !isPoweredOn}
             onClick={() => setSeed(seed - 1)}
           >
             <Icon icon={chevronDown} size={16} />

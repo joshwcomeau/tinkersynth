@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import { power as powerIcon } from 'react-icons-kit/feather/power';
-import { refreshCw as shuffleIcon } from 'react-icons-kit/feather/refreshCw';
+import { shuffle as shuffleIcon } from 'react-icons-kit/feather/shuffle';
 
 import { COLORS, UNIT } from '../../../constants';
 import warningSrc from '../../../images/warning-wide.png';
@@ -12,17 +12,22 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SeedPicker from '../../SeedPicker';
 import BigOminousButton from '../../BigOminousButton';
-import ResetButton from '../../ResetButton';
+import PowerButton from '../../PowerButton';
 import Spacer from '../../Spacer';
 
 import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
+  isPoweredOn: boolean,
   shuffle: () => void,
-  resetState: () => void,
+  toggleMachinePower: () => void,
 };
 
-const SettingsCluster = ({ shuffle, resetState }: Props) => {
+const SettingsCluster = ({
+  isPoweredOn,
+  shuffle,
+  toggleMachinePower,
+}: Props) => {
   return (
     <ClusterWrapper>
       <InstrumentCluster>
@@ -35,8 +40,9 @@ const SettingsCluster = ({ shuffle, resetState }: Props) => {
 
               <BigOminousButton
                 id="shuffle"
-                color="black"
+                color="gray"
                 handlePress={shuffle}
+                isDisabled={!isPoweredOn}
               />
             </ButtonWrapper>
 
@@ -46,7 +52,7 @@ const SettingsCluster = ({ shuffle, resetState }: Props) => {
               <IconOuterWrapper>
                 <Icon icon={powerIcon} size={13} />
               </IconOuterWrapper>
-              <ResetButton handlePress={resetState} />
+              <PowerButton handlePress={toggleMachinePower} />
             </ButtonWrapper>
           </InnerWrapper>
         </Wrapper>
@@ -66,8 +72,9 @@ const SettingsContainer = () => {
 
   return (
     <OptimizedSettingsCluster
+      isPoweredOn={slopesParams.isPoweredOn}
       shuffle={slopesParams.shuffle}
-      resetState={slopesParams.resetState}
+      toggleMachinePower={slopesParams.toggleMachinePower}
     />
   );
 };

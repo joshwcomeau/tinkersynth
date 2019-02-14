@@ -10,8 +10,9 @@ import UnstyledButton from '../UnstyledButton';
 type Props = {
   id: string,
   size?: number,
-  color?: 'black' | 'red',
+  color?: 'gray' | 'red',
   icon?: React$Node,
+  isDisabled: boolean,
   handlePress: (ev: any) => void,
 };
 
@@ -24,10 +25,10 @@ const getHexCodesForColor = color => {
       };
     }
 
-    case 'black': {
+    case 'gray': {
       return {
-        primary: '#514C4C',
-        dark: '#17121',
+        primary: '#A9AFB1',
+        dark: '#55595A',
       };
     }
 
@@ -39,9 +40,10 @@ const getHexCodesForColor = color => {
 const BigOminousButton = ({
   id,
   size = 40,
-  color = 'red',
+  color,
   icon,
   handlePress,
+  isDisabled,
 }: Props) => {
   const [isActive, setIsActive] = useState(false);
 
@@ -49,19 +51,32 @@ const BigOminousButton = ({
 
   return (
     <Button
-      onClick={handlePress}
-      onMouseDown={() => setIsActive(true)}
-      onMouseUp={() => setIsActive(false)}
+      tabIndex={isDisabled ? -1 : 0}
+      disabled={isDisabled}
+      onClick={ev => !isDisabled && handlePress(ev)}
+      onMouseDown={() => !isDisabled && setIsActive(true)}
+      onMouseUp={() => !isDisabled && setIsActive(false)}
       onMouseLeave={() => isActive && setIsActive(false)}
       onKeyDown={ev => {
+        if (isDisabled) {
+          return;
+        }
+
         if (!isActive && ev.key === 'Enter') {
           setIsActive(true);
         }
       }}
       onKeyUp={ev => {
+        if (isDisabled) {
+          return;
+        }
+
         if (ev.key === 'Enter') {
           setIsActive(false);
         }
+      }}
+      style={{
+        cursor: isDisabled && 'not-allowed',
       }}
     >
       <Svg width={size} height={size} viewBox="0 0 40 40" fill="none">

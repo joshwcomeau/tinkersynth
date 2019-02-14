@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Duplicates a lot of the stuff in BigOminousButton, but I can't be bothered
+ * to clean it up.
+ */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,42 +14,16 @@ import UnstyledButton from '../UnstyledButton';
 type Props = {
   id: string,
   size?: number,
-  color?: 'black' | 'red',
-  icon?: React$Node,
   handlePress: (ev: any) => void,
 };
 
-const getHexCodesForColor = color => {
-  switch (color) {
-    case 'red': {
-      return {
-        primary: COLORS.red[300],
-        dark: COLORS.red[700],
-      };
-    }
-
-    case 'black': {
-      return {
-        primary: '#514C4C',
-        dark: '#17121',
-      };
-    }
-
-    default:
-      throw new Error(`Unsupported color: ${color}`);
-  }
-};
-
-const BigOminousButton = ({
-  id,
-  size = 40,
-  color = 'red',
-  icon,
-  handlePress,
-}: Props) => {
+const ResetButton = ({ id, size = 40, handlePress }: Props) => {
   const [isActive, setIsActive] = useState(false);
 
-  const hexCodes = getHexCodesForColor(color);
+  const colors = {
+    primary: COLORS.red[300],
+    dark: COLORS.red[700],
+  };
 
   return (
     <Button
@@ -111,7 +89,7 @@ const BigOminousButton = ({
                 `,
               }}
             >
-              <circle cx="20" cy="20" r="15" fill={hexCodes.primary} />
+              <circle cx="20" cy="20" r="15" fill={colors.primary} />
               <circle
                 cx="20"
                 cy="20"
@@ -174,7 +152,7 @@ const BigOminousButton = ({
             y2="40"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor={hexCodes.primary} />
+            <stop stopColor={colors.primary} />
             <stop offset="1" stopColor="white" stopOpacity="0" />
           </linearGradient>
           <radialGradient
@@ -185,8 +163,8 @@ const BigOminousButton = ({
             gradientUnits="userSpaceOnUse"
             gradientTransform="translate(20 20) rotate(90) scale(20)"
           >
-            <stop offset="0.773481" stopColor={hexCodes.dark} />
-            <stop offset="1" stopColor={hexCodes.primary} />
+            <stop offset="0.773481" stopColor={colors.dark} />
+            <stop offset="1" stopColor={colors.primary} />
           </radialGradient>
           <linearGradient
             id={`bob-${id}-soft-underside-glow`}
@@ -196,7 +174,7 @@ const BigOminousButton = ({
             y2="20"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stopColor={hexCodes.primary} stopOpacity="0" />
+            <stop offset="0" stopColor={colors.primary} stopOpacity="0" />
             <stop offset="0.490056" stopColor="white" />
             <stop offset="1" stopColor="#FF0000" stopOpacity="0" />
           </linearGradient>
@@ -235,4 +213,4 @@ const Button = styled(UnstyledButton)`
   /* border: 4px solid white; */
 `;
 
-export default BigOminousButton;
+export default ResetButton;

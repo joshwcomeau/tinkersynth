@@ -48,9 +48,9 @@ export const updateDisabledParams = (disabledObj, params) => {
 };
 
 export const shuffleParameters = state => {
-  // We track when we've shuffled the parameters, so that we can disable
-  // secondary animations, for performance.
-  state.animateTransitions = true;
+  // To allow shuffles to be repeated in quick succession, disable
+  // transitioning the canvas drawing
+  state.animateTransitions = false;
 
   // We also need to add the current state to the history, so that the shuffle
   // can be undone

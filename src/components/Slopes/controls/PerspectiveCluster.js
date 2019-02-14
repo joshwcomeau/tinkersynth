@@ -20,6 +20,7 @@ type Props = {
   perspective: number,
   lineAmount: number,
   tweakParameter: TweakParameterAction,
+  isPoweredOn: boolean,
 };
 
 const PerspectiveCluster = ({
@@ -27,6 +28,7 @@ const PerspectiveCluster = ({
   perspective,
   lineAmount,
   tweakParameter,
+  isPoweredOn,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -45,6 +47,7 @@ const PerspectiveCluster = ({
         width={videoSliderWidth}
         height={videoSliderHeight}
         visualizationComponent={PerspectiveVisualization}
+        isPoweredOn={isPoweredOn}
       />
 
       <Spacer size={UNIT} />
@@ -53,10 +56,11 @@ const PerspectiveCluster = ({
         <SliderIconControl
           width={secondarySliderWidth}
           height={videoSliderHeight}
+          numOfNotches={13}
           value={lineAmount}
           updateValue={val => tweakParameter('lineAmount', val)}
           visualizationComponent={LineAmountVisualization}
-          numOfNotches={13}
+          isPoweredOn={isPoweredOn}
         />
       </Column>
     </InstrumentCluster>
@@ -73,6 +77,7 @@ const PerspectiveContainer = ({ width }) => {
       width={width}
       perspective={slopesParams.perspective}
       lineAmount={slopesParams.lineAmount}
+      isPoweredOn={slopesParams.isPoweredOn}
       tweakParameter={slopesParams.tweakParameter}
     />
   );

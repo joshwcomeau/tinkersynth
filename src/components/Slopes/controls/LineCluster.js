@@ -24,6 +24,7 @@ type Props = {
   toggleParameter: ToggleParameterAction,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
+  isPoweredOn: boolean,
 };
 
 const LineCluster = ({
@@ -33,6 +34,7 @@ const LineCluster = ({
   toggleParameter,
   tweakParameter,
   animateTransitions,
+  isPoweredOn,
 }) => {
   const rowHeight = 54;
 
@@ -47,7 +49,8 @@ const LineCluster = ({
         width={innerWidth}
         height={54}
         visualizationComponent={LegoBrickVisualization}
-        isAnimated={!animateTransitions}
+        isAnimated={animateTransitions}
+        isPoweredOn={isPoweredOn}
       />
       <Spacer size={UNIT} />
       <ToggleControl
@@ -56,6 +59,7 @@ const LineCluster = ({
         value={enableOcclusion}
         updateValue={() => toggleParameter('enableOcclusion')}
         visualizationComponent={OcclusionVisualization}
+        isPoweredOn={isPoweredOn}
       />
     </InstrumentCluster>
   );
@@ -73,6 +77,7 @@ const LineClusterContainer = ({ columnWidth }) => {
       enableOcclusion={slopesParams.enableOcclusion}
       toggleParameter={slopesParams.toggleParameter}
       tweakParameter={slopesParams.tweakParameter}
+      isPoweredOn={slopesParams.isPoweredOn}
       animateTransitions={slopesParams.animateTransitions}
     />
   );

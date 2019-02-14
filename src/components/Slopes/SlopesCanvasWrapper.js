@@ -17,6 +17,7 @@ import Button from '../Button';
 import { SlopesContext } from './SlopesState';
 import PageCluster from './controls/PageCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
+import PoweredOffCanvas from './PoweredOffCanvas';
 
 type Props = {
   width: number,
@@ -25,6 +26,7 @@ type Props = {
   enableDarkMode: boolean,
   enableMargins: boolean,
   isAwareOfPurchaseOptions: boolean,
+  isPoweredOn: boolean,
 };
 
 // Show the tooltip after 2 minutes
@@ -79,6 +81,7 @@ const SlopesCanvasWrapper = ({
   enableDarkMode,
   enableMargins,
   isAwareOfPurchaseOptions,
+  isPoweredOn,
 }: Props) => {
   const [showPurchaseTooltip, setShowPurchaseTooltip] = React.useState(false);
 
@@ -90,6 +93,7 @@ const SlopesCanvasWrapper = ({
         <TopPanel />
 
         <InnerWrapper>
+          {!isPoweredOn && <PoweredOffCanvas />}
           <ChildWrapper
             style={{
               backgroundColor: enableDarkMode
@@ -156,6 +160,7 @@ const SlopesCanvasWrapperContainer = (props: any) => {
       {...props}
       enableDarkMode={slopesParams.enableDarkMode}
       enableMargins={slopesParams.enableMargins}
+      isPoweredOn={slopesParams.isPoweredOn}
     />
   );
 };

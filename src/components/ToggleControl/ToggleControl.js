@@ -12,6 +12,7 @@ type Props = {
   value: number,
   updateValue: (isToggled: boolean) => void,
   visualizationComponent: any,
+  isPoweredOn: boolean,
 };
 
 const ToggleControl = ({
@@ -20,6 +21,7 @@ const ToggleControl = ({
   value,
   updateValue,
   visualizationComponent,
+  isPoweredOn,
 }: Props) => {
   const visualizationRatio = 0.5;
 
@@ -34,7 +36,11 @@ const ToggleControl = ({
   return (
     <Wrapper style={{ width, height }}>
       <VisualizationWrapper
-        style={{ height: height * visualizationRatio }}
+        style={{
+          height: height * visualizationRatio,
+          opacity: isPoweredOn ? 1 : 0,
+          transition: 'opacity 400ms',
+        }}
         onClick={() => updateValue(!value)}
       >
         <Visualization
@@ -50,6 +56,7 @@ const ToggleControl = ({
           height={22}
           isToggled={value}
           handleToggle={updateValue}
+          isDisabled={!isPoweredOn}
         />
       </ToggleWrapper>
     </Wrapper>

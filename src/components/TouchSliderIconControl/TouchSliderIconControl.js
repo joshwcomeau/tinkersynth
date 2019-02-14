@@ -14,6 +14,7 @@ type Props = {
   dotSize?: number,
   visualizationComponent: any,
   isAnimated: boolean,
+  isPoweredOn: boolean,
 };
 
 const TouchSliderIconControl = ({
@@ -23,6 +24,7 @@ const TouchSliderIconControl = ({
   height,
   visualizationComponent,
   isAnimated,
+  isPoweredOn,
   ...delegated
 }: Props) => {
   const iconSize = height;
@@ -34,8 +36,19 @@ const TouchSliderIconControl = ({
   return (
     <Wrapper style={{ width }}>
       <IconWrapper
-        style={{ width: iconSize, height: iconSize }}
-        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
+        style={{
+          width: iconSize,
+          height: iconSize,
+          opacity: isPoweredOn ? 1 : 0,
+          transition: 'opacity 400ms',
+        }}
+        onClick={() => {
+          if (!isPoweredOn) {
+            return;
+          }
+
+          return value > 50 ? updateValue(0) : updateValue(100);
+        }}
       >
         <Visualization value={value} size={iconSize} isAnimated={isAnimated} />
       </IconWrapper>

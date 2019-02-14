@@ -17,6 +17,7 @@ type Props = {
   waterBoilAmount: number,
   isWaterBoilAmountDisabled: boolean,
   animateTransitions: boolean,
+  isPoweredOn: boolean,
   tweakParameter: TweakParameterAction,
 };
 
@@ -25,6 +26,7 @@ const SimilarityCluster = ({
   waterBoilAmount,
   isWaterBoilAmountDisabled,
   animateTransitions,
+  isPoweredOn,
   tweakParameter,
 }: Props) => {
   const OUTER_BORDER_WIDTH = 1;
@@ -42,7 +44,8 @@ const SimilarityCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={SimilarityVisualization}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
         />
       </ControlCompartment>
     </InstrumentCluster>
@@ -60,6 +63,7 @@ const SimilarityContainer = ({ width }) => {
       waterBoilAmount={slopesParams.waterBoilAmount}
       isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
       animateTransitions={slopesParams.animateTransitions}
+      isPoweredOn={slopesParams.isPoweredOn}
       tweakParameter={slopesParams.tweakParameter}
     />
   );

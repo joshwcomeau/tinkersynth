@@ -24,6 +24,7 @@ type Props = {
   isPersonInflateAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
+  isPoweredOn: boolean,
 };
 
 const PeaksCluster = ({
@@ -33,6 +34,7 @@ const PeaksCluster = ({
   isPersonInflateAmountDisabled,
   tweakParameter,
   animateTransitions,
+  isPoweredOn,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -52,6 +54,7 @@ const PeaksCluster = ({
         width={bezierControlWidth}
         height={bezierControlHeight}
         isAnimated={animateTransitions}
+        isPoweredOn={isPoweredOn}
       />
 
       <Spacer size={UNIT} />
@@ -69,16 +72,18 @@ const PeaksCluster = ({
           updateValue={val => tweakParameter('personInflateAmount', val)}
           visualizationComponent={PersonInflateVisualization}
           disabled={isPersonInflateAmountDisabled}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
         />
       </ControlCompartment>
     </InstrumentCluster>
   );
 };
 
+// $FlowIgnore
 const OptimizedPeaksCluster = React.memo(PeaksCluster);
 
-const PeaksContainer = ({ width }) => {
+const PeaksContainer = ({ width }: { width: number }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
@@ -91,6 +96,7 @@ const PeaksContainer = ({ width }) => {
       }
       tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
+      isPoweredOn={slopesParams.isPoweredOn}
     />
   );
 };

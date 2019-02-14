@@ -16,15 +16,17 @@ type Props = {
   height: number,
   isUsable: boolean,
   enableMirrored: boolean,
+  isPoweredOn: boolean,
   toggleParameter: ToggleParameterAction,
 };
 
 const HiddenCluster = ({
   width,
   height,
-  enableMirrored,
-  toggleParameter,
   isUsable,
+  enableMirrored,
+  isPoweredOn,
+  toggleParameter,
 }: Props) => {
   const innerWidth = width - UNIT * 2;
   const innerHeight = height - UNIT * 2;
@@ -32,7 +34,10 @@ const HiddenCluster = ({
   return (
     <InstrumentCluster style={{ borderRadius: 4 }}>
       <Wrapper style={{ width: innerWidth, height: innerHeight }}>
-        <VisualizationWrapper onClick={() => toggleParameter('enableMirrored')}>
+        <VisualizationWrapper
+          onClick={() => toggleParameter('enableMirrored')}
+          style={{ opacity: isPoweredOn ? 1 : 0 }}
+        >
           <HiddenVisualization isEnabled={enableMirrored} />
         </VisualizationWrapper>
 
@@ -41,7 +46,7 @@ const HiddenCluster = ({
             width={innerWidth / 2 - 6}
             height={20}
             isToggled={enableMirrored}
-            isDisabled={!isUsable}
+            isDisabled={!isUsable || !isPoweredOn}
             handleToggle={() => toggleParameter('enableMirrored')}
           />
         </ToggleWrapper>
@@ -62,6 +67,7 @@ const HiddenClusterContainer = ({ width, height, isUsable }: any) => {
       height={height}
       isUsable={isUsable}
       enableMirrored={slopesParams.enableMirrored}
+      isPoweredOn={slopesParams.isPoweredOn}
       toggleParameter={slopesParams.toggleParameter}
     />
   );

@@ -17,6 +17,7 @@ type Props = {
   points: Array<[number, number]>,
   strokeColor?: string,
   strokeWidth?: number,
+  areHandlesVisible: boolean,
   updatePoint: (id: number, point: PointData) => void,
 };
 
@@ -108,6 +109,7 @@ class BezierCurve extends PureComponent<Props> {
       isAnimated,
       strokeColor,
       strokeWidth,
+      areHandlesVisible,
     } = this.props;
 
     const svgWidth = width - BORDER_WIDTH * 2;
@@ -170,86 +172,94 @@ class BezierCurve extends PureComponent<Props> {
                 squareSize={DOT_SPACING}
               />
 
-              <ControlLine
-                x1={sprung.p1.interpolate((x, y) => x)}
-                y1={sprung.p1.interpolate((x, y) => y)}
-                x2={sprung.p2.interpolate((x, y) => x)}
-                y2={sprung.p2.interpolate((x, y) => y)}
-              />
-              <ControlLine
-                x1={sprung.p2.interpolate((x, y) => x)}
-                y1={sprung.p2.interpolate((x, y) => y)}
-                x2={sprung.p3.interpolate((x, y) => x)}
-                y2={sprung.p3.interpolate((x, y) => y)}
-              />
-
-              <animated.path
-                d={interpolate(
-                  [sprung.p1, sprung.p2, sprung.p3],
-                  getInstructions
-                )}
-                fill="none"
-                stroke={strokeColor}
-                strokeWidth={strokeWidth}
-              />
-
-              {/* End point */}
-              <PointWrapper
-                onMouseDown={this.handleSelectPoint('p3')}
-                onKeyDown={ev => handleKeyDown(ev, 'p3')}
-                tabIndex={0}
-                transform={sprung.p3.interpolate(
-                  (x, y) => `
-                    translate(
-                      ${x - svgWidth / 2},
-                      ${y - HANDLE_RADIUS}
-                    )
-                  `
-                )}
+              <g
+                data-layer-name="handles-and-line"
+                style={{
+                  opacity: areHandlesVisible ? 1 : 0,
+                  transition: 'opacity 400ms',
+                }}
               >
-                <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
-              </PointWrapper>
-
-              {/* Control point 1 */}
-              <PointWrapper
-                onMouseDown={this.handleSelectPoint('p2')}
-                onKeyDown={ev => handleKeyDown(ev, 'p2')}
-                tabIndex={0}
-                transform={sprung.p2.interpolate(
-                  (x, y) =>
-                    `
-                    translate(
-                      ${x - svgWidth / 2},
-                      ${y - HANDLE_RADIUS}
-                    )
-                  `
-                )}
-              >
-                <RoundHandle
-                  id="bezier-control"
-                  size={HANDLE_RADIUS * 2}
-                  innerColor={COLORS.violet[100]}
-                  outerColor={COLORS.violet[300]}
+                <ControlLine
+                  x1={sprung.p1.interpolate((x, y) => x)}
+                  y1={sprung.p1.interpolate((x, y) => y)}
+                  x2={sprung.p2.interpolate((x, y) => x)}
+                  y2={sprung.p2.interpolate((x, y) => y)}
                 />
-              </PointWrapper>
+                <ControlLine
+                  x1={sprung.p2.interpolate((x, y) => x)}
+                  y1={sprung.p2.interpolate((x, y) => y)}
+                  x2={sprung.p3.interpolate((x, y) => x)}
+                  y2={sprung.p3.interpolate((x, y) => y)}
+                />
 
-              {/* Start point */}
-              <PointWrapper
-                onMouseDown={this.handleSelectPoint('p1')}
-                onKeyDown={ev => handleKeyDown(ev, 'p1')}
-                tabIndex={0}
-                transform={sprung.p1.interpolate(
-                  (x, y) =>
-                    `
+                <animated.path
+                  d={interpolate(
+                    [sprung.p1, sprung.p2, sprung.p3],
+                    getInstructions
+                  )}
+                  fill="none"
+                  stroke={strokeColor}
+                  strokeWidth={strokeWidth}
+                />
+
+                {/* End point */}
+                <PointWrapper
+                  onMouseDown={this.handleSelectPoint('p3')}
+                  onKeyDown={ev => handleKeyDown(ev, 'p3')}
+                  tabIndex={0}
+                  transform={sprung.p3.interpolate(
+                    (x, y) => `
                     translate(
                       ${x - svgWidth / 2},
                       ${y - HANDLE_RADIUS}
                     )
                   `
-                )}
-              >
-                <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
-              </PointWrapper>
+                  )}
+                >
+                  <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+                </PointWrapper>
+
+                {/* Control point 1 */}
+                <PointWrapper
+                  onMouseDown={this.handleSelectPoint('p2')}
+                  onKeyDown={ev => handleKeyDown(ev, 'p2')}
+                  tabIndex={0}
+                  transform={sprung.p2.interpolate(
+                    (x, y) =>
+                      `
+                    translate(
+                      ${x - svgWidth / 2},
+                      ${y - HANDLE_RADIUS}
+                    )
+                  `
+                  )}
+                >
+                  <RoundHandle
+                    id="bezier-control"
+                    size={HANDLE_RADIUS * 2}
+                    innerColor={COLORS.violet[100]}
+                    outerColor={COLORS.violet[300]}
+                  />
+                </PointWrapper>
+
+                {/* Start point */}
+                <PointWrapper
+                  onMouseDown={this.handleSelectPoint('p1')}
+                  onKeyDown={ev => handleKeyDown(ev, 'p1')}
+                  tabIndex={0}
+                  transform={sprung.p1.interpolate(
+                    (x, y) =>
+                      `
+                    translate(
+                      ${x - svgWidth / 2},
+                      ${y - HANDLE_RADIUS}
+                    )
+                  `
+                  )}
+                >
+                  <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
+                </PointWrapper>
+              </g>
             </Svg>
           </Wrapper>
         )}

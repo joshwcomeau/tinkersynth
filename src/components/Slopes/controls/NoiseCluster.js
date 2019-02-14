@@ -22,8 +22,9 @@ type Props = {
   spikyness: number,
   staticAmount: number,
   isStaticAmountDisabled: boolean,
-  tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
+  isPoweredOn: boolean,
+  tweakParameter: TweakParameterAction,
 };
 
 const NoiseCluster = ({
@@ -31,8 +32,9 @@ const NoiseCluster = ({
   spikyness,
   staticAmount,
   isStaticAmountDisabled,
-  tweakParameter,
   animateTransitions,
+  isPoweredOn,
+  tweakParameter,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -52,6 +54,7 @@ const NoiseCluster = ({
           width={videoSliderWidth}
           height={sliderHeight}
           spacing={0}
+          isPoweredOn={isPoweredOn}
           visualizationComponent={NoiseVisualization}
         />
 
@@ -71,7 +74,8 @@ const NoiseCluster = ({
             visualizationComponent={StaticVisualization}
             numOfNotches={14}
             isDisabled={isStaticAmountDisabled}
-            isAnimated={!animateTransitions}
+            isAnimated={animateTransitions}
+            isPoweredOn={isPoweredOn}
           />
         </ControlCompartment>
       </Row>
@@ -93,8 +97,9 @@ const NoiseContainer = ({ width }: { width: number }) => {
       spikyness={slopesParams.spikyness}
       staticAmount={slopesParams.staticAmount}
       isStaticAmountDisabled={slopesParams.disabledParams.staticAmount}
-      tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
+      isPoweredOn={slopesParams.isPoweredOn}
+      tweakParameter={slopesParams.tweakParameter}
     />
   );
 };

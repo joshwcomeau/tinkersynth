@@ -6,7 +6,7 @@ const Paragraph = styled.p`
   font-size: 18px;
   font-weight: 400;
   line-height: 1.3;
-  color: ${COLORS.gray[900]};
+  color: ${props => props.color || COLORS.gray[900]};
   margin-bottom: ${UNIT * 3}px;
 `;
 

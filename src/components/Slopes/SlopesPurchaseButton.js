@@ -128,8 +128,11 @@ const SlopesPurchaseButtonContainer = ({ storeData, cost }) => {
   const slopesParams = React.useContext(SlopesContext);
 
   const artParams = { ...slopesParams };
-  delete artParams.disabledParams;
-  delete artParams.animateTransitions;
+  delete artParams.isPoweredOn;
+  delete artParams.shuffle;
+  delete artParams.toggleMachinePower;
+  delete artParams.toggleParameter;
+  delete artParams.tweakParameter;
 
   return (
     <SlopesPurchaseButton

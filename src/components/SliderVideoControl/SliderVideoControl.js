@@ -18,6 +18,7 @@ type Props = {
   height: number,
   spacing?: number,
   visualizationComponent: any,
+  isPoweredOn: boolean,
 };
 
 const SliderVideoControl = ({
@@ -27,6 +28,7 @@ const SliderVideoControl = ({
   height,
   spacing = 4,
   visualizationComponent,
+  isPoweredOn,
 }: Props) => {
   const isOutOfBounds = value < 0 || value > 100;
 
@@ -42,8 +44,18 @@ const SliderVideoControl = ({
   return (
     <Wrapper style={{ width, height }}>
       <VisualizationWrapper
-        style={{ padding: spacing }}
-        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
+        style={{
+          padding: spacing,
+          opacity: isPoweredOn ? 1 : 0,
+          transition: !isPoweredOn ? 'opacity 400ms' : null,
+        }}
+        onClick={() => {
+          if (!isPoweredOn) {
+            return;
+          }
+
+          return value > 50 ? updateValue(0) : updateValue(100);
+        }}
       >
         <Visualization
           value={value}
@@ -60,6 +72,7 @@ const SliderVideoControl = ({
           width={sliderWidth}
           height={sliderHeight}
           extendRange={isOutOfBounds}
+          isDisabled={!isPoweredOn}
         />
       </SliderWrapper>
     </Wrapper>

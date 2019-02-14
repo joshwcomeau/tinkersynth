@@ -16,6 +16,7 @@ type Props = {
   isDisabled: boolean,
   visualizationComponent: any,
   isAnimated: boolean,
+  isPoweredOn: boolean,
 };
 
 const SliderIconControl = ({
@@ -27,6 +28,7 @@ const SliderIconControl = ({
   isDisabled,
   visualizationComponent,
   isAnimated,
+  isPoweredOn,
   ...sliderProps
 }: Props) => {
   const sliderIconSize = width;
@@ -39,8 +41,19 @@ const SliderIconControl = ({
   return (
     <Wrapper>
       <VisualizationWrapper
-        style={{ width: sliderIconSize, height: sliderIconSize }}
-        onClick={() => (value > 50 ? updateValue(0) : updateValue(100))}
+        style={{
+          width: sliderIconSize,
+          height: sliderIconSize,
+          opacity: isPoweredOn ? 1 : 0,
+          transition: !isPoweredOn ? 'opacity 400ms' : null,
+        }}
+        onClick={() => {
+          if (!isPoweredOn) {
+            return;
+          }
+
+          return value > 50 ? updateValue(0) : updateValue(100);
+        }}
       >
         <Visualization
           size={sliderIconSize}
@@ -55,7 +68,7 @@ const SliderIconControl = ({
           updateValue={updateValue}
           width={sliderWidth}
           height={sliderHeight}
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || !isPoweredOn}
           {...sliderProps}
         />
       </SliderWrapper>

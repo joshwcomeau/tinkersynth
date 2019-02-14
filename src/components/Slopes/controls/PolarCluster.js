@@ -26,9 +26,10 @@ type Props = {
   omega: number,
   splitUniverse: number,
   tweakParameter: TweakParameterAction,
-  animateTransitions: boolean,
   isBallSizeDisabled: boolean,
   isOmegaDisabled: boolean,
+  animateTransitions: boolean,
+  isPoweredOn: boolean,
 };
 
 const PolarCluster = ({
@@ -41,6 +42,7 @@ const PolarCluster = ({
   isBallSizeDisabled,
   isOmegaDisabled,
   animateTransitions,
+  isPoweredOn,
 }: Props) => {
   const innerWidth = width - UNIT * 2 - 2;
 
@@ -61,6 +63,7 @@ const PolarCluster = ({
           height={sliderHeight}
           spacing={15}
           visualizationComponent={PolarAmountVisualization}
+          isPoweredOn={isPoweredOn}
         />
 
         <Spacer size={UNIT} />
@@ -78,8 +81,9 @@ const PolarCluster = ({
             padding={polarHoleSliderPadding}
             visualizationComponent={BallSizeVisualization}
             numOfNotches={14}
-            isAnimated={!animateTransitions}
+            isAnimated={animateTransitions}
             isDisabled={isBallSizeDisabled}
+            isPoweredOn={isPoweredOn}
           />
         </ControlCompartment>
       </Row>
@@ -98,8 +102,9 @@ const PolarCluster = ({
             width={innerWidth}
             height={40}
             visualizationComponent={OmegaVisualization}
-            isAnimated={!animateTransitions}
+            isAnimated={animateTransitions}
             isDisabled={isOmegaDisabled}
+            isPoweredOn={isPoweredOn}
           />
         </ControlCompartment>
       </Row>
@@ -113,7 +118,8 @@ const PolarCluster = ({
           width={innerWidth}
           height={40}
           visualizationComponent={SplitUniverseVisualization}
-          isAnimated={!animateTransitions}
+          isAnimated={animateTransitions}
+          isPoweredOn={isPoweredOn}
         />
       </Row>
     </InstrumentCluster>
@@ -139,6 +145,7 @@ const PolarContainer = ({ width }) => {
       tweakParameter={slopesParams.tweakParameter}
       isBallSizeDisabled={slopesParams.disabledParams.ballSize}
       isOmegaDisabled={slopesParams.disabledParams.omega}
+      isPoweredOn={slopesParams.isPoweredOn}
       animateTransitions={slopesParams.animateTransitions}
     />
   );

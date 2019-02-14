@@ -5,12 +5,26 @@ import { COLORS } from '../../constants';
 
 import UnstyledButton from '../UnstyledButton';
 
-const CanvasToggle = ({ size = 38, isActive, handleToggle, children }) => {
+const CanvasToggle = ({
+  size = 38,
+  isActive,
+  isPoweredOn,
+  handleToggle,
+  children,
+}) => {
   return (
-    <Button style={{ width: size, height: size }} onClick={handleToggle}>
+    <Button
+      style={{ width: size, height: size }}
+      onClick={handleToggle}
+      disabled={!isPoweredOn}
+    >
       <LED
         style={{
-          backgroundColor: isActive ? COLORS.green[300] : COLORS.gray[300],
+          backgroundColor: isPoweredOn
+            ? isActive
+              ? COLORS.green[300]
+              : COLORS.gray[300]
+            : 'transparent',
         }}
       />
       <ChildrenWrapper>{children}</ChildrenWrapper>
@@ -22,6 +36,10 @@ const Button = styled(UnstyledButton)`
   position: relative;
   background: ${COLORS.gray[900]};
   border-radius: 4px;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const ChildrenWrapper = styled.div`

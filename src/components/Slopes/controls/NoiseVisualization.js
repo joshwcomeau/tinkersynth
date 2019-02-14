@@ -210,7 +210,7 @@ const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
           strokeOpacity={1}
           // TODO: Figure out why content way further on the page becomes
           // invisible when this line is uncommented o_O
-          // style={{ mixBlendMode: 'multiply' }}
+          style={{ mixBlendMode: 'color-dodge', willChange: 'opacity' }}
         />
       ))}
     </Svg>

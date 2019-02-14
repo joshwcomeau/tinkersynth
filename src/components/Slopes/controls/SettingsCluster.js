@@ -13,14 +13,24 @@ import type { TweakParameterAction } from '../SlopesState';
 type Props = {
   squeeze: boolean,
   seed: number,
+  isPoweredOn: boolean,
   tweakParameter: TweakParameterAction,
 };
 
-const SettingsCluster = ({ squeeze, seed, tweakParameter }: Props) => {
+const SettingsCluster = ({
+  squeeze,
+  seed,
+  isPoweredOn,
+  tweakParameter,
+}: Props) => {
   return (
     <div style={{ paddingTop: 15 }}>
       <InstrumentCluster>
-        <SeedPicker seed={seed} setSeed={val => tweakParameter('seed', val)} />
+        <SeedPicker
+          seed={seed}
+          isPoweredOn={isPoweredOn}
+          setSeed={val => tweakParameter('seed', val)}
+        />
       </InstrumentCluster>
     </div>
   );
@@ -35,6 +45,7 @@ const SettingsContainer = ({ squeeze }) => {
     <OptimizedSettingsCluster
       squeeze={squeeze}
       seed={slopesParams.seed}
+      isPoweredOn={slopesParams.isPoweredOn}
       tweakParameter={slopesParams.tweakParameter}
     />
   );

@@ -9,15 +9,31 @@ import Svg from '../../Svg';
 type Props = {
   size?: number,
   isActive: boolean,
+  isPoweredOn: boolean,
   handleToggle: () => void,
 };
 
-const BulbToggle = ({ size = 38, isActive, handleToggle }: Props) => {
+const BulbToggle = ({
+  size = 38,
+  isActive,
+  isPoweredOn,
+  handleToggle,
+}: Props) => {
   const visualizationSize = size - 6;
 
   return (
-    <CanvasToggle size={size} isActive={!isActive} handleToggle={handleToggle}>
-      <Svg width={size - 6} height={size - 2} viewBox="0 0 32 29" fill="none">
+    <CanvasToggle
+      size={size}
+      isActive={!isActive}
+      isPoweredOn={isPoweredOn}
+      handleToggle={handleToggle}
+    >
+      <Svg
+        width={size - 6}
+        height={size - 2}
+        viewBox="0 0 32 29"
+        style={{ opacity: isPoweredOn ? 1 : 0 }}
+      >
         <path
           data-layer-name="Filament"
           d="M13 13L14 14.8417M14 14.8417L15 13L16 14.8417L17 13L18 14.8417M14 14.8417L16 18.2M18 14.8417L19 13M18 14.8417L16 18.2M16 18.2V19.5"

@@ -99,7 +99,7 @@ const Slider = ({
   const handleMarginTop = -handleHeight / 2;
 
   const handleDisplacement = normalize(value, min, max, height, 0);
-  const handleColor = COLORS.pink[300];
+  const handleColor = isDisabled ? COLORS.gray[500] : COLORS.pink[300];
 
   const handleMouseDown = ev => {
     ev.stopPropagation();
@@ -128,6 +128,9 @@ const Slider = ({
           let hasBrokenOutOfRange = false;
 
           if (ev.key === 'ArrowUp') {
+            ev.preventDefault();
+            ev.stopPropagation();
+
             if (value < 120) {
               const newValue = value + 2;
               updateValue(newValue);
@@ -135,11 +138,23 @@ const Slider = ({
               hasBrokenOutOfRange = newValue > 100;
             }
           } else if (ev.key === 'ArrowDown') {
+            ev.preventDefault();
+            ev.stopPropagation();
+
             if (value > -20) {
               const newValue = value - 2;
               updateValue(newValue);
 
               hasBrokenOutOfRange = newValue < 0;
+            }
+          } else if (ev.key === 'Enter') {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            if (value > 50) {
+              updateValue(0);
+            } else {
+              updateValue(100);
             }
           }
 

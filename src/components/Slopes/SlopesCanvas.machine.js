@@ -17,7 +17,7 @@ const SlopesCanvasMachine = (props: any) => {
   delete springParams.seed;
 
   return (
-    <Spring to={springParams} immediate={slopesParams.animateTransitions}>
+    <Spring to={springParams} immediate={!slopesParams.animateTransitions}>
       {interpolatedParams => (
         <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
       )}
