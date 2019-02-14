@@ -50,3 +50,8 @@ export const submitCharge = ({
     })
     .then(response => response.json());
 };
+
+export const getOrderDetails = orderId => {
+  const orderUrl = `${getApiUrl()}/orders/${orderId}`;
+  return window.fetch(orderUrl).then(res => res.json());
+};

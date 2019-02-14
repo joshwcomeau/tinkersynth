@@ -43,7 +43,7 @@ const getMachineWidth = (slopesBreakpoint, windowWidth) => {
   }
 };
 
-const Slopes = ({ size }) => {
+const Slopes = ({ size, orderParams }) => {
   const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
 
   const windowDimensions = useWindowDimensions();
@@ -58,7 +58,7 @@ const Slopes = ({ size }) => {
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
 
   return (
-    <SlopesProvider>
+    <SlopesProvider orderParams={orderParams}>
       <MachineWrapper>
         <MainRow>
           <ControlsWrapper>

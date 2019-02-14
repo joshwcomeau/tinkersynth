@@ -45,7 +45,7 @@ export const markNewVisit = () => {
   window.localStorage.setItem(NUM_OF_VISITS_KEY, numOfVisits + 1);
 };
 
-export const getInitialSlopesParams = () => {
+export const retrieveLastSessionSlopesParams = () => {
   if (typeof window === 'undefined') {
     return;
   }

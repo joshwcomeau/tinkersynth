@@ -11,7 +11,7 @@ import {
   isUpdatePartOfGroup,
 } from './SlopesState.helpers';
 import {
-  getInitialSlopesParams,
+  retrieveLastSessionSlopesParams,
   setSlopesParams,
 } from '../../helpers/local-storage.helpers';
 import { sum, mean, sample, debounce } from '../../utils';
@@ -61,31 +61,33 @@ const defaultState = {
   parameters: defaultParameters,
 };
 
+type Parameters = {
+  seed: number,
+  enableDarkMode: boolean,
+  enableMargins: boolean,
+  enableOcclusion: boolean,
+  amplitudeAmount: number,
+  wavelength: number,
+  octaveAmount: number,
+  perspective: number,
+  lineAmount: number,
+  spikyness: number,
+  staticAmount: number,
+  polarAmount: number,
+  omega: number,
+  splitUniverse: number,
+  personInflateAmount: number,
+  waterBoilAmount: number,
+  ballSize: number,
+  dotAmount: number,
+  peaksCurve: Curve,
+  enableMirrored: boolean,
+};
+
 type State = {
   history: Array<HistorySnapshot>,
   animateTransitions: boolean,
-  parameters: {
-    seed: number,
-    enableDarkMode: boolean,
-    enableMargins: boolean,
-    enableOcclusion: boolean,
-    amplitudeAmount: number,
-    wavelength: number,
-    octaveAmount: number,
-    perspective: number,
-    lineAmount: number,
-    spikyness: number,
-    staticAmount: number,
-    polarAmount: number,
-    omega: number,
-    splitUniverse: number,
-    personInflateAmount: number,
-    waterBoilAmount: number,
-    ballSize: number,
-    dotAmount: number,
-    peaksCurve: Curve,
-    enableMirrored: boolean,
-  },
+  parameters: Parameters,
 };
 
 let times = [];
@@ -179,13 +181,20 @@ const reducer = produce(
   }
 );
 
-const initialState = {
-  history: [],
-  animateTransitions: true,
-  parameters: getInitialSlopesParams() || defaultParameters,
-};
+export const SlopesProvider = ({
+  children,
+  orderParams,
+}: {
+  children: React$Node,
+  orderParams: ?Parameters,
+}) => {
+  const initialState = {
+    history: [],
+    animateTransitions: true,
+    parameters:
+      orderParams || retrieveLastSessionSlopesParams() || defaultParameters,
+  };
 
-export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // ACTIONS

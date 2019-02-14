@@ -2,9 +2,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import loadable from '@loadable/component';
+import queryString from 'query-string';
 
 import { COLORS, HEADER_HEIGHT } from '../../constants';
 import analytics from '../../services/analytics.service';
+import { getOrderDetails } from '../../helpers/api.helpers';
 import {
   getNumberOfVisits,
   markNewVisit,
@@ -17,7 +19,9 @@ import LoadingMachine from '../../components/LoadingMachine';
 
 const Slopes = loadable(() => import('../../components/Slopes'));
 
-const SlopesIndex = () => {
+const SlopesIndex = ({ location }) => {
+  const { orderId } = queryString.parse(location.search);
+
   // For our initial render, we'll show a loading indicator.
   //
   // (I'm violating a best practice, and deciding to show the loader for several
@@ -26,10 +30,36 @@ const SlopesIndex = () => {
   //
   // I'm not sure how to use @loadable to signal to me when the component is
   // actually ready to be rendered,
+
   const [hasScriptLoaded, setHasScriptLoaded] = React.useState(false);
   const [hasTimeElapsed, setHasTimeElapsed] = React.useState(false);
 
-  // TODO: Reduce this number after 3 visits, track in localStorage.
+  // If the user supplied an orderId in the query params, we want to fetch that
+  // data before we mount our slopes.
+  // We use this as the default state, since if we don't have an orderId,
+  // we have no data we need to fetch (so we can mark it as fully fetched).
+  const [needsToFetchOrderData, setNeedsToFetchOrderData] = React.useState(
+    !!orderId
+  );
+
+  const [orderData, setOrderData] = React.useState();
+
+  // On mount, kick off the order-data request if necessary
+  React.useEffect(() => {
+    if (needsToFetchOrderData) {
+      getOrderDetails(orderId).then(order => {
+        setNeedsToFetchOrderData(false);
+
+        if (!order) {
+          // This shouldn't happen, but whatever, ignore it if it does.
+          return;
+        }
+
+        setOrderData(order.params);
+      });
+    }
+  }, []);
+
   const numOfVisits = getNumberOfVisits();
   const amountOfTimeToWait = numOfVisits > 3 ? 1 : 4000;
 
@@ -37,7 +67,8 @@ const SlopesIndex = () => {
     setHasTimeElapsed(true);
   }, amountOfTimeToWait);
 
-  const showLoading = !hasScriptLoaded || !hasTimeElapsed;
+  const showLoading =
+    !hasScriptLoaded || !hasTimeElapsed || needsToFetchOrderData;
 
   const showSlopes = hasScriptLoaded;
 
@@ -62,7 +93,9 @@ const SlopesIndex = () => {
   return (
     <>
       {showLoading && loadingElements}
-      {showSlopes && <Slopes fallback={loadingElements} />}
+      {showSlopes && (
+        <Slopes fallback={loadingElements} orderParams={orderData} />
+      )}
 
       <LoadScript
         src="https://checkout.stripe.com/checkout.js"

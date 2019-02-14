@@ -5,7 +5,7 @@ import Layout from '../../components/Layout';
 import SEO from '../../components/SEO';
 import SlopesIndex from '../../components/Slopes/SlopesIndex';
 
-const Page = () => (
+const Page = ({ location }) => (
   <Layout pageId="slopes">
     <SEO
       title="Slopes"
@@ -13,7 +13,7 @@ const Page = () => (
       keywords={['generative art', 'art', 'online store']}
     />
 
-    <SlopesIndex />
+    <SlopesIndex location={location} />
   </Layout>
 );
 

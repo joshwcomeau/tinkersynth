@@ -4,9 +4,12 @@ import React from 'react';
 const useTimeout = (callback: Function, delay?: ?number) => {
   const callbackRef = React.useRef(callback);
 
-  React.useEffect(() => {
-    callbackRef.current = callback;
-  });
+  React.useEffect(
+    () => {
+      callbackRef.current = callback;
+    },
+    [callback]
+  );
 
   React.useEffect(
     () => {
@@ -20,7 +23,7 @@ const useTimeout = (callback: Function, delay?: ?number) => {
         window.clearTimeout(timeoutId);
       };
     },
-    [callback, delay]
+    [delay]
   );
 };
 

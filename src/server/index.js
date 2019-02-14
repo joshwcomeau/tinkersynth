@@ -25,6 +25,20 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.get('/orders/:orderId', async (req, res) => {
+  const order = await Order.findOne({
+    where: {
+      id: req.params.orderId,
+    },
+  });
+
+  if (!order) {
+    return res.sendStatus(404);
+  }
+
+  return res.json({ params: order.artParams });
+});
+
 // After successfully completing a purchase, Stripe will fire a webhook,
 // which will hit this path, containing all the info needed to produce the
 // image, send the user an email, and mail them the print (if applicable).
