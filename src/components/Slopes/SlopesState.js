@@ -58,6 +58,7 @@ const defaultParameters = {
 const defaultState = {
   history: [],
   animateTransitions: false,
+  isMachineOn: true,
   parameters: defaultParameters,
 };
 
@@ -87,6 +88,7 @@ type Parameters = {
 type State = {
   history: Array<HistorySnapshot>,
   animateTransitions: boolean,
+  isMachineOn: boolean,
   parameters: Parameters,
 };
 
@@ -158,6 +160,12 @@ const reducer = produce(
       case 'RESET_STATE': {
         state.animateTransitions = true;
         state.parameters = defaultParameters;
+        return state;
+      }
+
+      case 'TOGGLE_MACHINE_POWER': {
+        state.isMachineOn = !state.isMachineOn;
+        return state;
       }
 
       case 'UNDO': {

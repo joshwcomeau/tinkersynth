@@ -2,8 +2,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
-import { u1F500 as shuffleIcon } from 'react-icons-kit/noto_emoji_regular/u1F500';
-import { u1F4A3 as bombIcon } from 'react-icons-kit/noto_emoji_regular/u1F4A3';
+import { power as powerIcon } from 'react-icons-kit/feather/power';
+import { refreshCw as shuffleIcon } from 'react-icons-kit/feather/refreshCw';
 
 import { COLORS, UNIT } from '../../../constants';
 import warningSrc from '../../../images/warning-wide.png';
@@ -12,6 +12,7 @@ import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 import SeedPicker from '../../SeedPicker';
 import BigOminousButton from '../../BigOminousButton';
+import ResetButton from '../../ResetButton';
 import Spacer from '../../Spacer';
 
 import type { TweakParameterAction } from '../SlopesState';
@@ -29,7 +30,7 @@ const SettingsCluster = ({ shuffle, resetState }: Props) => {
           <InnerWrapper>
             <ButtonWrapper>
               <IconOuterWrapper>
-                <Icon icon={shuffleIcon} />
+                <Icon icon={shuffleIcon} size={13} />
               </IconOuterWrapper>
 
               <BigOminousButton
@@ -39,24 +40,20 @@ const SettingsCluster = ({ shuffle, resetState }: Props) => {
               />
             </ButtonWrapper>
 
-            <Spacer size={3} />
+            <Spacer size={UNIT} />
 
             <ButtonWrapper>
               <IconOuterWrapper>
-                <Icon icon={bombIcon} />
+                <Icon icon={powerIcon} size={13} />
               </IconOuterWrapper>
-              <BigOminousButton
-                id="reset"
-                color="red"
-                handlePress={resetState}
-              />
+              <ResetButton handlePress={resetState} />
             </ButtonWrapper>
           </InnerWrapper>
         </Wrapper>
       </InstrumentCluster>
 
-      <IconBorder style={{ left: 22 }} />
-      <IconBorder style={{ left: 73 }} />
+      <IconBorder style={{ left: 27 }} />
+      <IconBorder style={{ left: 83 }} />
     </ClusterWrapper>
   );
 };
@@ -81,7 +78,7 @@ const ClusterWrapper = styled.div`
 
 const Wrapper = styled.div`
   height: 54px;
-  padding: 3px;
+  padding: ${UNIT}px;
   background-size: cover;
   border-radius: 4px;
 `;
@@ -98,7 +95,7 @@ const ButtonWrapper = styled.div`
   position: relative;
   background: ${COLORS.gray[100]};
   padding: 4px;
-  border-radius: 8px;
+  border-radius: 100%;
 `;
 
 const IconOuterWrapper = styled.div`
@@ -106,7 +103,7 @@ const IconOuterWrapper = styled.div`
   left: 0;
   right: 0;
   margin: auto;
-  top: -16px;
+  top: -19px;
   width: 28px;
   height: 28px;
   display: flex;
@@ -120,7 +117,7 @@ const IconOuterWrapper = styled.div`
 const IconBorder = styled.div`
   position: absolute;
   z-index: -1;
-  top: -6px;
+  top: -9px;
   width: 28px;
   height: 28px;
   background: ${COLORS.gray[100]};
