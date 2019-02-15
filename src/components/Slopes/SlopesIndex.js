@@ -75,7 +75,7 @@ const SlopesIndex = ({ location }) => {
   React.useEffect(
     () => {
       if (!showLoading) {
-        analytics.logEvent('load-machine', { type: 'slopes' });
+        analytics.logEvent('load-machine', { machineName: 'slopes' });
         markNewVisit();
       }
     },

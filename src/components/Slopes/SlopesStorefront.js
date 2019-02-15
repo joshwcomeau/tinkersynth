@@ -7,7 +7,7 @@ import Waypoint from 'react-waypoint';
 import * as actions from '../../actions';
 import { COLORS, UNIT } from '../../constants';
 import { getCost } from '../../reducers/store.reducer';
-
+import analytics from '../../services/analytics.service';
 import consoleTableSrc from '../../images/wide-console-table.svg';
 import pottedPlantSrc from '../../images/potted-plant.svg';
 
@@ -95,7 +95,13 @@ const SlopesStorefront = ({
               )
             }
             selectedId={storeData.format}
-            handleChange={value => selectFormat('slopes', value)}
+            handleChange={value => {
+              analytics.logEvent('change-purchase-kind', {
+                machineName: 'slopes',
+                kind: value,
+              });
+              selectFormat('slopes', value);
+            }}
           />
 
           {storeData.format === 'print' && (
@@ -109,7 +115,14 @@ const SlopesStorefront = ({
                   { label: '24” × 36”', id: 'large' },
                 ]}
                 selectedId={storeData.size}
-                handleChange={value => selectSize('slopes', value)}
+                handleChange={value => {
+                  analytics.logEvent('change-purchase-size', {
+                    machineName: 'slopes',
+                    size: value,
+                  });
+
+                  selectSize('slopes', value);
+                }}
               />
             </>
           )}

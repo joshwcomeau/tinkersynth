@@ -11,6 +11,7 @@ import {
   DARK_BACKGROUND,
 } from '../../constants';
 import * as actions from '../../actions';
+import analytics from '../../services/analytics.service';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
@@ -33,6 +34,8 @@ type Props = {
 const SHOW_PURCHASE_TOOLTIP_AFTER = 1000 * 60 * 2;
 
 const handleClickPurchase = () => {
+  analytics.logEvent('click-smaller-purchase', { machineName: 'slopes' });
+
   // HACK: I've totally broken out of React's abstraction here, because the
   // alternative is more work.
   const storefrontEl = document.querySelector('#slopes-storefront');

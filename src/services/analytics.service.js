@@ -14,16 +14,17 @@ import { getDistinctId } from '../helpers/local-storage.helpers';
 export const MIXPANEL_KEY = '346d24c09aba76e15bf88847c8608e5d';
 
 export type EventType =
-  | 'initial-visit'
   | 'visit-page'
   | 'load-machine'
   | 'change-control-value'
+  | 'shuffle'
+  | 'toggle-machine-power'
   | 'click-smaller-purchase'
   | 'change-purchase-kind'
   | 'change-purchase-size'
   | 'initiate-checkout'
   | 'complete-checkout'
-  | 'fail-to-load-purchase-button';
+  | 'error-checkout';
 
 export const createLogger = (environment?: ?string = process.env.NODE_ENV) => {
   mixpanel.init(MIXPANEL_KEY);

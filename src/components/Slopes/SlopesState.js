@@ -105,6 +105,13 @@ type State = {
 
 let times = [];
 
+const trackParameterChange = debounce(controlName => {
+  analytics.logEvent('change-control-value', {
+    machineName: 'slopes',
+    controlName,
+  });
+}, 600);
+
 const reducer = produce(
   (state: State, action): State => {
     switch (action.type) {
@@ -233,13 +240,7 @@ export const SlopesProvider = ({
 
   // ACTIONS
   const toggleParameter = useRef(parameterName => {
-    analytics.logEvent(
-      'change-control-value',
-      { controlName: parameterName },
-      args => {
-        console.log(args);
-      }
-    );
+    trackParameterChange(parameterName);
 
     dispatch({
       type: 'TOGGLE_PARAMETER',
@@ -248,9 +249,7 @@ export const SlopesProvider = ({
   });
 
   const tweakParameter = useRef((key, value) => {
-    analytics.logEvent('change-control-value', { controlName: key }, args => {
-      console.log('tweak', args);
-    });
+    trackParameterChange(key);
 
     dispatch({
       type: 'TWEAK_PARAMETER',
@@ -258,17 +257,21 @@ export const SlopesProvider = ({
     });
   });
 
-  const shuffle = useRef(() =>
+  const shuffle = useRef(() => {
+    analytics.logEvent('shuffle', { machineName: 'slopes' });
+
     dispatch({
       type: 'SHUFFLE',
-    })
-  );
+    });
+  });
 
-  const toggleMachinePower = useRef(() =>
+  const toggleMachinePower = useRef(() => {
+    analytics.logEvent('toggle-machine-power', { machineName: 'slopes' });
+
     dispatch({
       type: 'TOGGLE_MACHINE_POWER',
-    })
-  );
+    });
+  });
 
   const undo = useRef(() =>
     dispatch({

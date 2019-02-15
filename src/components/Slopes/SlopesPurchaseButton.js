@@ -12,6 +12,7 @@ import { COLORS } from '../../constants';
 import { getCost } from '../../reducers/store.reducer';
 import { createStripeConnection } from '../../helpers/stripe.helpers';
 import { submitCharge } from '../../helpers/api.helpers';
+import analytics from '../../services/analytics.service';
 
 import Button from '../Button';
 import Spin from '../Spin';
@@ -49,8 +50,11 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   };
 
   const handleSuccessfulPurchase = ({ previewUrl, width, height }) => {
-    // Whatever, the machine isn't working
+    // Whatever, the state machine is being problematic so I'm just setting it
+    // directly.
     setStatus('success');
+
+    analytics.logEvent('complete-checkout', { machineName: 'slopes' });
 
     window.setTimeout(() => {
       const urlParams = queryString.stringify({ previewUrl, width, height });
@@ -59,7 +63,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   };
 
   const handleFailedPurchase = ({ err }) => {
-    // TODO
+    analytics.logEvent('error-checkout', { machineName: 'slopes', err });
   };
 
   React.useEffect(() => {
@@ -72,6 +76,8 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   }, []);
 
   const openStripe = () => {
+    analytics.logEvent('initiate-checkout', { machineName: 'slopes' });
+
     const productName =
       storeData.format === 'print' ? 'Art print' : 'Art download';
 
