@@ -14,6 +14,7 @@ import {
   retrieveLastSessionSlopesParams,
   setSlopesParams,
 } from '../../helpers/local-storage.helpers';
+import analytics from '../../services/analytics.service';
 import { sum, mean, sample, debounce } from '../../utils';
 
 import type { Curve } from '../../types';
@@ -231,19 +232,31 @@ export const SlopesProvider = ({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // ACTIONS
-  const toggleParameter = useRef(parameterName =>
+  const toggleParameter = useRef(parameterName => {
+    analytics.logEvent(
+      'change-control-value',
+      { controlName: parameterName },
+      args => {
+        console.log(args);
+      }
+    );
+
     dispatch({
       type: 'TOGGLE_PARAMETER',
       parameterName,
-    })
-  );
+    });
+  });
 
-  const tweakParameter = useRef((key, value) =>
+  const tweakParameter = useRef((key, value) => {
+    analytics.logEvent('change-control-value', { controlName: key }, args => {
+      console.log('tweak', args);
+    });
+
     dispatch({
       type: 'TWEAK_PARAMETER',
       payload: { [key]: value },
-    })
-  );
+    });
+  });
 
   const shuffle = useRef(() =>
     dispatch({

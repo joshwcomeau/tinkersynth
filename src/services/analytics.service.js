@@ -33,13 +33,13 @@ export const createLogger = (environment?: ?string = process.env.NODE_ENV) => {
   mixpanel.identify(distinctId);
 
   return {
-    logEvent: (eventType: EventType, data: any) => {
+    logEvent: (eventType: EventType, data: any, cb?: any) => {
       if (environment !== 'production') {
         console.info('Event tracked', eventType, data);
         return;
       }
 
-      mixpanel.track(eventType, data);
+      mixpanel.track(eventType, data, cb);
     },
   };
 };
