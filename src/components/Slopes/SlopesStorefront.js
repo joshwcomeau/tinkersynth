@@ -17,6 +17,7 @@ import Asterisk from '../Asterisk';
 import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
+import OrderFormat from '../OrderFormat';
 import StorefrontRow from '../StorefrontRow';
 import StorefrontPreviewDecorations from '../StorefrontPreviewDecorations';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
@@ -68,34 +69,12 @@ const SlopesStorefront = ({
 
           <Spacer size={UNIT * 10} />
 
-          <OrderOption
-            label="Choose an option:"
-            options={[
-              { label: 'Giclée print', id: 'print' },
-              { label: 'Vector image', id: 'vector' },
-            ]}
-            comment={
-              storeData.format === 'print' ? (
-                <>
-                  We print on <strong>Epson ultra-premium lustre</strong> paper,
-                  a heavy 240-gsm acid-free paper chosen for its rich, deep
-                  blacks.
-                  <br />
-                  <br />
-                  Learn more.
-                </>
-              ) : (
-                <>
-                  Want to handle the printing yourself? This option sends you a
-                  high-definition JPEG, as well as an infinitely-scalable SVG.
-                  <br />
-                  <br />
-                  Learn more.
-                </>
-              )
-            }
-            selectedId={storeData.format}
-            handleChange={value => {
+          <Heading size={4}>Choose an Option:</Heading>
+          <Spacer size={UNIT * 3} />
+
+          <OrderFormat
+            format={storeData.format}
+            handleChangeFormat={value => {
               analytics.logEvent('change-purchase-kind', {
                 machineName: 'slopes',
                 kind: value,

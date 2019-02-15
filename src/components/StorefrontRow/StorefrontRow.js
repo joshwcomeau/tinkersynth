@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import { COLORS, BREAKPOINTS } from '../../constants';
 
+import Heading from '../Heading';
+
 type Option = {
   label: string,
   id: string,
@@ -19,7 +21,7 @@ const StorefrontRow = ({ title, subtitle, children }: Props) => {
   return (
     <Wrapper>
       <TitleCell>
-        {title && <Title>{title}</Title>}
+        {title && <Title size={4}>{title}</Title>}
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </TitleCell>
 
@@ -46,10 +48,8 @@ const TitleCell = styled.div`
   }
 `;
 
-const Title = styled.div`
-  font-size: 24px;
+const Title = styled(Heading)`
   line-height: 32px;
-  font-weight: 600;
 `;
 
 const Subtitle = styled.div`
