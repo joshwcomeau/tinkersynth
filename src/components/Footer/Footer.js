@@ -6,6 +6,8 @@ import { UNIT, COLORS } from '../../constants';
 
 import LogoWithName from '../LogoWithName';
 import MaxWidthWrapper from '../MaxWidthWrapper';
+import Spacer from '../Spacer';
+import TextLink from '../TextLink';
 
 const Footer = ({ transparentBackground }) => {
   return (
@@ -22,9 +24,21 @@ const Footer = ({ transparentBackground }) => {
           />
         </Link>
 
-        <Copyright>
-          <strong>© 2019-present Josh Comeau.</strong> All rights reserved.
-        </Copyright>
+        <CopyrightArea>
+          <Line>
+            <strong>© 2019-present Josh Comeau.</strong> All rights reserved.
+          </Line>
+          <Spacer size={UNIT} />
+          <Line>
+            <TextLink to="/privacy" style={{ color: COLORS.gray[500] }}>
+              Privacy Policy
+            </TextLink>
+            &nbsp;&nbsp;&nbsp; ·&nbsp;&nbsp;&nbsp;
+            <TextLink to="/contact" style={{ color: COLORS.gray[500] }}>
+              Contact
+            </TextLink>
+          </Line>
+        </CopyrightArea>
       </InnerWrapper>
       <ScrollOverflow />
     </Wrapper>
@@ -40,6 +54,7 @@ const Wrapper = styled.div`
 const InnerWrapper = styled(MaxWidthWrapper)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -47,17 +62,18 @@ const InnerWrapper = styled(MaxWidthWrapper)`
   }
 `;
 
-const Copyright = styled.div`
-  font-size: 14px;
-  /* HACK: Need this hardcoded line-height val, to align with logo */
-  line-height: 28px;
-  color: ${COLORS.white};
+const CopyrightArea = styled.div`
   display: inline-block;
+  text-align: right;
+  font-size: 14px;
+  color: ${COLORS.white};
 
   @media (max-width: 600px) {
     margin-top: ${UNIT * 2}px;
   }
 `;
+
+const Line = styled.div``;
 
 const ScrollOverflow = styled.div`
   position: fixed;
