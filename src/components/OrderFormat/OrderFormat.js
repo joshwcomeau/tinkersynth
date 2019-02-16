@@ -3,80 +3,79 @@ import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
 
-import CardToggle from '../CardToggle';
+import RadioListSelect from '../RadioListSelect';
 import Heading from '../Heading';
+import Spacer from '../Spacer';
 import Paragraph from '../Paragraph';
 
-const Pricing = ({ price, variable }) => {
-  return (
+const OrderFormatItem = ({ title, details, price, variablePrice }) => (
+  <>
+    <Title size={4}>{title}</Title>
+    <Spacer size={UNIT} />
+    <Details>{details}</Details>
+    <Spacer size={UNIT * 2} />
     <PricingWrapper>
-      {variable && <PricingSubheading>Starting from</PricingSubheading>}
+      {variablePrice && <PricingSubheading>from&nbsp;</PricingSubheading>}
       <PricingValue>
         <strong>{price}</strong> USD
       </PricingValue>
     </PricingWrapper>
-  );
-};
+  </>
+);
 
 const OrderFormat = ({ format, handleChangeFormat }) => {
   return (
-    <Wrapper>
-      <CardToggle selectedOptionId={format} handleToggle={handleChangeFormat}>
-        <CardToggle.Option id="print">
-          <Column>
-            <Main>
-              <Title size={4}>Source Image</Title>
-              <Details>
-                Receive a download pack which includes the source SVG as well as
-                several print-ready raster images.
-              </Details>
-            </Main>
+    <RadioListSelect
+      name="order-format"
+      selectedOptionId={format}
+      handleSelect={handleChangeFormat}
+    >
+      <RadioListSelect.Option id="vector">
+        <OrderFormatItem
+          title="Vector and Raster Download"
+          details="Digital delivery of print-ready image assets, including a scalable vector image (SVG) and multiple 300DPI raster images (PNG)."
+          price={19}
+        />
+      </RadioListSelect.Option>
 
-            <Pricing price={19} variable={false} />
-          </Column>
-        </CardToggle.Option>
-        <CardToggle.Option id="vector">
-          <Column>
-            <Main>
-              <Title size={4}>Giclée Print</Title>
-              <Details>
-                Ultra-premium lustre print on 240gsm acid-free paper. Printed
-                with archival inks.
-              </Details>
-            </Main>
+      <RadioListSelect.Option id="print">
+        <OrderFormatItem
+          title="Giclée Art Print"
+          details={
+            <>
+              Fine art print, printed on{' '}
+              <em style={{ fontStyle: 'normal' }}>
+                Epson Ultra-Premium Lustre
+              </em>{' '}
+              paper, a 240gsm acid-free paper known for its rich blacks. Printed
+              with archival inks.
+            </>
+          }
+          price={99}
+          variablePrice
+        />
+      </RadioListSelect.Option>
 
-            <Pricing price={99} variable={true} />
-          </Column>
-        </CardToggle.Option>
-        <CardToggle.Option id="combo">
-          <Column>
-            <Main>
-              <Title size={4}>Source + Giclée</Title>
-              <Details>
-                Combination pack. Download plus ultra-premium Giclée print.
-              </Details>
-            </Main>
-
-            <Pricing price={99} variable={true} />
-          </Column>
-        </CardToggle.Option>
-      </CardToggle>
-    </Wrapper>
+      <RadioListSelect.Option id="combo">
+        <OrderFormatItem
+          title="Giclée Art Print + Vector / Raster Download"
+          details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
+          price={99}
+          variablePrice
+        />
+      </RadioListSelect.Option>
+    </RadioListSelect>
   );
 };
 
-const Wrapper = styled.div`
-  margin-left: -${UNIT * 2}px;
-  margin-right: -40px;
-`;
-
 const Title = styled(Heading)`
-  font-size: 21px;
-  margin: ${UNIT}px 0 ${UNIT * 2}px;
+  font-size: 18px;
 `;
 
 const Details = styled(Paragraph)`
   font-size: 14px;
+  font-style: italic;
+  color: ${COLORS.gray[700]};
   margin-bottom: 0;
 `;
 
@@ -92,22 +91,15 @@ const Main = styled.div`
 `;
 
 const PricingWrapper = styled.div`
-  height: 42px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+  font-size: 14px;
+  color: ${COLORS.gray[700]};
 `;
 
-const PricingSubheading = styled.div`
-  font-size: 12px;
-  font-style: italic;
-  color: ${COLORS.gray[500]};
-  line-height: 22px;
-`;
+const PricingSubheading = styled.span``;
 
-const PricingValue = styled.div`
-  font-size: 18px;
+const PricingValue = styled.span`
+  font-weight: bold;
+  color: ${COLORS.black};
 `;
 
 export default OrderFormat;

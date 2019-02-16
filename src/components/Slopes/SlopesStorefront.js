@@ -69,19 +69,25 @@ const SlopesStorefront = ({
 
           <Spacer size={UNIT * 10} />
 
-          <Heading size={4}>Choose an Option:</Heading>
-          <Spacer size={UNIT * 3} />
-
-          <OrderFormat
-            format={storeData.format}
-            handleChangeFormat={value => {
-              analytics.logEvent('change-purchase-kind', {
-                machineName: 'slopes',
-                kind: value,
-              });
-              selectFormat('slopes', value);
-            }}
-          />
+          <StorefrontRow
+            title="Select format:"
+            subtitle={
+              <>
+                <strong>Learn more</strong> about these options.
+              </>
+            }
+          >
+            <OrderFormat
+              format={storeData.format}
+              handleChangeFormat={value => {
+                analytics.logEvent('change-purchase-kind', {
+                  machineName: 'slopes',
+                  kind: value,
+                });
+                selectFormat('slopes', value);
+              }}
+            />
+          </StorefrontRow>
 
           {storeData.format === 'print' && (
             <>
