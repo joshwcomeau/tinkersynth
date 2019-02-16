@@ -52,17 +52,16 @@ const SlopesStorefront = ({
     </span>
   );
 
+  // HACK - I ran into many issues trying to combine position: sticky and
+  // overflow: hidden, to avoid horizontal scrollbars for the console table
+  // and potted plant sticking outside the viewport.
+  // My fix is to add an overflow: hidden _inside_ the position sticky, but for
+  // that to work I need to know the exact width of that column. So I work it
+  // out in JS.
   const maxWrapperWidth = BREAKPOINT_SIZES.lg;
-  const contentWidth = BREAKPOINT_SIZES.lg;
-
-  const firstColumnWidth = 650;
-  const secondColumnWidth = maxWrapperWidth - firstColumnWidth;
+  const secondColumnWidth = 441; //
   const sidePadding = (windowDimensions.width - maxWrapperWidth) / 2;
-
-  const consoleTableLeft = 45;
-  const consoleTableWidth =
-    secondColumnWidth + sidePadding - consoleTableLeft - 36;
-  const consoleTableHeight = 441;
+  const secondColumnTrimWidth = secondColumnWidth + sidePadding;
 
   return (
     <Wrapper id="slopes-storefront">
@@ -158,32 +157,31 @@ const SlopesStorefront = ({
               </MultiplePurchaseInfoButton>
             </PurchaseRowContents>
           </StorefrontRow>
+
+          {/* Add a healthy amount of space below */}
+          <Spacer size={UNIT * 24} />
         </FirstColumn>
 
         <SecondColumn>
-          <Stuff>
-            <Foreground>
-              <ConsoleTable
-                style={{
-                  left: consoleTableLeft,
-                  width: consoleTableWidth,
-                  height: consoleTableHeight,
-                }}
-              />
-              <PottedPlant src={pottedPlantSrc} />
-            </Foreground>
+          <StickyWrapper>
+            <ContentWrapper style={{ width: secondColumnTrimWidth }}>
+              <Foreground>
+                <ConsoleTable src={consoleTableSrc} />
+                <PottedPlant src={pottedPlantSrc} />
+              </Foreground>
 
-            <Background>
-              <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
+              <Background>
+                <SlopesCanvasPreview
+                  key={storeData.size}
+                  size={storeData.size}
+                />
 
-              <StorefrontPreviewDecorations size={storeData.size} />
-            </Background>
-          </Stuff>
+                <StorefrontPreviewDecorations size={storeData.size} />
+              </Background>
+            </ContentWrapper>
+          </StickyWrapper>
         </SecondColumn>
       </MainContent>
-
-      {/* Add a healthy amount of space below */}
-      <Spacer size={UNIT * 24} />
     </Wrapper>
   );
 };
@@ -241,12 +239,12 @@ const FirstColumn = styled(Column)`
   }
 `;
 
-const Stuff = styled.div`
-  position: sticky;
-  top: 0;
-`;
+const StickyWrapper = styled.div``;
 
 const SecondColumn = styled(Column)`
+  position: sticky;
+  top: 0;
+
   @media (max-width: ${SECOND_COLUMN_CUTOFF}px) {
     display: none;
   }
@@ -258,10 +256,12 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-const ConsoleTable = styled.div`
+const ConsoleTable = styled.img`
   position: absolute;
+  width: 735px;
+  height: 441px;
   top: 525px;
-  background: url("${consoleTableSrc}");
+  left: 45px;
 `;
 
 const PottedPlant = styled.img`
@@ -273,6 +273,12 @@ const PottedPlant = styled.img`
 
 const PurchaseRowContents = styled.div`
   display: flex;
+`;
+
+const ContentWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: 974px;
 `;
 
 const MultiplePurchaseInfoButton = styled(UnstyledButton)``;
