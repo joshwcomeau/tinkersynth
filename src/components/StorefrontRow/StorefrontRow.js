@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { COLORS, BREAKPOINTS } from '../../constants';
+import { COLORS, BREAKPOINTS, UNIT } from '../../constants';
 
 import Heading from '../Heading';
 
@@ -40,7 +40,7 @@ const Wrapper = styled.div`
 `;
 
 const TitleCell = styled.div`
-  width: 270px;
+  width: 250px;
   color: ${COLORS.gray[900]};
 
   @media (max-width: 700px) {
@@ -56,6 +56,8 @@ const Subtitle = styled.div`
   font-size: 14px;
   font-weight: 300;
   color: ${COLORS.gray[700]};
+  margin-top: ${UNIT}px;
+  line-height: 1.4;
 `;
 
 const ChildrenCell = styled.div`

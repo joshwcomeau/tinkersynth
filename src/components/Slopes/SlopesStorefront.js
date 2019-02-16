@@ -15,6 +15,7 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import Heading from '../Heading';
 import Asterisk from '../Asterisk';
 import Spacer from '../Spacer';
+import TextLink from '../TextLink';
 import Paragraph from '../Paragraph';
 import OrderOption from '../OrderOption';
 import OrderFormat from '../OrderFormat';
@@ -73,7 +74,8 @@ const SlopesStorefront = ({
             title="Select format:"
             subtitle={
               <>
-                <strong>Learn more</strong> about these options.
+                <TextLink to="/faq?q=purchase-options">Learn more</TextLink>{' '}
+                about the available options.
               </>
             }
           >

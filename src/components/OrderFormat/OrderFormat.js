@@ -16,57 +16,61 @@ const OrderFormatItem = ({ title, details, price, variablePrice }) => (
     <Spacer size={UNIT * 2} />
     <PricingWrapper>
       {variablePrice && <PricingSubheading>from&nbsp;</PricingSubheading>}
-      <PricingValue>
-        <strong>{price}</strong> USD
-      </PricingValue>
+      <PricingValue>{price}</PricingValue> USD
     </PricingWrapper>
   </>
 );
 
 const OrderFormat = ({ format, handleChangeFormat }) => {
   return (
-    <RadioListSelect
-      name="order-format"
-      selectedOptionId={format}
-      handleSelect={handleChangeFormat}
-    >
-      <RadioListSelect.Option id="vector">
-        <OrderFormatItem
-          title="Vector and Raster Download"
-          details="Digital delivery of print-ready image assets, including a scalable vector image (SVG) and multiple 300DPI raster images (PNG)."
-          price={19}
-        />
-      </RadioListSelect.Option>
+    <Wrapper>
+      <RadioListSelect
+        name="order-format"
+        selectedOptionId={format}
+        handleSelect={handleChangeFormat}
+      >
+        <RadioListSelect.Option id="vector">
+          <OrderFormatItem
+            title="Vector and Raster Download"
+            details="Digital delivery of print-ready image assets, including a  vector image (svg) and multiple 300dpi raster images (png)."
+            price={19}
+          />
+        </RadioListSelect.Option>
 
-      <RadioListSelect.Option id="print">
-        <OrderFormatItem
-          title="Giclée Art Print"
-          details={
-            <>
-              Fine art print, printed on{' '}
-              <em style={{ fontStyle: 'normal' }}>
-                Epson Ultra-Premium Lustre
-              </em>{' '}
-              paper, a 240gsm acid-free paper known for its rich blacks. Printed
-              with archival inks.
-            </>
-          }
-          price={99}
-          variablePrice
-        />
-      </RadioListSelect.Option>
+        <RadioListSelect.Option id="print">
+          <OrderFormatItem
+            title="Giclée Art Print"
+            details={
+              <>
+                Fine art print, printed on{' '}
+                <em style={{ fontStyle: 'normal' }}>
+                  Epson Ultra-Premium Lustre
+                </em>{' '}
+                paper, a 240gsm acid-free paper known for its rich blacks.
+                Printed with archival inks.
+              </>
+            }
+            price={99}
+            variablePrice
+          />
+        </RadioListSelect.Option>
 
-      <RadioListSelect.Option id="combo">
-        <OrderFormatItem
-          title="Giclée Art Print + Vector / Raster Download"
-          details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
-          price={99}
-          variablePrice
-        />
-      </RadioListSelect.Option>
-    </RadioListSelect>
+        <RadioListSelect.Option id="combo">
+          <OrderFormatItem
+            title="Giclée Art Print + Vector / Raster Download"
+            details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
+            price={99}
+            variablePrice
+          />
+        </RadioListSelect.Option>
+      </RadioListSelect>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  padding-top: 10px;
+`;
 
 const Title = styled(Heading)`
   font-size: 18px;
@@ -92,12 +96,12 @@ const Main = styled.div`
 
 const PricingWrapper = styled.div`
   font-size: 14px;
-  color: ${COLORS.gray[700]};
+  color: ${COLORS.gray[900]};
 `;
 
 const PricingSubheading = styled.span``;
 
-const PricingValue = styled.span`
+const PricingValue = styled.strong`
   font-weight: bold;
   color: ${COLORS.black};
 `;

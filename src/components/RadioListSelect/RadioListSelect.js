@@ -30,7 +30,7 @@ const RadioListSelect = ({
 
     acc.push(clonedChild);
 
-    const isLastChild = index - 1 === children.length;
+    const isLastChild = children.length === index + 1;
 
     if (!isLastChild) {
       acc.push(<Spacer key={`spacer-${index}`} size={UNIT * 4} />);
@@ -70,13 +70,16 @@ RadioListSelect.Option = ({
 
 const Wrapper = styled.div``;
 
+const RADIO_COLUMN_WIDTH = 30;
+
 const OptionWrapper = styled(UnstyledButton)`
   display: flex;
-  margin-left: -40px;
+  margin-left: -${RADIO_COLUMN_WIDTH}px;
 `;
 
 const RadioColumn = styled.div`
-  width: 40px;
+  width: ${RADIO_COLUMN_WIDTH}px;
+  padding-top: 1px;
 `;
 
 const MainColumn = styled.div`

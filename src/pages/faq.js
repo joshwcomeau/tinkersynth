@@ -116,7 +116,10 @@ const SlopesIndex = () => (
 
       <Questions>
         {/* Q1 */}
-        <QuestionAndAnswer question="What are the purchase options?">
+        <QuestionAndAnswer
+          id="purchase-options"
+          question="What are the purchase options?"
+        >
           <Paragraph>
             The art you create through Tinkersmith can be purchased in two
             formats: <strong>print</strong> and <strong>download</strong>.
