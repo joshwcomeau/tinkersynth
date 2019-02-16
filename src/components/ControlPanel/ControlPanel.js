@@ -83,7 +83,6 @@ const TopPanel = styled.div`
 
 const FrontPanel = styled.div`
   background: ${COLORS.gray[100]};
-  border-radius: 0 0 2px 4px;
 `;
 
 const DecorativeHeader = styled.div`

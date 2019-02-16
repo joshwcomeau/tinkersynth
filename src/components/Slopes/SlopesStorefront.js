@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Waypoint from 'react-waypoint';
 
 import * as actions from '../../actions';
-import { COLORS, UNIT } from '../../constants';
+import { COLORS, UNIT, BREAKPOINT_SIZES } from '../../constants';
 import { getCost } from '../../reducers/store.reducer';
 import analytics from '../../services/analytics.service';
 import consoleTableSrc from '../../images/wide-console-table.svg';
@@ -29,13 +29,14 @@ import LoadScript from '../LoadScript';
 import SlopesPurchaseButton from './SlopesPurchaseButton';
 
 const BACKDROP_HEIGHT = 300;
-const SECOND_COLUMN_CUTOFF = 1104;
+const SECOND_COLUMN_CUTOFF = BREAKPOINT_SIZES.lg;
 
 const SlopesStorefront = ({
   printWidth,
   printHeight,
   storeData,
   cost,
+  windowDimensions,
   isAwareOfPurchaseOptions,
   selectFormat,
   selectSize,
@@ -50,6 +51,18 @@ const SlopesStorefront = ({
       It's a safe bet that your creation is one-of-a-kind.
     </span>
   );
+
+  const maxWrapperWidth = BREAKPOINT_SIZES.lg;
+  const contentWidth = BREAKPOINT_SIZES.lg;
+
+  const firstColumnWidth = 650;
+  const secondColumnWidth = maxWrapperWidth - firstColumnWidth;
+  const sidePadding = (windowDimensions.width - maxWrapperWidth) / 2;
+
+  const consoleTableLeft = 45;
+  const consoleTableWidth =
+    secondColumnWidth + sidePadding - consoleTableLeft - 36;
+  const consoleTableHeight = 441;
 
   return (
     <Wrapper id="slopes-storefront">
@@ -148,23 +161,28 @@ const SlopesStorefront = ({
         </FirstColumn>
 
         <SecondColumn>
-          <Foreground>
-            <ConsoleTable src={consoleTableSrc} />
-            <PottedPlant src={pottedPlantSrc} />
-          </Foreground>
+          <Stuff>
+            <Foreground>
+              <ConsoleTable
+                style={{
+                  left: consoleTableLeft,
+                  width: consoleTableWidth,
+                  height: consoleTableHeight,
+                }}
+              />
+              <PottedPlant src={pottedPlantSrc} />
+            </Foreground>
 
-          <Background>
-            <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
+            <Background>
+              <SlopesCanvasPreview key={storeData.size} size={storeData.size} />
 
-            <StorefrontPreviewDecorations size={storeData.size} />
-          </Background>
+              <StorefrontPreviewDecorations size={storeData.size} />
+            </Background>
+          </Stuff>
         </SecondColumn>
       </MainContent>
 
-      {/*
-        HACK: Need enough space for the table to not be obfuscated by the
-              site footer
-      */}
+      {/* Add a healthy amount of space below */}
       <Spacer size={UNIT * 24} />
     </Wrapper>
   );
@@ -223,6 +241,11 @@ const FirstColumn = styled(Column)`
   }
 `;
 
+const Stuff = styled.div`
+  position: sticky;
+  top: 0;
+`;
+
 const SecondColumn = styled(Column)`
   @media (max-width: ${SECOND_COLUMN_CUTOFF}px) {
     display: none;
@@ -235,11 +258,10 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-const ConsoleTable = styled.img`
+const ConsoleTable = styled.div`
   position: absolute;
-  width: 735px;
   top: 525px;
-  left: 45px;
+  background: url("${consoleTableSrc}");
 `;
 
 const PottedPlant = styled.img`

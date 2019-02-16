@@ -85,7 +85,7 @@ const Slopes = ({ size, orderParams }) => {
 
       <Spacer size={UNIT * 2} />
 
-      <SlopesStorefront />
+      <SlopesStorefront windowDimensions={windowDimensions} />
     </SlopesProvider>
   );
 };

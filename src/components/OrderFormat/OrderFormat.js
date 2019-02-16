@@ -17,7 +17,7 @@ const OrderFormatItem = ({ title, details, price, variablePrice }) => (
     <Spacer size={UNIT * 2} />
     <PricingWrapper>
       {variablePrice && <PricingSubheading>from&nbsp;</PricingSubheading>}
-      <PricingValue>{price / 100}</PricingValue> <Currency>USD</Currency>
+      <PricingValue>{price / 100}</PricingValue> USD
     </PricingWrapper>
   </>
 );
@@ -104,11 +104,8 @@ const PricingSubheading = styled.span``;
 
 const PricingValue = styled.strong`
   font-weight: bold;
+  font-size: 15px;
   color: ${COLORS.black};
-`;
-
-const Currency = styled.span`
-  font-size: 0.9em;
 `;
 
 export default OrderFormat;
