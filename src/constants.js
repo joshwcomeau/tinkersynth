@@ -243,7 +243,15 @@ export const PRINT_SIZES = {
 // For calculating line information, and displaying the preview, assume canvases
 // are 552px tall. This odd number is a factor of both aspect ratios
 // (0.75 and 0.66).
-export const CANVAS_DISPLAY_HEIGHT = 552;
+// HACK: this should be responsive, I'm just lazy
+export const CANVAS_DISPLAY_HEIGHT =
+  typeof window === 'undefined'
+    ? 552
+    : window.innerWidth > BREAKPOINT_SIZES.sm
+    ? 552
+    : 486;
+
+console.log();
 
 export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'

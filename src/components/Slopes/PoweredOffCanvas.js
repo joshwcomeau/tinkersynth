@@ -39,7 +39,7 @@ const Wrapper = styled(FadeIn)`
      it. I'm starting to worry about all the wrapping DOM nodes so I'm going
      for a hacky solution. Probably a bad idea.
   */
-  z-index: 2;
+  z-index: 5;
   top: 0;
   left: 0;
   right: 0;

@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { UNIT } from '../../constants';
+import { UNIT, BREAKPOINT_SIZES } from '../../constants';
 
 import ControlPanel from '../ControlPanel';
 import Spacer from '../Spacer';
@@ -22,20 +22,21 @@ import DestructiveCluster from './controls/DestructiveCluster';
 
 type Props = {
   width: number,
+  windowDimensions: { width: string, height: string },
 };
 
-const SlopesControls = ({ width }: Props) => {
-  // We receive an outerWidth through props.
-
+const SlopesControls = ({ width, windowDimensions }: Props) => {
   const padding = UNIT * 2;
 
   const numOfColumns = width <= SLOPES_BREAKPOINTS.small ? 1 : 2;
 
   const totalPadding = numOfColumns === 2 ? padding * 3 : padding * 2;
 
-  // We want our control panel to have two columns, and to have equal spacing
-  // on both sides (so 3 units of spacing total: left, between, right).
+  // We want our control panel to have two columns on desktop, and to have equal
+  // spacing on both sides (so 3 units of spacing total: left, between, right).
   const columnWidth = (width - totalPadding) / numOfColumns;
+
+  console.log(windowDimensions.width, BREAKPOINT_SIZES.sm);
 
   return (
     <ControlPanel width={width} padding={padding}>
@@ -44,7 +45,7 @@ const SlopesControls = ({ width }: Props) => {
         <SettingsCluster squeeze={columnWidth <= 550} />
       </Row>
       <Spacer size={UNIT * 2} />
-      <Row>
+      <DesktopOnlyRow>
         <Column>
           <PerspectiveCluster width={columnWidth} />
           <Spacer size={UNIT * 2} />
@@ -61,13 +62,16 @@ const SlopesControls = ({ width }: Props) => {
           <Spacer size={UNIT * 2} />
           <NoiseCluster width={columnWidth} />
         </Column>
-      </Row>
+      </DesktopOnlyRow>
       <Spacer size={UNIT * 2} />
 
-      <Row>
-        <LineCluster columnWidth={columnWidth} />
+      <DesktopOnlyRow>
+        <LineCluster
+          columnWidth={columnWidth}
+          hideOcclusionToggle={windowDimensions.width < BREAKPOINT_SIZES.sm}
+        />
         <DestructiveCluster />
-      </Row>
+      </DesktopOnlyRow>
     </ControlPanel>
   );
 };
@@ -77,7 +81,9 @@ const Row = styled.div`
   z-index: 1;
   display: flex;
   justify-content: space-between;
+`;
 
+const DesktopOnlyRow = styled(Row)`
   @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
     flex-direction: column;
   }

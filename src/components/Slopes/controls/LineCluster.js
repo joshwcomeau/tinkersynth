@@ -19,6 +19,7 @@ import type {
 
 type Props = {
   width: number,
+  hideOcclusionToggle: boolean,
   dotAmount: number,
   enableOcclusion: boolean,
   toggleParameter: ToggleParameterAction,
@@ -29,6 +30,7 @@ type Props = {
 
 const LineCluster = ({
   columnWidth,
+  hideOcclusionToggle,
   dotAmount,
   enableOcclusion,
   toggleParameter,
@@ -36,6 +38,7 @@ const LineCluster = ({
   animateTransitions,
   isPoweredOn,
 }) => {
+  console.log(hideOcclusionToggle);
   const rowHeight = 54;
 
   const OUTER_BORDER_WIDTH = 1;
@@ -52,15 +55,19 @@ const LineCluster = ({
         isAnimated={animateTransitions}
         isPoweredOn={isPoweredOn}
       />
-      <Spacer size={UNIT} />
-      <ToggleControl
-        width={rowHeight}
-        height={rowHeight}
-        value={enableOcclusion}
-        updateValue={() => toggleParameter('enableOcclusion')}
-        visualizationComponent={OcclusionVisualization}
-        isPoweredOn={isPoweredOn}
-      />
+      {!hideOcclusionToggle && (
+        <>
+          <Spacer size={UNIT} />
+          <ToggleControl
+            width={rowHeight}
+            height={rowHeight}
+            value={enableOcclusion}
+            updateValue={() => toggleParameter('enableOcclusion')}
+            visualizationComponent={OcclusionVisualization}
+            isPoweredOn={isPoweredOn}
+          />
+        </>
+      )}
     </InstrumentCluster>
   );
 };

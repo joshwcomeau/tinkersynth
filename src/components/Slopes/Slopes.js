@@ -65,6 +65,7 @@ const Slopes = ({ size, orderParams }) => {
             <Spacer size={UNIT} />
             <SlopesControls
               key={slopesBreakpoint}
+              windowDimensions={windowDimensions}
               width={getMachineWidth(slopesBreakpoint, windowDimensions.width)}
             />
           </ControlsWrapper>
