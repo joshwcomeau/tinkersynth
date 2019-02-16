@@ -6,13 +6,14 @@ export const getRenderOptions = (
   width: number,
   height: number,
   context: CanvasRenderingContext2D,
+  scaleRatio?: number = 1,
   { enableDarkMode, dotRatio }: any
 ) => {
   // prettier-ignore
   const MAX_WIDTH = 2.5;
   const DEFAULT_WIDTH = 1;
 
-  const lineWidth =
+  let lineWidth =
     dotRatio === 0
       ? DEFAULT_WIDTH
       : clamp(
@@ -20,6 +21,10 @@ export const getRenderOptions = (
           1,
           MAX_WIDTH
         );
+
+  // In the smaller framed preview, we scale the canvas down, so we need to
+  // boost the line thickness
+  lineWidth *= 1 / scaleRatio;
 
   return {
     width,

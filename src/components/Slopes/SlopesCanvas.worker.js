@@ -14,7 +14,12 @@ import { getRenderOptions } from './SlopesCanvas.helpers';
 let ctx;
 
 onmessage = throttle(function({ data }) {
-  const { canvas, devicePixelRatio, supportsOffscreenCanvas } = data;
+  const {
+    canvas,
+    devicePixelRatio,
+    supportsOffscreenCanvas,
+    scaleRatio,
+  } = data;
 
   const lines = generator(data);
 
@@ -37,7 +42,7 @@ onmessage = throttle(function({ data }) {
 
     renderPolylines(
       lines,
-      getRenderOptions(data.width, data.height, ctx, data)
+      getRenderOptions(data.width, data.height, ctx, scaleRatio, data)
     );
   } else {
     // $FlowIgnore

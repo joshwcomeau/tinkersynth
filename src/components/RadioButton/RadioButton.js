@@ -22,7 +22,6 @@ const RadioButton = ({ size = 16, name, value, isChecked }) => {
 
   return (
     <Wrapper>
-      <RadioInput type="radio" name={name} value={value} checked={isChecked} />
       <AestheticRadio style={{ width: size, height: size }}>
         <OuterRing
           style={{

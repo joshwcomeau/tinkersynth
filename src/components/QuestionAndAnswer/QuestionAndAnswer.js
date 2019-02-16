@@ -21,10 +21,6 @@ type Props = {
 const QuestionAndAnswer = ({ id, question, children }: Props) => {
   const [isExpanded, toggleExpanded] = useToggle(false);
 
-  React.useEffect(() => {
-    console.log('update!');
-  });
-
   return (
     <Wrapper>
       {/* Add an anchor for linking to specific questions */}

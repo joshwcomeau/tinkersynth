@@ -7,6 +7,8 @@ import { UNIT, COLORS, BREAKPOINTS } from '../../constants';
 import ToggleButton from '../ToggleButton';
 import Spacer from '../Spacer';
 import StorefrontRow from '../StorefrontRow';
+import UnstyledButton from '../UnstyledButton';
+import RadioButton from '../RadioButton/RadioButton';
 
 type Option = {
   label: string,
@@ -16,18 +18,11 @@ type Option = {
 type Props = {
   label: string,
   options: Array<Option>,
-  comment?: React$Node,
   selectedId: string,
   handleChange: (id: string) => void,
 };
 
-const OrderOption = ({
-  label,
-  options,
-  comment,
-  selectedId,
-  handleChange,
-}: Props) => {
+const OrderOption = ({ label, options, selectedId, handleChange }: Props) => {
   const lastOptionId = options[options.length - 1].id;
 
   return (
@@ -35,31 +30,27 @@ const OrderOption = ({
       <Options>
         {options.map(({ label, id }, index) => (
           <React.Fragment key={id}>
-            <ToggleButton
-              id={id}
-              isToggled={selectedId === id}
-              onClick={() => handleChange(id)}
-            >
+            <OptionWrapper>
+              <RadioButton />
+              <Spacer size={UNIT} />
               {label}
-            </ToggleButton>
+            </OptionWrapper>
 
             {id !== lastOptionId && <Spacer size={UNIT * 4} />}
           </React.Fragment>
         ))}
       </Options>
-
-      {comment && (
-        <>
-          <Spacer size={UNIT * 4} />
-          <Comment>{comment}</Comment>
-        </>
-      )}
     </StorefrontRow>
   );
 };
 
 const Options = styled.div`
   display: flex;
+`;
+
+const OptionWrapper = styled(UnstyledButton)`
+  display: flex;
+  align-items: center;
 `;
 
 const Comment = styled.div`

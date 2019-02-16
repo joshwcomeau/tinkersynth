@@ -13,12 +13,14 @@ import pottedPlantSrc from '../../images/potted-plant.svg';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import Heading from '../Heading';
+import FadeIn from '../FadeIn';
 import Asterisk from '../Asterisk';
 import Spacer from '../Spacer';
+import Link from '../Link';
 import TextLink from '../TextLink';
 import Paragraph from '../Paragraph';
-import OrderOption from '../OrderOption';
 import OrderFormat from '../OrderFormat';
+import OrderSize from '../OrderSize';
 import StorefrontRow from '../StorefrontRow';
 import StorefrontPreviewDecorations from '../StorefrontPreviewDecorations';
 import SlopesCanvasPreview from './SlopesCanvas.preview';
@@ -63,6 +65,10 @@ const SlopesStorefront = ({
   const sidePadding = (windowDimensions.width - maxWrapperWidth) / 2;
   const secondColumnTrimWidth = secondColumnWidth + sidePadding;
 
+  const { format, size } = storeData;
+
+  const showSizeOptions = format === 'print' || format === 'combo';
+
   return (
     <Wrapper id="slopes-storefront">
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
@@ -87,7 +93,9 @@ const SlopesStorefront = ({
             subtitle={
               <>
                 <TextLink to="/faq?q=purchase-options">Learn more</TextLink>{' '}
-                about the available options.
+                about the
+                <br />
+                available options.
               </>
             }
           >
@@ -103,63 +111,68 @@ const SlopesStorefront = ({
             />
           </StorefrontRow>
 
-          {storeData.format === 'print' && (
-            <>
+          {showSizeOptions && (
+            <FadeIn>
               <Spacer size={UNIT * 8} />
-              <OrderOption
-                label="Select a size:"
-                options={[
-                  { label: '12” × 18”', id: 'small' },
-                  { label: '18” × 24”', id: 'medium' },
-                  { label: '24” × 36”', id: 'large' },
-                ]}
-                selectedId={storeData.size}
-                handleChange={value => {
-                  analytics.logEvent('change-purchase-size', {
-                    machineName: 'slopes',
-                    size: value,
-                  });
+              <StorefrontRow title="Choose a size:">
+                <OrderSize
+                  size={storeData.size}
+                  handleChangeSize={value => {
+                    analytics.logEvent('change-purchase-size', {
+                      machineName: 'slopes',
+                      size: value,
+                    });
 
-                  selectSize('slopes', value);
-                }}
-              />
-            </>
+                    selectSize('slopes', value);
+                  }}
+                />
+              </StorefrontRow>
+            </FadeIn>
           )}
 
-          <Spacer size={UNIT * 8} />
+          {storeData.format && (
+            <FadeIn>
+              <Spacer size={UNIT * 8} />
 
-          <StorefrontRow title="Total:">
-            <Pricetag cost={cost} />
-          </StorefrontRow>
+              <StorefrontRow title="Price:">
+                <Indent>
+                  <Pricetag cost={cost} />
+                </Indent>
+              </StorefrontRow>
 
-          <Spacer size={UNIT * 8} />
+              <Spacer size={UNIT * 8} />
 
-          <StorefrontRow>
-            <PurchaseRowContents>
-              <Waypoint
-                onEnter={() => {
-                  if (isAwareOfPurchaseOptions) {
-                    return;
-                  }
-
-                  window.setTimeout(discoverStorefront, 500);
-                }}
-              >
-                <span>
+              <StorefrontRow>
+                <PurchaseRowContents>
                   <SlopesPurchaseButton />
-                </span>
-              </Waypoint>
 
-              <Spacer size={UNIT * 6} />
+                  <Spacer size={UNIT * 6} />
 
-              <MultiplePurchaseInfoButton>
-                Want to buy multiple?
-              </MultiplePurchaseInfoButton>
-            </PurchaseRowContents>
-          </StorefrontRow>
+                  <MultiplePurchaseInfoButton
+                    as={Link}
+                    to="/faq?q=multiple-purchases"
+                  >
+                    Want to buy multiple?
+                  </MultiplePurchaseInfoButton>
+                </PurchaseRowContents>
+              </StorefrontRow>
+            </FadeIn>
+          )}
 
-          {/* Add a healthy amount of space below */}
-          <Spacer size={UNIT * 24} />
+          <Waypoint
+            onEnter={() => {
+              if (isAwareOfPurchaseOptions) {
+                return;
+              }
+
+              window.setTimeout(discoverStorefront, 500);
+            }}
+          >
+            {/* Add a healthy amount of space below */}
+            <span>
+              <Spacer size={UNIT * 24} />
+            </span>
+          </Waypoint>
         </FirstColumn>
 
         <SecondColumn>
@@ -239,7 +252,10 @@ const FirstColumn = styled(Column)`
   }
 `;
 
-const StickyWrapper = styled.div``;
+const StickyWrapper = styled.div`
+  position: sticky;
+  top: 0;
+`;
 
 const SecondColumn = styled(Column)`
   position: sticky;
@@ -264,6 +280,10 @@ const ConsoleTable = styled.img`
   left: 45px;
 `;
 
+const Indent = styled.div`
+  padding-left: 30px;
+`;
+
 const PottedPlant = styled.img`
   position: absolute;
   width: 128px;
@@ -271,7 +291,7 @@ const PottedPlant = styled.img`
   left: 400px;
 `;
 
-const PurchaseRowContents = styled.div`
+const PurchaseRowContents = styled(Indent)`
   display: flex;
 `;
 
@@ -281,7 +301,9 @@ const ContentWrapper = styled.div`
   height: 974px;
 `;
 
-const MultiplePurchaseInfoButton = styled(UnstyledButton)``;
+const MultiplePurchaseInfoButton = styled(UnstyledButton)`
+  line-height: 48px;
+`;
 
 const mapStateToProps = state => ({
   storeData: state.store.slopes,

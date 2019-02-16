@@ -55,6 +55,7 @@ const SlopesCanvasPreview = ({ size }: Props) => {
           />
           <SlopesCanvas
             {...slopesParams}
+            scaleRatio={scaleRatio}
             width={width}
             height={ACTUAL_HEIGHT}
           />

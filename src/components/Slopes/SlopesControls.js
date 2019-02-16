@@ -36,8 +36,6 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
   // spacing on both sides (so 3 units of spacing total: left, between, right).
   const columnWidth = (width - totalPadding) / numOfColumns;
 
-  console.log(windowDimensions.width, BREAKPOINT_SIZES.sm);
-
   return (
     <ControlPanel width={width} padding={padding}>
       <Row style={{ zIndex: 2 }}>

@@ -21,6 +21,7 @@ type Props = {
 const useCanvasDrawing = (
   canvasRef,
   devicePixelRatio,
+  scaleRatio,
   width,
   height,
   params
@@ -70,7 +71,7 @@ const useCanvasDrawing = (
 
         renderPolylines(
           lines,
-          getRenderOptions(width, height, context, passedData)
+          getRenderOptions(width, height, context, scaleRatio, passedData)
         );
       };
     }
@@ -95,6 +96,7 @@ const useCanvasDrawing = (
       width,
       height,
       supportsOffscreenCanvas,
+      scaleRatio,
       ...drawingVariables,
     };
     let transfer = undefined;
@@ -120,13 +122,20 @@ const useCanvasDrawing = (
   });
 };
 
-const SlopesCanvas = ({ width, height, ...params }: Props) => {
+const SlopesCanvas = ({ width, height, scaleRatio = 1, ...params }: Props) => {
   const canvasRef = useRef(null);
 
   const { style, ...dimensions } = getScaledCanvasProps(width, height);
   const devicePixelRatio = getDevicePixelRatio();
 
-  useCanvasDrawing(canvasRef, devicePixelRatio, width, height, params);
+  useCanvasDrawing(
+    canvasRef,
+    devicePixelRatio,
+    scaleRatio,
+    width,
+    height,
+    params
+  );
 
   return (
     <canvas

@@ -14,14 +14,14 @@ import { calculateCost } from '../helpers/store.helpers';
 type State = {
   // Keyed by machine name.
   [string]: {
-    format: 'print' | 'vector' | 'combo',
+    format: 'print' | 'vector' | 'combo' | undefined,
     size: 'small' | 'medium' | 'large',
   },
 };
 
 const initialState = {
   slopes: {
-    format: 'print',
+    format: undefined,
     size: 'medium',
   },
 };

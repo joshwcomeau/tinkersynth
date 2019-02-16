@@ -3,6 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
+
+import FadeOnChange from '../FadeOnChange';
 import Spacer from '../Spacer';
 
 type Props = {

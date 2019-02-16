@@ -32,7 +32,9 @@ const BezierControl = ({
       <BezierCurve
         width={width}
         height={height}
-        isAnimated={isAnimated}
+        // We want to animate the bezier curve ONLY during shuffles.
+        // This is counter to most things
+        isAnimated={!isAnimated}
         areHandlesVisible={isPoweredOn}
         points={
           isCubic

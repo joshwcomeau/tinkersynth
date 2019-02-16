@@ -251,8 +251,6 @@ export const CANVAS_DISPLAY_HEIGHT =
     ? 552
     : 486;
 
-console.log();
-
 export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'
     ? 'pk_test_tYzaDp1UlScq9ZMnITWadUQb' // 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'

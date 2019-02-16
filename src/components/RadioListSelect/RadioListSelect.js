@@ -70,7 +70,7 @@ RadioListSelect.Option = ({
 
 const Wrapper = styled.div``;
 
-const RADIO_COLUMN_WIDTH = 30;
+const RADIO_COLUMN_WIDTH = 0;
 
 const OptionWrapper = styled(UnstyledButton)`
   display: flex;
@@ -78,7 +78,7 @@ const OptionWrapper = styled(UnstyledButton)`
 `;
 
 const RadioColumn = styled.div`
-  width: ${RADIO_COLUMN_WIDTH}px;
+  width: 30px;
   padding-top: 1px;
 `;
 

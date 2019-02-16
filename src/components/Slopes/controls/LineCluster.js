@@ -38,7 +38,6 @@ const LineCluster = ({
   animateTransitions,
   isPoweredOn,
 }) => {
-  console.log(hideOcclusionToggle);
   const rowHeight = 54;
 
   const OUTER_BORDER_WIDTH = 1;

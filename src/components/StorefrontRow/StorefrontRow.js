@@ -40,7 +40,7 @@ const Wrapper = styled.div`
 `;
 
 const TitleCell = styled.div`
-  width: 250px;
+  width: 225px;
   color: ${COLORS.gray[900]};
 
   @media (max-width: 700px) {
