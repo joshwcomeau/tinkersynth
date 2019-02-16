@@ -27,7 +27,7 @@ export const Order = sequelize.define('order', {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
   },
-  format: Sequelize.ENUM('print', 'vector'),
+  format: Sequelize.ENUM('print', 'vector', 'combo'),
   size: Sequelize.ENUM('small', 'medium', 'large'),
   cost: Sequelize.INTEGER,
   artParams: Sequelize.JSON,

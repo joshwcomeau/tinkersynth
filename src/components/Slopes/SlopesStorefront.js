@@ -93,7 +93,7 @@ const SlopesStorefront = ({
 
           {storeData.format === 'print' && (
             <>
-              <Spacer size={UNIT * 6} />
+              <Spacer size={UNIT * 8} />
               <OrderOption
                 label="Select a size:"
                 options={[
@@ -114,16 +114,13 @@ const SlopesStorefront = ({
             </>
           )}
 
-          <Spacer size={UNIT * 6} />
+          <Spacer size={UNIT * 8} />
 
-          <StorefrontRow
-            title="Total:"
-            subtitle="(Includes shipping worldwide)"
-          >
+          <StorefrontRow title="Total:">
             <Pricetag cost={cost} />
           </StorefrontRow>
 
-          <Spacer size={UNIT * 6} />
+          <Spacer size={UNIT * 8} />
 
           <StorefrontRow>
             <PurchaseRowContents>

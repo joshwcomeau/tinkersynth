@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSpring, animated } from 'react-spring/hooks';
+
 import { COLORS } from '../../constants';
 
 type Props = {
@@ -10,6 +12,14 @@ type Props = {
 };
 
 const RadioButton = ({ size = 16, name, value, isChecked }) => {
+  const spring = useSpring({
+    transform: isChecked ? `scale(1, 1)` : `scale(0, 0)`,
+    config: {
+      tension: 120,
+      friction: 11,
+    },
+  });
+
   return (
     <Wrapper>
       <RadioInput type="radio" name={name} value={value} checked={isChecked} />
@@ -20,9 +30,7 @@ const RadioButton = ({ size = 16, name, value, isChecked }) => {
           }}
         />
 
-        <CheckedCircle
-          style={{ transform: isChecked ? `scale(1, 1)` : `scale(0, 0)` }}
-        />
+        <CheckedCircle style={{ transform: spring.transform }} />
       </AestheticRadio>
     </Wrapper>
   );
@@ -54,7 +62,7 @@ const OuterRing = styled.div`
   border: 2px solid;
 `;
 
-const CheckedCircle = styled.div`
+const CheckedCircle = styled(animated.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -65,7 +73,6 @@ const CheckedCircle = styled.div`
   height: calc(100% - 8px);
   border-radius: 100%;
   background: ${COLORS.blue[500]};
-  transition: transform 300ms ease-out;
 `;
 
 export default RadioButton;

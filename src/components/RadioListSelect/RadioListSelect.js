@@ -33,7 +33,7 @@ const RadioListSelect = ({
     const isLastChild = children.length === index + 1;
 
     if (!isLastChild) {
-      acc.push(<Spacer key={`spacer-${index}`} size={UNIT * 4} />);
+      acc.push(<Spacer key={`spacer-${index}`} size={UNIT * 5} />);
     }
 
     return acc;

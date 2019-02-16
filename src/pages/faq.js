@@ -12,7 +12,7 @@ import Heading from '../components/Heading';
 import List from '../components/List';
 import TextLink from '../components/TextLink';
 
-const SlopesIndex = () => (
+const FAQ = () => (
   <LayoutSidePage pageId="faq" title="Frequently Asked Questions">
     <Section>
       <Header>
@@ -344,4 +344,4 @@ const Separator = styled.div`
   background: rgba(0, 0, 0, 0.1);
 `;
 
-export default SlopesIndex;
+export default FAQ;

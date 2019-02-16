@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
+import { calculateCost } from '../../helpers/store.helpers';
 
 import RadioListSelect from '../RadioListSelect';
 import Heading from '../Heading';
@@ -16,7 +17,7 @@ const OrderFormatItem = ({ title, details, price, variablePrice }) => (
     <Spacer size={UNIT * 2} />
     <PricingWrapper>
       {variablePrice && <PricingSubheading>from&nbsp;</PricingSubheading>}
-      <PricingValue>{price}</PricingValue> USD
+      <PricingValue>{price / 100}</PricingValue> <Currency>USD</Currency>
     </PricingWrapper>
   </>
 );
@@ -33,7 +34,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
           <OrderFormatItem
             title="Vector and Raster Download"
             details="Digital delivery of print-ready image assets, including a  vector image (svg) and multiple 300dpi raster images (png)."
-            price={19}
+            price={calculateCost('vector')}
           />
         </RadioListSelect.Option>
 
@@ -50,7 +51,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
                 Printed with archival inks.
               </>
             }
-            price={99}
+            price={calculateCost('print', 'small')}
             variablePrice
           />
         </RadioListSelect.Option>
@@ -59,7 +60,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
           <OrderFormatItem
             title="Giclée Art Print + Vector / Raster Download"
             details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
-            price={99}
+            price={calculateCost('combo', 'small')}
             variablePrice
           />
         </RadioListSelect.Option>
@@ -104,6 +105,10 @@ const PricingSubheading = styled.span``;
 const PricingValue = styled.strong`
   font-weight: bold;
   color: ${COLORS.black};
+`;
+
+const Currency = styled.span`
+  font-size: 0.9em;
 `;
 
 export default OrderFormat;

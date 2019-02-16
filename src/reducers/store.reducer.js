@@ -9,10 +9,12 @@
  */
 import produce from 'immer';
 
+import { calculateCost } from '../helpers/store.helpers';
+
 type State = {
   // Keyed by machine name.
   [string]: {
-    format: 'print' | 'vector',
+    format: 'print' | 'vector' | 'combo',
     size: 'small' | 'medium' | 'large',
   },
 };
@@ -49,16 +51,7 @@ export const getSlopes = state => state.store.slopes;
 export const getCost = machineName => state => {
   const { format, size } = state.store[machineName];
 
-  if (format === 'vector') {
-    return 2000;
-  } else {
-    // prettier-ignore
-    switch (size) {
-      case 'small': return 9500;
-      case 'medium': return 12500;
-      case 'large': return 15000;
-    }
-  }
+  return calculateCost(format, size);
 };
 
 export default reducer;
