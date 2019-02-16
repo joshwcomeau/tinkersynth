@@ -14,19 +14,28 @@ import Spacer from '../Spacer';
 import FadeIn from '../FadeIn';
 
 type Props = {
+  id: string,
   question: string,
+  isExpanded: boolean,
+  toggleExpanded: (id: ?string) => void,
   children: React$Node,
 };
 
-const QuestionAndAnswer = ({ id, question, children }: Props) => {
-  const [isExpanded, toggleExpanded] = useToggle(false);
-
+const QuestionAndAnswer = ({
+  id,
+  question,
+  isExpanded,
+  toggleExpanded,
+  children,
+}: Props) => {
   return (
     <Wrapper>
       {/* Add an anchor for linking to specific questions */}
       <a id={id} />
 
-      <Question onClick={toggleExpanded}>
+      <Question
+        onClick={() => (isExpanded ? toggleExpanded(null) : toggleExpanded(id))}
+      >
         <Icon
           icon={isExpanded ? minus : plus}
           size={32}

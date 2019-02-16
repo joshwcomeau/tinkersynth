@@ -92,7 +92,15 @@ const SlopesStorefront = ({
             title="Select format:"
             subtitle={
               <>
-                <TextLink to="/faq?q=purchase-options">Learn more</TextLink>{' '}
+                <TextLink
+                  to="/faq?q=purchase-options"
+                  onClick={ev => {
+                    ev.preventDefault();
+                    window.open('/faq?q=purchase-options');
+                  }}
+                >
+                  Learn more
+                </TextLink>{' '}
                 about the
                 <br />
                 available options.
@@ -151,6 +159,10 @@ const SlopesStorefront = ({
                   <MultiplePurchaseInfoButton
                     as={Link}
                     to="/faq?q=multiple-purchases"
+                    onClick={ev => {
+                      ev.preventDefault();
+                      window.open('/faq?q=multiple-purchases');
+                    }}
                   >
                     Want to buy multiple?
                   </MultiplePurchaseInfoButton>
