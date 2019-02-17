@@ -112,6 +112,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
     <Button
       size="large"
       color={status === 'success' ? COLORS.green[500] : COLORS.blue[500]}
+      style={{ width: 140 }}
       kind="flat"
       disabled={status === 'preauthorizing'}
       onClick={openStripe}

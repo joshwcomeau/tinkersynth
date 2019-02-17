@@ -18,7 +18,7 @@ export const sendArtVectorEmail = (
   pngUrlOpaque
 ) => {
   // Don't send email in development
-  if (process.env.node_env !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return;
   }
 
@@ -47,7 +47,7 @@ export const sendArtVectorEmail = (
 
 export const notifyMe = (name, email, format, cost, orderId, chargeId) => {
   // Don't send email in development
-  if (process.env.node_env !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return;
   }
 
@@ -82,7 +82,7 @@ export const sendContactEmail = (
   message
 ) => {
   // Don't send email in development
-  if (process.env.node_env !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return new Promise(resolve =>
       resolve({
         test: true,

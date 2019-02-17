@@ -35,7 +35,7 @@ const projectDir = `/home/${user}/app`;
 const newDirectory = `${projectDir}/${newDirectoryName}`;
 const linkedDirectory = `${projectDir}/current`;
 
-const MAX_SAVED_DEPLOYS = 1;
+const MAX_SAVED_DEPLOYS = 5;
 
 const restartServer = remote => {
   // Start/Restart the application
