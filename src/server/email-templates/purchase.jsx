@@ -60,29 +60,6 @@ const Wrapper = ({ children }) => (
   </table>
 );
 
-const getFormatSpecificCopy = format => {
-  switch (format) {
-    case 'combo': {
-      return (
-        <p>
-          Our server has been hard at work assembling the pieces of art you
-          created through Tinkersynth, and they've just wrapped the job up. Your
-          assets are available to download now!
-        </p>
-      );
-    }
-
-    case 'vector': {
-      return (
-        <p>Our servers have finished assembling the files you purchased.</p>
-      );
-    }
-
-    default:
-      throw new Error(`Unrecognized format: ${format}`);
-  }
-};
-
 const PurchaseTemplate = ({
   orderId,
   format,

@@ -46,7 +46,7 @@ Order.belongsTo(User);
 
 // prettier-ignore
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.info('Database created!');
   });

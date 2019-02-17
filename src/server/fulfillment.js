@@ -21,6 +21,29 @@ export default async function fulfill(
   userId,
   charge
 ) {
+  // Create a User, if we don't already have one.
+  const [user, wasJustCreated] = await User.findOrCreate({
+    where: { id: userId },
+    defaults: { email: userEmail, name: userName },
+  });
+
+  // Associate an Order with this user
+  const order = await Order.create({
+    format,
+    size,
+    cost,
+    artParams,
+    chargeId: charge.id,
+    shipTo: shippingAddress.shipTo,
+    streetAddress: shippingAddress.streetAddress,
+    city: shippingAddress.city,
+    state: shippingAddress.state,
+    country: shippingAddress.country,
+    zipCode: shippingAddress.zipCode,
+  });
+
+  await user.addOrder(order);
+
   // Once the charge and the initial preview image are completed, we can
   // return this stuff to the user. THere's more to do, but that can happen
   // asynchronously.
@@ -44,29 +67,6 @@ export default async function fulfill(
       upload(rasterFileOpaque.path, 'png'),
       upload(rasterFileTransparent.path, 'png'),
     );
-
-  // Create a User, if we don't already have one.
-  const [user, wasJustCreated] = await User.findOrCreate({
-    where: { id: userId },
-    defaults: { email: userEmail, name: userName },
-  });
-
-  // Associate an Order with this user
-  const order = await Order.create({
-    format,
-    size,
-    cost,
-    artParams,
-    chargeId: charge.id,
-    shipTo: shippingAddress.shipTo,
-    streetAddress: shippingAddress.streetAddress,
-    city: shippingAddress.city,
-    state: shippingAddress.state,
-    country: shippingAddress.country,
-    zipCode: shippingAddress.zipCode,
-  });
-
-  await user.addOrder(order);
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
   const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
