@@ -12,6 +12,7 @@ export const sendArtVectorEmail = (
   name,
   email,
   format,
+  orderId,
   svgUrl,
   pngUrlTransparent,
   pngUrlOpaque
@@ -21,41 +22,55 @@ export const sendArtVectorEmail = (
     return;
   }
 
-  client.sendEmail({
-    From: 'josh@tinkersynth.com',
-    To: email,
-    Subject: 'Your art is ready to be downloaded!',
-    HtmlBody: ReactDOMServer.renderToStaticMarkup(
-      <Purchase
-        format={format}
-        name={name}
-        svgUrl={svgUrl}
-        pngUrlTransparent={pngUrlTransparent}
-        pngUrlOpaque={pngUrlOpaque}
-      />
-    ),
-  });
+  client
+    .sendEmail({
+      From: 'josh@tinkersynth.com',
+      To: email,
+      Subject: 'Your art is ready to be downloaded!',
+      HtmlBody: ReactDOMServer.renderToStaticMarkup(
+        <Purchase
+          format={format}
+          name={name}
+          orderId={orderId}
+          svgUrl={svgUrl}
+          pngUrlTransparent={pngUrlTransparent}
+          pngUrlOpaque={pngUrlOpaque}
+        />
+      ),
+    })
+    .then(result => {
+      console.log('Sent "sendArtVectorEmail" email', result);
+
+      return result;
+    });
 };
 
-export const notifyMe = (name, email, format, cost, chargeId) => {
+export const notifyMe = (name, email, format, cost, orderId, chargeId) => {
   // Don't send email in development
   if (process.env.node_env !== 'production') {
     return;
   }
 
-  client.sendEmail({
-    From: 'josh@tinkersynth.com',
-    To: email,
-    Subject: 'New purchase on Tinkersynth!',
-    TextBody: `
+  client
+    .sendEmail({
+      From: 'josh@tinkersynth.com',
+      To: email,
+      Subject: 'New purchase on Tinkersynth!',
+      TextBody: `
 Yay new order!
 
 chargeId: ${chargeId}
+orderId:  ${orderId}
 name:     ${name}
 email:    ${email}
 format:   ${format}
 cost:     ${cost / 100}`,
-  });
+    })
+    .then(result => {
+      console.log('Sent "notifyMe" email', result);
+
+      return result;
+    });
 };
 
 // Method to handle the contact form, for customer inquiries.
@@ -90,6 +105,11 @@ Subject:
 Message:
 ${message}
 `,
+    })
+    .then(result => {
+      console.log('Sent "sendContactEmail" email', result);
+
+      return result;
     })
     .catch(err => {
       console.error(err);

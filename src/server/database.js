@@ -23,8 +23,8 @@ export const User = sequelize.define('user', {
 
 export const Order = sequelize.define('order', {
   id: {
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4,
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   format: Sequelize.ENUM('print', 'vector', 'combo'),

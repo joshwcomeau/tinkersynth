@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import Icon from 'react-icons-kit';
 import { facebook_1 as facebookIcon } from 'react-icons-kit/ikons/facebook_1';
 import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
+import { arrowLeft } from 'react-icons-kit/feather/arrowLeft';
 
 import { UNIT, COLORS } from '../constants';
 
@@ -14,6 +15,7 @@ import Heading from '../components/Heading';
 import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
+import Link from '../components/Link';
 import MountainsBg from '../components/MountainsBg';
 import CanvasFrame from '../components/CanvasFrame';
 import LoadScript from '../components/LoadScript/LoadScript';
@@ -126,6 +128,12 @@ const Thanks = ({ location }) => {
             )}
           </ArtPreview>
         </Wrapper>
+
+        <AfterWrapper>
+          <Link to="/slopes" style={{ color: '#FFF' }}>
+            <Icon icon={arrowLeft} size={24} /> Create another piece
+          </Link>
+        </AfterWrapper>
       </Foreground>
     </Layout>
   );
@@ -157,6 +165,15 @@ const Wrapper = styled.div`
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.16);
   padding: ${UNIT}px;
   border-radius: 8px;
+`;
+
+const AfterWrapper = styled.div`
+  width: 90%;
+  max-width: 960px;
+  margin: auto;
+  line-height: 65px;
+  font-size: 18px;
+  color: #fff;
 `;
 
 const MainContent = styled.div`
