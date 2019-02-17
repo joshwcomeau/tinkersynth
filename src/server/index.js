@@ -51,6 +51,10 @@ app.get('/orders/:orderId', async (req, res) => {
 app.post('/contact', async (req, res) => {
   const { firstName, lastName, email, subject, message } = req.body;
 
+  if (!firstName || !lastName || !email || !subject || !message) {
+    return res.sendStatus(422);
+  }
+
   sendContactEmail(firstName, lastName, email, subject, message)
     .then(result => {
       console.log('Result', result);

@@ -17,14 +17,44 @@ import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import Spin from '../components/Spin';
 
-const Contact = () => {
+type Status = 'idle' | 'sending' | 'complete' | 'error';
+
+type ContactFormProps = {
+  status: Status,
+  setStatus: (status: Status) => void,
+};
+
+const getErrorTextForCode = code => {
+  // The server returns a 422 when required fields are left blank.
+  // We also have HTML guards, so the only way to see this error should be if
+  // the user modifies the DOM tree.
+  if (code === 422) {
+    return (
+      <>
+        All fields are required. Please make sure to fill out the form
+        completely
+      </>
+    );
+  }
+
+  return (
+    <>
+      An unknown error has occurred. If the problem persists, you can email me
+      directly instead, at{' '}
+      <TextLink to="mailto:josh@tinkersynth.com" style={{ color: 'inherit' }}>
+        josh@tinkersynth.com
+      </TextLink>
+      .
+    </>
+  );
+};
+
+const ContactForm = ({ status, setStatus, errorCode, setErrorCode }) => {
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [subject, setSubject] = React.useState('');
   const [message, setMessage] = React.useState('');
-
-  const [status, setStatus] = React.useState('idle');
 
   const handleSubmitForm = ev => {
     ev.preventDefault();
@@ -37,131 +67,150 @@ const Contact = () => {
       })
       .catch(err => {
         setStatus('error');
+        setErrorCode(err.status);
       });
   };
 
   return (
-    <LayoutSidePage pageId="contact" title="Contact">
-      <Wrapper>
-        <Intro>
-          <Paragraph>
-            Have questions about how Tinkersynth works, or feedback about the
-            experience? We'd love to hear from you! This contact form is an
-            effective way to reach the author of this project.
-          </Paragraph>
+    <Form onSubmit={handleSubmitForm}>
+      <Row>
+        <Column>
+          <TextInputWithLabel
+            required
+            id="first-name"
+            type="text"
+            value={firstName}
+            updateValue={setFirstName}
+            labelText="First Name"
+            placeholder="Kim"
+          />
+        </Column>
 
-          <Paragraph>
-            <strong>For order inquiries</strong>, you can reply to any email
-            sent from Tinkersynth. This way, we'll have all the context for your
-            inquiry. We don't do that "noreply" nonsense.
-          </Paragraph>
-        </Intro>
+        <Spacer size={UNIT * 4} />
 
-        <Form onSubmit={handleSubmitForm}>
-          <Row>
-            <Column>
-              <TextInputWithLabel
-                id="last-name"
-                type="text"
-                value={firstName}
-                updateValue={setFirstName}
-                labelText="First Name"
-                placeholder="Kim"
-              />
-            </Column>
+        <Column>
+          <TextInputWithLabel
+            required
+            id="last-name"
+            type="text"
+            value={lastName}
+            updateValue={setLastName}
+            labelText="Last Name"
+            placeholder="Smith"
+          />
+        </Column>
+      </Row>
 
-            <Spacer size={UNIT * 4} />
+      <Spacer size={UNIT * 4} />
 
-            <Column>
-              <TextInputWithLabel
-                id="first-name"
-                type="text"
-                value={lastName}
-                updateValue={setLastName}
-                labelText="Last Name"
-                placeholder="Smith"
-              />
-            </Column>
-          </Row>
+      <Row>
+        <Column>
+          <TextInputWithLabel
+            required
+            id="email"
+            type="email"
+            value={email}
+            updateValue={setEmail}
+            labelText="Email"
+            placeholder="kim.smith@gmail.com"
+          />
+        </Column>
+      </Row>
 
+      <Spacer size={UNIT * 4} />
+
+      <Row>
+        <Column>
+          <TextInputWithLabel
+            required
+            id="subject"
+            type="text"
+            value={subject}
+            updateValue={setSubject}
+            labelText="Subject"
+            placeholder="Hello world!"
+          />
+        </Column>
+      </Row>
+
+      <Spacer size={UNIT * 4} />
+
+      <Row>
+        <Column>
+          <TextInputWithLabel
+            required
+            as="textarea"
+            id="message"
+            value={message}
+            updateValue={setMessage}
+            labelText="Message"
+            rows={6}
+          />
+        </Column>
+      </Row>
+
+      {status === 'error' && (
+        <>
           <Spacer size={UNIT * 4} />
 
-          <Row>
-            <Column>
-              <TextInputWithLabel
-                id="email"
-                type="email"
-                value={email}
-                updateValue={setEmail}
-                labelText="Email"
-                placeholder="kim.smith@gmail.com"
-              />
-            </Column>
-          </Row>
+          <ErrorText>{getErrorTextForCode(errorCode)}</ErrorText>
+        </>
+      )}
 
-          <Spacer size={UNIT * 4} />
+      <Spacer size={UNIT * 4} />
 
-          <Row>
-            <Column>
-              <TextInputWithLabel
-                id="subject"
-                type="text"
-                value={subject}
-                updateValue={setSubject}
-                labelText="Subject"
-                placeholder="Hello world!"
-              />
-            </Column>
-          </Row>
-
-          <Spacer size={UNIT * 4} />
-
-          <Row>
-            <Column>
-              <TextInputWithLabel
-                as="textarea"
-                id="message"
-                value={message}
-                updateValue={setMessage}
-                labelText="Message"
-                rows={6}
-              />
-            </Column>
-          </Row>
-
-          {status === 'error' && (
-            <>
-              <Spacer size={UNIT * 4} />
-
-              <ErrorText>
-                An unknown error has occurred. If the problem persists, you can
-                email me directly instead, at{' '}
-                <TextLink
-                  to="mailto:josh@tinkersynth.com"
-                  style={{ color: 'inherit' }}
-                >
-                  josh@tinkersynth.com
-                </TextLink>
-                .
-              </ErrorText>
-            </>
+      <LastRow>
+        <Button style={{ width: 80 }} disabled={status === 'sending'}>
+          {status === 'sending' ? (
+            <Spin>
+              <Icon icon={loader} />
+            </Spin>
+          ) : (
+            'Submit'
           )}
+        </Button>
+      </LastRow>
+    </Form>
+  );
+};
 
-          <Spacer size={UNIT * 4} />
+const Contact = () => {
+  const [status, setStatus] = React.useState('idle');
+  const [errorCode, setErrorCode] = React.useState(null);
 
-          <LastRow>
-            <Button style={{ width: 80 }} disabled={status === 'sending'}>
-              {status === 'sending' ? (
-                <Spin>
-                  <Icon icon={loader} />
-                </Spin>
-              ) : (
-                'Submit'
-              )}
-            </Button>
-          </LastRow>
-        </Form>
-      </Wrapper>
+  return (
+    <LayoutSidePage pageId="contact" title="Contact">
+      {status === 'complete' ? (
+        <Success>
+          <Heading size={4}>Message Received.</Heading>
+          <Spacer size={UNIT * 2} />
+          <Paragraph>
+            Thanks for your inquiry! We'll get back to you within a day or two.
+          </Paragraph>
+        </Success>
+      ) : (
+        <Wrapper>
+          <Intro>
+            <Paragraph>
+              Have questions about how Tinkersynth works, or feedback about the
+              experience? We'd love to hear from you! This contact form is an
+              effective way to reach the author of this project.
+            </Paragraph>
+
+            <Paragraph>
+              <strong>For order inquiries</strong>, you can reply to any email
+              sent from Tinkersynth. This way, we'll have all the context for
+              your inquiry. We don't do that "noreply" nonsense.
+            </Paragraph>
+          </Intro>
+          <ContactForm
+            status={status}
+            setStatus={setStatus}
+            errorCode={errorCode}
+            setErrorCode={setErrorCode}
+          />
+        </Wrapper>
+      )}
       <Spacer size={UNIT * 12} />
     </LayoutSidePage>
   );
@@ -221,6 +270,11 @@ const ErrorText = styled.div`
   padding: ${UNIT * 3}px;
   line-height: 1.45;
   color: ${COLORS.red[500]};
+`;
+
+const Success = styled.div`
+  background-color: hsla(150, 100%, 60%, 0.2);
+  padding: ${UNIT * 4}px;
 `;
 
 export default Contact;

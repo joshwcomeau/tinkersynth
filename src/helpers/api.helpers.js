@@ -83,5 +83,11 @@ export const submitContactForm = (
       },
       body,
     })
-    .then(response => response.json());
+    .then(response => {
+      if (response.status !== 200) {
+        throw response;
+      }
+
+      return response.json();
+    });
 };
