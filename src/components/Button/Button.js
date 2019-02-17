@@ -10,7 +10,8 @@ import UnstyledButton from '../UnstyledButton';
 type ButtonSize = 'medium' | 'large';
 
 type Props = {
-  color: string,
+  color?: string,
+  disabled?: boolean,
   kind?: 'flat' | '3d',
   size?: ButtonSize,
   children: React$Node,
@@ -36,7 +37,7 @@ const getLowlightColor = (color, alpha) => {
 const Button = React.forwardRef(
   (
     {
-      color,
+      color = COLORS.blue[500],
       disabled,
       kind = '3d',
       size = 'medium',
