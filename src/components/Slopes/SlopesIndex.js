@@ -99,8 +99,6 @@ const SlopesIndex = ({ location }) => {
     </LoadingWrapper>
   );
 
-  console.log(showLoading, slopesComponent.current);
-
   const Slopes = slopesComponent.current;
 
   return (

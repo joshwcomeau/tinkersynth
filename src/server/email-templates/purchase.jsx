@@ -5,13 +5,54 @@
 
 import React from 'react';
 
+import { COLORS } from '../../constants';
+
 const Wrapper = ({ children }) => (
-  <table width="100%">
+  <table
+    width="100%"
+    style={{
+      fontSize: 18,
+      lineHeight: 1.4,
+      WebkitFontSmoothing: 'antialiased',
+      fontFamily: 'sans-serif',
+    }}
+  >
     <tr>
-      <td style={{ background: '#EEE' }} align="center">
-        <table width={600}>
+      <td
+        style={{
+          backgroundColor: '#EEE',
+          backgroundImage: `url(https://storage.googleapis.com/tinkersynth-email-assets/mountains.svg)`,
+          backgroundSize: 'cover',
+          padding: 50,
+        }}
+        align="center"
+      >
+        <div style={{ textAlign: 'left', maxWidth: 730 }}>
+          <img
+            src="https://storage.googleapis.com/tinkersynth-email-assets/logo-with-name.png"
+            width={175}
+            style={{ transform: 'translateX(-4px)' }}
+          />
+        </div>
+
+        <table
+          style={{
+            maxWidth: 730,
+          }}
+        >
           <tr>
-            <td style={{ background: '#FFF', padding: 20 }}>{children}</td>
+            <td
+              style={{
+                background: '#FFF',
+                padding: 30,
+                paddingTop: 20,
+                borderRadius: 12,
+
+                boxShadow: '0px 5px 50px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              {children}
+            </td>
           </tr>
         </table>
       </td>
@@ -21,24 +62,19 @@ const Wrapper = ({ children }) => (
 
 const getFormatSpecificCopy = format => {
   switch (format) {
-    case 'print': {
+    case 'combo': {
       return (
         <p>
-          Your print will soon be processed, and I'll let you know when it's in
-          the mail. In the meantime, though, I want you to have the
-          vector/raster files ASAP. They're yours, to do with whatever you'd
-          like!
+          Our server has been hard at work assembling the pieces of art you
+          created through Tinkersynth, and they've just wrapped the job up. Your
+          assets are available to download now!
         </p>
       );
     }
 
     case 'vector': {
       return (
-        <p>
-          My computer robots just finished assembling and preparing your
-          high-fidelity raster download, to accompany the vector one you created
-          in Tinkersynth.
-        </p>
+        <p>Our servers have finished assembling the files you purchased.</p>
       );
     }
 
@@ -48,6 +84,7 @@ const getFormatSpecificCopy = format => {
 };
 
 const PurchaseTemplate = ({
+  orderId,
   format,
   name,
   svgUrl,
@@ -55,27 +92,62 @@ const PurchaseTemplate = ({
   pngUrlOpaque,
 }) => (
   <Wrapper>
-    <h1>Your art is ready for download</h1>
+    <p>Hi {name},</p>
 
-    <p>Hi {name}!</p>
+    <p>
+      Good news - our server has been hard at work assembling the images of the
+      art you created through Tinkersynth, and they've just wrapped the job up.
+      Your assets are available to download now!
+    </p>
 
-    {getFormatSpecificCopy(format)}
+    {format === 'combo' && (
+      <p>
+        Your order also included a physical art print. We'll send you another
+        email once that has been printed and shipped.
+      </p>
+    )}
+
+    <h4>Downloads</h4>
 
     <ul>
       <li>
-        <a href={pngUrlOpaque}>Raster image (solid background)</a>
+        <a href={pngUrlOpaque} style={{ color: COLORS.blue[500] }}>
+          Raster image (solid background)
+        </a>
       </li>
       <li>
-        <a href={pngUrlTransparent}>Raster image (transparent background)</a>
+        <a href={pngUrlTransparent} style={{ color: COLORS.blue[500] }}>
+          Raster image (transparent background)
+        </a>
       </li>
       <li>
-        <a href={svgUrl}>Vector image</a>
+        <a href={svgUrl} style={{ color: COLORS.blue[500] }}>
+          Vector image
+        </a>
       </li>
     </ul>
+
+    <br />
 
     <p>
       Thanks again for your purchase! This is a new art experiment, and your
       support is much appreciated 🙏.
+    </p>
+
+    <p>
+      If you have any questions or comments, feel free to reply to this email.
+      I'd love to hear from you!
+    </p>
+
+    <p
+      style={{
+        fontSize: 12,
+        marginTop: 40,
+        color: '#999',
+        textAlign: 'center',
+      }}
+    >
+      This email is in reference to Order #<em>{orderId}</em>.
     </p>
   </Wrapper>
 );

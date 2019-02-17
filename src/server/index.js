@@ -57,8 +57,6 @@ app.post('/contact', async (req, res) => {
 
   sendContactEmail(firstName, lastName, email, subject, message)
     .then(result => {
-      console.log('Result', result);
-
       return res.json({ result });
     })
     .catch(err => {

@@ -82,7 +82,7 @@ const SlopesStorefront = ({
               You have created a unique
               <Asterisk tooltip={asteriskTooltipContents} /> piece of art.
               <br />
-              Display it proudly!
+              Let's produce it!
             </Paragraph>
           </Header>
 

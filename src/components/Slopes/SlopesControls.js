@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { UNIT, BREAKPOINT_SIZES } from '../../constants';
+import { UNIT, BREAKPOINT_SIZES, BREAKPOINTS } from '../../constants';
 
 import ControlPanel from '../ControlPanel';
 import Spacer from '../Spacer';
@@ -68,6 +68,11 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
           columnWidth={columnWidth}
           hideOcclusionToggle={windowDimensions.width < BREAKPOINT_SIZES.sm}
         />
+
+        <MobileOnly>
+          <Spacer size={UNIT * 2} />
+        </MobileOnly>
+
         <DestructiveCluster />
       </DesktopOnlyRow>
     </ControlPanel>
@@ -89,6 +94,12 @@ const DesktopOnlyRow = styled(Row)`
 
 const Column = styled.div`
   flex: 1;
+`;
+
+const MobileOnly = styled.div`
+  @media ${BREAKPOINTS.mdMin} {
+    display: none;
+  }
 `;
 
 export default SlopesControls;

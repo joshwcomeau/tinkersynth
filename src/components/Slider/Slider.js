@@ -55,8 +55,6 @@ const Slider = ({
       return;
     }
 
-    console.log(sliderBoundingBox);
-
     const deltaY = ev.clientY - sliderBoundingBox.top;
     const value = clamp(deltaY / height, 0, 1);
 

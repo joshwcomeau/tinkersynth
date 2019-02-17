@@ -27,8 +27,6 @@ class ToastComponent extends React.Component<Props> {
   render() {
     const { id, title, message, dismissToast } = this.props;
 
-    console.log(message);
-
     return (
       <OuterWrapper>
         <MainBox>

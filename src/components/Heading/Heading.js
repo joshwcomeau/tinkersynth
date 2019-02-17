@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { BREAKPOINTS } from '../../constants';
 
 type Props = {
   size: 1 | 2 | 3 | 4,
@@ -29,6 +30,10 @@ const H1 = styled.h1`
   font-weight: 700;
   letter-spacing: -3px;
   transform: translateX(-5px);
+
+  @media ${BREAKPOINTS.sm} {
+    font-size: 60px;
+  }
 `;
 const H2 = styled.h1`
   font-size: 48px;

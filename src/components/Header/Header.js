@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from '@reach/router';
 
-import { COLORS, HEADER_HEIGHT, UNIT } from '../../constants';
+import { COLORS, HEADER_HEIGHT, UNIT, BREAKPOINTS } from '../../constants';
 
 import Logo from '../Logo';
 import Spacer from '../Spacer';
@@ -23,7 +23,9 @@ const Header = () => {
         <Navigation>
           <HeaderNavigationItem to="/slopes">Create</HeaderNavigationItem>
           <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>
-          <HeaderNavigationItem to="/contact">Contact</HeaderNavigationItem>
+          <DesktopOnly>
+            <HeaderNavigationItem to="/contact">Contact</HeaderNavigationItem>
+          </DesktopOnly>
         </Navigation>
       </InnerWrapper>
     </OuterWrapper>
@@ -48,6 +50,12 @@ const InnerWrapper = styled(MaxWidthWrapper)`
 
 const Navigation = styled.ul`
   display: flex;
+`;
+
+const DesktopOnly = styled.span`
+  @media ${BREAKPOINTS.sm} {
+    display: none;
+  }
 `;
 
 export default Header;

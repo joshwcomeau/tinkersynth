@@ -43,6 +43,8 @@ const LineCluster = ({
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = columnWidth - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
 
+  console.log({ hideOcclusionToggle });
+
   return (
     <InstrumentCluster direction="row">
       <TouchSliderIconControl
@@ -73,12 +75,13 @@ const LineCluster = ({
 
 const OptimizedLineCluster = React.memo(LineCluster);
 
-const LineClusterContainer = ({ columnWidth }) => {
+const LineClusterContainer = ({ columnWidth, hideOcclusionToggle }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedLineCluster
       columnWidth={columnWidth}
+      hideOcclusionToggle={hideOcclusionToggle}
       dotAmount={slopesParams.dotAmount}
       enableOcclusion={slopesParams.enableOcclusion}
       toggleParameter={slopesParams.toggleParameter}

@@ -23,14 +23,14 @@ type Props = {
   toggleMachinePower: () => void,
 };
 
-const SettingsCluster = ({
+const DestructiveCluster = ({
   isPoweredOn,
   shuffle,
   toggleMachinePower,
 }: Props) => {
   return (
     <ClusterWrapper>
-      <InstrumentCluster>
+      <InlineInstrumentCluster>
         <Wrapper style={{ backgroundImage: `url(${warningSrc})` }}>
           <InnerWrapper>
             <ButtonWrapper>
@@ -56,7 +56,7 @@ const SettingsCluster = ({
             </ButtonWrapper>
           </InnerWrapper>
         </Wrapper>
-      </InstrumentCluster>
+      </InlineInstrumentCluster>
 
       <IconBorder style={{ left: 27 }} />
       <IconBorder style={{ left: 83 }} />
@@ -65,13 +65,13 @@ const SettingsCluster = ({
 };
 
 // $FlowIgnore
-const OptimizedSettingsCluster = React.memo(SettingsCluster);
+const OptimizedDestructiveCluster = React.memo(DestructiveCluster);
 
-const SettingsContainer = () => {
+const DestructiveContainer = () => {
   const slopesParams = useContext(SlopesContext);
 
   return (
-    <OptimizedSettingsCluster
+    <OptimizedDestructiveCluster
       isPoweredOn={slopesParams.isPoweredOn}
       shuffle={slopesParams.shuffle}
       toggleMachinePower={slopesParams.toggleMachinePower}
@@ -81,6 +81,11 @@ const SettingsContainer = () => {
 
 const ClusterWrapper = styled.div`
   position: relative;
+`;
+
+const InlineInstrumentCluster = styled(InstrumentCluster)`
+  /* This is done for mobile, to avoid this short thing stretching the entire space */
+  display: inline-flex;
 `;
 
 const Wrapper = styled.div`
@@ -132,4 +137,4 @@ const IconBorder = styled.div`
   border-radius: 100%;
 `;
 
-export default SettingsContainer;
+export default DestructiveContainer;
