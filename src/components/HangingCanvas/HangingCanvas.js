@@ -21,9 +21,9 @@ type Props = {
 };
 
 const FRAME_OFFSETS = {
-  small: { top: 360, left: 115 },
-  medium: { top: 200, left: 100 },
-  large: { top: 45, left: 100 },
+  small: { top: -130, left: 140 },
+  medium: { top: -80, left: 80 },
+  large: { top: -50, left: 100 },
 };
 
 const calculateOffset = frameBoundingBox => {
@@ -82,7 +82,7 @@ const HangingCanvas = ({
 };
 
 const Frame = styled(CanvasFrame)`
-  position: absolute;
+  position: relative;
   z-index: 2;
 `;
 

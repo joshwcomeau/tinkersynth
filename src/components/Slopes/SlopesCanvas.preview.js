@@ -67,6 +67,7 @@ const SlopesCanvasPreview = ({ size }: Props) => {
 
 const Wrapper = styled.div`
   position: relative;
+  display: inline-block;
   z-index: 2;
 `;
 
