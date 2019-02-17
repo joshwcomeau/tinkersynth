@@ -39,6 +39,7 @@ const useBoundingBox = () => {
 
     window.addEventListener('scroll', recalculate);
     window.addEventListener('resize', recalculate);
+
     return () => {
       window.removeEventListener('scroll', recalculate);
       window.removeEventListener('resize', recalculate);

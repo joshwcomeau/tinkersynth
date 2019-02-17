@@ -93,7 +93,7 @@ const SlopesIndex = ({ location }) => {
   return (
     <>
       {showLoading && loadingElements}
-      {showSlopes && (
+      {!showLoading && showSlopes && (
         <Slopes fallback={loadingElements} orderParams={orderData} />
       )}
 

@@ -16,6 +16,8 @@ type Props = {
 };
 
 class ToastComponent extends React.Component<Props> {
+  dismissNode: ?HTMLElement;
+
   componentDidMount() {
     if (this.dismissNode) {
       this.dismissNode.focus();
@@ -23,13 +25,15 @@ class ToastComponent extends React.Component<Props> {
   }
 
   render() {
-    const { id, title, message, icon, dismissToast } = this.props;
+    const { id, title, message, dismissToast } = this.props;
+
+    console.log(message);
 
     return (
       <OuterWrapper>
         <MainBox>
           <Title>{title}</Title>
-          <Message>{message}</Message>
+          <Message>{[message]}</Message>
 
           <Spacer size={UNIT * 2} />
 

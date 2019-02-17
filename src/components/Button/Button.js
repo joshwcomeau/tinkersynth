@@ -80,7 +80,6 @@ const Button = React.forwardRef(
 
 const Wrapper = styled(UnstyledButton)`
   position: relative;
-  color: white;
   padding-left: ${UNIT * 4}px;
   padding-right: ${UNIT * 4}px;
   border-radius: 4px;
@@ -108,6 +107,7 @@ const Children = styled.div`
   display: inline-block;
   position: relative;
   z-index: 1;
+  color: #fff !important;
 
   ${Wrapper}:active:not(:disabled) & {
     transform: scale(0.95, 0.95);

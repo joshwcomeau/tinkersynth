@@ -18,7 +18,7 @@ const ToastManager = ({ toasts, dismissToast }) => {
         keys={item => item.id}
         from={{ transform: 'translateY(0px) scale(0, 1)', opacity: 1 }}
         enter={{ transform: 'translateY(0px) scale(1, 1)', opacity: 1 }}
-        leave={{ transform: 'translateY(-8px) scale(1, 0)', opacity: 0.5 }}
+        leave={{ transform: 'translateY(-8px) scale(1, 1)', opacity: 0 }}
       >
         {toast => props => (
           <ToastWrapper style={props}>

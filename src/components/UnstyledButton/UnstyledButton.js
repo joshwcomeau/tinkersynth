@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { COLORS } from '../../constants';
 
 export default styled.button`
-  all: unset;
   display: block;
   margin: 0;
   padding: 0;
   border: none;
   background: transparent;
   cursor: pointer;
+  text-align: left;
 
   &:focus {
     outline: 2px solid ${COLORS.pink[300]};

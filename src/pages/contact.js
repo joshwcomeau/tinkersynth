@@ -203,6 +203,7 @@ const Contact = () => {
               your inquiry. We don't do that "noreply" nonsense.
             </Paragraph>
           </Intro>
+          <Spacer size={UNIT * 4} />
           <ContactForm
             status={status}
             setStatus={setStatus}

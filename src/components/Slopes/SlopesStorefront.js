@@ -270,9 +270,6 @@ const StickyWrapper = styled.div`
 `;
 
 const SecondColumn = styled(Column)`
-  position: sticky;
-  top: 0;
-
   @media (max-width: ${SECOND_COLUMN_CUTOFF}px) {
     display: none;
   }
