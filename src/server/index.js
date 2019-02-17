@@ -7,6 +7,7 @@ import { upload } from './google-cloud';
 import fulfill from './fulfillment';
 import { createCharge } from './stripe';
 import { createRasterImage, createVectorImage } from './image-processing';
+import { sendContactEmail } from './email';
 
 import './database';
 
@@ -25,6 +26,11 @@ app.use(function(req, res, next) {
   next();
 });
 
+/**
+ * This endpoint allows users to 'resume' an order, by preselecting all the
+ * controls for the machine. Note that we need to be sure not to expose any
+ * PII through this endpoint; all it does is populate art parameters.
+ */
 app.get('/orders/:orderId', async (req, res) => {
   const order = await Order.findOne({
     where: {
@@ -39,9 +45,34 @@ app.get('/orders/:orderId', async (req, res) => {
   return res.json({ params: order.artParams });
 });
 
-// After successfully completing a purchase, Stripe will fire a webhook,
-// which will hit this path, containing all the info needed to produce the
-// image, send the user an email, and mail them the print (if applicable).
+/**
+ * Handle submissions to the contact form at tinkersynth.com/contact
+ */
+app.post('/contact', async (req, res) => {
+  const { firstName, lastName, email, subject, message } = req.body;
+
+  sendContactEmail(firstName, lastName, email, subject, message)
+    .then(result => {
+      console.log('Result', result);
+
+      return res.json({ result });
+    })
+    .catch(err => {
+      console.error('error', err);
+
+      return res.sendStatus(500).json({ error: err });
+    });
+});
+
+/**
+ * After entering payment details in the Stripe widget-modal, we make a request
+ * to the server to fulfill the purchase. This involves:
+ *
+ * - Creating the charge, charging the customer
+ * - Creating a preview image to show them right away, uploading to GCS
+ * - A bunch of other fulfillment stuff, done asynchronously after the
+ *   response.
+ */
 app.post('/purchase/fulfill', async (req, res) => {
   const {
     artParams,
@@ -58,7 +89,7 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     const previewImage = await createRasterImage(size, artParams, {
       opaqueBackground: true,
-      pixelsPerInch: 25, // TODO: find the right number
+      pixelsPerInch: 25,
     });
 
     const previewUrl = await upload(previewImage.path);
@@ -83,8 +114,10 @@ app.post('/purchase/fulfill', async (req, res) => {
   }
 });
 
+/**
+ * Launch server!
+ */
 const { PORT } = config;
-
 app.listen(PORT, () => {
   console.info(`server running on port ${PORT}`);
 });

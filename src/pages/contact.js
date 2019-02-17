@@ -1,8 +1,11 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import Icon from 'react-icons-kit';
+import { loader } from 'react-icons-kit/feather/loader';
 
 import { COLORS, UNIT } from '../constants';
+import { submitContactForm } from '../helpers/api.helpers';
 
 import LayoutSidePage from '../components/LayoutSidePage';
 import Paragraph from '../components/Paragraph';
@@ -12,8 +15,31 @@ import TextInputWithLabel from '../components/TextInputWithLabel';
 import Label from '../components/Label';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
+import Spin from '../components/Spin';
 
 const Contact = () => {
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [subject, setSubject] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  const [status, setStatus] = React.useState('idle');
+
+  const handleSubmitForm = ev => {
+    ev.preventDefault();
+
+    setStatus('sending');
+
+    submitContactForm(firstName, lastName, email, subject, message)
+      .then(res => {
+        setStatus('complete');
+      })
+      .catch(err => {
+        setStatus('error');
+      });
+  };
+
   return (
     <LayoutSidePage pageId="contact" title="Contact">
       <Wrapper>
@@ -31,13 +57,16 @@ const Contact = () => {
           </Paragraph>
         </Intro>
 
-        <Form>
+        <Form onSubmit={handleSubmitForm}>
           <Row>
             <Column>
               <TextInputWithLabel
-                id="first-name"
-                labelText="First Name"
+                id="last-name"
                 type="text"
+                value={firstName}
+                updateValue={setFirstName}
+                labelText="First Name"
+                placeholder="Kim"
               />
             </Column>
 
@@ -46,8 +75,26 @@ const Contact = () => {
             <Column>
               <TextInputWithLabel
                 id="first-name"
-                labelText="Last Name"
                 type="text"
+                value={lastName}
+                updateValue={setLastName}
+                labelText="Last Name"
+                placeholder="Smith"
+              />
+            </Column>
+          </Row>
+
+          <Spacer size={UNIT * 4} />
+
+          <Row>
+            <Column>
+              <TextInputWithLabel
+                id="email"
+                type="email"
+                value={email}
+                updateValue={setEmail}
+                labelText="Email"
+                placeholder="kim.smith@gmail.com"
               />
             </Column>
           </Row>
@@ -58,8 +105,11 @@ const Contact = () => {
             <Column>
               <TextInputWithLabel
                 id="subject"
-                labelText="Subject"
                 type="text"
+                value={subject}
+                updateValue={setSubject}
+                labelText="Subject"
+                placeholder="Hello world!"
               />
             </Column>
           </Row>
@@ -70,17 +120,45 @@ const Contact = () => {
             <Column>
               <TextInputWithLabel
                 as="textarea"
-                id="body"
+                id="message"
+                value={message}
+                updateValue={setMessage}
                 labelText="Message"
                 rows={6}
               />
             </Column>
           </Row>
 
+          {status === 'error' && (
+            <>
+              <Spacer size={UNIT * 4} />
+
+              <ErrorText>
+                An unknown error has occurred. If the problem persists, you can
+                email me directly instead, at{' '}
+                <TextLink
+                  to="mailto:josh@tinkersynth.com"
+                  style={{ color: 'inherit' }}
+                >
+                  josh@tinkersynth.com
+                </TextLink>
+                .
+              </ErrorText>
+            </>
+          )}
+
           <Spacer size={UNIT * 4} />
 
           <LastRow>
-            <Button>Submit</Button>
+            <Button style={{ width: 80 }} disabled={status === 'sending'}>
+              {status === 'sending' ? (
+                <Spin>
+                  <Icon icon={loader} />
+                </Spin>
+              ) : (
+                'Submit'
+              )}
+            </Button>
           </LastRow>
         </Form>
       </Wrapper>
@@ -136,6 +214,13 @@ const Column = styled.div`
 const LastRow = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+const ErrorText = styled.div`
+  font-size: 16px;
+  padding: ${UNIT * 3}px;
+  line-height: 1.45;
+  color: ${COLORS.red[500]};
 `;
 
 export default Contact;

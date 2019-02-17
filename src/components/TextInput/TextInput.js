@@ -8,7 +8,7 @@ type Props = {
   as?: 'input' | 'textarea',
   type: 'text' | 'email' | 'password',
   value: string,
-  onChange: (value: string) => void,
+  updateValue: (value: string) => void,
   isActive: boolean,
 };
 
@@ -16,7 +16,7 @@ const TextInput = ({
   as = 'input',
   type,
   value,
-  onChange,
+  updateValue,
   isActive,
   ...delegated
 }: Props) => {
@@ -26,7 +26,7 @@ const TextInput = ({
         as={as}
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={ev => updateValue(ev.currentTarget.value)}
         {...delegated}
       />
       <BottomBorder
@@ -55,6 +55,10 @@ const Input = styled.input`
   font-size: 18px;
   border: none;
   outline: none;
+
+  &::placeholder {
+    opacity: 0.5;
+  }
 `;
 
 const BottomBorder = styled.div`

@@ -10,7 +10,7 @@ type Props = {
   id: string,
   type: 'text' | 'email' | 'password',
   value: string,
-  onChange: (value: string) => void,
+  updateValue: (value: string) => void,
   labelText: React$Node,
 };
 
@@ -18,7 +18,7 @@ const TextInputWithLabel = ({
   id,
   type,
   value,
-  onChange,
+  updateValue,
   labelText,
   ...delegated
 }: Props) => {
@@ -33,7 +33,7 @@ const TextInputWithLabel = ({
         id={id}
         type={type}
         value={value}
-        onChange={onChange}
+        updateValue={updateValue}
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
         isActive={isActive}

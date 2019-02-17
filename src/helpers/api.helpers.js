@@ -55,3 +55,33 @@ export const getOrderDetails = orderId => {
   const orderUrl = `${getApiUrl()}/orders/${orderId}`;
   return window.fetch(orderUrl).then(res => res.json());
 };
+
+export const submitContactForm = (
+  firstName,
+  lastName,
+  email,
+  subject,
+  message
+) => {
+  const orderUrl = `${getApiUrl()}/contact`;
+
+  const body = JSON.stringify({
+    firstName,
+    lastName,
+    email,
+    subject,
+    message,
+  });
+
+  return window
+    .fetch(orderUrl, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body,
+    })
+    .then(response => response.json());
+};

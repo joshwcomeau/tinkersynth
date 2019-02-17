@@ -47,14 +47,53 @@ export const notifyMe = (name, email, format, cost, chargeId) => {
     From: 'josh@tinkersynth.com',
     To: email,
     Subject: 'New purchase on Tinkersynth!',
-    TextBody: ```
+    TextBody: `
 Yay new order!
 
 chargeId: ${chargeId}
 name:     ${name}
 email:    ${email}
 format:   ${format}
-cost:     ${cost / 100}
-    ```,
+cost:     ${cost / 100}`,
   });
+};
+
+// Method to handle the contact form, for customer inquiries.
+export const sendContactEmail = (
+  firstName,
+  lastName,
+  email,
+  subject,
+  message
+) => {
+  // Don't send email in development
+  if (process.env.node_env !== 'production') {
+    return new Promise(resolve =>
+      resolve({
+        test: true,
+      })
+    );
+  }
+
+  return client
+    .sendEmail({
+      From: 'josh@tinkersynth.com',
+      To: 'josh@tinkersynth.com',
+      Subject: 'Contact form submission on Tinkersynth.com',
+      TextBody: `
+From:
+    ${firstName} ${lastName} <${email}>
+
+Subject:
+    ${subject}
+
+Message:
+${message}
+`,
+    })
+    .catch(err => {
+      console.error(err);
+
+      throw new Error(err);
+    });
 };
