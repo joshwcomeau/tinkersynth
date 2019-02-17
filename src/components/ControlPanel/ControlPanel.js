@@ -56,17 +56,17 @@ const ControlPanel = ({ width, padding, children }: Props) => {
 const Wrapper = styled.div`
   position: relative;
   user-select: none;
-  perspective: 200px;
-
-  @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
-    perspective: 400px;
-  }
 `;
 
 const InnerWrapper = styled.div`
   position: relative;
   z-index: 2;
   margin-top: 50px;
+  perspective: 200px;
+
+  @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
+    perspective: 400px;
+  }
 `;
 
 const TopPanel = styled.div`

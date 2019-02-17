@@ -67,7 +67,7 @@ const Wrapper = styled.div`
 
 const Heading = styled.div`
   height: 22px;
-  line-height: 22px;
+  line-height: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;

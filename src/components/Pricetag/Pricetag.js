@@ -11,15 +11,17 @@ type Props = {
   cost: number,
 };
 
-const Pricetag = ({ cost }: Props) => {
+const Pricetag = ({ cost, includeShippingNote }: Props) => {
   const dollars = cost / 100;
 
   return (
     <Wrapper>
       <Cost>{dollars}</Cost> <Currency>USD</Currency>
-      <ShippingNote>
-        Includes <strong>free worldwide shipping</strong>.
-      </ShippingNote>
+      {includeShippingNote && (
+        <ShippingNote>
+          Includes <strong>free worldwide shipping</strong>.
+        </ShippingNote>
+      )}
     </Wrapper>
   );
 };

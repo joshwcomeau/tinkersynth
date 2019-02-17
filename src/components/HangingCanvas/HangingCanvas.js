@@ -88,6 +88,7 @@ const Frame = styled(CanvasFrame)`
 
 const CanvasWrapper = styled.div`
   position: relative;
+  padding: 1px;
 `;
 
 export default HangingCanvas;

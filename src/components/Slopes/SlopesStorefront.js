@@ -76,7 +76,7 @@ const SlopesStorefront = ({
       <MainContent>
         <FirstColumn>
           <Header style={{ height: BACKDROP_HEIGHT }}>
-            <Heading size={1}>Magnificent!</Heading>
+            <Heading size={1}>Looks great!</Heading>
             <Spacer size={UNIT * 4} />
             <Paragraph as="div" style={{ fontSize: 24 }}>
               You have created a unique
@@ -144,7 +144,13 @@ const SlopesStorefront = ({
 
               <StorefrontRow title="Price:">
                 <Indent>
-                  <Pricetag cost={cost} />
+                  <Pricetag
+                    cost={cost}
+                    includeShippingNote={
+                      storeData.format === 'print' ||
+                      storeData.format === 'combo'
+                    }
+                  />
                 </Indent>
               </StorefrontRow>
 
@@ -164,7 +170,7 @@ const SlopesStorefront = ({
                       window.open('/faq?q=multiple-purchases');
                     }}
                   >
-                    Want to buy multiple?
+                    Purchasing multiple?
                   </MultiplePurchaseInfoButton>
                 </PurchaseRowContents>
               </StorefrontRow>

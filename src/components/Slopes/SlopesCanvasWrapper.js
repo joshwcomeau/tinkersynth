@@ -185,6 +185,7 @@ const Machine = styled.div`
 
 const InnerWrapper = styled.div`
   position: relative;
+  padding: 2px;
 `;
 
 const ChildWrapper = styled.div`
