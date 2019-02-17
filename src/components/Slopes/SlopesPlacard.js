@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import slopesPlacardSrc from '../../images/slopes-placard.svg';
+import analytics from '../../services/analytics.service';
 
 import Spacer from '../Spacer';
 import Screw from '../Screw';
@@ -43,6 +44,17 @@ const SlopesPlacard = ({ handleRemoval }: Props) => {
   });
 
   const handlePop = id => {
+    const isFirstScrew = Object.values(attachedScrews).every(
+      screwKey => !!screwKey
+    );
+
+    // The first screw triggers a different event from the second.
+    // This is so I can gauge how many people make the logical jump from 1 to 2.
+    const eventName = isFirstScrew
+      ? 'pop-first-easter-egg-screw'
+      : 'discover-easter-egg-control';
+    analytics.logEvent(eventName);
+
     setAttachedScrews({
       ...attachedScrews,
       [id]: false,

@@ -21,10 +21,9 @@ const Header = () => {
         </Link>
 
         <Navigation>
+          <HeaderNavigationItem to="/slopes">Create</HeaderNavigationItem>
           <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>
-          <HeaderNavigationItem to="/about">About</HeaderNavigationItem>
-          <HeaderNavigationItem to="/buy">Buy</HeaderNavigationItem>
-          <HeaderNavigationItem to="/build">Build</HeaderNavigationItem>
+          <HeaderNavigationItem to="/contact">Contact</HeaderNavigationItem>
         </Navigation>
       </InnerWrapper>
     </OuterWrapper>
