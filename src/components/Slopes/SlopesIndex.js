@@ -17,8 +17,6 @@ import useScrollDisabler from '../../hooks/scroll-disabler.hook';
 import LoadScript from '../../components/LoadScript';
 import LoadingMachine from '../../components/LoadingMachine';
 
-const Slopes = loadable(() => import('../../components/Slopes'));
-
 const SlopesIndex = ({ location }) => {
   const { orderId } = queryString.parse(location.search);
 
@@ -33,6 +31,8 @@ const SlopesIndex = ({ location }) => {
 
   const [hasScriptLoaded, setHasScriptLoaded] = React.useState(false);
   const [hasTimeElapsed, setHasTimeElapsed] = React.useState(false);
+  const [hasLoadedSlopes, setHasLoadedSlopes] = React.useState(false);
+  const slopesComponent = React.useRef(null);
 
   // If the user supplied an orderId in the query params, we want to fetch that
   // data before we mount our slopes.
@@ -43,6 +43,14 @@ const SlopesIndex = ({ location }) => {
   );
 
   const [orderData, setOrderData] = React.useState();
+
+  // On mount, start async-loading the Slopes component
+  React.useEffect(() => {
+    import('../../components/Slopes').then(Component => {
+      slopesComponent.current = Component.default;
+      setHasLoadedSlopes(true);
+    });
+  }, []);
 
   // On mount, kick off the order-data request if necessary
   React.useEffect(() => {
@@ -68,9 +76,10 @@ const SlopesIndex = ({ location }) => {
   }, amountOfTimeToWait);
 
   const showLoading =
-    !hasScriptLoaded || !hasTimeElapsed || needsToFetchOrderData;
-
-  const showSlopes = hasScriptLoaded;
+    !hasScriptLoaded ||
+    !hasTimeElapsed ||
+    needsToFetchOrderData ||
+    !hasLoadedSlopes;
 
   React.useEffect(
     () => {
@@ -90,12 +99,13 @@ const SlopesIndex = ({ location }) => {
     </LoadingWrapper>
   );
 
+  console.log(showLoading, slopesComponent.current);
+
+  const Slopes = slopesComponent.current;
+
   return (
     <>
-      {showLoading && loadingElements}
-      {!showLoading && showSlopes && (
-        <Slopes fallback={loadingElements} orderParams={orderData} />
-      )}
+      {showLoading ? loadingElements : <Slopes orderParams={orderData} />}
 
       <LoadScript
         src="https://checkout.stripe.com/checkout.js"
