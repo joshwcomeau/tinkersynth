@@ -4,44 +4,29 @@ import styled from 'styled-components';
 import format from 'date-fns/format';
 
 import { getApiUrl } from '../../helpers/api.helpers';
+import { COLORS } from '../../constants';
 
 import Button from '../Button';
 import TextLink from '../TextLink';
 import Spacer from '../Spacer';
 
-const useDashboardData = adminPassword => {
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(
-    () => {
-      if (typeof adminPassword !== 'string') {
-        return;
-      }
-
-      window
-        .fetch(`${getApiUrl()}/admin/dashboard`, {
-          method: 'GET',
-          mode: 'cors',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `basic ${adminPassword}`,
-          },
-        })
-        .then(res => {
-          return res.json();
-        })
-        .then(json => {
-          setData(json);
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-    [adminPassword]
-  );
-
-  return data;
+const fetchDashboardData = password => {
+  return window
+    .fetch(`${getApiUrl()}/admin/dashboard`, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `basic ${password}`,
+      },
+    })
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 const renderAddress = order => {
@@ -58,6 +43,8 @@ const renderAddress = order => {
 
   return (
     <>
+      <strong>{order.shipTo}</strong>
+      <br />
       {order.streetAddress}
       <br />
       {order.city}, {order.state}
@@ -70,7 +57,20 @@ const renderAddress = order => {
 };
 
 const AdminDashboard = ({ adminPassword }) => {
-  const dashboardData = useDashboardData(adminPassword);
+  const [dashboardData, setDashboardData] = React.useState(null);
+
+  React.useEffect(
+    () => {
+      if (typeof adminPassword !== 'string') {
+        return;
+      }
+
+      fetchDashboardData(adminPassword).then(json => {
+        setDashboardData(json);
+      });
+    },
+    [adminPassword]
+  );
 
   if (!dashboardData) {
     return 'Loading...';
@@ -83,6 +83,7 @@ const AdminDashboard = ({ adminPassword }) => {
     >
       <thead>
         <tr>
+          <HeaderCell>Preview</HeaderCell>
           <HeaderCell>Date</HeaderCell>
           <HeaderCell>Customer</HeaderCell>
           <HeaderCell>Type</HeaderCell>
@@ -94,6 +95,13 @@ const AdminDashboard = ({ adminPassword }) => {
       <tbody>
         {dashboardData.orders.map(order => (
           <tr>
+            <TableCell>
+              {order.previewUrl && (
+                <a href={order.pngUrlOpaque} target="_blank">
+                  <img src={order.previewUrl} style={{ height: 50 }} />
+                </a>
+              )}
+            </TableCell>
             <TableCell>
               {format(new Date(order.createdAt), 'MMM D YYYY')}
               <Small>{format(new Date(order.createdAt), 'h:mm A')}</Small>
@@ -112,9 +120,17 @@ const AdminDashboard = ({ adminPassword }) => {
                 View on Stripe
               </StripeLink>
               <Spacer size={12} />
-              <Button style={{ padding: '0 12px', margin: 'auto' }}>
-                Mark Shipped
-              </Button>
+              {order.format !== 'vector' && (
+                <Button
+                  style={{ padding: '0 12px', margin: 'auto' }}
+                  color={order.shipped ? COLORS.blue[500] : COLORS.green[500]}
+                  onClick={() => {
+                    markOrderAsShipped;
+                  }}
+                >
+                  {order.shipped ? 'Shipped!' : 'Mark shipped'}
+                </Button>
+              )}
             </TableCell>
           </tr>
         ))}
@@ -140,6 +156,7 @@ const HeaderCell = styled.th`
 const TableCell = styled.td`
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 12px;
+  font-size: 14px;
   line-height: 1.4;
 `;
 
@@ -148,9 +165,6 @@ const Small = styled.div`
   opacity: 0.75;
 `;
 
-const StripeLink = styled(TextLink)`
-  height: 40px;
-  line-height: 40px;
-`;
+const StripeLink = styled(TextLink)``;
 
 export default connect(mapStateToProps)(AdminDashboard);

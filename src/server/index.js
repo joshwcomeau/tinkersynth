@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import uuid from 'uuid/v1';
 
 import config from './config';
 import { User, Order } from './database';
@@ -90,7 +91,11 @@ app.post('/purchase/fulfill', async (req, res) => {
   try {
     const charge = await createCharge(req.body);
 
+    const fileId = uuid();
+
     const previewImage = await createRasterImage(size, artParams, {
+      fileId,
+      name: 'preview',
       opaqueBackground: true,
       pixelsPerInch: 25,
     });
@@ -100,7 +105,16 @@ app.post('/purchase/fulfill', async (req, res) => {
     // Kick-start the real business of sending emails and creating orders in
     // the local database... but we don't have to wait for it to complete.
     // It's slow.
-    fulfill(format, size, artParams, shippingAddress, cost, userId, charge);
+    fulfill(
+      format,
+      size,
+      artParams,
+      shippingAddress,
+      cost,
+      userId,
+      fileId,
+      charge
+    );
 
     return res.status(200).send({
       previewUrl,

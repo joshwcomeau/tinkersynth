@@ -6,6 +6,8 @@
  *   - Email the user with the assets
  *   - Email me to let me know about the order
  */
+import uuid from 'uuid/v1';
+
 import { User, Order } from './database';
 import { upload } from './google-cloud';
 import { parallel } from './utils';
@@ -19,6 +21,7 @@ export default async function fulfill(
   shippingAddress,
   cost,
   userId,
+  fileId,
   charge
 ) {
   // Once the charge and the initial preview image are completed, we can
@@ -52,28 +55,41 @@ export default async function fulfill(
 
   await user.addOrder(order);
 
-  const vectorFile = await createVectorImage(size, artParams);
+  const vectorFile = await createVectorImage(size, artParams, { fileId });
 
   const rasterFileOpaque = await createRasterImage(size, artParams, {
+    fileId,
+    name: 'opaque',
     opaqueBackground: true,
     pixelsPerInch: 300,
   });
   const rasterFileTransparent = await createRasterImage(size, artParams, {
+    fileId,
+    name: 'transparent',
     opaqueBackground: false,
     pixelsPerInch: 300,
   });
 
   // prettier-ignore
   await parallel(
-      upload(vectorFile.path, 'svg'),
-      upload(rasterFileOpaque.path, 'png'),
-      upload(rasterFileTransparent.path, 'png'),
-    );
+    upload(vectorFile.path, 'svg'),
+    upload(rasterFileOpaque.path, 'png',),
+    upload(rasterFileTransparent.path, 'png')
+  );
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
-  const svgUrl = `${urlPrefix}/${vectorFile.id}.svg`;
-  const pngUrlOpaque = `${urlPrefix}/${rasterFileOpaque.path}.png`;
-  const pngUrlTransparent = `${urlPrefix}/${rasterFileTransparent.path}.png`;
+  const previewUrl = `${urlPrefix}/${fileId}.preview.png`;
+  const svgUrl = `${urlPrefix}/${fileId}.svg`;
+  const pngUrlOpaque = `${urlPrefix}/${fileId}.opaque.png`;
+  const pngUrlTransparent = `${urlPrefix}/${fileId}.transparent.png`;
+
+  // Update the order model with these URLs
+  order.previewUrl = previewUrl;
+  order.svgUrl = svgUrl;
+  order.pngUrlOpaque = pngUrlOpaque;
+  order.pngUrlTransparent = pngUrlTransparent;
+
+  await order.save();
 
   // Email the customer!
   sendArtVectorEmail(

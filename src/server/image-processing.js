@@ -98,7 +98,7 @@ const getOrCreateOutputDirectory = () => {
 
 // Utility to create an SVG, given the requested size (small|medium|large) and
 // the art params.
-export const createVectorImage = async (size, artParams) => {
+export const createVectorImage = async (size, artParams, { fileId }) => {
   const { width, height, lineColor, backgroundColor } = getDrawingSettings(
     size,
     artParams
@@ -106,7 +106,6 @@ export const createVectorImage = async (size, artParams) => {
 
   const lines = generateLines(width, height, artParams);
 
-  const fileId = uuid();
   const fileExtension = 'svg';
   const outputDirectory = await getOrCreateOutputDirectory();
   const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
@@ -133,7 +132,7 @@ export const createVectorImage = async (size, artParams) => {
 export const createRasterImage = async (
   size,
   artParams,
-  { opaqueBackground, pixelsPerInch }
+  { fileId, name, opaqueBackground, pixelsPerInch }
 ) => {
   const {
     width,
@@ -146,10 +145,12 @@ export const createRasterImage = async (
 
   const lines = generateLines(width, height, artParams);
 
-  const fileId = uuid();
   const fileExtension = 'png';
   const outputDirectory = await getOrCreateOutputDirectory();
-  const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
+  const filePath = path.join(
+    outputDirectory,
+    `${fileId}.${name}.${fileExtension}`
+  );
 
   const markup = polylinesToSVG(lines, {
     width,
