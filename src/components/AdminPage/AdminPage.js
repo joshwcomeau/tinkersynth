@@ -1,18 +1,23 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { getApiUrl } from '../../helpers/api.helpers';
+import * as actions from '../../actions';
 
-import LayoutSidePage from '../LayoutSidePage';
 import Button from '../Button';
+import Spacer from '../Spacer';
+import Heading from '../Heading';
+import TextInput from '../TextInput';
 import { COLORS } from '../../constants';
 
 type Props = {
   children: React$Node,
+  authenticateAsAdmin: (password: string) => void,
 };
 
-const AdminPage = ({ children }: Props) => {
+const AdminPage = ({ children, authenticateAsAdmin }: Props) => {
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState(null);
   const [isAuthorized, setIsAuthorized] = React.useState(false);
@@ -37,6 +42,7 @@ const AdminPage = ({ children }: Props) => {
       })
       .then(json => {
         setIsAuthorized(true);
+        authenticateAsAdmin(password);
       })
       .catch(err => {
         console.error(err);
@@ -47,24 +53,26 @@ const AdminPage = ({ children }: Props) => {
 
   if (!isAuthorized) {
     return (
-      <LayoutSidePage title="Admin dashboard" adminPage={true}>
-        <form onSubmit={handleSubmit}>
-          <h1>This page requires admin authorization.</h1>
+      <form onSubmit={handleSubmit}>
+        <Heading size={3}>This page requires admin authorization.</Heading>
+        <Spacer size={36} />
 
-          <label>
-            Enter password:
-            <input
-              type="password"
-              value={password}
-              onChange={ev => setPassword(ev.currentTarget.value)}
-            />
-          </label>
+        <label>
+          Enter password:{' '}
+          <TextInput
+            type="password"
+            value={password}
+            onChange={ev => setPassword(ev.currentTarget.value)}
+            width={200}
+          />
+        </label>
 
-          {error && <Error>{error}</Error>}
+        <Spacer size={48} />
 
-          <Button>Submit</Button>
-        </form>
-      </LayoutSidePage>
+        {error && <Error>{error}</Error>}
+
+        <Button>Submit</Button>
+      </form>
     );
   }
 
@@ -76,4 +84,7 @@ const Error = styled.pre`
   color: ${COLORS.red[500]};
 `;
 
-export default AdminPage;
+export default connect(
+  null,
+  { authenticateAsAdmin: actions.authenticateAsAdmin }
+)(AdminPage);

@@ -6,7 +6,7 @@ const initialState = {
   password: null,
 };
 
-export default function adminReducer(state, action) {
+export default function adminReducer(state = initialState, action) {
   switch (action.type) {
     case 'AUTHENTICATE_AS_ADMIN': {
       return {

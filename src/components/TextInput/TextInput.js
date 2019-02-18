@@ -18,10 +18,11 @@ const TextInput = ({
   value,
   updateValue,
   isActive,
+  width,
   ...delegated
 }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper style={{ width }}>
       <Input
         as={as}
         type={type}

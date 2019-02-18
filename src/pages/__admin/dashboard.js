@@ -5,12 +5,15 @@ import styled from 'styled-components';
 import { COLORS, UNIT } from '../../constants';
 
 import AdminPage from '../../components/AdminPage';
+import LayoutSidePage from '../../components/LayoutSidePage';
 
 const Dashboard = () => {
   return (
-    <AdminPage pageId="dashboard" title="Dashboard">
-      <p>Hello World</p>
-    </AdminPage>
+    <LayoutSidePage title="Admin dashboard" adminPage={true}>
+      <AdminPage pageId="dashboard" title="Dashboard">
+        <p>Hello World</p>
+      </AdminPage>
+    </LayoutSidePage>
   );
 };
 
