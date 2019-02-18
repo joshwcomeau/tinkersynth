@@ -8,7 +8,7 @@ import Purchase from '../../../server/email-templates/purchase';
 const templateProps = {
   format: 'combo',
   name: 'Josh Comeau',
-  orderId: uuid.v4(),
+  orderId: 5,
   svgUrl: 'https://placekitten.com/200/200',
   pngUrlTransparent: 'https://placekitten.com/200/300',
   pngUrlOpaque: 'https://placekitten.com/200/400',

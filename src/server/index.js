@@ -5,6 +5,7 @@ import config from './config';
 import { User, Order } from './database';
 import { upload } from './google-cloud';
 import fulfill from './fulfillment';
+import adminOnly from './admin-middleware';
 import { createCharge } from './stripe';
 import { createRasterImage, createVectorImage } from './image-processing';
 import { sendContactEmail } from './email';
@@ -21,7 +22,7 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   next();
 });
@@ -114,6 +115,17 @@ app.post('/purchase/fulfill', async (req, res) => {
       url: '',
     });
   }
+});
+
+/**
+ * Admin-only routes
+ */
+app.post('/admin/authenticate', adminOnly, async (req, res) => {
+  res.send({ ok: true });
+});
+
+app.get('/admin/dashboard', adminOnly, async (req, res) => {
+  res.send({ ok: true });
 });
 
 /**

@@ -106,6 +106,21 @@ const PurchaseTemplate = ({
 
     <br />
 
+    <h4>Continue Working</h4>
+
+    <p>
+      Want to keep iterating on the design you came up with for this print? This
+      link will initialize the machine to the settings used for this order:
+    </p>
+
+    <a href={`https://tinkersynth.com/slopes?orderId=${orderId}`}>
+      https://tinkersynth.com/slopes?orderId={orderId}
+    </a>
+
+    <br />
+    <br />
+    <hr />
+
     <p>
       Thanks again for your purchase! This is a new art experiment, and your
       support is much appreciated 🙏.

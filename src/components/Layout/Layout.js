@@ -20,13 +20,24 @@ import { HEADER_HEIGHT } from '../../constants';
 const store = configureStore();
 
 type Props = {
+  pageId: string,
   children: React$Node,
   noHeader?: boolean,
+  transparentFooter?: boolean,
+  adminPage?: boolean,
 };
 
-const Layout = ({ pageId, children, noHeader, transparentFooter }: Props) => {
+const Layout = ({
+  pageId,
+  children,
+  noHeader,
+  transparentFooter,
+  adminPage,
+}: Props) => {
   React.useEffect(() => {
-    analytics.logEvent('visit-page', { pageId });
+    if (!adminPage) {
+      analytics.logEvent('visit-page', { pageId });
+    }
   }, []);
 
   return (

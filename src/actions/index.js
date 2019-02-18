@@ -62,3 +62,8 @@ export const selectSize = (machineName: string, size: string) => ({
   machineName,
   size,
 });
+
+export const authenticateAsAdmin = (password: string) => ({
+  type: 'AUTHENTICATE_AS_ADMIN',
+  password,
+});
