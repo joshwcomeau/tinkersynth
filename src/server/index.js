@@ -125,7 +125,8 @@ app.post('/admin/authenticate', adminOnly, async (req, res) => {
 });
 
 app.get('/admin/dashboard', adminOnly, async (req, res) => {
-  res.send({ ok: true });
+  const orders = await Order.findAll({ include: [User] });
+  res.send({ orders });
 });
 
 /**

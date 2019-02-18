@@ -78,7 +78,7 @@ const GlobalStyles = createGlobalStyle`
   b, u, i, center,
   dl, dt, dd, ol, ul, li,
   fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
+  caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, embed,
   figure, figcaption, footer, header, hgroup,
   menu, nav, output, ruby, section, summary,
@@ -108,10 +108,10 @@ const GlobalStyles = createGlobalStyle`
     content: '';
     content: none;
   }
-  table {
+  /* table {
     border-collapse: collapse;
     border-spacing: 0;
-  }
+  } */
 
   /* Styles for the Tippy tooltip library */
   .tippy-tooltip {

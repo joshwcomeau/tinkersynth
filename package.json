@@ -25,7 +25,7 @@
     "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.3.1",
     "canvas-sketch-util": "1.5.0",
-    "dotenv": "^6.2.0",
+    "date-fns": "^1.30.1",
     "express": "^4.16.4",
     "focus-visible": "4.1.5",
     "gatsby": "^2.0.76",
