@@ -119,6 +119,7 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     return res.status(200).send({
       previewUrl,
+      format,
       width: previewImage.width,
       height: previewImage.height,
     });

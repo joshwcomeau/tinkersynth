@@ -35,11 +35,52 @@ const getWindowOptions = () => {
   ].join();
 };
 
+const getCopyForFormat = format => {
+  switch (format) {
+    case 'vector':
+      return (
+        <>
+          <Paragraph>
+            At this very moment, a computer in a server farm in Toronto is hard
+            at work generating high-definition images for the art you created.
+            You should receive an email within a few minutes with links to
+            download your artwork!
+          </Paragraph>
+        </>
+      );
+
+    case 'combo':
+      return (
+        <>
+          <Paragraph>
+            At this very moment, a bunch of stuff is happening on a computer
+            deep in a Toronto server farm. It's creating high-definition images
+            for the artwork you created, and sending them across the internet.
+            You'll receive a copy in your email inbox within a few minutes, and
+            we'll begin producing your fine-art print shortly after that.
+          </Paragraph>
+        </>
+      );
+
+    case 'print':
+      return (
+        <>
+          <Paragraph>
+            We'll contact you within a couple days to let you know when your
+            fine art print has been produced, and is being shipped.
+          </Paragraph>
+        </>
+      );
+  }
+};
+
 const Thanks = ({ location }) => {
-  const { previewUrl, width, height } = queryString.parse(location.search);
+  const { previewUrl, format, width, height } = queryString.parse(
+    location.search
+  );
 
   const text = encodeURIComponent(
-    'I just made some generative art with Tinkersynth :o'
+    'I just created some generative art with Tinkersynth!'
   );
   const homeUrl = 'https://tinkersynth.com';
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
@@ -50,31 +91,26 @@ const Thanks = ({ location }) => {
       <Background>
         <MountainsBg />
       </Background>
+
       <Foreground>
         <Wrapper>
           <MainContent>
             <Heading size={1}>Success!</Heading>
             <Spacer size={40} />
-            <Paragraph style={{ fontSize: 21 }}>
-              At this very moment, a computer in a server farm in Toronto is
-              hard at work creating some high-resolution versions of your
-              artwork. Within a few minutes, you should receive an email with
-              links to download them!
+
+            <Paragraph>
+              Your purchase has completed successfully. Thank you for being one
+              of the first people to use Tinkersynth!
             </Paragraph>
 
-            <Paragraph style={{ fontSize: 21 }}>
-              Your purchase is really appreciated. Thank you for being an early
-              adopter!
-            </Paragraph>
+            {getCopyForFormat(format)}
 
             <Spacer size={50} />
 
-            <Paragraph style={{ fontSize: 21 }}>
+            <Paragraph>
               If you enjoyed creating art with this machine, spread the word!
               These buttons will help show your art to the world:
             </Paragraph>
-
-            <Spacer size={20} />
 
             <ButtonsRow>
               <Button
@@ -113,6 +149,8 @@ const Thanks = ({ location }) => {
                 Facebook
               </Button>
             </ButtonsRow>
+
+            <Spacer size={UNIT * 2} />
           </MainContent>
 
           <Spacer size={UNIT * 2} />
@@ -131,9 +169,11 @@ const Thanks = ({ location }) => {
 
         <AfterWrapper>
           <Link to="/slopes" style={{ color: '#FFF' }}>
-            <Icon icon={arrowLeft} size={24} /> Create another piece
+            <Icon icon={arrowLeft} size={24} /> Continue creating art
           </Link>
         </AfterWrapper>
+
+        <Spacer size={100} />
       </Foreground>
     </Layout>
   );
@@ -153,7 +193,7 @@ const Foreground = styled.div`
   position: relative;
   z-index: 1;
   padding-top: 10vh;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const Wrapper = styled.div`

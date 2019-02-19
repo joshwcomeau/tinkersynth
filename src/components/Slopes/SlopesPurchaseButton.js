@@ -49,7 +49,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
     setStatus(nextStateKey);
   };
 
-  const handleSuccessfulPurchase = ({ previewUrl, width, height }) => {
+  const handleSuccessfulPurchase = ({ format, previewUrl, width, height }) => {
     // Whatever, the state machine is being problematic so I'm just setting it
     // directly.
     setStatus('success');
@@ -57,7 +57,12 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
     analytics.logEvent('complete-checkout', { machineName: 'slopes' });
 
     window.setTimeout(() => {
-      const urlParams = queryString.stringify({ previewUrl, width, height });
+      const urlParams = queryString.stringify({
+        previewUrl,
+        width,
+        height,
+        format,
+      });
       navigate(`/thanks?${urlParams}`);
     }, 500);
   };
