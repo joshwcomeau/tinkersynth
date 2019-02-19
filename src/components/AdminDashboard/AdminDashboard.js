@@ -1,60 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import format from 'date-fns/format';
 
-import { getApiUrl } from '../../helpers/api.helpers';
 import { COLORS } from '../../constants';
+import { fetchDashboardData } from './AdminDashboard.helpers';
 
 import Button from '../Button';
 import TextLink from '../TextLink';
+import Paragraph from '../Paragraph';
+import Heading from '../Heading';
 import Spacer from '../Spacer';
-
-const fetchDashboardData = password => {
-  return window
-    .fetch(`${getApiUrl()}/admin/dashboard`, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `basic ${password}`,
-      },
-    })
-    .then(res => {
-      return res.json();
-    })
-    .catch(err => {
-      console.error(err);
-    });
-};
-
-const renderAddress = order => {
-  let message;
-  if (order.format === 'vector') {
-    message = 'Not Applicable';
-  } else if (!order.city) {
-    message = '(No address)';
-  }
-
-  if (message) {
-    return <span style={{ opacity: 0.6 }}>{message}</span>;
-  }
-
-  return (
-    <>
-      <strong>{order.shipTo}</strong>
-      <br />
-      {order.streetAddress}
-      <br />
-      {order.city}, {order.state}
-      <br />
-      {order.country}
-      <br />
-      {order.zipCode}
-    </>
-  );
-};
+import OrderRow from './OrderRow';
 
 const AdminDashboard = ({ adminPassword }) => {
   const [dashboardData, setDashboardData] = React.useState(null);
@@ -72,70 +28,55 @@ const AdminDashboard = ({ adminPassword }) => {
     [adminPassword]
   );
 
-  if (!dashboardData) {
+  if (!dashboardData || !dashboardData.orders) {
     return 'Loading...';
   }
 
+  const refreshDashboardData = () => {
+    return fetchDashboardData(adminPassword).then(json => {
+      setDashboardData(json);
+    });
+  };
+
+  const totalSales = dashboardData.orders.reduce(
+    (acc, order) => acc + order.cost,
+    0
+  );
+
   return (
-    <table
-      style={{ width: '100%', border: '1px solid rgba(0, 0, 0, 0.2)' }}
-      cellSpacing={2}
-    >
-      <thead>
-        <tr>
-          <HeaderCell>Preview</HeaderCell>
-          <HeaderCell>Date</HeaderCell>
-          <HeaderCell>Customer</HeaderCell>
-          <HeaderCell>Type</HeaderCell>
-          <HeaderCell>Cost</HeaderCell>
-          <HeaderCell>Ship to</HeaderCell>
-          <HeaderCell>Actions</HeaderCell>
-        </tr>
-      </thead>
-      <tbody>
-        {dashboardData.orders.map(order => (
+    <>
+      <Heading size={4}>Total sales:</Heading>
+      <Paragraph>${totalSales / 100} USD</Paragraph>
+
+      <Spacer size={25} />
+
+      <table
+        style={{ width: '100%', border: '1px solid rgba(0, 0, 0, 0.2)' }}
+        cellSpacing={2}
+      >
+        <thead>
           <tr>
-            <TableCell>
-              {order.previewUrl && (
-                <a href={order.pngUrlOpaque} target="_blank">
-                  <img src={order.previewUrl} style={{ height: 50 }} />
-                </a>
-              )}
-            </TableCell>
-            <TableCell>
-              {format(new Date(order.createdAt), 'MMM D YYYY')}
-              <Small>{format(new Date(order.createdAt), 'h:mm A')}</Small>
-            </TableCell>
-            <TableCell>{order.user.email}</TableCell>
-            <TableCell>
-              {order.format}
-              {order.format !== 'vector' && <Small>{order.size}</Small>}
-            </TableCell>
-            <TableCell>${order.cost / 100} USD</TableCell>
-            <TableCell>{renderAddress(order)}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>
-              <StripeLink
-                to={`https://dashboard.stripe.com/payments/${order.chargeId}`}
-              >
-                View on Stripe
-              </StripeLink>
-              <Spacer size={12} />
-              {order.format !== 'vector' && (
-                <Button
-                  style={{ padding: '0 12px', margin: 'auto' }}
-                  color={order.shipped ? COLORS.blue[500] : COLORS.green[500]}
-                  onClick={() => {
-                    markOrderAsShipped;
-                  }}
-                >
-                  {order.shipped ? 'Shipped!' : 'Mark shipped'}
-                </Button>
-              )}
-            </TableCell>
+            <HeaderCell>Preview</HeaderCell>
+            <HeaderCell>Date</HeaderCell>
+            <HeaderCell>Customer</HeaderCell>
+            <HeaderCell>Type</HeaderCell>
+            <HeaderCell>Cost</HeaderCell>
+            <HeaderCell>Ship to</HeaderCell>
+            <HeaderCell>Actions</HeaderCell>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {dashboardData.orders.map(order => (
+            <OrderRow
+              key={order.id}
+              order={order}
+              adminPassword={adminPassword}
+              refreshDashboardData={refreshDashboardData}
+            />
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 
@@ -158,6 +99,7 @@ const TableCell = styled.td`
   padding: 12px;
   font-size: 14px;
   line-height: 1.4;
+  vertical-align: top;
 `;
 
 const Small = styled.div`

@@ -25,6 +25,7 @@ app.use(function(req, res, next) {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT');
   next();
 });
 
@@ -141,6 +142,20 @@ app.post('/admin/authenticate', adminOnly, async (req, res) => {
 app.get('/admin/dashboard', adminOnly, async (req, res) => {
   const orders = await Order.findAll({ include: [User] });
   res.send({ orders });
+});
+
+app.put('/admin/toggle-order-shipped', adminOnly, async (req, res) => {
+  const { orderId, shipped } = req.body;
+
+  console.log({ orderId, shipped });
+
+  const order = await Order.findByPk(orderId);
+
+  order.shipped = shipped;
+
+  await order.save();
+
+  res.send({ order });
 });
 
 /**
