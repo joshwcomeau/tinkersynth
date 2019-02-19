@@ -23,6 +23,7 @@ type Props = {
   pageId: string,
   children: React$Node,
   noHeader?: boolean,
+  transparentHeader?: boolean,
   transparentFooter?: boolean,
   adminPage?: boolean,
 };
@@ -31,6 +32,7 @@ const Layout = ({
   pageId,
   children,
   noHeader,
+  transparentHeader,
   transparentFooter,
   adminPage,
 }: Props) => {
@@ -44,7 +46,7 @@ const Layout = ({
     <Provider store={store}>
       <ToastManager />
 
-      {!noHeader && <Header />}
+      {!noHeader && <Header transparentBackground={transparentHeader} />}
 
       <MainContentWrapper>{children}</MainContentWrapper>
 

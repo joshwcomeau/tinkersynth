@@ -6,16 +6,32 @@ import { UNIT, COLORS } from '../../constants';
 import Logo from '../Logo';
 import Spacer from '../Spacer';
 
-// TODO: Should sizing be customizable through props? I don't think so, since
-// I probably want this to be used consistently?
-const LogoWithName = ({ id, logoColors, nameColor = COLORS.gray[900] }) => {
+const getColorsForTheme = theme => {
+  if (theme === 'light') {
+    return {
+      tGradient: [COLORS.gray[500], COLORS.gray[100]],
+      sColor: COLORS.gray[300],
+      nameColor: COLORS.white,
+    };
+  }
+
+  return {
+    tGradient: ['#F218BC', '#FF1AFF'],
+    sColor: '#3C22E6',
+    nameColor: COLORS.gray[900],
+  };
+};
+
+const LogoWithName = ({ id, theme = 'default' }) => {
+  const logoColors = getColorsForTheme(theme);
+
   return (
     <Wrapper>
       <Logo id={id} height={28} colors={logoColors} />
 
       <Spacer size={UNIT} />
 
-      <SiteTitle style={{ color: nameColor }}>
+      <SiteTitle style={{ color: logoColors.nameColor }}>
         TinkerS<span style={{ letterSpacing: 1 }}>y</span>
         <span style={{ letterSpacing: 1.5 }}>n</span>
         <span style={{ letterSpacing: 1.5 }}>t</span>h

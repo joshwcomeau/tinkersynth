@@ -12,19 +12,37 @@ import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
 import LogoWithName from '../LogoWithName';
 
-const Header = () => {
+const Header = ({ transparentBackground }) => {
+  const navigationLinkColor = transparentBackground
+    ? COLORS.white
+    : COLORS.gray[900];
+
   return (
-    <OuterWrapper>
+    <OuterWrapper
+      style={{
+        position: transparentBackground ? 'absolute' : 'relative',
+        background: transparentBackground ? 'transparent' : COLORS.white,
+      }}
+    >
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-          <LogoWithName id="site-header" />
+          <LogoWithName
+            theme={transparentBackground ? 'light' : 'default'}
+            id="site-header"
+          />
         </Link>
 
         <Navigation>
-          <HeaderNavigationItem to="/slopes">Create</HeaderNavigationItem>
-          <HeaderNavigationItem to="/faq">FAQ</HeaderNavigationItem>
+          <HeaderNavigationItem color={navigationLinkColor} to="/slopes">
+            Create
+          </HeaderNavigationItem>
+          <HeaderNavigationItem color={navigationLinkColor} to="/faq">
+            FAQ
+          </HeaderNavigationItem>
           <DesktopOnly>
-            <HeaderNavigationItem to="/contact">Contact</HeaderNavigationItem>
+            <HeaderNavigationItem color={navigationLinkColor} to="/contact">
+              Contact
+            </HeaderNavigationItem>
           </DesktopOnly>
         </Navigation>
       </InnerWrapper>
@@ -33,12 +51,10 @@ const Header = () => {
 };
 
 const OuterWrapper = styled.div`
-  position: relative;
   top: 0;
   left: 0;
   right: 0;
   z-index: 2;
-  background: ${COLORS.white};
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`

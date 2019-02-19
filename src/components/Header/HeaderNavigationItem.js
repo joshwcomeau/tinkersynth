@@ -10,10 +10,12 @@ type Props = {
   children: React$Node,
 };
 
-const HeaderNavigationItem = ({ to, children }: Props) => {
+const HeaderNavigationItem = ({ to, color, children }: Props) => {
+  console.log({ color });
   return (
     <NavigationLink
       to={to}
+      color={color}
       getProps={({ isCurrent }) => {
         // the object returned here is passed to the
         // anchor element's props
@@ -33,7 +35,7 @@ const NavigationLink = styled(Link)`
   font-size: 16px;
   margin: 0 ${UNIT * 2.5}px;
   text-decoration: none;
-  color: ${COLORS.gray[900]};
+  color: ${props => props.color};
 `;
 
 export default HeaderNavigationItem;

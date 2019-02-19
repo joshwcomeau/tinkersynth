@@ -14,14 +14,7 @@ const Footer = ({ transparentBackground }) => {
     <Wrapper style={{ background: !transparentBackground && COLORS.gray[900] }}>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-          <LogoWithName
-            id="footer-logo"
-            logoColors={{
-              tGradient: [COLORS.gray[500], COLORS.gray[100]],
-              sColor: COLORS.gray[300],
-            }}
-            nameColor={COLORS.white}
-          />
+          <LogoWithName id="footer-logo" theme="light" />
         </Link>
 
         <CopyrightArea>
