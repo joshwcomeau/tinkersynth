@@ -12,9 +12,16 @@ import Heading from '../components/Heading';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import Spin from '../components/Spin';
+import HomepageHowItWorks from '../components/HomepageHowItWorks/HomepageHowItWorks';
 
 const Homepage = ({}) => {
-  return <Layout theme="dark">{/* TODO */}</Layout>;
+  return (
+    <Layout theme="dark">
+      {/* TEMP */}
+      <Spacer size={400} />
+      <HomepageHowItWorks />
+    </Layout>
+  );
 };
 
 const Wrapper = styled.div``;

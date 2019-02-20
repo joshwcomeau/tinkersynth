@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Column from './Column';
 import LineDemo from './LineDemo';
+import MaxWidthWrapper from '../MaxWidthWrapper';
 
 const HomepageHowItWorks = () => {
   const [lineLength, setLineLength] = React.useState(50);
@@ -29,11 +30,53 @@ const HomepageHowItWorks = () => {
           setLineCurve={setLineCurve}
         />
       </Column>
+
+      <Column
+        index={2}
+        title="Order a print"
+        description={
+          <>
+            We sell beautiful fine-art prints, produced with ultra-premium
+            papers and rich archival inks.
+            <br />
+            <br />
+            You can also purchase raw assets, and manage the printing yourself!
+          </>
+        }
+      >
+        <LineDemo
+          lineLength={lineLength}
+          lineCurve={lineCurve}
+          setLineLength={setLineLength}
+          setLineCurve={setLineCurve}
+        />
+      </Column>
+
+      <Column
+        index={3}
+        title="Display it proudly"
+        description={
+          <>
+            You collaborated with a machine to produce a unique piece of
+            generative artwork.
+            <br />
+            <br />
+            It’ll look great in your home.
+          </>
+        }
+      >
+        <LineDemo
+          lineLength={lineLength}
+          lineCurve={lineCurve}
+          setLineLength={setLineLength}
+          setLineCurve={setLineCurve}
+        />
+      </Column>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled(MaxWidthWrapper)`
   display: flex;
 `;
 
