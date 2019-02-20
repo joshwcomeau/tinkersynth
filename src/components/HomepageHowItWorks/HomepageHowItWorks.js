@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Column from './Column';
 import LineDemo from './LineDemo';
 import MaxWidthWrapper from '../MaxWidthWrapper';
+import FlyingTruckDemo from './FlyingTruckDemo';
 
 const HomepageHowItWorks = () => {
   const [lineLength, setLineLength] = React.useState(50);
@@ -44,12 +45,7 @@ const HomepageHowItWorks = () => {
           </>
         }
       >
-        <LineDemo
-          lineLength={lineLength}
-          lineCurve={lineCurve}
-          setLineLength={setLineLength}
-          setLineCurve={setLineCurve}
-        />
+        <FlyingTruckDemo />
       </Column>
 
       <Column
@@ -65,12 +61,7 @@ const HomepageHowItWorks = () => {
           </>
         }
       >
-        <LineDemo
-          lineLength={lineLength}
-          lineCurve={lineCurve}
-          setLineLength={setLineLength}
-          setLineCurve={setLineCurve}
-        />
+        {/* TODO */}
       </Column>
     </Wrapper>
   );
