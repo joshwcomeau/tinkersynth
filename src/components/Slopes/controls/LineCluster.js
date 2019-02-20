@@ -43,8 +43,6 @@ const LineCluster = ({
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = columnWidth - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
 
-  console.log({ hideOcclusionToggle });
-
   return (
     <InstrumentCluster direction="row">
       <TouchSliderIconControl

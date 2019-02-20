@@ -7,11 +7,11 @@ import { COLORS, UNIT } from '../../constants';
 
 type Props = {
   to: string,
+  color: string,
   children: React$Node,
 };
 
 const HeaderNavigationItem = ({ to, color, children }: Props) => {
-  console.log({ color });
   return (
     <NavigationLink
       to={to}

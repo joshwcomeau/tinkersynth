@@ -23,18 +23,18 @@ type Props = {
   pageId: string,
   children: React$Node,
   noHeader?: boolean,
-  transparentHeader?: boolean,
   transparentFooter?: boolean,
   adminPage?: boolean,
+  theme?: 'default' | 'dark',
 };
 
 const Layout = ({
   pageId,
   children,
   noHeader,
-  transparentHeader,
   transparentFooter,
   adminPage,
+  theme = 'default',
 }: Props) => {
   React.useEffect(() => {
     if (!adminPage) {
@@ -46,11 +46,17 @@ const Layout = ({
     <Provider store={store}>
       <ToastManager />
 
-      {!noHeader && <Header transparentBackground={transparentHeader} />}
+      {!noHeader && <Header theme={theme} />}
 
-      <MainContentWrapper>{children}</MainContentWrapper>
+      <MainContentWrapper
+        style={{
+          backgroundColor: theme === 'dark' ? 'hsl(0, 0%, 15%)' : 'white',
+        }}
+      >
+        {children}
+      </MainContentWrapper>
 
-      <Footer transparentBackground={transparentFooter} />
+      <Footer theme={theme} transparentBackground={transparentFooter} />
 
       <GlobalStyles />
       <DevTools />

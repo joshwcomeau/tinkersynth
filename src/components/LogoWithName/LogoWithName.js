@@ -7,10 +7,10 @@ import Logo from '../Logo';
 import Spacer from '../Spacer';
 
 const getColorsForTheme = theme => {
-  if (theme === 'light') {
+  if (theme === 'dark') {
     return {
-      tGradient: [COLORS.gray[500], COLORS.gray[100]],
-      sColor: COLORS.gray[300],
+      tGradient: [COLORS.pink[300], COLORS.pink[300]],
+      sColor: COLORS.blue[300],
       nameColor: COLORS.white,
     };
   }

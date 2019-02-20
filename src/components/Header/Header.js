@@ -12,24 +12,20 @@ import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
 import LogoWithName from '../LogoWithName';
 
-const Header = ({ transparentBackground }) => {
-  const navigationLinkColor = transparentBackground
-    ? COLORS.white
-    : COLORS.gray[900];
+const Header = ({ theme }) => {
+  const navigationLinkColor =
+    theme === 'dark' ? COLORS.white : COLORS.gray[900];
 
   return (
     <OuterWrapper
       style={{
-        position: transparentBackground ? 'absolute' : 'relative',
-        background: transparentBackground ? 'transparent' : COLORS.white,
+        position: theme === 'dark' ? 'absolute' : 'relative',
+        background: theme === 'dark' ? 'transparent' : COLORS.white,
       }}
     >
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-          <LogoWithName
-            theme={transparentBackground ? 'light' : 'default'}
-            id="site-header"
-          />
+          <LogoWithName theme={theme} id="site-header" />
         </Link>
 
         <Navigation>

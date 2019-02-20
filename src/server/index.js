@@ -148,8 +148,6 @@ app.get('/admin/dashboard', adminOnly, async (req, res) => {
 app.put('/admin/toggle-order-shipped', adminOnly, async (req, res) => {
   const { orderId, shipped } = req.body;
 
-  console.log({ orderId, shipped });
-
   const order = await Order.findByPk(orderId);
 
   order.shipped = shipped;

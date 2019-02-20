@@ -39,7 +39,7 @@ export const sendArtVectorEmail = (
       ),
     })
     .then(result => {
-      console.log('Sent "sendArtVectorEmail" email', result);
+      console.info('Sent "sendArtVectorEmail" email', result);
 
       return result;
     });
@@ -67,7 +67,7 @@ format:   ${format}
 cost:     ${cost / 100}`,
     })
     .then(result => {
-      console.log('Sent "notifyMe" email', result);
+      console.info('Sent "notifyMe" email', result);
 
       return result;
     });
@@ -107,7 +107,7 @@ ${message}
 `,
     })
     .then(result => {
-      console.log('Sent "sendContactEmail" email', result);
+      console.info('Sent "sendContactEmail" email', result);
 
       return result;
     })

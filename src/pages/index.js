@@ -14,7 +14,7 @@ import Button from '../components/Button';
 import Spin from '../components/Spin';
 
 const Homepage = ({}) => {
-  return <Layout transparentHeader>{/* TODO */}</Layout>;
+  return <Layout theme="dark">{/* TODO */}</Layout>;
 };
 
 const Wrapper = styled.div``;

@@ -9,12 +9,12 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import Spacer from '../Spacer';
 import TextLink from '../TextLink';
 
-const Footer = ({ transparentBackground }) => {
+const Footer = ({ transparentBackground, theme }) => {
   return (
-    <Wrapper style={{ background: !transparentBackground && COLORS.gray[900] }}>
+    <Wrapper style={{ background: COLORS.gray[900] }}>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
-          <LogoWithName id="footer-logo" theme="light" />
+          <LogoWithName id="footer-logo" theme="dark" />
         </Link>
 
         <CopyrightArea>
