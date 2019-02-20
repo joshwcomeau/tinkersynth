@@ -5,7 +5,7 @@ export const getBreakpointFor = windowWidth =>
     name => windowWidth <= BREAKPOINT_SIZES[name]
   ) || 'xl';
 
-export const isMobile = breakpoint => {
+export const getIsMobile = breakpoint => {
   if (typeof window === 'undefined') {
     return false;
   }
@@ -17,7 +17,7 @@ export const isMobile = breakpoint => {
   return breakpoint === 'xs' || breakpoint === 'sm';
 };
 
-export const isDesktop = breakpoint => !isMobile(breakpoint);
+export const isDesktop = breakpoint => !getIsMobile(breakpoint);
 
 export const isLargeScreen = breakpoint => {
   if (typeof window === 'undefined') {
@@ -29,33 +29,4 @@ export const isLargeScreen = breakpoint => {
   }
 
   return breakpoint === 'lg' || breakpoint === 'xl';
-};
-
-export const getApproximateWindowHeight = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  // Many mobile browsers like Safari do this irritating thing where the window
-  // height changes depending on whether the "menu" at the bottom is shown or
-  // not.
-  //
-  // Sometimes, you want things based on window height, but you DON'T want them
-  // jumping around when the user scrolls and that menu shows/hides.
-  //
-  // For mobile, though, the window size is almost as large as the screen;
-  // you can't (yet) have a Safari window open at an arbitrary size.
-  // So we can just use the screen size for mobile user-agents, to get a static
-  // approximation of the window size.
-  //
-  // WARNING: This always returns a value slightly larger than the available
-  // window space, so don't use it for things where precision is important.
-  if (IS_MOBILE_USER_AGENT) {
-    // I don't know how widely available `window.screen` is, so fall back to
-    // just using innerHeight
-    return (window.screen && window.screen.height) || window.innerHeight;
-  }
-
-  // On desktop, we can simply use window.innerHeight. Easy-peasy.
-  return window.innerHeight;
 };

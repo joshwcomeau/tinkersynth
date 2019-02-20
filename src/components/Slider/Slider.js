@@ -51,11 +51,18 @@ const Slider = ({
   const [sliderRef, sliderBoundingBox] = useBoundingBox();
 
   const updatePosition = ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
     if (!sliderBoundingBox || isDisabled) {
       return;
     }
 
-    const deltaY = ev.clientY - sliderBoundingBox.top;
+    // This can either be a mouse or touch event.
+    const clientY =
+      typeof ev.clientY === 'number' ? ev.clientY : ev.touches[0].clientY;
+
+    const deltaY = clientY - sliderBoundingBox.top;
     const value = clamp(deltaY / height, 0, 1);
 
     const normalizedValue = normalize(value, 0, 1, max, min);

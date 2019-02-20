@@ -7,6 +7,7 @@ import {
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
+import { getIsMobile } from '../../helpers/responsive.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
@@ -136,9 +137,15 @@ const TouchSlider = ({
   );
 
   const calculateAndSetNewValue = (ev, setter = updateValue) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
     if (!boundingBox || isDisabled) {
       return;
     }
+
+    const clientX =
+      typeof ev.clientX === 'number' ? ev.clientX : ev.touches[0].clientX;
 
     // Figure out what value this click represents, from 0-100.
     // We want to make it easier to select edge values (0 and 100), so we'll
@@ -148,7 +155,7 @@ const TouchSlider = ({
       left: boundingBox.left + CLICK_PADDING_AMOUNT,
       width: boundingBox.width - CLICK_PADDING_AMOUNT * 2,
     };
-    const relativeLeft = ev.clientX - paddedBoundingBox.left;
+    const relativeLeft = clientX - paddedBoundingBox.left;
     const ratio = clamp(relativeLeft / paddedBoundingBox.width, 0, 1);
 
     const newValue = normalize(ratio, 0, 1, min, max);
@@ -169,18 +176,27 @@ const TouchSlider = ({
       };
 
       window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchend', handleMouseUp);
+
       window.addEventListener('mousemove', calculateAndSetNewValue);
+      window.addEventListener('touchmove', calculateAndSetNewValue);
 
       return () => {
         // $FlowIgnore
         document.body.style.cursor = null;
 
         window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('touchend', handleMouseUp);
         window.removeEventListener('mousemove', calculateAndSetNewValue);
+        window.removeEventListener('touchmove', calculateAndSetNewValue);
       };
     },
     [dragging]
   );
+
+  // HACK: This doesn't handle resizes, but I'm only using this to control
+  // whether I need to worry about hover states, so whatever
+  const isMobile = getIsMobile();
 
   return (
     <UnstyledButton
@@ -206,19 +222,29 @@ const TouchSlider = ({
       <Canvas
         ref={canvasRef}
         {...scaledCanvasProps}
+        onTouchStart={ev => {
+          setDragging(true);
+          calculateAndSetNewValue(ev);
+        }}
         onMouseDown={ev => {
           setDragging(true);
-          setHoveredValue(null);
+          if (!isMobile) {
+            setHoveredValue(null);
+          }
           calculateAndSetNewValue(ev);
         }}
         onMouseMove={ev => {
           // When the user hovers over the space, set the hover value
-          if (ev.buttons === 0) {
-            calculateAndSetNewValue(ev, setHoveredValue);
+          if (!isMobile) {
+            if (ev.buttons === 0) {
+              calculateAndSetNewValue(ev, setHoveredValue);
+            }
           }
         }}
         onMouseLeave={() => {
-          setHoveredValue(null);
+          if (!isMobile) {
+            setHoveredValue(null);
+          }
         }}
       />
     </UnstyledButton>
