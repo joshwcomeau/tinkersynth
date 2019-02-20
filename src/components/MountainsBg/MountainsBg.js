@@ -1,134 +1,175 @@
 import React from 'react';
-
+import styled from 'styled-components';
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 
 const MountainsBg = () => {
   const windowDimensions = useWindowDimensions();
 
-  return (
-    <svg
-      viewBox="0 0 1305 953"
-      fill="none"
-      style={{
-        width: '100%',
-        height: windowDimensions.width > 700 ? 700 : '100%',
-      }}
-      preserveAspectRatio={
-        windowDimensions.width > 700 ? 'none' : 'xMaxYMin meet'
-      }
-    >
-      <mask
-        id="mountains-mask"
-        maskUnits="userSpaceOnUse"
-        x="-1"
-        y="0"
-        width="1306"
-        height="953"
-      >
-        <rect width="1305" height="953" fill="#FFF" />
-      </mask>
+  const backgroundSizeProps =
+    windowDimensions.width < 800
+      ? { width: 800, preserveAspectRatio: 'none' }
+      : {
+          width: '100%',
+          preserveAspectRatio: 'none',
+          style: { maxHeight: 900 },
+        };
 
-      <g mask="url(#mountains-mask)">
-        <rect width="1305" height="835.138" fill="#F5FBFF" />
-        <path
-          d="M108.5 55.5636C34.2881 32.404 -11.5002 310.651 -11.5002 310.651L-18.0002 2312.62H1362.5V335.907C1362.5 335.907 1249.02 137.776 1164.5 149.853C1092.78 160.102 1076.45 356.299 1005.5 335.907C929.582 314.089 959.153 110.297 885.5 72.4011C796.205 26.4577 761.643 314.354 674 260.139C618.975 226.101 631.922 64.2899 573.5 72.4011C507.839 81.5171 562.414 267.607 510.5 335.907C417.53 458.22 319.361 -30.1691 238.5 114.495C212.822 160.434 230.815 232.972 197 260.139C144.02 302.702 166.218 73.5762 108.5 55.5636Z"
-          fill="#CED8DE"
-          filter="url(#mountains0_f)"
-        />
-        <path
-          d="M52.9998 399.048C19.2453 387.499 -17.5002 309.809 -17.5002 309.809V2334.51H1371.5V432.723C1371.5 432.723 1317.61 19.5191 1210.5 50.5123C1146.34 69.076 1152.58 237.374 1087.5 239.934C1035.8 241.967 1024.12 141.051 973 127.965C897.478 108.633 857.767 334.745 794.5 262.664C748.625 210.399 788 185.212 728 116.178C668 47.1449 733.099 267.589 672 293.814C622.175 315.199 624.333 224.78 588 185.212C551.666 145.644 522.7 271.087 475.5 262.664C406.755 250.398 430.027 41.6961 361 35.3586C292.04 29.0273 299.758 266.341 232.5 239.934C203.226 228.44 198.377 177.41 169 166.691C100.194 141.585 121.993 422.653 52.9998 399.048Z"
-          fill="#ABBAC4"
-          filter="url(#mountains1_f)"
-        />
-        <path
-          d="M159 313.727C79.2476 331.468 -34.0002 192.497 -34.0002 192.497L-11.5002 2202.05H1373V478.734C1373 478.734 1284.77 364.827 1221 313.727C1151.52 258.053 1109.91 218.28 1033 214.386C925.476 208.942 871.998 455.177 775 376.867C699.414 315.845 724 11.4946 667 64.5326C610 117.571 515.327 310.701 428.5 327.197C367.937 338.703 355.434 194.562 294.5 192.497C234.589 190.467 218.406 300.512 159 313.727Z"
-          fill="#879CAB"
-          filter="url(#mountains2_f)"
-        />
-        <path
-          d="M35.9998 239.934C-35.0032 304.737 -3.50024 581.734 -3.50024 581.734L-23.5002 2305.89H1388.5V498.389C1388.5 498.389 1354.4 209.868 1278.5 225.622C1217.68 238.246 1244.27 436.872 1183 435.248C1136.2 434.008 1136.3 307.836 1089.5 308.967C1018.56 310.681 1103.85 539.862 1044.5 605.307C959.288 699.271 949.297 258.206 852 308.967C795.102 338.652 805.408 466.164 749 498.389C669.77 543.65 629.41 295.364 553 352.745C491.596 398.856 531.368 565.177 468.5 605.307C372.054 666.868 429.962 176.676 331 225.622C273.79 253.917 289.612 389.504 233.5 423.462C150.597 473.634 113.449 169.247 35.9998 239.934Z"
-          fill="#6A7D8A"
-          filter="url(#mountains3_f)"
-        />
-        <path
-          d="M144 252.562C50.9083 227.939 -8.50024 567.422 -8.50024 567.422V2305.05H1314.5V649.084C1314.5 649.084 1194.73 410.976 1090.5 404.099C1017.57 399.287 985.953 519.952 913.5 505.124C822.666 486.534 822.536 217.031 733.5 252.562C644.681 288.006 730.697 606.374 639.5 612.883C552.927 619.063 596.327 355.658 515.5 303.074C413.167 236.499 363.201 574.387 261.5 505.124C192.518 458.144 217.51 272.006 144 252.562Z"
-          fill="#434E56"
-          filter="url(#mountains4_f)"
-        />
-        <path
-          d="M293 413.36C163.404 389.028 -8.50024 654.978 -8.50024 654.978V2363.14H1376V262.665C1376 262.665 1211.24 695.276 1074.5 619.619C976.405 565.345 1054 241.619 916.5 262.665C779 283.711 670.884 643.17 492.5 585.102C406.589 557.136 379.963 429.687 293 413.36Z"
-          fill="#1C1E21"
-        />
-      </g>
-      <defs>
-        <filter
-          id="mountains0_f"
-          x="-48"
-          y="24.194"
-          width="1440.5"
-          height="2318.43"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation="15" result="effect1_foregroundBlur" />
-        </filter>
-        <filter
-          id="mountains1_f"
-          x="-37.5"
-          y="15.234"
-          width="1429"
-          height="2339.28"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur" />
-        </filter>
-        <filter
-          id="mountains2_f"
-          x="-46"
-          y="46.358"
-          width="1431"
-          height="2167.69"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur" />
-        </filter>
-        <filter
-          id="mountains3_f"
-          x="-31.5"
-          y="214.179"
-          width="1428"
-          height="2099.71"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation="4" result="effect1_foregroundBlur" />
-        </filter>
-        <filter
-          id="mountains4_f"
-          x="-12.5"
-          y="245.338"
-          width="1331"
-          height="2063.71"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur" />
-        </filter>
-      </defs>
-    </svg>
+  return (
+    <Wrapper>
+      <svg {...backgroundSizeProps} viewBox="0 0 1361 917" fill="none">
+        <g id="Background">
+          <rect
+            id="Background_2"
+            x="-1"
+            y="-5"
+            width="1361"
+            height="598"
+            fill="url(#paint0_linear)"
+          />
+          <path
+            d="M20 316C-5.33572 309.899 -13 258 -13 258V799H1397V273C1397 273 1355.07 311.039 1323 309C1279.45 306.231 1283.04 207.627 1245 229C1222.92 241.404 1238.05 274.553 1216 287C1188.11 302.74 1168.93 262.585 1137 265C1102.34 267.621 1090.13 314.512 1057 304C1029.08 295.142 1041.14 246.966 1012 244C981.505 240.896 986.113 293.269 956 299C927.712 304.383 915.491 268.824 887 273C840.462 279.821 873.148 364.81 828 378C764.781 396.468 782 214 749 229C716 244 725 273 697 273C669 273 639.345 301.248 599 299C551.404 296.348 541.726 207.861 499 229C462.406 247.105 488 330 472 330C456 330 450.598 249.37 411 249C381.855 248.727 378.395 285.425 350 292C317.234 299.587 296.406 258.625 266 273C239.354 285.597 243 334 226 337C209 340 221.597 255.041 184 249C154.969 244.335 148.282 289.671 119 287C100.215 285.287 94.8593 265.361 76 265C46.426 264.433 48.7574 322.925 20 316Z"
+            fill="#1AD9FF"
+            fillOpacity="0.2"
+            id="Back row"
+            filter="url(#filter0_f)"
+          />
+          <g id="4th row" filter="url(#filter1_f)">
+            <path
+              id="Subtract"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M3.8706 347.421C12.9182 378.761 31.4884 424.028 63 422.38C83.0419 421.332 90.719 405.481 98.7877 388.821C99.6881 386.962 100.593 385.093 101.521 383.233C89.769 370.663 82.966 349.883 77.1474 332.111C70.6915 312.391 65.4476 296.374 56 299.38C43.9861 303.203 22.0715 326.588 3.8706 347.421ZM-3 355.357V838.38H1409V839.38H-32L-26 381.38C-24.5934 380.677 -18.8587 373.945 -10.8998 364.603C-8.45593 361.734 -5.80237 358.619 -3 355.357ZM1395.41 354.367C1376.39 328.433 1339.89 285.972 1302 281.38C1272.8 277.841 1254.47 299.625 1236.42 321.086C1229.67 329.11 1222.95 337.088 1215.72 343.682C1234.9 348.662 1245.28 365.414 1255.69 382.217C1267.32 400.989 1278.99 419.824 1303 422.38C1339.9 426.307 1373.02 388.926 1395.41 354.367ZM1168.85 358.112C1157.9 355.421 1150.54 349.645 1143.21 343.886C1135.5 337.832 1127.82 331.796 1116 329.38C1094.55 324.996 1079.08 336.135 1063.45 347.385C1053.74 354.377 1043.97 361.411 1032.66 364.79C1046.06 397.034 1062.69 424.602 1095 422.38C1121.23 420.577 1135.93 400.546 1150.3 380.958C1156.27 372.82 1162.19 364.758 1168.85 358.112ZM931.537 289.442C927.19 288.782 922.394 289.318 917 291.38C899.247 298.168 898.249 318.445 897.282 338.092C896.283 358.368 895.318 377.973 876 381.38C858.225 384.515 849.059 371.324 839.371 357.382C836.353 353.039 833.285 348.624 829.891 344.606C832.78 350.915 835.093 357.78 837.395 364.612C844.4 385.402 851.299 405.879 874 409.38C905.349 414.216 909.982 382.751 915.017 348.553C918.162 327.188 921.465 304.756 931.537 289.442ZM767.61 341.644C764.901 343.678 762.235 345.819 759.57 347.959C745.912 358.927 732.276 369.876 713 366.38C694.352 362.998 685.557 347.267 676.965 331.897C667.883 315.652 659.027 299.81 639 299.38C614.167 298.847 607.79 322.288 601.144 346.713C598.133 357.781 595.067 369.051 590.204 378.385C593.157 377.055 596.406 376.037 600 375.38C631.357 369.648 645.323 399.016 659.518 428.864C673.505 458.275 687.714 488.153 719 485.38C755.314 482.162 758.378 435.843 761.237 392.622C762.485 373.759 763.694 355.487 767.61 341.644ZM570.06 397.881C568.466 398.488 566.782 398.991 565 399.38C540.322 404.775 523.72 382.003 507.929 360.344C491.477 337.779 475.906 316.421 453 329.38C445.983 333.35 441.992 339.189 439.425 345.863C447.886 361.965 453.063 383.168 458.145 403.979C468.688 447.155 478.819 488.642 517 479.38C542.032 473.308 550.082 449.998 558.061 426.892C561.587 416.68 565.1 406.507 570.06 397.881ZM374.778 325.179C369.452 308.475 361.502 296.455 346 299.38C327.216 302.925 323.47 321.263 319.678 339.825C315.949 358.084 312.175 376.559 294 381.38C274.871 386.455 262.678 373.479 250.039 360.026C238.353 347.589 226.285 334.745 208 335.38C191.719 335.945 181.165 346.34 171.777 358.274C184.13 367.141 194.957 381.406 205.981 395.929C226.772 423.322 248.261 451.635 282 446.38C314.83 441.267 327.108 410.792 339.169 380.856C348.26 358.292 357.227 336.036 374.778 325.179Z"
+              fill="#1AD9FF"
+              fillOpacity="0.5"
+            />
+          </g>
+          <path
+            d="M63 423C14.963 425.513 -3 319 -3 319V839H1425V300C1425 300 1370.28 430.16 1303 423C1254.77 417.867 1256.33 347.062 1208 343C1154.12 338.472 1148.94 419.291 1095 423C1014.79 428.515 1031.16 250.419 954 273C894.538 290.402 935.232 419.445 874 410C829.214 403.092 845.932 330.113 802 319C731.396 301.14 791.544 479.57 719 486C655.962 491.587 662.254 364.62 600 376C548.884 385.344 567.499 467.751 517 480C441.018 498.43 476.123 315.892 398 319C330.593 321.682 348.657 436.619 282 447C213.038 457.74 195.256 328.244 130 353C94.6198 366.422 100.789 421.023 63 423Z"
+            fill="#6EE7FF"
+            fillOpacity="0.75"
+            id="3rd row"
+            filter="url(#filter2_f)"
+          />
+          <path
+            d="M60 494.034C20.7708 491.044 -32 451.424 -32 451.424V890H1408V411.931C1376.67 443.456 1361.29 501.491 1309 506.506C1241.34 512.994 1256.15 386.361 1189 375.556C1148.65 369.064 1104 376.596 1087 399.46C1070 422.324 1076.93 454.353 1051 470.131C1008.61 495.924 989.868 411.911 941 406.735C867.506 398.95 851.65 512.496 778 506.506C698.645 500.051 701.295 330.823 628 363.085C581.19 383.689 610.426 485.139 560 478.445C525.482 473.863 528.25 429.808 498 411.931C425.683 369.193 366.338 494.103 290 459.738C253.111 443.132 249.869 401.812 211 391.146C142.824 372.436 130.324 499.395 60 494.034Z"
+            fill="#BAF3FF"
+            fillOpacity="0.89"
+            id="2nd row"
+            filter="url(#filter3_df)"
+          />
+          <path
+            id="Foreground"
+            d="M121.538 453.038C12.9284 452.386 -127 534.876 -127 534.876V917H1508V445C1508 445 1472.13 563.239 1380.94 583.832C1274.22 607.938 1241.75 500.82 1130.18 489.573C980.332 474.467 910.12 607.558 765.73 577.256C672.881 557.771 674.164 477.501 577.376 469.844C486.323 462.64 456.203 533.815 364.503 534.876C257.846 536.109 228.207 453.678 121.538 453.038Z"
+            fill="#fff"
+          />
+        </g>
+        <defs>
+          <filter
+            id="filter0_f"
+            x="-33"
+            y="205.74"
+            width="1450"
+            height="613.26"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur" />
+          </filter>
+          <filter
+            id="filter1_f"
+            x="-42"
+            y="271"
+            width="1461"
+            height="578.38"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur" />
+          </filter>
+          <filter
+            id="filter2_f"
+            x="-8"
+            y="266.02"
+            width="1438"
+            height="577.98"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="2.5"
+              result="effect1_foregroundBlur"
+            />
+          </filter>
+          <filter
+            id="filter3_df"
+            x="-36"
+            y="356.5"
+            width="1448"
+            height="541.5"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feOffset dy="4" />
+            <feGaussianBlur stdDeviation="2" />
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow" />
+            <feBlend
+              in="SourceGraphic"
+              in2="effect1_dropShadow"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="1.25"
+              result="effect2_foregroundBlur"
+            />
+          </filter>
+          <linearGradient
+            id="paint0_linear"
+            x1="589"
+            y1="-124"
+            x2="1011.98"
+            y2="710.49"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#3C22E6" />
+            <stop offset="1" stopColor="#1AD9FF" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  overflow: hidden;
+`;
 
 export default MountainsBg;

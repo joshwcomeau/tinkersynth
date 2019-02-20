@@ -12,14 +12,9 @@ import Heading from '../components/Heading';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import Spin from '../components/Spin';
-import HomepageBackground from '../components/HomepageBackground/HomepageBackground';
 
 const Homepage = ({}) => {
-  return (
-    <Layout transparentHeader>
-      <HomepageBackground />
-    </Layout>
-  );
+  return <Layout transparentHeader>{/* TODO */}</Layout>;
 };
 
 const Wrapper = styled.div``;

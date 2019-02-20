@@ -86,13 +86,18 @@ const Thanks = ({ location }) => {
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
 
   return (
-    <Layout pageId="thanks" noHeader transparentFooter>
+    <Layout pageId="thanks" noHeader>
       <SEO title="Slopes" url="https://tinkersynth.com/slopes/" />
       <Background>
         <MountainsBg />
       </Background>
 
       <Foreground>
+        <BeforeWrapper>
+          <Link to="/slopes" style={{ color: '#FFF' }}>
+            <Icon icon={arrowLeft} size={24} /> Create more art
+          </Link>
+        </BeforeWrapper>
         <Wrapper>
           <MainContent>
             <Heading size={1}>Success!</Heading>
@@ -167,12 +172,6 @@ const Thanks = ({ location }) => {
           </ArtPreview>
         </Wrapper>
 
-        <AfterWrapper>
-          <Link to="/slopes" style={{ color: '#FFF' }}>
-            <Icon icon={arrowLeft} size={24} /> Continue creating art
-          </Link>
-        </AfterWrapper>
-
         <Spacer size={100} />
       </Foreground>
     </Layout>
@@ -186,7 +185,7 @@ const Background = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: hsl(0, 0%, 12%);
+  background: #fff;
 `;
 
 const Foreground = styled.div`
@@ -207,13 +206,12 @@ const Wrapper = styled.div`
   border-radius: 8px;
 `;
 
-const AfterWrapper = styled.div`
+const BeforeWrapper = styled.div`
   width: 90%;
   max-width: 960px;
   margin: auto;
   line-height: 65px;
   font-size: 18px;
-  color: #fff;
 `;
 
 const MainContent = styled.div`
