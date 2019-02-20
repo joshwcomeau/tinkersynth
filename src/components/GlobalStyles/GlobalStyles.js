@@ -118,6 +118,10 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.5 !important;
     padding: 1rem !important;
   }
+
+  .tippy-popper {
+    pointer-events: auto !important;
+  }
 `;
 
 export default GlobalStyles;

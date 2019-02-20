@@ -19,6 +19,7 @@ import { SlopesContext } from './SlopesState';
 import PageCluster from './controls/PageCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
+import UnstyledButton from '../UnstyledButton';
 
 type Props = {
   width: number,
@@ -50,7 +51,7 @@ const handleClickPurchase = () => {
 };
 
 const useTooltip = isAwareOfPurchaseOptions => {
-  const [showTooltip, setShowTooltip] = React.useState(false);
+  const [shouldShowTooltip, setShouldShowTooltip] = React.useState(false);
 
   const timeoutId = React.useRef(null);
 
@@ -60,7 +61,7 @@ const useTooltip = isAwareOfPurchaseOptions => {
     }
 
     timeoutId.current = window.setTimeout(() => {
-      setShowTooltip(true);
+      setShouldShowTooltip(true);
     }, SHOW_PURCHASE_TOOLTIP_AFTER);
   }, []);
 
@@ -68,13 +69,17 @@ const useTooltip = isAwareOfPurchaseOptions => {
     () => {
       if (isAwareOfPurchaseOptions) {
         window.clearTimeout(timeoutId.current);
-        setShowTooltip(false);
+        setShouldShowTooltip(false);
       }
     },
     [isAwareOfPurchaseOptions]
   );
 
-  return showTooltip;
+  const dismissTooltip = () => {
+    setShouldShowTooltip(false);
+  };
+
+  return [shouldShowTooltip, dismissTooltip];
 };
 
 const SlopesCanvasWrapper = ({
@@ -88,7 +93,9 @@ const SlopesCanvasWrapper = ({
 }: Props) => {
   const [showPurchaseTooltip, setShowPurchaseTooltip] = React.useState(false);
 
-  const showTooltip = useTooltip(isAwareOfPurchaseOptions);
+  const [shouldShowTooltip, dismissTooltip] = useTooltip(
+    isAwareOfPurchaseOptions
+  );
 
   return (
     <Wrapper>
@@ -123,21 +130,20 @@ const SlopesCanvasWrapper = ({
 
           <Tooltip
             animation="fade"
-            tabIndex={0}
             animateFill={false}
             arrow={true}
             position="bottom"
             html={
-              <>
+              <TooltipContents onClick={dismissTooltip}>
                 <strong>Happy with your design?</strong>
                 <br />
                 <br />
                 You can purchase it as a print,
                 <br />
                 or as a vector image.
-              </>
+              </TooltipContents>
             }
-            open={showTooltip}
+            open={shouldShowTooltip}
             style={{
               lineHeight: 1.4,
             }}
@@ -211,6 +217,12 @@ const Footer = styled.div`
 `;
 
 const Toggles = styled.div``;
+
+const TooltipContents = styled(UnstyledButton)`
+  font-size: 15px;
+  color: ${COLORS.white};
+  text-align: center;
+`;
 
 const mapStateToProps = state => {
   return {
