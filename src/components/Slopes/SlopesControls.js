@@ -89,6 +89,7 @@ const Row = styled.div`
 const DesktopOnlyRow = styled(Row)`
   @media (max-width: ${SLOPES_BREAKPOINTS.small}px) {
     flex-direction: column;
+    align-items: flex-end;
   }
 `;
 

@@ -1,5 +1,5 @@
 // @flow
-import { getIsMobile } from '../../helpers/responsive.helpers';
+import { getDeviceType } from '../../helpers/responsive.helpers';
 
 export const getPadding = ({
   noPadding,
@@ -12,9 +12,9 @@ export const getPadding = ({
     return 0;
   }
 
-  if (getIsMobile() && noPaddingOnMobile) {
+  if (getDeviceType() === 'mobile' && noPaddingOnMobile) {
     return 0;
   }
 
-  return getIsMobile() ? '1rem' : '2rem';
+  return getDeviceType() === 'mobile' ? '1rem' : '2rem';
 };

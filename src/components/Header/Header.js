@@ -19,8 +19,7 @@ const Header = ({ theme }) => {
   return (
     <OuterWrapper
       style={{
-        position: theme === 'dark' ? 'absolute' : 'relative',
-        background: theme === 'dark' ? 'transparent' : COLORS.white,
+        background: theme === 'dark' ? COLORS.gray[900] : COLORS.white,
       }}
     >
       <InnerWrapper>

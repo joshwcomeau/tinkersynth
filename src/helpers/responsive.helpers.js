@@ -1,32 +1,22 @@
-import { BREAKPOINT_SIZES } from '../constants';
+import { BREAKPOINT_SIZES, IS_MOBILE_USER_AGENT } from '../constants';
 
 export const getBreakpointFor = windowWidth =>
   Object.keys(BREAKPOINT_SIZES).find(
     name => windowWidth <= BREAKPOINT_SIZES[name]
   ) || 'xl';
 
-export const getIsMobile = breakpoint => {
+export const getDeviceType = breakpoint => {
   if (typeof window === 'undefined') {
-    return false;
+    return 'desktop';
   }
 
   if (!breakpoint) {
     breakpoint = getBreakpointFor(window.innerWidth);
   }
 
-  return breakpoint === 'xs' || breakpoint === 'sm';
-};
-
-export const isDesktop = breakpoint => !getIsMobile(breakpoint);
-
-export const isLargeScreen = breakpoint => {
-  if (typeof window === 'undefined') {
-    return true;
+  if (breakpoint === 'xs' || breakpoint === 'sm' || IS_MOBILE_USER_AGENT) {
+    return 'mobile';
+  } else {
+    return 'desktop';
   }
-
-  if (!breakpoint) {
-    breakpoint = getBreakpointFor(window.innerWidth);
-  }
-
-  return breakpoint === 'lg' || breakpoint === 'xl';
 };

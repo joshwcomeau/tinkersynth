@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Spring, animated, interpolate } from 'react-spring';
 
 import { COLORS, CONTROL_RADIUS } from '../../constants';
+import { getDeviceType } from '../../helpers/responsive.helpers';
 import { clamp, normalize } from '../../utils';
 
 import RoundHandle from '../RoundHandle';
@@ -21,7 +22,8 @@ type Props = {
   updatePoint: (id: number, point: PointData) => void,
 };
 
-const HANDLE_RADIUS = 10;
+const LARGE_HANDLE_RADIUS = 15;
+const SMALL_HANDLE_RADIUS = 10;
 const BORDER_WIDTH = 12;
 const DOT_SPACING = 15;
 
@@ -54,6 +56,9 @@ class BezierCurve extends PureComponent<Props> {
       window.addEventListener('mousemove', this.handleDrag);
       window.addEventListener('mouseup', this.handleRelease);
 
+      window.addEventListener('touchmove', this.handleDrag);
+      window.addEventListener('touchend', this.handleRelease);
+
       document.body.style.cursor = 'grabbing';
     });
   };
@@ -69,7 +74,16 @@ class BezierCurve extends PureComponent<Props> {
 
   handleDrag = ev => {
     // This event handles both mouseMove and touchMove.
-    const [x, y] = [ev.clientX, ev.clientY];
+    let x, y;
+    if (ev.touches) {
+      ev.preventDefault();
+      const touch = ev.touches[0];
+      [x, y] = [touch.clientX, touch.clientY];
+    } else {
+      [x, y] = [ev.clientX, ev.clientY];
+    }
+
+    console.log(x, y);
 
     const { width, height, updatePoint } = this.props;
     const { draggingPointId } = this.state;
@@ -157,6 +171,9 @@ class BezierCurve extends PureComponent<Props> {
       updatePoint(pointId, [newX, newY]);
     };
 
+    const handleRadius =
+      getDeviceType() === 'mobile' ? LARGE_HANDLE_RADIUS : SMALL_HANDLE_RADIUS;
+
     return (
       <Spring native to={{ p1, p2, p3 }} immediate={!isAnimated}>
         {sprung => (
@@ -205,23 +222,25 @@ class BezierCurve extends PureComponent<Props> {
                 {/* End point */}
                 <PointWrapper
                   onMouseDown={this.handleSelectPoint('p3')}
+                  onTouchStart={this.handleSelectPoint('p3')}
                   onKeyDown={ev => handleKeyDown(ev, 'p3')}
                   tabIndex={0}
                   transform={sprung.p3.interpolate(
                     (x, y) => `
                     translate(
                       ${x - svgWidth / 2},
-                      ${y - HANDLE_RADIUS}
+                      ${y - handleRadius}
                     )
                   `
                   )}
                 >
-                  <RoundHandle id="bezier-end" size={HANDLE_RADIUS * 2} />
+                  <RoundHandle id="bezier-end" size={handleRadius * 2} />
                 </PointWrapper>
 
                 {/* Control point 1 */}
                 <PointWrapper
                   onMouseDown={this.handleSelectPoint('p2')}
+                  onTouchStart={this.handleSelectPoint('p2')}
                   onKeyDown={ev => handleKeyDown(ev, 'p2')}
                   tabIndex={0}
                   transform={sprung.p2.interpolate(
@@ -229,14 +248,14 @@ class BezierCurve extends PureComponent<Props> {
                       `
                     translate(
                       ${x - svgWidth / 2},
-                      ${y - HANDLE_RADIUS}
+                      ${y - handleRadius}
                     )
                   `
                   )}
                 >
                   <RoundHandle
                     id="bezier-control"
-                    size={HANDLE_RADIUS * 2}
+                    size={handleRadius * 2}
                     innerColor={COLORS.violet[100]}
                     outerColor={COLORS.violet[300]}
                   />
@@ -245,6 +264,7 @@ class BezierCurve extends PureComponent<Props> {
                 {/* Start point */}
                 <PointWrapper
                   onMouseDown={this.handleSelectPoint('p1')}
+                  onTouchStart={this.handleSelectPoint('p1')}
                   onKeyDown={ev => handleKeyDown(ev, 'p1')}
                   tabIndex={0}
                   transform={sprung.p1.interpolate(
@@ -252,12 +272,12 @@ class BezierCurve extends PureComponent<Props> {
                       `
                     translate(
                       ${x - svgWidth / 2},
-                      ${y - HANDLE_RADIUS}
+                      ${y - handleRadius}
                     )
                   `
                   )}
                 >
-                  <RoundHandle id="bezier-start" size={HANDLE_RADIUS * 2} />
+                  <RoundHandle id="bezier-start" size={handleRadius * 2} />
                 </PointWrapper>
               </g>
             </Svg>

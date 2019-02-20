@@ -206,6 +206,9 @@ const Wrapper = styled.div`
 
 const HandleWrapper = styled(UnstyledButton)`
   position: absolute;
+  /* Don't scroll while dragging handle */
+  touch-action: none;
+
   /*
     The wrapper is given some padding, so that user clicks don't have to be
     perfect. It's an invisible barrier around the handle.

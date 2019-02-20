@@ -7,7 +7,7 @@ import {
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
-import { getIsMobile } from '../../helpers/responsive.helpers';
+import { getDeviceType } from '../../helpers/responsive.helpers';
 import useBoundingBox from '../../hooks/bounding-box.hook';
 
 import { generateDotCoords, getColorForColIndex } from './TouchSlider.helpers';
@@ -196,7 +196,7 @@ const TouchSlider = ({
 
   // HACK: This doesn't handle resizes, but I'm only using this to control
   // whether I need to worry about hover states, so whatever
-  const isMobile = getIsMobile();
+  const isMobile = getDeviceType() === 'mobile';
 
   return (
     <UnstyledButton
@@ -223,6 +223,9 @@ const TouchSlider = ({
         ref={canvasRef}
         {...scaledCanvasProps}
         onTouchStart={ev => {
+          ev.preventDefault();
+          ev.stopPropagation();
+
           setDragging(true);
           calculateAndSetNewValue(ev);
         }}
@@ -259,6 +262,7 @@ TouchSlider.defaultProps = {
 const Canvas = styled.canvas`
   display: block;
   cursor: pointer;
+  touch-action: none;
 `;
 
 export default TouchSlider;
