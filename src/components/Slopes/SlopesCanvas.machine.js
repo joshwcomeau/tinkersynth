@@ -19,7 +19,12 @@ const SlopesCanvasMachine = (props: any) => {
   return (
     <Spring to={springParams} immediate={!slopesParams.animateTransitions}>
       {interpolatedParams => (
-        <SlopesCanvas {...slopesParams} {...interpolatedParams} {...props} />
+        <SlopesCanvas
+          kind="main"
+          {...slopesParams}
+          {...interpolatedParams}
+          {...props}
+        />
       )}
     </Spring>
   );

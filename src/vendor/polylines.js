@@ -48,8 +48,6 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
   var lineCap = opt.lineCap || 'butt';
 
-  console.log({ lineJoin, lineCap });
-
   return `
 <svg
   width="${viewWidth}"
@@ -91,7 +89,7 @@ export const renderPolylines = function(polylines, opt: Options) {
   context.clearRect(0, 0, width, height);
 
   // Fill with white
-  context.fillStyle = opt.background || 'white';
+  context.fillStyle = opt.backgroundColor || 'white';
   context.fillRect(0, 0, width, height);
 
   // Draw lines

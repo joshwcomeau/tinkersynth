@@ -45,6 +45,7 @@ onmessage = throttle(function({ data }) {
       getRenderOptions(
         data.width,
         data.height,
+        data.kind,
         ctx,
         devicePixelRatio,
         scaleRatio,

@@ -44,7 +44,7 @@ const Wrapper = styled(FadeIn)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: #333;
+  background: ${COLORS.gray[1000]};
 `;
 
 const MainContent = styled.div`

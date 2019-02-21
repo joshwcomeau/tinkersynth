@@ -5,6 +5,7 @@ import { clamp, normalize } from '../../utils';
 export const getRenderOptions = (
   width: number,
   height: number,
+  kind: 'main' | 'framed-preview',
   context: CanvasRenderingContext2D,
   devicePixelRatio: number,
   scaleRatio: number = 1,
@@ -23,14 +24,16 @@ export const getRenderOptions = (
           MAX_WIDTH
         );
 
-  // In the smaller framed preview, we scale the canvas down, so we need to
-  // boost the line thickness
-  lineWidth *= 1 / scaleRatio;
+  if (kind === 'framed-preview') {
+    // In the smaller framed preview, we scale the canvas down, so we need to
+    // boost the line thickness
+    lineWidth *= 1 / scaleRatio;
 
-  // ...of course, we should also take in our devicePixelRatio, to make sure it
-  // looks clean and nice on retina displays.
-  if (lineWidth > 1 && devicePixelRatio > 1) {
-    lineWidth /= devicePixelRatio;
+    // ...of course, we should also take in our devicePixelRatio, to make sure it
+    // looks clean and nice on retina displays.
+    if (lineWidth > 1 && devicePixelRatio > 1) {
+      lineWidth /= devicePixelRatio;
+    }
   }
 
   // Our linecap doesn't make much difference in the small preview, but it is
@@ -45,7 +48,7 @@ export const getRenderOptions = (
     height,
     context,
     lineColor: enableDarkMode ? COLORS.white : COLORS.black,
-    background: 'transparent',
+    backgroundColor: 'transparent',
     lineWidth,
     lineCap,
   };

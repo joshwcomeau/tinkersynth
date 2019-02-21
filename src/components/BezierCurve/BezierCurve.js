@@ -83,8 +83,6 @@ class BezierCurve extends PureComponent<Props> {
       [x, y] = [ev.clientX, ev.clientY];
     }
 
-    console.log(x, y);
-
     const { width, height, updatePoint } = this.props;
     const { draggingPointId } = this.state;
 

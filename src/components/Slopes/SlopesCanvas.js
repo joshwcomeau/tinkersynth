@@ -16,6 +16,7 @@ import { getRenderOptions } from './SlopesCanvas.helpers';
 type Props = {
   width: number,
   height: number,
+  kind: 'main' | 'framed-preview',
 };
 
 const useCanvasDrawing = (
@@ -24,6 +25,7 @@ const useCanvasDrawing = (
   scaleRatio,
   width,
   height,
+  kind,
   params
 ) => {
   // In SSR mode, we don't want to try and do any of this.
@@ -74,6 +76,7 @@ const useCanvasDrawing = (
           getRenderOptions(
             width,
             height,
+            kind,
             context,
             devicePixelRatio,
             scaleRatio,
@@ -102,8 +105,10 @@ const useCanvasDrawing = (
     let messageData = {
       width,
       height,
+      kind,
       supportsOffscreenCanvas,
       scaleRatio,
+      devicePixelRatio,
       ...drawingVariables,
     };
     let transfer = undefined;
@@ -114,8 +119,6 @@ const useCanvasDrawing = (
     if (supportsOffscreenCanvas && !hasSentCanvas.current) {
       // $FlowFixMe
       messageData.canvas = canvasRef.current;
-      // $FlowFixMe
-      messageData.devicePixelRatio = devicePixelRatio;
       transfer = [canvasRef.current];
 
       hasSentCanvas.current = true;
@@ -129,7 +132,13 @@ const useCanvasDrawing = (
   });
 };
 
-const SlopesCanvas = ({ width, height, scaleRatio = 1, ...params }: Props) => {
+const SlopesCanvas = ({
+  width,
+  height,
+  kind,
+  scaleRatio = 1,
+  ...params
+}: Props) => {
   const canvasRef = useRef(null);
 
   const { style, ...dimensions } = getScaledCanvasProps(width, height);
@@ -141,6 +150,7 @@ const SlopesCanvas = ({ width, height, scaleRatio = 1, ...params }: Props) => {
     scaleRatio,
     width,
     height,
+    kind,
     params
   );
 

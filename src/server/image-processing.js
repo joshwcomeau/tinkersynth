@@ -39,9 +39,19 @@ const getDrawingSettings = (size, artParams) => {
   const lineColor = artParams.enableDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = artParams.enableDarkMode ? '#000000' : '#FFFFFF';
 
+  console.log('art params', artParams, artParams.dotAmount);
+
   const lineCap = artParams.dotAmount > 0 ? 'round' : 'butt';
 
-  return { width, height, printWidth, printHeight, lineColor, backgroundColor };
+  return {
+    width,
+    height,
+    printWidth,
+    printHeight,
+    lineColor,
+    lineCap,
+    backgroundColor,
+  };
 };
 
 const generateLines = (width, height, artParams) => {
@@ -101,10 +111,13 @@ const getOrCreateOutputDirectory = () => {
 // Utility to create an SVG, given the requested size (small|medium|large) and
 // the art params.
 export const createVectorImage = async (size, artParams, { fileId }) => {
-  const { width, height, lineColor, backgroundColor } = getDrawingSettings(
-    size,
-    artParams
-  );
+  const {
+    width,
+    height,
+    lineColor,
+    lineCap,
+    backgroundColor,
+  } = getDrawingSettings(size, artParams);
 
   const lines = generateLines(width, height, artParams);
 
@@ -116,6 +129,7 @@ export const createVectorImage = async (size, artParams, { fileId }) => {
     width,
     height,
     lineColor,
+    lineCap,
     backgroundColor,
   });
 
@@ -142,6 +156,7 @@ export const createRasterImage = async (
     printWidth,
     printHeight,
     lineColor,
+    lineCap,
     backgroundColor,
   } = getDrawingSettings(size, artParams);
 
@@ -158,6 +173,7 @@ export const createRasterImage = async (
     width,
     height,
     lineColor,
+    lineCap,
     backgroundColor: opaqueBackground && backgroundColor,
   });
 

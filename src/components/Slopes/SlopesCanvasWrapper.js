@@ -177,7 +177,8 @@ const SlopesCanvasWrapperContainer = (props: any) => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 50px; /* Needs to line up with ControlPanel's top margin */
 `;
 
 const Machine = styled.div`
