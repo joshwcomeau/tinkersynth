@@ -71,7 +71,14 @@ const useCanvasDrawing = (
 
         renderPolylines(
           lines,
-          getRenderOptions(width, height, context, scaleRatio, passedData)
+          getRenderOptions(
+            width,
+            height,
+            context,
+            devicePixelRatio,
+            scaleRatio,
+            passedData
+          )
         );
       };
     }

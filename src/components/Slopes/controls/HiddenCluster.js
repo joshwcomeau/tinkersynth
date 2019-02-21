@@ -76,7 +76,7 @@ const HiddenClusterContainer = ({ width, height, isUsable }: any) => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: 4px;
 `;
 

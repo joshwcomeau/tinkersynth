@@ -39,6 +39,8 @@ const getDrawingSettings = (size, artParams) => {
   const lineColor = artParams.enableDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = artParams.enableDarkMode ? '#000000' : '#FFFFFF';
 
+  const lineCap = artParams.dotAmount > 0 ? 'round' : 'butt';
+
   return { width, height, printWidth, printHeight, lineColor, backgroundColor };
 };
 

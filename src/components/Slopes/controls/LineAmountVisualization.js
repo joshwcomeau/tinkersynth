@@ -34,7 +34,7 @@ const LineAmountVisualization = ({ size, value }: Props) => {
         withBorder={false}
         segmentActiveColor={COLORS.pink[500]}
         segmentInactiveColor="rgba(242, 24, 188, 0.2)"
-        backgroundColor={COLORS.gray[900]}
+        backgroundColor="transparent"
       />
     </Wrapper>
   );

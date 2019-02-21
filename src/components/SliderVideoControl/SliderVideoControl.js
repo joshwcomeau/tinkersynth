@@ -82,7 +82,7 @@ const SliderVideoControl = ({
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: ${CONTROL_RADIUS}px;
 `;
 

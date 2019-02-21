@@ -219,6 +219,7 @@ const SlopesStorefront = ({
 
 const Wrapper = styled.div`
   position: relative;
+  background: ${COLORS.white};
 `;
 
 const Backdrop = styled.div`

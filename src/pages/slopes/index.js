@@ -6,7 +6,7 @@ import SEO from '../../components/SEO';
 import SlopesIndex from '../../components/Slopes/SlopesIndex';
 
 const Page = ({ location }) => (
-  <Layout pageId="slopes">
+  <Layout pageId="slopes" theme="dark">
     <SEO
       title="Slopes"
       ogTitle="Slopes Mk.1 Generative Art Machine"

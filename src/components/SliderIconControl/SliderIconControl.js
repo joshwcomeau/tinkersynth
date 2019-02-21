@@ -77,7 +77,7 @@ const SliderIconControl = ({
 };
 
 const Wrapper = styled(Column)`
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: ${CONTROL_RADIUS}px;
 `;
 

@@ -49,7 +49,7 @@ const OcclusionLine = ({
     >
       <animated.path
         d={path}
-        fill={COLORS.gray[900]}
+        fill={COLORS.gray[1000]}
         style={{
           opacity: springProps.occludeOpacity,
         }}

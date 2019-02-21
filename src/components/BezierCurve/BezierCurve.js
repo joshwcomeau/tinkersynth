@@ -291,7 +291,7 @@ class BezierCurve extends PureComponent<Props> {
 const Wrapper = styled.div`
   border-width: ${BORDER_WIDTH}px;
   border-style: solid;
-  border-color: ${COLORS.gray[900]};
+  border-color: ${COLORS.gray[1000]};
   border-radius: ${CONTROL_RADIUS}px;
 `;
 

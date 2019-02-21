@@ -66,7 +66,7 @@ const ToggleControl = ({
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: ${CONTROL_RADIUS}px;
 `;
 

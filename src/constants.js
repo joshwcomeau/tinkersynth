@@ -175,6 +175,11 @@ export const COLORS = {
       saturation: 0,
       brightness: 15,
     }),
+    '1000': prepColor({
+      hue: 0,
+      saturation: 0,
+      brightness: 4,
+    }),
   },
   white: prepColor({
     hue: 0,
@@ -189,7 +194,7 @@ export const COLORS = {
 };
 
 export const LIGHT_BACKGROUND = COLORS.white;
-export const DARK_BACKGROUND = COLORS.gray[900];
+export const DARK_BACKGROUND = COLORS.gray[1000];
 
 export const UNIT = 8;
 export const CONTROL_RADIUS = 3;

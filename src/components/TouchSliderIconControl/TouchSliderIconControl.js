@@ -73,7 +73,7 @@ const TouchSliderIconControl = ({
 };
 
 const Wrapper = styled.div`
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: ${CONTROL_RADIUS}px;
   display: flex;
 `;
@@ -86,7 +86,7 @@ const IconWrapper = styled.div`
 `;
 
 const TouchSliderWrapper = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
 `;
 
 export default React.memo(TouchSliderIconControl);

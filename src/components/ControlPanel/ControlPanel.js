@@ -138,12 +138,12 @@ const Foot = styled.div`
   background:
     linear-gradient(
       90deg,
-      #888,
-      #aaa,
-      #aaa,
-      #888
+      #555,
+      #666,
+      #666,
+      #555
     );
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 7px 7px;
   box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 `;
 

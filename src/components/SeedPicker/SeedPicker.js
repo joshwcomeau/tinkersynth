@@ -33,7 +33,7 @@ const SeedPicker = ({ seed, setSeed, isPoweredOn }) => {
           withBorder={false}
           segmentActiveColor={COLORS.pink[500]}
           segmentInactiveColor="rgba(242, 24, 188, 0.2)"
-          backgroundColor={COLORS.gray[900]}
+          backgroundColor="transparent"
         />
 
         <Spacer size={UNIT} />
@@ -59,7 +59,7 @@ const SeedPicker = ({ seed, setSeed, isPoweredOn }) => {
 
 const Wrapper = styled.div`
   height: ${HEIGHT}px;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: 4px;
   display: flex;
   flex-direction: column;

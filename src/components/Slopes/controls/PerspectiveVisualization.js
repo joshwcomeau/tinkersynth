@@ -78,7 +78,7 @@ const PerspectiveVisualization = ({
         >
           <path
             d="M23 1C11.5 1 1 29 1 29H45C45 29 34.5 1 23 1"
-            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[1000]}
           />
           <path
             d="M23 1C11.5 1 1 29 1 29 M45 29 C45 29 34.5 1 23 1"
@@ -102,7 +102,7 @@ const PerspectiveVisualization = ({
         >
           <path
             d="M23 1C15 1 1 45 1 45H45C45 45 31 1 23 1"
-            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[1000]}
           />
           <path
             d="M23 1C15 1 1 45 1 45 M 45 45 C45 45 31 1 23 1"
@@ -136,7 +136,7 @@ const PerspectiveVisualization = ({
             cy="8"
             r="5"
             stroke={isBroken ? COLORS.white : COLORS.yellow[300]}
-            fill={isBroken ? COLORS.red[500] : COLORS.gray[900]}
+            fill={isBroken ? COLORS.red[500] : COLORS.gray[1000]}
             strokeWidth={2}
           />
         </Sun>

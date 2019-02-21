@@ -12,6 +12,7 @@ type Options = {
   lineWidth?: number,
   backgroundColor?: string,
   lineColor?: string,
+  lineCap: string,
 };
 
 export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
@@ -44,6 +45,10 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   var fillStyle = opt.backgroundColor || 'none';
   var strokeStyle = opt.lineColor || 'black';
   var lineWidth = opt.lineWidth || 1;
+  var lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
+  var lineCap = opt.lineCap || 'butt';
+
+  console.log({ lineJoin, lineCap });
 
   return `
 <svg
@@ -63,7 +68,8 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
     stroke="${strokeStyle}"
     stroke-width="${lineWidth}${units}"
     fill="none"
-    stroke-linecap="round"
+    stroke-linecap="${lineCap}"
+    stroke-linejoin="${lineJoin}"
   />
 </svg>`;
 };
@@ -98,8 +104,8 @@ export const renderPolylines = function(polylines, opt: Options) {
 
     context.strokeStyle = opt.lineColor || 'black';
     context.lineWidth = lineWidth;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    context.lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
+    context.lineCap = opt.lineCap || 'butt';
     context.stroke();
   });
 };

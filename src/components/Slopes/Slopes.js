@@ -92,7 +92,7 @@ const Slopes = ({ size, orderParams }) => {
 const MachineWrapper = styled.div`
   position: relative;
   min-height: calc(100vh - ${HEADER_HEIGHT}px);
-  background: ${COLORS.gray[700]};
+  background: ${COLORS.gray[900]};
   padding-bottom: ${UNIT * 16}px;
 `;
 

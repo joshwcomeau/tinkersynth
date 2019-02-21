@@ -6,7 +6,8 @@ export const getRenderOptions = (
   width: number,
   height: number,
   context: CanvasRenderingContext2D,
-  scaleRatio?: number = 1,
+  devicePixelRatio: number,
+  scaleRatio: number = 1,
   { enableDarkMode, dotRatio }: any
 ) => {
   // prettier-ignore
@@ -26,12 +27,26 @@ export const getRenderOptions = (
   // boost the line thickness
   lineWidth *= 1 / scaleRatio;
 
+  // ...of course, we should also take in our devicePixelRatio, to make sure it
+  // looks clean and nice on retina displays.
+  if (lineWidth > 1 && devicePixelRatio > 1) {
+    lineWidth /= devicePixelRatio;
+  }
+
+  // Our linecap doesn't make much difference in the small preview, but it is
+  // noticeable when printed or sent as a vector.
+  //
+  // The choice will depend on the parameters. If the `dotRatio` is more than
+  // 0, it makes sense to use a round linecap. Otherwise, use the default butt
+  const lineCap = dotRatio > 0 ? 'round' : 'butt';
+
   return {
     width,
     height,
     context,
-    lineColor: enableDarkMode ? COLORS.white : COLORS.gray[900],
+    lineColor: enableDarkMode ? COLORS.white : COLORS.black,
     background: 'transparent',
     lineWidth,
+    lineCap,
   };
 };
