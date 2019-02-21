@@ -88,7 +88,8 @@ export const shuffleParameters = state => {
       Math.random() > 0.5 ? getRandomSliderValue() : 0;
   }
 
-  state.parameters.dotAmount = Math.random() > 0.5 ? getRandomSliderValue() : 0;
+  // Dots should be a rare treat
+  state.parameters.dotAmount = Math.random() > 0.8 ? getRandomSliderValue() : 0;
 
   // Certain parameters make more sense at one of the extremities, so let's
   // increase the chances of those.
