@@ -3,8 +3,8 @@ import styled, { keyframes } from 'styled-components';
 
 import fireSpritesheet from '../../images/fire-sprite-row.png';
 
-const AnimatedFire = () => {
-  return <Fire />;
+const AnimatedFire = ({ width = 38, height = 67 }) => {
+  return <Fire style={{ width, height }} />;
 };
 
 const animation = keyframes`
@@ -15,11 +15,10 @@ const animation = keyframes`
 
 const Fire = styled.div`
   position: relative;
-  width: 38px;
-  height: 67px;
   background-image: url('${fireSpritesheet}');
   background-size: cover;
   animation: ${animation} 0.8s steps(10) infinite;
+  backface-visibility: hidden;
 `;
 
 export default AnimatedFire;
