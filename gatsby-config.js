@@ -50,5 +50,14 @@ module.exports = {
         theme_color: '#F218BC',
       },
     },
+    {
+      resolve: 'gatsby-plugin-fathom',
+      options: {
+        // your Fathom server URL
+        trackingUrl: 'tinkersynth.usesfathom.com',
+        // unique site id (optional, required for Fathom v1.1.0+)
+        siteId: 'WZOTQZMZ',
+      },
+    },
   ],
 };
