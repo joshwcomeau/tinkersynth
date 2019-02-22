@@ -6,6 +6,8 @@ import { loader } from 'react-icons-kit/feather/loader';
 
 import { COLORS, UNIT } from '../constants';
 
+import homepageVideo1 from '../videos/homepage-art-1.1.mp4';
+
 import Layout from '../components/Layout';
 import Paragraph from '../components/Paragraph';
 import Heading from '../components/Heading';
@@ -17,7 +19,13 @@ import HomepageHowItWorks from '../components/HomepageHowItWorks/HomepageHowItWo
 const Homepage = ({}) => {
   return (
     <Layout theme="dark">
-      {/* TEMP */}
+      <HomepageVideo
+        playsInline
+        autoPlay={true}
+        muted
+        loop
+        src={homepageVideo1}
+      />
       <Spacer size={400} />
       <HomepageHowItWorks />
     </Layout>
@@ -25,5 +33,13 @@ const Homepage = ({}) => {
 };
 
 const Wrapper = styled.div``;
+
+const HomepageVideo = styled.video`
+  width: 415px;
+  height: 550px;
+  backface-visibility: hidden;
+  border: none;
+  background-color: transparent;
+`;
 
 export default Homepage;

@@ -16,6 +16,9 @@ const SlopesCanvasMachine = (props: any) => {
   // fractional seeds don't make sense, and it would be too chaotic anyway.
   delete springParams.seed;
 
+  // Use this slow config when recording sample videos.
+  const SLOW_CONFIG = { tension: 30, friction: 40 };
+
   return (
     <Spring to={springParams} immediate={!slopesParams.animateTransitions}>
       {interpolatedParams => (

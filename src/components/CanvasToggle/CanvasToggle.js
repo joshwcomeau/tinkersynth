@@ -34,7 +34,7 @@ const CanvasToggle = ({
 
 const Button = styled(UnstyledButton)`
   position: relative;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[1000]};
   border-radius: 4px;
 
   &:disabled {
