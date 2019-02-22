@@ -8,6 +8,7 @@ import { random } from '../../utils';
 import Mailtruck from '../Mailtruck';
 import AnimatedFire from '../AnimatedFire';
 import Float from '../Float';
+import Starfield from '../Starfield';
 
 const FlyingTruckDemo = ({}) => {
   const [rotation, setRotation] = React.useState(-30);
@@ -37,6 +38,12 @@ const FlyingTruckDemo = ({}) => {
 
   return (
     <Wrapper>
+      <FrontStarfield>
+        <Starfield starSize={10} speed={12} />
+      </FrontStarfield>
+      <BackStarfield>
+        <Starfield starSize={5} speed={4} />
+      </BackStarfield>
       <InnerWrapper>
         <Float>
           <TruckWrapper style={{ transform: spring.rotate }}>
@@ -57,8 +64,22 @@ const Wrapper = styled.div`
   height: 200px;
 `;
 
+const BackStarfield = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+`;
+const FrontStarfield = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+`;
+
 const InnerWrapper = styled.div`
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
   right: 0;

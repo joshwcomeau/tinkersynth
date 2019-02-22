@@ -166,7 +166,7 @@ const Wheel = styled.img`
   position: absolute;
   z-index: 2;
   top: 55px;
-  animation: ${spinning} 1000ms linear infinite;
+  animation: ${spinning} 400ms linear infinite;
   transform-origin: 12px 12.5px;
 `;
 
