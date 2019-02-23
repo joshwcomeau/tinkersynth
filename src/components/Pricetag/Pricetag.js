@@ -9,13 +9,15 @@ import Spacer from '../Spacer';
 
 type Props = {
   cost: number,
+  includeShippingNote: boolean,
 };
 
-const Pricetag = ({ cost, includeShippingNote }: Props) => {
+const Pricetag = ({ cost, includePrefix, includeShippingNote }: Props) => {
   const dollars = cost / 100;
 
   return (
     <Wrapper>
+      {includePrefix && <Prefix>Total: </Prefix>}
       <Cost>{dollars}</Cost> <Currency>USD</Currency>
       {includeShippingNote && (
         <ShippingNote>
@@ -31,6 +33,8 @@ const Wrapper = styled.span`
   line-height: 32px;
   color: ${COLORS.gray[900]};
 `;
+
+const Prefix = styled.span``;
 
 const Cost = styled.span`
   font-weight: bold;

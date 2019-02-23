@@ -62,7 +62,8 @@ const CopyrightArea = styled.div`
   color: ${COLORS.white};
 
   @media (max-width: 600px) {
-    margin-top: ${UNIT * 2}px;
+    margin-top: ${UNIT * 4}px;
+    text-align: center;
   }
 `;
 

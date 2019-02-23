@@ -37,6 +37,10 @@ const Wrapper = styled.div`
   @media (max-width: 700px) {
     flex-direction: column;
   }
+
+  @media (max-width: 450px) {
+    text-align: center;
+  }
 `;
 
 const TitleCell = styled.div`
@@ -45,6 +49,7 @@ const TitleCell = styled.div`
 
   @media (max-width: 700px) {
     width: 100%;
+    margin-bottom: ${UNIT * 3}px;
   }
 `;
 

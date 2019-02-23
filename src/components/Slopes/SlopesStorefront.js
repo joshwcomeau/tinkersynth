@@ -69,6 +69,8 @@ const SlopesStorefront = ({
 
   const showSizeOptions = format === 'print' || format === 'combo';
 
+  const isDesktop = windowDimensions.width > 700;
+
   return (
     <Wrapper id="slopes-storefront">
       <Backdrop style={{ height: BACKDROP_HEIGHT }} />
@@ -78,10 +80,10 @@ const SlopesStorefront = ({
           <Header style={{ height: BACKDROP_HEIGHT }}>
             <Heading size={1}>Looks great!</Heading>
             <Spacer size={UNIT * 4} />
-            <Paragraph as="div" style={{ fontSize: 24 }}>
+            <Paragraph as="div" style={{ fontSize: isDesktop ? 24 : 21 }}>
               You have created a unique
-              <Asterisk tooltip={asteriskTooltipContents} /> piece of art.
-              <br />
+              <Asterisk tooltip={asteriskTooltipContents} /> piece of art.{' '}
+              {isDesktop && <br />}
               Let's produce it!
             </Paragraph>
           </Header>
@@ -101,8 +103,7 @@ const SlopesStorefront = ({
                 >
                   Learn more
                 </TextLink>{' '}
-                about the
-                <br />
+                about the {isDesktop && <br />}
                 available options.
               </>
             }
@@ -142,10 +143,11 @@ const SlopesStorefront = ({
             <FadeIn>
               <Spacer size={UNIT * 8} />
 
-              <StorefrontRow title="Price:">
+              <StorefrontRow title={isDesktop && 'Price:'}>
                 <Indent>
                   <Pricetag
                     cost={cost}
+                    includePrefix={!isDesktop}
                     includeShippingNote={
                       storeData.format === 'print' ||
                       storeData.format === 'combo'
@@ -154,13 +156,13 @@ const SlopesStorefront = ({
                 </Indent>
               </StorefrontRow>
 
-              <Spacer size={UNIT * 8} />
+              <Spacer size={isDesktop ? UNIT * 8 : UNIT * 2} />
 
               <StorefrontRow>
                 <PurchaseRowContents>
                   <SlopesPurchaseButton />
 
-                  <Spacer size={UNIT * 6} />
+                  <Spacer size={isDesktop ? UNIT * 6 : UNIT * 2} />
 
                   <MultiplePurchaseInfoButton
                     as={Link}
@@ -297,7 +299,9 @@ const ConsoleTable = styled.img`
 `;
 
 const Indent = styled.div`
-  padding-left: 30px;
+  @media (min-width: 701px) {
+    padding-left: 30px;
+  }
 `;
 
 const PottedPlant = styled.img`
@@ -309,6 +313,11 @@ const PottedPlant = styled.img`
 
 const PurchaseRowContents = styled(Indent)`
   display: flex;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ContentWrapper = styled.div`
