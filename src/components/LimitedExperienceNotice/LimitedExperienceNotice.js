@@ -37,8 +37,8 @@ const LimitedExperienceNotice = () => {
           style={{ color: COLORS.white, fontSize: 14, marginBottom: 0 }}
         >
           We highly recommend trying this page on a desktop computer, if
-          possible. Larger screens provide access to many more controls, for
-          greatly enhanced customization.
+          possible. Larger screens provide access to many more controls, for a
+          greatly enhanced experience.
         </Paragraph>
       </Wrapper>
     </>

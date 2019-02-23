@@ -10,7 +10,7 @@ import fs from 'fs';
 import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
 
-import { PRINT_SIZES, CANVAS_DISPLAY_HEIGHT } from '../constants';
+import { PRINT_SIZES } from '../constants';
 import {
   clipLinesWithMargin,
   groupPolylines,
@@ -19,6 +19,7 @@ import {
 import generator from '../components/Slopes/Slopes.generator';
 import transformParameters from '../components/Slopes/Slopes.params';
 import { getMarginSize } from '../components/Slopes/Slopes.helpers';
+import { getCanvasDimensions } from '../components/Slopes/SlopesCanvas.helpers';
 
 import { parallel, writeFile } from './utils';
 import rasterize from './rasterization';
@@ -33,6 +34,7 @@ const getDrawingSettings = (size, artParams) => {
   // NOTE: using the same height as found in Slopes.js, so that the art is
   // identical... but maybe we should make this variable, and use a higher
   // number for the print?
+  const { width, height } = getCanvasDimensions();
   const height = CANVAS_DISPLAY_HEIGHT;
   const width = height * aspectRatio;
 

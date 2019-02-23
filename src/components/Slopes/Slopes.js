@@ -4,13 +4,8 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import {
-  COLORS,
-  UNIT,
-  PRINT_SIZES,
-  CANVAS_DISPLAY_HEIGHT,
-  HEADER_HEIGHT,
-} from '../../constants';
+import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
+import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
@@ -57,8 +52,10 @@ const Slopes = ({ size, orderParams }) => {
   // By default, our size is 18 x 24.
   const aspectRatio = printWidth / printHeight;
 
-  const canvasHeight = CANVAS_DISPLAY_HEIGHT;
-  const canvasWidth = canvasHeight * aspectRatio;
+  const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(
+    windowDimensions,
+    aspectRatio
+  );
 
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
 
@@ -83,6 +80,7 @@ const Slopes = ({ size, orderParams }) => {
           <SlopesCanvasWrapper
             width={canvasWidth}
             height={canvasHeight}
+            key={`${canvasWidth}/${canvasHeight}`}
             isFullExperience={isFullExperience}
           >
             <SlopesCanvasMachine

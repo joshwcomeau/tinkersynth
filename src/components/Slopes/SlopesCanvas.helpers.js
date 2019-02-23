@@ -1,6 +1,51 @@
 // @flow
-import { COLORS } from '../../constants';
+import { COLORS, UNIT } from '../../constants';
 import { clamp, normalize } from '../../utils';
+
+/**
+ * The canvas dimensions are actually quite complicated!
+ *
+ * On desktop, we want to keep a consistent height, while tweaking the width
+ * depending on the aspect ratio.
+ *
+ * On mobile, we do the opposite, since we want to always fill the available
+ * width.
+ */
+export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
+  const defaultHeight = 552;
+  const defaultWidth = defaultHeight * aspectRatio;
+
+  // When actually building the image on the server, we'll use our default
+  // desktop size. This might mean the mobile design is sliiiightly different,
+  // but it should be ok.
+  // TODO: test this hypothesis.
+  if (!windowDimensions) {
+    console.log('Not enough data', {
+      height: defaultHeight,
+      width: defaultHeight * aspectRatio,
+    });
+    return { height: defaultHeight, width: defaultHeight * aspectRatio };
+  }
+
+  // We'll assume it's desktop if our width is larger than the natural canvas
+  // size
+  if (windowDimensions.width > defaultWidth) {
+    console.log('large enough', { width: defaultWidth, height: defaultHeight });
+    return { width: defaultWidth, height: defaultHeight };
+  }
+
+  // If our width is smaller than that, we essentially want to fill the
+  // available width, and work out a derived height
+  // We add a bit of spacing, so that the canvas doesn't run to the edges of
+  // the screen.
+  const padding = UNIT * 2;
+  const width = windowDimensions.width - padding * 2;
+  const height = width * (1 / aspectRatio);
+
+  console.log('Mobile', { width, height });
+
+  return { width, height };
+};
 
 export const getRenderOptions = (
   width: number,
