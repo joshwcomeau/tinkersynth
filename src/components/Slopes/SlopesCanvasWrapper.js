@@ -12,6 +12,7 @@ import {
 } from '../../constants';
 import * as actions from '../../actions';
 import analytics from '../../services/analytics.service';
+import slopesPlacardMobile from '../../images/slopes-placard-mobile.png';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
@@ -112,7 +113,7 @@ const SlopesCanvasWrapper = ({
         {!isFullExperience && (
           <Header>
             <PlacardWrapper>
-              <PlacardArea />
+              <img src={slopesPlacardMobile} style={{ width: 176 }} />
             </PlacardWrapper>
 
             <DestructiveCluster />
@@ -197,7 +198,14 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 50px; /* Needs to line up with ControlPanel's top margin */
+
+  @media (max-width: 450px) {
+    padding-top: 4px;
+  }
+
+  @media (min-width: 451px) {
+    padding-top: 50px; /* Needs to line up with ControlPanel's top margin */
+  }
 `;
 
 const Header = styled.div`
