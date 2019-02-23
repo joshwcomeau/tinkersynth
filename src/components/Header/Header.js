@@ -11,6 +11,7 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
 import LogoWithName from '../LogoWithName';
+import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 
 const Header = ({ theme }) => {
   const navigationLinkColor =
@@ -27,19 +28,22 @@ const Header = ({ theme }) => {
           <LogoWithName theme={theme} id="site-header" />
         </Link>
 
-        <Navigation>
-          <HeaderNavigationItem color={navigationLinkColor} to="/slopes">
-            Create
-          </HeaderNavigationItem>
-          <HeaderNavigationItem color={navigationLinkColor} to="/faq">
-            FAQ
-          </HeaderNavigationItem>
-          <DesktopOnly>
+        <DesktopOnly>
+          <Navigation>
+            <HeaderNavigationItem color={navigationLinkColor} to="/slopes">
+              Create
+            </HeaderNavigationItem>
+            <HeaderNavigationItem color={navigationLinkColor} to="/faq">
+              FAQ
+            </HeaderNavigationItem>
             <HeaderNavigationItem color={navigationLinkColor} to="/contact">
               Contact
             </HeaderNavigationItem>
-          </DesktopOnly>
-        </Navigation>
+          </Navigation>
+        </DesktopOnly>
+        <MobileOnly>
+          <HamburgerMenu theme={theme} />
+        </MobileOnly>
       </InnerWrapper>
     </OuterWrapper>
   );
@@ -66,6 +70,11 @@ const Navigation = styled.ul`
 
 const DesktopOnly = styled.span`
   @media ${BREAKPOINTS.sm} {
+    display: none;
+  }
+`;
+const MobileOnly = styled.span`
+  @media ${BREAKPOINTS.mdMin} {
     display: none;
   }
 `;
