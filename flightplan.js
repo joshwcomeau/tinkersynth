@@ -50,7 +50,7 @@ const restartServer = remote => {
     );
   } else {
     remote.log('Restarting app');
-    remote.exec(`NODE_ENV=production pm2 restart ${appName}`);
+    remote.exec(`NODE_ENV=production pm2 restart ${appName} --update-env`);
   }
 };
 
