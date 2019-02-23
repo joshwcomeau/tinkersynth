@@ -12,9 +12,8 @@ import { SlopesContext } from '../SlopesState';
 
 import type { ToggleParameter } from '../SlopesState';
 
-const ACTION_SIZE = 38;
-
 type Props = {
+  size: number,
   enableDarkMode: boolean,
   enableMargins: boolean,
   isPoweredOn: boolean,
@@ -22,6 +21,7 @@ type Props = {
 };
 
 const PageCluster = ({
+  size,
   enableDarkMode,
   enableMargins,
   isPoweredOn,
@@ -29,7 +29,7 @@ const PageCluster = ({
 }) => (
   <Wrapper>
     <BulbToggle
-      size={ACTION_SIZE}
+      size={size}
       isActive={enableDarkMode}
       isPoweredOn={isPoweredOn}
       handleToggle={() => toggleParameter('enableDarkMode')}
@@ -38,7 +38,7 @@ const PageCluster = ({
     <Spacer size={UNIT} />
 
     <MarginsToggle
-      size={ACTION_SIZE}
+      size={size}
       isActive={enableMargins}
       isPoweredOn={isPoweredOn}
       handleToggle={() => toggleParameter('enableMargins')}
@@ -49,11 +49,12 @@ const PageCluster = ({
 // $FlowIgnore
 const OptimizedPageCluster = React.memo(PageCluster);
 
-const PageContainer = () => {
+const PageContainer = ({ size }) => {
   const slopesParams = React.useContext(SlopesContext);
 
   return (
     <OptimizedPageCluster
+      size={size}
       enableDarkMode={slopesParams.enableDarkMode}
       enableMargins={slopesParams.enableMargins}
       isPoweredOn={slopesParams.isPoweredOn}

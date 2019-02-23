@@ -15,8 +15,13 @@ import analytics from '../../services/analytics.service';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
+import BigOminousButton from '../BigOminousButton';
 import { SlopesContext } from './SlopesState';
+import PlacardArea from './controls/PlacardArea';
 import PageCluster from './controls/PageCluster';
+import { InstrumentCluster } from '../ControlPanel';
+
+import DestructiveCluster from './controls/DestructiveCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
 import UnstyledButton from '../UnstyledButton';
@@ -24,6 +29,7 @@ import UnstyledButton from '../UnstyledButton';
 type Props = {
   width: number,
   height: number,
+  isFullExperience: boolean,
   children: React$Node,
   enableDarkMode: boolean,
   enableMargins: boolean,
@@ -85,6 +91,7 @@ const useTooltip = isAwareOfPurchaseOptions => {
 const SlopesCanvasWrapper = ({
   width,
   height,
+  isFullExperience,
   children,
   enableDarkMode,
   enableMargins,
@@ -101,6 +108,16 @@ const SlopesCanvasWrapper = ({
     <Wrapper>
       <Machine>
         <TopPanel />
+
+        {!isFullExperience && (
+          <Header>
+            <PlacardWrapper>
+              <PlacardArea />
+            </PlacardWrapper>
+
+            <DestructiveCluster />
+          </Header>
+        )}
 
         <InnerWrapper>
           {!isPoweredOn && <PoweredOffCanvas />}
@@ -124,9 +141,7 @@ const SlopesCanvasWrapper = ({
         <Spacer size={UNIT} />
 
         <Footer>
-          <Toggles>
-            <PageCluster />
-          </Toggles>
+          <PageCluster size={isFullExperience ? 38 : 48} />
 
           <Tooltip
             animation="fade"
@@ -148,7 +163,11 @@ const SlopesCanvasWrapper = ({
               lineHeight: 1.4,
             }}
           >
-            <Button color={COLORS.blue[500]} onClick={handleClickPurchase}>
+            <Button
+              color={COLORS.blue[500]}
+              onClick={handleClickPurchase}
+              size={isFullExperience ? 'medium' : 'large'}
+            >
               Purchase
             </Button>
           </Tooltip>
@@ -181,6 +200,13 @@ const Wrapper = styled.div`
   padding-top: 50px; /* Needs to line up with ControlPanel's top margin */
 `;
 
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-top: ${UNIT}px;
+  padding-bottom: ${UNIT}px;
+`;
+
 const Machine = styled.div`
   position: sticky;
   top: 28px;
@@ -188,6 +214,10 @@ const Machine = styled.div`
   user-select: none;
   padding: ${UNIT}px;
   background: ${COLORS.gray[100]};
+`;
+
+const PlacardWrapper = styled.div`
+  transform: translateY(-10px);
 `;
 
 const InnerWrapper = styled.div`

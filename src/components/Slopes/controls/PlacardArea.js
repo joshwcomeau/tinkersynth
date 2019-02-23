@@ -6,12 +6,9 @@ import useToggle from '../../../hooks/toggle.hook';
 import SlopesPlacard from '../SlopesPlacard';
 import HiddenCluster from './HiddenCluster';
 
-type Props = {
-  width: number,
-  height: number,
-};
+type Props = {};
 
-const PlacardArea = ({ width, height }: Props) => {
+const PlacardArea = ({  }: Props) => {
   const [isHiddenClusterUsable, toggleHiddenCluster] = useToggle(false);
 
   return (

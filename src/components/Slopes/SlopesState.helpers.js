@@ -39,7 +39,8 @@ export const updateDisabledParams = (disabledObj, params) => {
   disabledObj.current.amplitudeAmount = params.splitUniverse === 100;
   disabledObj.current.octaveAmount = params.splitUniverse === 100;
   disabledObj.current.wavelength = params.splitUniverse === 100;
-  disabledObj.current.waterBoilAmount = params.splitUniverse === 100;
+  disabledObj.current.waterBoilAmount =
+    params.splitUniverse === 100 || params.spikyness === 100;
   disabledObj.current.personInflateAmount = params.splitUniverse === 100;
   disabledObj.current.omega = params.polarAmount === 0;
   disabledObj.current.omega = params.polarAmount === 0;

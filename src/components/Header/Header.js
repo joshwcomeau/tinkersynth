@@ -50,6 +50,7 @@ const OuterWrapper = styled.div`
   left: 0;
   right: 0;
   z-index: 2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`

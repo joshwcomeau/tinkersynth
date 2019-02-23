@@ -39,7 +39,7 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
   return (
     <ControlPanel width={width} padding={padding}>
       <Row style={{ zIndex: 2 }}>
-        <PlacardArea width={170} height={70} />
+        <PlacardArea />
         <SettingsCluster squeeze={columnWidth <= 550} />
       </Row>
       <Spacer size={UNIT * 2} />

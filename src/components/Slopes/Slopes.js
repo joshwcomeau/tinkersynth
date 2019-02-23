@@ -11,12 +11,12 @@ import {
   CANVAS_DISPLAY_HEIGHT,
   HEADER_HEIGHT,
 } from '../../constants';
+import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
+import LimitedExperienceNotice from '../LimitedExperienceNotice';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
-
-import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
@@ -48,6 +48,11 @@ const Slopes = ({ size, orderParams }) => {
 
   const windowDimensions = useWindowDimensions();
 
+  // The full experience is only available on desktop.
+  // This sad decision is because I don't know how to make the full experience
+  // good on smaller screens =(
+  const isFullExperience = windowDimensions.width > 450;
+
   // Our aspect ratio depends on the size selected.
   // By default, our size is 18 x 24.
   const aspectRatio = printWidth / printHeight;
@@ -59,17 +64,27 @@ const Slopes = ({ size, orderParams }) => {
 
   return (
     <SlopesProvider orderParams={orderParams}>
+      {!isFullExperience && <LimitedExperienceNotice />}
       <MachineWrapper>
         <MainRow>
-          <ControlsWrapper>
-            <SlopesControls
-              key={slopesBreakpoint}
-              windowDimensions={windowDimensions}
-              width={getMachineWidth(slopesBreakpoint, windowDimensions.width)}
-            />
-          </ControlsWrapper>
+          {isFullExperience && (
+            <ControlsWrapper>
+              <SlopesControls
+                key={slopesBreakpoint}
+                windowDimensions={windowDimensions}
+                width={getMachineWidth(
+                  slopesBreakpoint,
+                  windowDimensions.width
+                )}
+              />
+            </ControlsWrapper>
+          )}
 
-          <SlopesCanvasWrapper width={canvasWidth} height={canvasHeight}>
+          <SlopesCanvasWrapper
+            width={canvasWidth}
+            height={canvasHeight}
+            isFullExperience={isFullExperience}
+          >
             <SlopesCanvasMachine
               // Whenever the size changes, we want to redraw the canvas.
               // Easiest way to do this with the web-worker and offscreenCanvas

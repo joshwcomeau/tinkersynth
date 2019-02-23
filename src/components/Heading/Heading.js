@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BREAKPOINTS } from '../../constants';
 
 type Props = {
-  size: 1 | 2 | 3 | 4,
+  size: 1 | 2 | 3 | 4 | 5,
   children: React$Node,
 };
 
@@ -15,6 +15,7 @@ const getElementForSize = size => {
     case 2: return H2;
     case 3: return H3;
     case 4: return H4;
+    case 5: return H5;
     default: throw new Error('Unrecognized size: ' + size);
   }
 };
@@ -45,6 +46,10 @@ const H3 = styled.h1`
 `;
 const H4 = styled.h1`
   font-size: 24px;
+  font-weight: 600;
+`;
+const H5 = styled.h1`
+  font-size: 20px;
   font-weight: 600;
 `;
 
