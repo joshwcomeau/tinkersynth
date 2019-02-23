@@ -42,6 +42,7 @@ const PerspectiveCluster = ({
   return (
     <InstrumentCluster>
       <SliderVideoControl
+        canBreakOutOfRangeOnKeyboard
         value={perspective}
         updateValue={val => tweakParameter('perspective', val)}
         width={videoSliderWidth}

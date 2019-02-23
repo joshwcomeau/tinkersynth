@@ -19,6 +19,7 @@ type Props = {
   spacing?: number,
   visualizationComponent: any,
   isPoweredOn: boolean,
+  canBreakOutOfRangeOnKeyboard: boolean,
 };
 
 const SliderVideoControl = ({
@@ -29,6 +30,7 @@ const SliderVideoControl = ({
   spacing = 4,
   visualizationComponent,
   isPoweredOn,
+  canBreakOutOfRangeOnKeyboard,
 }: Props) => {
   const isOutOfBounds = value < 0 || value > 100;
 
@@ -73,6 +75,7 @@ const SliderVideoControl = ({
           height={sliderHeight}
           extendRange={isOutOfBounds}
           isDisabled={!isPoweredOn}
+          canBreakOutOfRangeOnKeyboard={canBreakOutOfRangeOnKeyboard}
         />
       </SliderWrapper>
     </Wrapper>
