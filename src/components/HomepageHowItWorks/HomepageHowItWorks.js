@@ -2,14 +2,47 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { random } from '../../utils';
+
 import Column from './Column';
 import LineDemo from './LineDemo';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import FlyingTruckDemo from './FlyingTruckDemo';
 
 const HomepageHowItWorks = () => {
-  const [lineLength, setLineLength] = React.useState(50);
-  const [lineCurve, setLineCurve] = React.useState(50);
+  const [lineLength, setLineLength] = React.useState(20);
+  const [lineCurve, setLineCurve] = React.useState(10);
+
+  // TODO: Abstract
+  React.useEffect(() => {
+    let timeoutId;
+
+    const update = () => {
+      setLineCurve(random(0, 100));
+      timeoutId = window.setTimeout(update, random(500, 5000));
+    };
+
+    update();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    let timeoutId;
+
+    const update = () => {
+      setLineLength(random(0, 100));
+      timeoutId = window.setTimeout(update, random(500, 5000));
+    };
+
+    update();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
     <Wrapper>
