@@ -49,6 +49,7 @@ const NoiseCluster = ({
     <InstrumentCluster direction="column">
       <Row>
         <SliderVideoControl
+          canBreakOutOfRangeOnKeyboard
           value={spikyness}
           updateValue={val => tweakParameter('spikyness', val)}
           width={videoSliderWidth}

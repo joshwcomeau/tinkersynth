@@ -15,6 +15,7 @@ type Props = {
   width: number,
   height: number,
   value: number,
+  isBroken: boolean,
 };
 
 const generateRandomLines = (id, width, height, numOfPoints) =>
@@ -68,7 +69,13 @@ const generateLine = (numOfPoints, smoothPoints, randomLines, ratio) => {
     .join('\n');
 };
 
-const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
+const NoiseVisualization = ({
+  width,
+  height,
+  value,
+  onClick,
+  isBroken,
+}: Props) => {
   const ratio = value / 100;
 
   const horizontalPadding = 30;
@@ -204,7 +211,7 @@ const NoiseVisualization = ({ width, height, value, onClick }: Props) => {
           d={springs[index].ratio.interpolate(ratio =>
             generateLine(numOfPoints, smoothPoints, lines[index], ratio)
           )}
-          stroke={color}
+          stroke={isBroken ? COLORS.white : color}
           strokeWidth={3}
           strokeLinecap="round"
           strokeOpacity={1}

@@ -57,6 +57,7 @@ const PolarCluster = ({
     <InstrumentCluster direction="column">
       <Row>
         <SliderVideoControl
+          canBreakOutOfRangeOnKeyboard
           value={polarAmount}
           updateValue={val => tweakParameter('polarAmount', val)}
           width={videoSliderWidth}

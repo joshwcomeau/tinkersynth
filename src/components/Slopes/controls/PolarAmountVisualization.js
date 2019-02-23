@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { useSpring, animated } from 'react-spring/hooks';
+import styled from 'styled-components';
 
 import { COLORS } from '../../../constants';
 import { range, mix } from '../../../utils';
@@ -17,6 +18,7 @@ type Props = {
   numOfLines?: number,
   value: number,
   springConfig: any,
+  isBroken: boolean,
 };
 
 const devicePixelRatio = getDevicePixelRatio();
@@ -61,7 +63,15 @@ const calculatePointsForLine = (value, width, height, rowIndex, numOfLines) => {
 const getPolylinePointsAsString = points =>
   points.map(point => `${point[0]},${point[1]}`).join(' ');
 
-const getColorForLineIndex = (index: number, numOfLines: number) => {
+const getColorForLineIndex = (
+  index: number,
+  numOfLines: number,
+  isBroken: boolean
+) => {
+  if (isBroken) {
+    return COLORS.white;
+  }
+
   // HACK: Refactor
   if (numOfLines === 3) {
     switch (index) {
@@ -96,6 +106,7 @@ const PolarAmountVisualization = ({
   numOfLines = 5,
   value,
   springConfig = SPRING_CONFIG,
+  isBroken,
 }: Props) => {
   const innerWidth = width - horizontalPadding;
   const innerHeight = height - verticalPadding;
@@ -103,7 +114,7 @@ const PolarAmountVisualization = ({
   const spring = useSpring({ value, config: springConfig });
 
   return (
-    <Svg width={innerWidth} height={innerHeight}>
+    <Svg width={innerWidth} height={innerHeight} fill="none">
       {range(numOfLines).map(rowIndex => (
         <animated.polyline
           key={rowIndex}
@@ -117,7 +128,7 @@ const PolarAmountVisualization = ({
             );
             return getPolylinePointsAsString(line);
           })}
-          stroke={getColorForLineIndex(rowIndex, numOfLines)}
+          stroke={getColorForLineIndex(rowIndex, numOfLines, isBroken)}
           strokeWidth={devicePixelRatio > 1 ? 2.5 : 2}
           strokeLinecap="round"
         />

@@ -50,6 +50,7 @@ const SliderVideoControl = ({
           padding: spacing,
           opacity: isPoweredOn ? 1 : 0,
           transition: !isPoweredOn ? 'opacity 400ms' : null,
+          backgroundColor: isOutOfBounds && COLORS.red[500],
         }}
         onClick={() => {
           if (!isPoweredOn) {

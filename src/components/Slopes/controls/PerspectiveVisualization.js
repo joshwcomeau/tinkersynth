@@ -45,7 +45,6 @@ const PerspectiveVisualization = ({
       style={{
         width,
         height,
-        backgroundColor: isBroken ? COLORS.red[500] : 'initial',
       }}
     >
       <GridWrapper
