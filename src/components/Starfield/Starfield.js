@@ -77,8 +77,6 @@ const Starfield = ({
     [stars]
   );
 
-  // console.log(stars.map(star => `${star.x} - ${star.y}`));
-
   return (
     <Wrapper style={{ width, height }}>
       {stars.map(star => (

@@ -24,6 +24,7 @@ type Props = {
   handleWidth?: number,
   handleHeight?: number,
   isDisabled: boolean,
+  canBreakOutOfRangeOnKeyboard: boolean,
 };
 
 const HANDLE_BUFFER = 2;
@@ -31,6 +32,10 @@ const HANDLE_BUFFER = 2;
 // All sliders expect values to be between 0 and 100
 const min = 0;
 const max = 100;
+
+// The keyboard can sometimes be used to push outside the custom range.
+// Currently this is set to 10 on each end (so the range is -10 to 110)
+const MAX_BREAKOUT = 0;
 
 const Slider = ({
   value,
@@ -41,6 +46,7 @@ const Slider = ({
   handleWidth = 20,
   handleHeight = 30,
   isDisabled,
+  canBreakOutOfRangeOnKeyboard,
 }: Props) => {
   const handleRef = useRef(null);
 
@@ -132,21 +138,29 @@ const Slider = ({
           // either direction :o this is an easter egg!
           let hasBrokenOutOfRange = false;
 
-          if (ev.key === 'ArrowUp') {
+          if (ev.key === 'ArrowRight') {
             ev.preventDefault();
             ev.stopPropagation();
 
-            if (value < 120) {
+            const maxValue = canBreakOutOfRangeOnKeyboard
+              ? 100 + MAX_BREAKOUT
+              : 100;
+
+            if (value < maxValue) {
               const newValue = value + 2;
               updateValue(newValue);
 
               hasBrokenOutOfRange = newValue > 100;
             }
-          } else if (ev.key === 'ArrowDown') {
+          } else if (ev.key === 'ArrowLeft') {
             ev.preventDefault();
             ev.stopPropagation();
 
-            if (value > -20) {
+            const minValue = canBreakOutOfRangeOnKeyboard
+              ? 0 - MAX_BREAKOUT
+              : 0;
+
+            if (value > minValue) {
               const newValue = value - 2;
               updateValue(newValue);
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { COLORS, UNIT } from '../../constants';
 
-import Slider from './Slider';
+import HomeSlider from './HomeSlider';
 
 const getLinePath = (lineLength, lineCurve) => {
   // TODO
@@ -28,13 +28,13 @@ const LineDemo = ({ lineLength, lineCurve, setLineLength, setLineCurve }) => (
     </LineWrapper>
 
     <ControlsWrapper>
-      <Slider
+      <HomeSlider
         value={lineLength}
         updateValue={setLineLength}
         width={150}
         height={40}
       />
-      <Slider
+      <HomeSlider
         value={lineCurve}
         updateValue={setLineCurve}
         width={150}
@@ -67,7 +67,7 @@ const ControlsWrapper = styled.div`
   padding-bottom: 4px;
 `;
 
-const SliderWrapper = styled.div`
+const HomeSliderWrapper = styled.div`
   position: relative;
   display: inline-block;
   height: 40px;
