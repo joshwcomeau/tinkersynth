@@ -27,6 +27,8 @@ const SMALL_HANDLE_RADIUS = 10;
 const BORDER_WIDTH = 12;
 const DOT_SPACING = 15;
 
+const ARROW_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
 // Utility method that produces the SVG path directions for the curve, given
 // 3 points.
 const getInstructions = (p1, p2, p3) =>
@@ -47,6 +49,62 @@ class BezierCurve extends PureComponent<Props> {
   static defaultProps = {
     strokeColor: COLORS.pink[700],
     strokeWidth: 6,
+  };
+
+  moveClosestPoint = ev => {
+    // If the user clicks somewhere on the background, NOT on a point, we
+    // should find the closest point and move it under the cursor.
+    //
+    // This is meant to help explain what this control is for the user.
+
+    // Don't worry about touch
+    if (ev.touches) {
+      return;
+    }
+    const { width, height, points, updatePoint } = this.props;
+
+    const svgWidth = width - BORDER_WIDTH * 2;
+    const svgHeight = height - BORDER_WIDTH * 2;
+
+    const x = ev.clientX;
+    const y = ev.clientY;
+
+    const svgBB = this.node.getBoundingClientRect();
+    const positionRelativeToSvg = [x - svgBB.left, y - svgBB.top];
+
+    const positionWithinViewBox = [
+      (positionRelativeToSvg[0] * svgWidth) / svgBB.width,
+      (positionRelativeToSvg[1] * svgHeight) / svgBB.height,
+    ];
+
+    // get the coordinate from 0-1.
+    // eg. [0.4, 0.95]
+    const relativeCoordinate = [
+      normalize(positionWithinViewBox[0], 0, svgWidth),
+      1 - normalize(positionWithinViewBox[1], 0, svgHeight),
+    ];
+
+    // Find the closest point to this coordinate
+    let closestDistance = Infinity;
+    let matchedPointIndex = null;
+
+    points.forEach((point, index) => {
+      // Get the hypothenuse, to work out the distance between two points
+      const deltaX = Math.abs(point[0] - relativeCoordinate[0]);
+      const deltaY = Math.abs(point[1] - relativeCoordinate[1]);
+
+      const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        matchedPointIndex = index;
+      }
+    });
+
+    const pointId = `p${matchedPointIndex + 1}`;
+
+    updatePoint(pointId, relativeCoordinate);
+    this.handleSelectPoint(pointId)();
   };
 
   handleSelectPoint = pointId => () => {
@@ -140,6 +198,13 @@ class BezierCurve extends PureComponent<Props> {
     const curveType = typeof p4 !== 'undefined' ? 'cubic' : 'quadratic';
 
     const handleKeyDown = (ev, pointId) => {
+      if (!ARROW_KEYS.includes(ev.key)) {
+        // Ignore non-arrow key presses
+        return;
+      }
+
+      ev.preventDefault();
+
       const STEP_SIZE = 0.03;
 
       const pointIndex = pointId.slice(1) - 1;
@@ -149,19 +214,19 @@ class BezierCurve extends PureComponent<Props> {
       let newY = y;
       switch (ev.key) {
         case 'ArrowLeft': {
-          newX = x - STEP_SIZE;
+          newX = Math.max(x - STEP_SIZE, 0);
           break;
         }
         case 'ArrowRight': {
-          newX = x + STEP_SIZE;
+          newX = Math.min(x + STEP_SIZE, 1);
           break;
         }
         case 'ArrowUp': {
-          newY = y + STEP_SIZE;
+          newY = Math.min(y + STEP_SIZE, 1);
           break;
         }
         case 'ArrowDown': {
-          newY = y - STEP_SIZE;
+          newY = Math.max(y - STEP_SIZE, 0);
           break;
         }
       }
@@ -185,6 +250,7 @@ class BezierCurve extends PureComponent<Props> {
                 width={svgWidth}
                 height={svgHeight}
                 squareSize={DOT_SPACING}
+                onMouseDown={this.moveClosestPoint}
               />
 
               <g

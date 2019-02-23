@@ -4,7 +4,7 @@ import React from 'react';
 import { range } from '../../utils';
 import { CONTROL_RADIUS } from '../../constants';
 
-const Background = ({ width, height, squareSize }) => {
+const Background = ({ width, height, squareSize, onMouseDown }) => {
   // We want to create a dotted backdrop. Ideally, we'd do this every 25px,
   // but we want them to be evenly spaced, including at the edges... so we
   // should choose a specific cell size that fits within our grid.
@@ -26,7 +26,7 @@ const Background = ({ width, height, squareSize }) => {
   );
 
   return (
-    <g>
+    <g onMouseDown={onMouseDown}>
       <rect
         x={0}
         y={0}
