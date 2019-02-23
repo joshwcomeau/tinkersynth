@@ -21,9 +21,8 @@ const ToastManager = ({ toasts, dismissToast }) => {
         leave={{ transform: 'translateY(-8px) scale(1, 1)', opacity: 0 }}
       >
         {toast => props => (
-          <ToastWrapper style={props}>
+          <ToastWrapper style={props} key={toast.id}>
             <Toast
-              key={toast.id}
               id={toast.id}
               title={toast.title}
               message={toast.message}

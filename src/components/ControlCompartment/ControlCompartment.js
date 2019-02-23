@@ -1,14 +1,16 @@
 // @flow
 import React, { useRef } from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Tooltip } from 'react-tippy';
 import { useSpring, animated } from 'react-spring/hooks';
 import Icon from 'react-icons-kit';
 import { alertCircle } from 'react-icons-kit/feather/alertCircle';
 
 import * as actions from '../../actions';
 import { COLORS } from '../../constants';
+
 import UnstyledButton from '../UnstyledButton';
+import Spacer from '../Spacer';
 
 type Props = {
   orientation: 'horizontal' | 'vertical',
@@ -81,16 +83,29 @@ const ControlCompartment = ({
             ),
           }}
         >
-          <UnstyledButton
-            ref={iconButtonRef}
-            tabIndex={isDisabled ? undefined : -1}
-            onClick={() =>
-              iconButtonRef.current &&
-              clickDisabledCompartment(iconButtonRef.current)
+          <Tooltip
+            interactiveBorder={10}
+            animation="fade"
+            duration={200}
+            tabIndex={isDisabled ? 0 : -1}
+            animateFill={false}
+            followCursor={true}
+            arrow={true}
+            html={
+              <>
+                This control is disabled because it doesn't do anything with
+                current settings.
+                <br />
+                <Spacer size={8} />
+                Try tweaking other parameters to unlock this one!
+              </>
             }
+            style={{
+              lineHeight: 1.4,
+            }}
           >
             <Icon icon={alertCircle} />
-          </UnstyledButton>
+          </Tooltip>
         </FirstDoor>
         {numOfDoors === 2 && (
           <LastDoor
@@ -179,11 +194,4 @@ const ChildrenShadow = styled(animated.div)`
   pointer-events: none;
 `;
 
-const mapDispatchToProps = {
-  clickDisabledCompartment: actions.clickDisabledCompartment,
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(ControlCompartment);
+export default ControlCompartment;

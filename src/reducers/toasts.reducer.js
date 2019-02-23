@@ -4,7 +4,6 @@ const initialState = [];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'CLICK_DISABLED_COMPARTMENT':
     case 'BREAK_MACHINE_WITH_KEYBOARD': {
       // Don't allow multiple of the same error to be added to state
       const alreadyIncludesThisToast = state.some(

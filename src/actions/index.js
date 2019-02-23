@@ -24,24 +24,6 @@ export const breakMachineWithKeyboard = (triggerRef: ?HTMLElement) => ({
   },
 });
 
-export const clickDisabledCompartment = (triggerRef: ?HTMLElement) => ({
-  type: 'CLICK_DISABLED_COMPARTMENT',
-  triggerRef,
-  toast: {
-    id: 'click-disabled-compartment',
-    title: 'This control is disabled.',
-    message: [
-      <>
-        Sometimes, the value of one control means that another control doesn't
-        do anything. In these cases, the control recedes into the machine.
-        <br />
-        <Spacer size={8} />
-        Try tweaking other parameters to unlock this one!
-      </>,
-    ],
-  },
-});
-
 export const discoverStorefront = () => ({
   type: 'DISCOVER_STOREFRONT',
 });
