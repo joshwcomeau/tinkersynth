@@ -135,8 +135,6 @@ const useVideo = () => {
     [currentVideoIndex]
   );
 
-  console.log(timeoutLength);
-
   return videos[currentVideoIndex];
 };
 
@@ -163,6 +161,7 @@ const HomepageVideo = styled.video`
   backface-visibility: hidden;
   border: none;
   background-color: transparent;
+  mix-blend-mode: luminosity;
 `;
 
 export default Homepage;
