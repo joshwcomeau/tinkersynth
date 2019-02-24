@@ -6,6 +6,7 @@ import { random } from '../../utils';
 
 import Column from './Column';
 import LineDemo from './LineDemo';
+import CanvasDisplay from './CanvasDisplay';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import FlyingTruckDemo from './FlyingTruckDemo';
 
@@ -13,34 +14,39 @@ const HomepageHowItWorks = () => {
   const [lineLength, setLineLength] = React.useState(20);
   const [lineCurve, setLineCurve] = React.useState(10);
 
+  let curveTimeoutId = React.useRef(null);
+  let lengthTimeoutId = React.useRef(null);
+
+  const createSetterThatAlsoDisables = setter => val => {
+    setter(val);
+    window.clearTimeout(curveTimeoutId.current);
+    window.clearTimeout(lengthTimeoutId.current);
+  };
+
   // TODO: Abstract
   React.useEffect(() => {
-    let timeoutId;
-
     const update = () => {
       setLineCurve(random(0, 100));
-      timeoutId = window.setTimeout(update, random(500, 5000));
+      curveTimeoutId.current = window.setTimeout(update, random(500, 2500));
     };
 
     update();
 
     return () => {
-      window.clearTimeout(timeoutId);
+      window.clearTimeout(curveTimeoutId.current);
     };
   }, []);
 
   React.useEffect(() => {
-    let timeoutId;
-
     const update = () => {
       setLineLength(random(0, 100));
-      timeoutId = window.setTimeout(update, random(500, 5000));
+      lengthTimeoutId.current = window.setTimeout(update, random(500, 2500));
     };
 
     update();
 
     return () => {
-      window.clearTimeout(timeoutId);
+      window.clearTimeout(lengthTimeoutId.current);
     };
   }, []);
 
@@ -60,8 +66,8 @@ const HomepageHowItWorks = () => {
         <LineDemo
           lineLength={lineLength}
           lineCurve={lineCurve}
-          setLineLength={setLineLength}
-          setLineCurve={setLineCurve}
+          setLineLength={createSetterThatAlsoDisables(setLineLength)}
+          setLineCurve={createSetterThatAlsoDisables(setLineCurve)}
         />
       </Column>
 
@@ -94,7 +100,7 @@ const HomepageHowItWorks = () => {
           </>
         }
       >
-        {/* TODO */}
+        <CanvasDisplay lineLength={lineLength} lineCurve={lineCurve} />
       </Column>
     </Wrapper>
   );

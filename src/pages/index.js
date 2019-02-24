@@ -28,6 +28,7 @@ const Homepage = ({}) => {
       />
       <Spacer size={400} />
       <HomepageHowItWorks />
+      <Spacer size={400} />
     </Layout>
   );
 };
