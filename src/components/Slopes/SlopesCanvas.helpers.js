@@ -12,7 +12,6 @@ import { clamp, normalize } from '../../utils';
  * width.
  */
 export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
-  console.log('GEt dimensions', windowDimensions, aspectRatio);
   const defaultHeight = 552;
   const defaultWidth = defaultHeight * aspectRatio;
 
@@ -21,17 +20,12 @@ export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
   // but it should be ok.
   // TODO: test this hypothesis.
   if (!windowDimensions) {
-    console.log('Not enough data', {
-      height: defaultHeight,
-      width: defaultHeight * aspectRatio,
-    });
     return { height: defaultHeight, width: defaultHeight * aspectRatio };
   }
 
   // We'll assume it's desktop if our width is larger than the natural canvas
   // size
   if (windowDimensions.width > defaultWidth) {
-    console.log('large enough', { width: defaultWidth, height: defaultHeight });
     return { width: defaultWidth, height: defaultHeight };
   }
 
@@ -42,8 +36,6 @@ export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
   const padding = UNIT * 2;
   const width = windowDimensions.width - padding * 2;
   const height = width * (1 / aspectRatio);
-
-  console.log('Mobile', { width, height });
 
   return { width, height };
 };

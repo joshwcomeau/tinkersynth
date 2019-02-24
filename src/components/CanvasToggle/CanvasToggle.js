@@ -12,7 +12,6 @@ const CanvasToggle = ({
   handleToggle,
   children,
 }) => {
-  console.log('size', size);
   return (
     <Button
       style={{ width: size, height: size }}

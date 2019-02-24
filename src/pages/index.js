@@ -5,6 +5,8 @@ import Icon from 'react-icons-kit';
 import { loader } from 'react-icons-kit/feather/loader';
 
 import { COLORS, UNIT } from '../constants';
+import { range } from '../utils';
+import useTimeout from '../hooks/timeout.hook';
 
 import homepageVideo0 from '../videos/homepage-demo-0.mp4';
 import homepageVideo1 from '../videos/homepage-demo-1.mp4';
@@ -23,59 +25,127 @@ import Spin from '../components/Spin';
 import FadeOnChange from '../components/FadeOnChange';
 import HomepageHowItWorks from '../components/HomepageHowItWorks/HomepageHowItWorks';
 
-const videos = [
-  homepageVideo0,
-  homepageVideo1,
-  homepageVideo2,
-  homepageVideo3,
-  homepageVideo4,
-  homepageVideo5,
-  homepageVideo7,
-];
+const loadVideoSrc = src => {
+  const videoElem = document.createElement('video');
+  videoElem.src = src;
+  videoElem.load();
 
-const useInterval = (callback, delay) => {
-  const savedCallback = React.useRef();
+  return new Promise((resolve, reject) => {
+    videoElem.addEventListener('canplaythrough', () => {
+      console.log('Can play through', src);
+      resolve();
+    });
+  });
+};
+
+const getRemainingTime = startTime => {
+  const MINIMUM_DISPLAY_LENGTH = 5000;
+
+  let remainingTime;
+
+  const amountOfTimeShownFrame = Date.now() - startTime;
+
+  if (amountOfTimeShownFrame >= MINIMUM_DISPLAY_LENGTH) {
+    remainingTime = 1;
+  } else {
+    remainingTime = MINIMUM_DISPLAY_LENGTH - amountOfTimeShownFrame;
+  }
+
+  return remainingTime;
+};
+
+const useVideo = () => {
+  const videos = [
+    homepageVideo0,
+    homepageVideo1,
+    homepageVideo2,
+    homepageVideo3,
+    homepageVideo4,
+    homepageVideo5,
+    homepageVideo7,
+  ];
+
+  const initialVideosLoaded = range(videos.length).map(() => false);
+  const [videosLoaded, setVideosLoaded] = React.useState(initialVideosLoaded);
+
+  const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
+  const [timeoutLength, setTimeoutLength] = React.useState(null);
+
+  const currentFrameStartedAt = React.useRef(Date.now());
 
   React.useEffect(() => {
-    savedCallback.current = callback;
-  });
+    const firstVideoSrc = videos[currentVideoIndex];
+    const secondVideoSrc = videos[currentVideoIndex + 1];
+
+    loadVideoSrc(firstVideoSrc)
+      .then(() => loadVideoSrc(secondVideoSrc))
+      .then(() => {
+        console.log('First 2 loaded');
+        const newVideosLoaded = [...videosLoaded];
+        newVideosLoaded[0] = true;
+        newVideosLoaded[1] = true;
+        setVideosLoaded(newVideosLoaded);
+
+        setTimeoutLength(getRemainingTime(currentFrameStartedAt.current));
+      });
+  }, []);
+
+  useTimeout(() => {
+    console.log('TIMEOUT DONE');
+    // Time's up! Swap to the next video
+    setTimeoutLength(null);
+
+    const nextVideoIndex = (currentVideoIndex + 1) % videos.length;
+    setCurrentVideoIndex(nextVideoIndex);
+  }, timeoutLength);
 
   React.useEffect(
     () => {
-      const tick = () => savedCallback.current();
+      // Skip on the very first time.
+      const anyLoadedVideo = videosLoaded.some(videoLoaded => videoLoaded);
+      if (!anyLoadedVideo) {
+        return;
+      }
 
-      if (typeof delay === 'number') {
-        let id = window.setInterval(tick, delay);
+      // When we switch to a video, we need to do a few things:
+      // - set the current frame time
+      // - Start loading the next video, if not already loaded
+      // - Set the timeout, if it is loaded
+      currentFrameStartedAt.current = Date.now();
 
-        return () => window.clearInterval(id);
+      const nextVideoIndex = (currentVideoIndex + 1) % videos.length;
+      const isNextVideoLoaded = videosLoaded[nextVideoIndex];
+
+      if (isNextVideoLoaded) {
+        setTimeoutLength(getRemainingTime(currentFrameStartedAt.current));
+      } else {
+        const nextVideo = videos[nextVideoIndex];
+
+        loadVideoSrc(nextVideo).then(() => {
+          console.log('Loaded', nextVideoIndex);
+          const newVideosLoaded = [...videosLoaded];
+          newVideosLoaded[nextVideoIndex] = true;
+          setVideosLoaded(newVideosLoaded);
+
+          setTimeoutLength(getRemainingTime(currentFrameStartedAt.current));
+        });
       }
     },
-    [delay]
+    [currentVideoIndex]
   );
+
+  console.log(timeoutLength);
+
+  return videos[currentVideoIndex];
 };
 
 const Homepage = ({}) => {
-  const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
-
-  useInterval(() => {
-    const nextIndex = (currentVideoIndex + 1) % 8;
-
-    setCurrentVideoIndex(nextIndex);
-  }, 5000);
-
-  const currentVideoSrc = videos[currentVideoIndex];
-
-  console.log(currentVideoIndex);
+  const videoSrc = useVideo();
 
   return (
     <Layout theme="dark" pageId="homepage">
-      <FadeOnChange changeKey={currentVideoSrc}>
-        <HomepageVideo
-          playsInline
-          autoPlay={true}
-          muted
-          src={currentVideoSrc}
-        />
+      <FadeOnChange changeKey={videoSrc}>
+        <HomepageVideo playsInline autoPlay={true} muted src={videoSrc} />
       </FadeOnChange>
       <Spacer size={400} />
       <HomepageHowItWorks />
