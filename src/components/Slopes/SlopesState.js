@@ -238,6 +238,9 @@ export const SlopesProvider = ({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // TEMP
+  window.machineDispatch = dispatch;
+
   // ACTIONS
   const toggleParameter = useRef(parameterName => {
     trackParameterChange(parameterName);

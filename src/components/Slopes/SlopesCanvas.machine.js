@@ -17,7 +17,7 @@ const SlopesCanvasMachine = (props: any) => {
   delete springParams.seed;
 
   // Use this slow config when recording sample videos.
-  const SLOW_CONFIG = { tension: 30, friction: 40 };
+  const SLOW_CONFIG = { tension: 30, friction: 50 };
 
   return (
     <Spring to={springParams} immediate={!slopesParams.animateTransitions}>

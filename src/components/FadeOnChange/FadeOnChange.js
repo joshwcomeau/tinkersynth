@@ -14,6 +14,7 @@ type State = {
 
 class FadeOnChange extends PureComponent<Props, State> {
   static defaultProps = {
+    as: 'div',
     duration: 300,
   };
 
