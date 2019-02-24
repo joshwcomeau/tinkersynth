@@ -25,7 +25,8 @@ import Spin from '../components/Spin';
 import FadeOnChange from '../components/FadeOnChange';
 import HomepageHowItWorks from '../components/HomepageHowItWorks/HomepageHowItWorks';
 
-const videoElem = document.createElement('video');
+const videoElem =
+  typeof document !== 'undefined' && document.createElement('video');
 
 const loadVideoSrc = src => {
   videoElem.src = src;
