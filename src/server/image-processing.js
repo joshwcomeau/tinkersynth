@@ -34,9 +34,7 @@ const getDrawingSettings = (size, artParams) => {
   // NOTE: using the same height as found in Slopes.js, so that the art is
   // identical... but maybe we should make this variable, and use a higher
   // number for the print?
-  const { width, height } = getCanvasDimensions();
-  const height = CANVAS_DISPLAY_HEIGHT;
-  const width = height * aspectRatio;
+  const { width, height } = getCanvasDimensions(null, aspectRatio);
 
   const lineColor = artParams.enableDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = artParams.enableDarkMode ? '#000000' : '#FFFFFF';

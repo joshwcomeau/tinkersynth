@@ -14,7 +14,7 @@ const TextLink = ({ style, ...delegated }) => {
 };
 
 const Wrapper = styled.div`
-  display: inline-block;
+  display: inline;
   font-weight: bold;
   color: ${COLORS.blue[500]};
   text-decoration: none;

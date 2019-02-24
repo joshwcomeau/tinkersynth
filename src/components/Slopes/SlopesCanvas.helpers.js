@@ -12,6 +12,7 @@ import { clamp, normalize } from '../../utils';
  * width.
  */
 export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
+  console.log('GEt dimensions', windowDimensions, aspectRatio);
   const defaultHeight = 552;
   const defaultWidth = defaultHeight * aspectRatio;
 

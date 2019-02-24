@@ -8,6 +8,7 @@ import cc0Badge from '../images/cc0-badge.png';
 
 import LayoutSidePage from '../components/LayoutSidePage';
 import QuestionAndAnswer from '../components/QuestionAndAnswer';
+import Asterisk from '../components/Asterisk';
 import Paragraph from '../components/Paragraph';
 import Heading from '../components/Heading';
 import List from '../components/List';
@@ -70,7 +71,6 @@ const FAQ = () => {
           </Heading>
         </Header>
         <Questions>
-          {/* Q1 */}
           <QuestionAndAnswer
             id="what-is-this"
             question="What is this exactly?"
@@ -78,8 +78,9 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Tinkersynth is a collection of software machines that can be used
-              to produce unique{' '}
+              Tinkersynth is a collection
+              <Asterisk tooltip="Well, er, so far it's just the one machine... but we hope to add others!" />{' '}
+              of software machines that can be used to produce unique{' '}
               <TextLink to="https://en.wikipedia.org/wiki/Generative_art">
                 generative art
               </TextLink>{' '}
@@ -110,7 +111,6 @@ const FAQ = () => {
 
           <Separator />
 
-          {/* Q2 */}
           <QuestionAndAnswer
             id="what-is-generative-art"
             question="How does it work?"
@@ -168,6 +168,8 @@ const FAQ = () => {
               !
             </Paragraph>
           </QuestionAndAnswer>
+
+          <Separator />
         </Questions>
       </Section>
 
@@ -387,8 +389,6 @@ const FAQ = () => {
         </Header>
 
         <Questions>
-          {/* Q1 */}
-
           <QuestionAndAnswer
             id="that-performance-tho"
             question="So, the performance..."
@@ -419,6 +419,45 @@ const FAQ = () => {
               be helpful to tweak the other parameters with the above
               optimizations enabled, and then revert them to their desired
               values once you've created something you like.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <QuestionAndAnswer
+            id="why-is-mobile-bad"
+            question="What's the deal with the limited mobile experience?"
+            isExpanded={openQuestionId === 'why-is-mobile-bad'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Originally, we had hoped to create a first-class mobile
+              experience, on par with the desktop experience. During
+              development, it became clear that it wasn't really feasible.
+            </Paragraph>
+            <Paragraph>
+              The Tinkersynth machines work so well because of the tight
+              feedback loop: when you drag a slider or toggle a switch, you can
+              immediately see what effect this has on the artwork, since both
+              the controls and the art are visible at the same time.
+            </Paragraph>
+            <Paragraph>
+              In our original mobile design, the machine's controls took up the
+              entire screen, so you had to make an adjustment, then swipe up to
+              see the effect. It felt really labor-intensive, and not a great
+              experience.
+            </Paragraph>
+
+            <Paragraph>
+              We decided to offer a limited subset for mobile, where the primary
+              mechanism for generating new art was the grey "Shuffle" button.
+              This button randomizes all the other controls, and can produce an
+              incredible range of potential outputs. With this solution, we can
+              fit the entire thing on your phone's screen, and still offer the
+              ability to create interesting, unique works of art.
+            </Paragraph>
+
+            <Paragraph>
+              That said, the desktop experience offers so much more control.
+              It's worth trying on a device with a larger screen, if possible.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>

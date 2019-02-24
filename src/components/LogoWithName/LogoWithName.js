@@ -48,7 +48,7 @@ const Wrapper = styled.div`
 
 const SiteTitle = styled.h1`
   font-size: 16px;
-  text-transform: uppercase;
+  text-transform: lowercase;
   letter-spacing: 2px;
 `;
 
