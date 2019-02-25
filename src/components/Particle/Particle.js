@@ -1,53 +1,76 @@
-// @flow
-import React, { useState, useRef, useEffect } from 'react';
-import { useSpring, animated, interpolate } from 'react-spring/hooks';
-import styled from 'styled-components';
-
-import { COLORS } from '../../constants';
-
-import { OpenCircle, Squiggle, Star, Swirl, X } from './shapes';
-
-const shapeMap = {
-  OpenCircle,
-  Squiggle,
-  Star,
-  Swirl,
-  X,
-};
+import * as React from 'react';
+import { Spring } from 'react-spring';
 
 type Props = {
+  size: number,
+  top: number,
+  left: number,
   angle: number,
   distance: number,
-  rotation: number,
-  color: string,
-  shape: 'OpenCircle' | 'Squiggle' | 'Star' | 'Swirl' | 'X',
+  fadeIn: number,
+  spinFrom: number,
 };
 
-const Particle = ({ angle, distance, rotation, color, shape }: Props) => {
-  const spring = useSpring({
-    rotation,
-    from: {
-      rotation: 0,
-    },
-    config: {
-      tension: 100,
+class Particle extends React.Component {
+  state = {
+    x: 0,
+    y: 0,
+  };
+
+  static defaultProps = {
+    fadeIn: false,
+    spinFrom: 0,
+  };
+
+  static getDerivedStateFromProps(props) {
+    const angleInRads = (props.angle * Math.PI) / 180;
+
+    const x = Math.cos(angleInRads) * props.distance;
+    const y = Math.sin(angleInRads) * props.distance;
+
+    return {
+      x,
+      y,
+    };
+  }
+
+  render() {
+    const { x, y } = this.state;
+    const { top, left, distance, fadeIn, spinFrom, children } = this.props;
+
+    const springConfig = {
+      tension: 100 - distance * 2,
       friction: 10,
-    },
-  });
+    };
 
-  const Shape = shapeMap[shape];
-
-  return (
-    <div
-      style={{
-        transform: spring.rotation.interpolate(
-          rotation => `rotate(${rotation}deg)`
-        ),
-      }}
-    >
-      <Shape color={color} />
-    </div>
-  );
-};
+    return (
+      <Spring
+        from={{ x: 0, y: 0, opacity: fadeIn ? 0 : 1, rotation: spinFrom }}
+        to={{ x, y, opacity: 1, rotation: 0 }}
+        config={springConfig}
+      >
+        {interpolated => (
+          <div
+            style={{
+              position: 'absolute',
+              top,
+              left,
+              opacity: interpolated.opacity,
+              transform: `translate(${interpolated.x}px, ${interpolated.y}px)`,
+            }}
+          >
+            <div
+              style={{
+                transform: `rotate(${interpolated.rotation}deg)`,
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        )}
+      </Spring>
+    );
+  }
+}
 
 export default Particle;

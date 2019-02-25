@@ -41,7 +41,7 @@ const H2 = styled.h1`
   font-weight: 700;
 `;
 const H3 = styled.h1`
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 600;
 `;
 const H4 = styled.h1`

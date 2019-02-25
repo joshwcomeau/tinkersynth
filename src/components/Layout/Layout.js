@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import configureStore from '../../store';
+import { COLORS } from '../../constants';
 import analytics from '../../services/analytics.service';
 
 import GlobalStyles from '../GlobalStyles';
@@ -22,7 +23,7 @@ const store = configureStore();
 type Props = {
   pageId: string,
   children: React$Node,
-  noHeader?: boolean,
+  noHeaderBorder?: boolean,
   transparentFooter?: boolean,
   adminPage?: boolean,
   theme?: 'default' | 'dark',
@@ -31,8 +32,7 @@ type Props = {
 const Layout = ({
   pageId,
   children,
-  noHeader,
-  transparentFooter,
+  noHeaderBorder,
   adminPage,
   theme = 'default',
 }: Props) => {
@@ -46,23 +46,25 @@ const Layout = ({
     <Provider store={store}>
       <ToastManager />
 
-      {!noHeader && <Header theme={theme} />}
-
-      <MainContentWrapper
+      <Wrapper
         style={{
-          backgroundColor: theme === 'dark' ? 'hsl(0, 0%, 15%)' : 'white',
+          backgroundColor: theme === 'dark' ? COLORS.navy : 'white',
         }}
       >
-        {children}
-      </MainContentWrapper>
+        <Header theme={theme} noBorder={noHeaderBorder} />
 
-      <Footer theme={theme} transparentBackground={transparentFooter} />
+        <MainContentWrapper>{children}</MainContentWrapper>
+
+        <Footer theme={theme} />
+      </Wrapper>
 
       <GlobalStyles />
       <DevTools />
     </Provider>
   );
 };
+
+const Wrapper = styled.div``;
 
 const MainContentWrapper = styled.div`
   position: relative;

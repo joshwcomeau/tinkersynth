@@ -47,7 +47,7 @@ const ChildWrapper = styled.div`
   width: 200px;
   height: 200px;
   margin: auto;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 `;
 
 export default Column;

@@ -9,9 +9,9 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import Spacer from '../Spacer';
 import TextLink from '../TextLink';
 
-const Footer = ({ transparentBackground, theme }) => {
+const Footer = ({ theme }) => {
   return (
-    <Wrapper style={{ background: COLORS.gray[900] }}>
+    <Wrapper>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName id="footer-logo" theme="dark" />
@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   position: relative;
   z-index: 2;
   padding: ${UNIT * 4}px 0px;
+  background-color: ${COLORS.navy};
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`

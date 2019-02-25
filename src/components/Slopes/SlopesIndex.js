@@ -120,7 +120,6 @@ const LoadingWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${COLORS.gray[900]};
 `;
 
 export default SlopesIndex;

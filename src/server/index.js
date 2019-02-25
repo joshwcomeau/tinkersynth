@@ -94,15 +94,6 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     const fileId = uuid();
 
-    const previewImage = await createRasterImage(size, artParams, {
-      fileId,
-      name: 'preview',
-      opaqueBackground: true,
-      pixelsPerInch: 25,
-    });
-
-    const previewUrl = await upload(previewImage.path);
-
     // Kick-start the real business of sending emails and creating orders in
     // the local database... but we don't have to wait for it to complete.
     // It's slow.
@@ -118,10 +109,7 @@ app.post('/purchase/fulfill', async (req, res) => {
     );
 
     return res.status(200).send({
-      previewUrl,
-      format,
-      width: previewImage.width,
-      height: previewImage.height,
+      ok: true,
     });
   } catch (err) {
     console.error(err);

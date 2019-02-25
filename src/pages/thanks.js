@@ -8,17 +8,20 @@ import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
 import { arrowLeft } from 'react-icons-kit/feather/arrowLeft';
 
 import { UNIT, COLORS } from '../constants';
+import headerSwoops from '../images/header-swoops.svg';
 
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 import Heading from '../components/Heading';
-import Paragraph from '../components/Paragraph';
 import Spacer from '../components/Spacer';
 import Button from '../components/Button';
 import Link from '../components/Link';
-import MountainsBg from '../components/MountainsBg';
+import Star from '../components/Star';
+import Particle from '../components/Particle';
 import CanvasFrame from '../components/CanvasFrame';
 import LoadScript from '../components/LoadScript/LoadScript';
+import SwoopyBackground from '../components/SwoopyBackground/SwoopyBackground';
+import Spin from '../components/Spin';
 
 const getWindowOptions = () => {
   const width = 500;
@@ -86,90 +89,139 @@ const Thanks = ({ location }) => {
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
 
   return (
-    <Layout pageId="thanks" noHeader>
+    <Layout pageId="thanks" theme="dark" noHeaderBorder>
       <SEO title="Slopes" url="https://tinkersynth.com/slopes/" />
-      <Background>
-        <MountainsBg />
-      </Background>
+
+      <SwoopyBackground width="100vw" height={175} />
 
       <Foreground>
-        <BeforeWrapper>
-          <Link to="/slopes" style={{ color: '#FFF' }}>
-            <Icon icon={arrowLeft} size={24} /> Create more art
-          </Link>
-        </BeforeWrapper>
         <Wrapper>
-          <MainContent>
-            <Heading size={1}>Success!</Heading>
-            <Spacer size={40} />
+          <Particle
+            fadeIn
+            angle={-100}
+            distance={32}
+            spinFrom={-30}
+            top={-20}
+            left={35}
+          >
+            <Star />
+          </Particle>
+          <Particle
+            fadeIn
+            angle={-140}
+            distance={20}
+            spinFrom={-10}
+            top={-12}
+            left={-5}
+          >
+            <Star />
+          </Particle>
+          <Particle
+            fadeIn
+            angle={-170}
+            distance={35}
+            spinFrom={-60}
+            top={10}
+            left={-5}
+          >
+            <Star />
+          </Particle>
+          <Particle
+            fadeIn
+            angle={-155}
+            distance={41}
+            spinFrom={-40}
+            top={-15}
+            left={-30}
+          >
+            <Star />
+          </Particle>
 
-            <Paragraph>
-              Your purchase has completed successfully. Thank you for being one
-              of the first people to use Tinkersynth!
-            </Paragraph>
+          <Particle
+            fadeIn
+            angle={-20}
+            distance={30}
+            spinFrom={-30}
+            top={-15}
+            left={300}
+          >
+            <Star />
+          </Particle>
 
-            {getCopyForFormat(format)}
+          <Particle
+            fadeIn
+            angle={-10}
+            distance={43}
+            spinFrom={-50}
+            top={5}
+            left={330}
+          >
+            <Star />
+          </Particle>
 
-            <Spacer size={50} />
+          <Heading size={3} style={{ fontSize: 36 }}>
+            Purchase confirmed!
+          </Heading>
+          <Spacer size={40} />
 
-            <Paragraph>
-              If you enjoyed creating art with this machine, spread the word!
-              These buttons will help show your art to the world:
-            </Paragraph>
+          <Paragraph>
+            At this very moment, a computer in a server farm near Toronto,
+            Canada is working hard to produce high-definition print-ready image
+            files using the specifications you provided.
+          </Paragraph>
 
-            <ButtonsRow>
-              <Button
-                kind="flat"
-                color="hsl(203, 89%, 53%)"
-                onClick={ev => {
-                  ev.preventDefault();
-                  const win = window.open(
-                    twitterShareUrl,
-                    'ShareOnTwitter',
-                    getWindowOptions()
-                  );
-                  win.opener = null;
-                }}
-              >
-                <Icon icon={twitterIcon} /> <Spacer inline size={UNIT} />{' '}
-                Twitter
-              </Button>
-              <Spacer size={20} />
-              <Button
-                kind="flat"
-                color="hsl(221, 44%, 41%)"
-                onClick={ev => {
-                  ev.preventDefault();
+          <Paragraph>
+            In a minute or two, you should receive an email with download links.
+            <br />I hope your new artwork sparks a lot of joy.
+          </Paragraph>
 
-                  const win = window.open(
-                    `https://www.facebook.com/sharer/sharer.php?u=${homeUrl}`,
-                    'facebook-share-dialog',
-                    'width=800,height=600'
-                  );
+          {getCopyForFormat(format)}
 
-                  win.opener = null;
-                }}
-              >
-                <Icon icon={facebookIcon} /> <Spacer inline size={UNIT} />{' '}
-                Facebook
-              </Button>
-            </ButtonsRow>
+          <Spacer size={50} />
 
-            <Spacer size={UNIT * 2} />
-          </MainContent>
+          <Paragraph>
+            If you enjoyed creating art with this machine, spread the word!
+            These buttons will help show your art to the world:
+          </Paragraph>
+
+          <ButtonsRow>
+            <Button
+              kind="flat"
+              color="hsl(203, 89%, 53%)"
+              onClick={ev => {
+                ev.preventDefault();
+                const win = window.open(
+                  twitterShareUrl,
+                  'ShareOnTwitter',
+                  getWindowOptions()
+                );
+                win.opener = null;
+              }}
+            >
+              <Icon icon={twitterIcon} /> <Spacer inline size={UNIT} /> Twitter
+            </Button>
+            <Spacer size={20} />
+            <Button
+              kind="flat"
+              color="hsl(221, 44%, 41%)"
+              onClick={ev => {
+                ev.preventDefault();
+
+                const win = window.open(
+                  `https://www.facebook.com/sharer/sharer.php?u=${homeUrl}`,
+                  'facebook-share-dialog',
+                  'width=800,height=600'
+                );
+
+                win.opener = null;
+              }}
+            >
+              <Icon icon={facebookIcon} /> <Spacer inline size={UNIT} />{' '}
+              Facebook
+            </Button>
+          </ButtonsRow>
 
           <Spacer size={UNIT * 2} />
-
-          <ArtPreview>
-            {previewUrl && (
-              <CanvasFrame>
-                <img
-                  src={previewUrl}
-                  style={{ width: width / 2, height: height / 2 }}
-                />
-              </CanvasFrame>
-            )}
-          </ArtPreview>
         </Wrapper>
 
         <Spacer size={100} />
@@ -178,58 +230,28 @@ const Thanks = ({ location }) => {
   );
 };
 
-const Background = styled.div`
-  position: fixed;
-  z-index: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
+const Background = styled.img`
+  position: relative;
+  width: 100%;
 `;
 
 const Foreground = styled.div`
   position: relative;
   z-index: 1;
-  padding-top: 10vh;
-  min-height: 100vh;
 `;
 
 const Wrapper = styled.div`
+  position: relative;
   width: 90%;
-  max-width: 960px;
+  max-width: 750px;
   margin: auto;
-  display: flex;
-  background: #fff;
-  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.16);
-  padding: ${UNIT}px;
-  border-radius: 8px;
+  color: ${COLORS.white};
 `;
 
-const BeforeWrapper = styled.div`
-  width: 90%;
-  max-width: 960px;
-  margin: auto;
-  line-height: 65px;
-  font-size: 18px;
-`;
-
-const MainContent = styled.div`
-  flex: 1;
-  padding: ${UNIT * 4}px;
-`;
-
-const ArtPreview = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: ${UNIT * 5}px;
-  background: hsl(0, 0%, 94%);
-  border-radius: 4px;
-
-  @media (max-width: 830px) {
-    display: none;
-  }
+const Paragraph = styled.p`
+  line-height: 1.3;
+  font-size: 22px;
+  margin-bottom: ${UNIT * 3}px;
 `;
 
 const ButtonsRow = styled.div`

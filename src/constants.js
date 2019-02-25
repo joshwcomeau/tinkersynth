@@ -139,6 +139,11 @@ export const COLORS = {
       saturation: 0,
       brightness: 95,
     }),
+    '200': prepColor({
+      hue: 0,
+      saturation: 0,
+      brightness: 92,
+    }),
 
     '300': prepColor({
       hue: 0,
@@ -190,6 +195,11 @@ export const COLORS = {
     hue: 0,
     saturation: 0,
     brightness: 0,
+  }),
+  navy: prepColor({
+    hue: 204,
+    saturation: 15,
+    brightness: 13,
   }),
 };
 

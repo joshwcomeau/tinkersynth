@@ -13,16 +13,12 @@ import Particle from '../Particle';
 import LogoWithName from '../LogoWithName';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 
-const Header = ({ theme }) => {
+const Header = ({ theme, noBorder }) => {
   const navigationLinkColor =
     theme === 'dark' ? COLORS.white : COLORS.gray[900];
 
   return (
-    <OuterWrapper
-      style={{
-        background: theme === 'dark' ? COLORS.gray[900] : COLORS.white,
-      }}
-    >
+    <OuterWrapper showBorder={!noBorder}>
       <InnerWrapper>
         <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName theme={theme} id="site-header" />
@@ -54,7 +50,8 @@ const OuterWrapper = styled.div`
   left: 0;
   right: 0;
   z-index: 2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: ${props =>
+    props.showBorder && '1px solid rgba(255, 255, 255, 0.06)'};
 `;
 
 const InnerWrapper = styled(MaxWidthWrapper)`
