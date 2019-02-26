@@ -40,13 +40,10 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
 
         <RadioListSelect.Option id="print">
           <OrderFormatItem
-            title="Giclée Art Print"
+            title="Fine Art Print"
             details={
               <>
-                Fine art print, printed on{' '}
-                <em style={{ fontStyle: 'normal' }}>
-                  Epson Ultra-Premium Lustre
-                </em>{' '}
+                Giclée art print, printed on <em>Epson Ultra-Premium Lustre</em>{' '}
                 paper, a 240gsm acid-free paper known for its rich blacks.
                 Printed with archival inks.
               </>
@@ -58,7 +55,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
 
         <RadioListSelect.Option id="combo">
           <OrderFormatItem
-            title="Giclée Art Print + Vector / Raster Download"
+            title="Fine Art Print + Vector / Raster Download"
             details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
             price={calculateCost('combo', 'small')}
             variablePrice
@@ -79,7 +76,6 @@ const Title = styled(Heading)`
 
 const Details = styled(Paragraph)`
   font-size: 14px;
-  font-style: italic;
   color: ${COLORS.gray[700]};
   margin-bottom: 0;
 `;

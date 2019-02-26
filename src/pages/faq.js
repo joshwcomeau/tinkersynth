@@ -5,14 +5,18 @@ import queryString from 'query-string';
 
 import { COLORS, UNIT } from '../constants';
 import cc0Badge from '../images/cc0-badge.png';
+import faqPerfCount from '../videos/faq-perf-count.mp4';
+import faqPerfOcclusion from '../videos/faq-perf-occ.mp4';
 
 import LayoutSidePage from '../components/LayoutSidePage';
 import QuestionAndAnswer from '../components/QuestionAndAnswer';
 import Asterisk from '../components/Asterisk';
 import Paragraph from '../components/Paragraph';
+import Spacer from '../components/Spacer';
 import Heading from '../components/Heading';
 import List from '../components/List';
 import TextLink from '../components/TextLink';
+import SimpleTable from '../components/SimpleTable';
 
 const navigateToId = id => {
   const elem = document.querySelector(`#${id}`);
@@ -176,12 +180,144 @@ const FAQ = () => {
       <Section>
         <Header>
           <Heading size={4} style={{ color: COLORS.violet[500] }}>
+            Shipping
+          </Heading>
+        </Header>
+
+        <Questions>
+          <QuestionAndAnswer
+            id="shipping-from-where"
+            question="Where are orders shipped from?"
+            isExpanded={openQuestionId === 'shipping-from-where'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Tinkersynth uses a fulfillment service that ships from the United
+              States as well as Europe. We choose the closest centre when
+              shipping your order.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="shipping"
+            question="How long will shipping take?"
+            isExpanded={openQuestionId === 'shipping'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Because Tinkersynth products are made-to-order (there's no way
+              around this, since you're the one creating them!), there's a short
+              period of fulfillment where your order is printed and packaged. We
+              aim to have all orders in the mail carrier's hands within{' '}
+              <strong>6 business days</strong>.
+            </Paragraph>
+
+            <Paragraph>
+              We generally try and use mid-tier shipping options. Here are some
+              approximate shipping times, depending on your location:
+            </Paragraph>
+
+            <SimpleTable>
+              <thead>
+                <tr>
+                  <th />
+                  <th>United States</th>
+                  <th>Canada</th>
+                  <th>Europe</th>
+                  <th>Worldwide</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>Duration</strong>
+                    <br />
+                    <span style={{ fontSize: '0.8em' }}>(business days)</span>
+                  </td>
+                  <td>3-5 days</td>
+                  <td>5-8 days</td>
+                  <td>5-10 days</td>
+                  <td>5-20 days</td>
+                </tr>
+              </tbody>
+            </SimpleTable>
+
+            <br />
+            <br />
+
+            <Paragraph>
+              Unfortunately, we don't offer the option to pay extra for "rush"
+              shipping. If this is something that interests you, please{' '}
+              <TextLink to="/contact">reach out</TextLink> and let us know - we
+              may consider building in support for this, in the future.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="worldwide-shipping"
+            question="Do you really ship anywhere in the world?"
+            isExpanded={openQuestionId === 'worldwide-shipping'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Tinkersynth uses a fulfillment shipping service to manage
+              shipping, and they claim to offer worldwide shipping. In certain
+              extreme cases, if they are not able to accommodate your address,
+              we may have to cancel and refund your order. This has never
+              happened so far, though.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="how-are-orders-shipped"
+            question="How are orders shipped?"
+            isExpanded={openQuestionId === 'how-are-orders-shipped'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Fine art prints are shipped rolled inside shipping tubes. We take
+              care to wrap prints carefully.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="damaged-during-shipping"
+            question="Help! My order was damaged during shipping!"
+            isExpanded={openQuestionId === 'how-are-orders-shipped'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              It's really important to us that you receive a perfect-condition
+              piece of artwork. If your art is damaged in transit, please send a
+              photo of the damage to josh@tinkersynth.com.
+            </Paragraph>
+
+            <Paragraph>
+              We'll either issue a full refund immediately, or ship it again,
+              whichever you'd prefer.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+        </Questions>
+      </Section>
+
+      <Section>
+        <Header>
+          <Heading size={4} style={{ color: COLORS.violet[500] }}>
             Store
           </Heading>
         </Header>
 
         <Questions>
-          {/* Q1 */}
           <QuestionAndAnswer
             id="purchase-options"
             question="What are the purchase options?"
@@ -189,70 +325,62 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              The art you create through Tinkersmith can be purchased in two
-              formats: <strong>print</strong> and <strong>download</strong>.
+              When purchasing art through Tinkersynth, we offer two products: a
+              digital download, and a physical fine art print.
             </Paragraph>
 
             <br />
-            <Heading size={4}>Download</Heading>
+            <Heading size={5}>Download</Heading>
             <br />
             <Paragraph>
-              The "download" option lets you order the raw image files, to be
-              sent via email shortly after purchase. This is a great option for
-              folks who want to put their art on a T-shirt, or use as a desktop
-              background.
+              When purchasing an option that includes a digital download, you'll
+              receive an email a few moments after purchase with links to
+              download the assets.
             </Paragraph>
 
             <Paragraph>
-              You can do whatever you want with the image, you retain the rights
-              to it. Both raster and vector formats are supplied, so you can
-              modify them however you wish in Illustrator or Photoshop.
+              Specifically, we'll send you the following files:
             </Paragraph>
-
-            <Paragraph>The files included with purchase are:</Paragraph>
 
             <List>
               <List.Item>
-                A raster .png, which can be sent straight to print shops. I
-                chose .png over .jpg because .pngs tend to have fewer
-                compression artifacts. Online tools can be used to convert to
-                jpg if required.
+                A 300dpi raster image in .png format with a transparent
+                background (only the lines).
               </List.Item>
               <List.Item>
-                A vector .svg, which can be used to create raster images at any
-                size.
+                A 300dpi raster image in .png format with an opaque background
+                (white lines on black background, or black lines on white
+                background).
+              </List.Item>
+              <List.Item>
+                An infinitely-scalable vector image in .svg format.
               </List.Item>
             </List>
 
-            <br />
-            <Heading size={4}>Download</Heading>
-            <br />
-
             <Paragraph>
-              "Print" allows you to purchase a physical Giclée print, shipped
-              right to your door. After experimenting with a couple options, I
-              chose Epson ultra-premium lustre paper, a heavy 240-gsm acid-free
-              paper whose ink retention captures rich, deep blacks. The ink is a
-              high-quality archival ink with solid monochromatic reproduction.
+              This is a great, flexible option. You can manage the printing
+              yourself with these assets, or use them for any other purpose.
             </Paragraph>
 
-            <Paragraph>Prints are shipped in a rolled tube.</Paragraph>
+            <br />
+            <Heading size={5}>Fine art prints</Heading>
+            <br />
 
             <Paragraph>
-              The other option, "download", instead provides
+              We also sell fine art Giclée prints. We use{' '}
+              <em>Epson ultra-premium lustre paper</em>, a heavy 240-gsm
+              acid-free paper whose ink retention captures rich, deep blacks.
+              The ink is a high-quality archival ink with solid monochromatic
+              reproduction.
             </Paragraph>
 
             <Paragraph>
-              Even if you want to build a piece with many occluded lines, it can
-              be helpful to tweak the other parameters with the above
-              optimizations enabled, and then revert them to their desired
-              values once you've created something you like.
+              Please note that this option doesn't include a frame.
             </Paragraph>
           </QuestionAndAnswer>
 
           <Separator />
 
-          {/* Q2 */}
           <QuestionAndAnswer
             id="license"
             question="What's the license for purchased artwork?"
@@ -293,65 +421,38 @@ const FAQ = () => {
 
           <Separator />
 
-          {/* Q3 */}
           <QuestionAndAnswer
-            id="how-is-pricing-calculated"
-            question="How is the pricing calculated?"
-            isExpanded={openQuestionId === 'how-is-pricing-calculated'}
+            id="refund"
+            question="Can I get a refund?"
+            isExpanded={openQuestionId === 'refund'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              When compared to other works from generative artists,
-              Tinkersynth's prices are a bit higher. There are several reasons
-              for this:
-            </Paragraph>
-
-            <List>
-              <List.Item>
-                Tinkersynth is a unique experience. You aren't just buying art
-                from a Shopify shop, you're participating in its creation. You
-                control the final output, and the sheer number of possible
-                combinations—more than 10³²—means that your art is virtually
-                guaranteed to be 100% unique.
-                <br />
-                <br />
-                Creating this tool took an incredible amount of time, and so
-                that effort is worked into the price.
-              </List.Item>
-
-              <List.Item>
-                Worldwide free shipping is included on physical prints.
-              </List.Item>
-
-              <List.Item>
-                The artwork produced is licensed as Creative Commons Zero, an
-                incredibly permissive license for artwork. You can use the
-                designs you purchase anywhere you'd like, even commercially,
-                without attributing Tinkersynth.
-              </List.Item>
-            </List>
-
-            <Paragraph>
-              Because of these factors, we believe we've priced our product
-              quite aggressively. Prices may rise in the future.
+              For our fine art prints, we generally are unable to offer refunds.
+              By design, Tinkersynth art is one-of-a-kind, and made-to-order;
+              we'd have no way of reselling a returned piece of artwork.
             </Paragraph>
 
             <Paragraph>
-              Please note that low-res image downloads are available for free -
-              right-click the canvas and select "Save Image As..." to download a
-              raster .png image. While we hope that most folks will pay for
-              high-res + vector formats, this is a great option if you want a
-              new background image for your phone and can't afford the high-res
-              download price.
+              That said, if your item was damaged in shipping, or has some sort
+              of cosmetic flaw, we'll gladly refund your money, or ship a new
+              print, whichever you'd prefer. This hasn't happened yet, but it's
+              important to us that you receive a high-quality piece of art.
+            </Paragraph>
+
+            <Paragraph>
+              For our digital download packages, we <em>generally</em> don't
+              offer refunds, although there's a little bit more flexibility.
+              Please <TextLink to="/contact">contact us</TextLink> and let us
+              know if you'd like a refund.
             </Paragraph>
           </QuestionAndAnswer>
 
           <Separator />
 
-          {/* Q4 */}
           <QuestionAndAnswer
             id="multiple-purchases"
-            question="How does it work for multiple purchases?"
+            question="Can I purchase multiple prints?"
             isExpanded={openQuestionId === 'multiple-purchases'}
             toggleExpanded={setOpenQuestionId}
           >
@@ -391,34 +492,68 @@ const FAQ = () => {
         <Questions>
           <QuestionAndAnswer
             id="that-performance-tho"
-            question="So, the performance..."
+            question="Is there any way to speed up the machine?"
             isExpanded={openQuestionId === 'that-performance-tho'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Not a question, but I take your point. The art-generation is
-              pretty sluggish.
+              While developing the Slopes machine, it was important that the
+              performance was top-notch: having a short feedback loop is
+              imperative to discovering neat tricks, and coming up with great
+              art.
             </Paragraph>
 
             <Paragraph>
-              There are a few tricks you can do to speed up the machine:
+              The performance varies pretty drastically depending on the
+              settings chosen, since some settings increase the work that the
+              machine has to do. Here are some tricks you can use to speed up
+              the machine.
             </Paragraph>
 
-            <Paragraph>
-              Line occlusion is very expensive to calculate, and can be disabled
-              with this control.
-            </Paragraph>
+            <QuestionSubsection>
+              <Heading size={5}>Reducing line counts</Heading>
+
+              <Spacer size={UNIT * 2} />
+
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={faqPerfCount}
+                style={{ width: 312 }}
+              />
+              <Spacer size={UNIT * 2} />
+              <Paragraph>
+                The more lines you draw, the slower the calculation. You can
+                reduce the number to dramatically improve performance.
+              </Paragraph>
+            </QuestionSubsection>
+
+            <QuestionSubsection>
+              <Heading size={5}>Disabling line occlusion</Heading>
+              <Spacer size={UNIT * 2} />
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={faqPerfOcclusion}
+                style={{ width: 312 }}
+              />
+              <Spacer size={UNIT * 2} />
+              <Paragraph>
+                One of the more computationally-intensive steps is making sure
+                that lines are "occluded" by earlier lines. By disabling this,
+                you reduce the amount of work needed to be done.
+              </Paragraph>
+            </QuestionSubsection>
 
             <Paragraph>
-              Reducing the number of lines rendered can also greatly speed up
-              the generation process.
-            </Paragraph>
-
-            <Paragraph>
-              Even if you want to build a piece with many occluded lines, it can
-              be helpful to tweak the other parameters with the above
-              optimizations enabled, and then revert them to their desired
-              values once you've created something you like.
+              Even if you want your final piece of artwork to include many
+              occluded lines, it can be advantageous to experiment with these
+              recommended settings, and then crank them up once you're happy
+              with the result.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -493,6 +628,12 @@ const Separator = styled.div`
   width: 100%;
   height: 1px;
   background: rgba(0, 0, 0, 0.1);
+`;
+
+const QuestionSubsection = styled.div`
+  padding: ${UNIT * 2}px;
+  background: rgba(0, 0, 0, 0.1);
+  margin-bottom: ${UNIT * 4}px;
 `;
 
 export default FAQ;
