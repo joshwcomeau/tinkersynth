@@ -11,6 +11,7 @@ import uuid from 'uuid/v1';
 import { polylinesToSVG } from '../vendor/polylines';
 
 import { PRINT_SIZES } from '../constants';
+import { clamp, normalize } from '../utils';
 import {
   clipLinesWithMargin,
   groupPolylines,
@@ -36,10 +37,16 @@ const getDrawingSettings = (size, artParams) => {
   // number for the print?
   const { width, height } = getCanvasDimensions(null, aspectRatio);
 
+  // TODO: This stuff is somewhat duplicated in SlopesCanvas.helpers
   const lineColor = artParams.enableDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = artParams.enableDarkMode ? '#000000' : '#FFFFFF';
 
   const lineCap = artParams.dotAmount > 0 ? 'round' : 'butt';
+
+  let lineWidth =
+    artParams.dotAmount === 0
+      ? 1
+      : clamp(normalize(artParams.dotAmount, 50, 100, 1, 2.5), 1, 2.5);
 
   return {
     width,
@@ -48,6 +55,7 @@ const getDrawingSettings = (size, artParams) => {
     printHeight,
     lineColor,
     lineCap,
+    lineWidth,
     backgroundColor,
   };
 };
@@ -114,6 +122,7 @@ export const createVectorImage = async (size, artParams, { fileId }) => {
     height,
     lineColor,
     lineCap,
+    lineWidth,
     backgroundColor,
   } = getDrawingSettings(size, artParams);
 
@@ -128,6 +137,7 @@ export const createVectorImage = async (size, artParams, { fileId }) => {
     height,
     lineColor,
     lineCap,
+    lineWidth,
     backgroundColor,
   });
 
@@ -155,6 +165,7 @@ export const createRasterImage = async (
     printHeight,
     lineColor,
     lineCap,
+    lineWidth,
     backgroundColor,
   } = getDrawingSettings(size, artParams);
 
@@ -172,6 +183,7 @@ export const createRasterImage = async (
     height,
     lineColor,
     lineCap,
+    lineWidth,
     backgroundColor: opaqueBackground && backgroundColor,
   });
 

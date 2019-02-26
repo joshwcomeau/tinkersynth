@@ -23,7 +23,7 @@ const SwoopyBackground = ({ width, height }) => {
         <path
           d="M1215.46 225.462C1324.07 226.114 1312 143.624 1312 143.624L1312 -14L-7.49973 -14L-7.49974 93C99.229 68.8948 95.249 177.68 206.822 188.928C356.668 204.033 426.881 70.9419 571.27 101.244C664.119 120.729 662.837 200.999 759.624 208.656C850.678 215.86 880.797 144.685 972.497 143.624C1079.15 142.391 1108.79 224.822 1215.46 225.462Z"
           fill="url(#swoop-bg-gradient)"
-          fill-opacity="0.05"
+          fillOpacity="0.05"
         />
       </g>
       <defs>
@@ -35,8 +35,8 @@ const SwoopyBackground = ({ width, height }) => {
           y2="44.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>

@@ -49,16 +49,15 @@ export const getRenderOptions = (
   scaleRatio: number = 1,
   { enableDarkMode, dotRatio }: any
 ) => {
-  // prettier-ignore
+  const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
-  const DEFAULT_WIDTH = 1;
 
   let lineWidth =
     dotRatio === 0
-      ? DEFAULT_WIDTH
+      ? MIN_WIDTH
       : clamp(
-          normalize(dotRatio, 0.5, 1, DEFAULT_WIDTH, MAX_WIDTH),
-          1,
+          normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
+          MIN_WIDTH,
           MAX_WIDTH
         );
 
