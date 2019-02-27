@@ -26,7 +26,10 @@ export type EventType =
   | 'complete-checkout'
   | 'error-checkout'
   | 'pop-first-easter-egg-screw'
-  | 'discover-easter-egg-control';
+  | 'discover-easter-egg-control'
+  | 'continue-creating-after-purchase'
+  | 'share-after-purchase'
+  | 'expand-faq-question';
 
 export const createLogger = (environment?: ?string = process.env.NODE_ENV) => {
   mixpanel.init(MIXPANEL_KEY);

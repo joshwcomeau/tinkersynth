@@ -8,16 +8,19 @@ import { twitter as twitterIcon } from 'react-icons-kit/ikons/twitter';
 import { arrowLeft } from 'react-icons-kit/feather/arrowLeft';
 
 import { UNIT, COLORS } from '../constants';
+import analytics from '../services/analytics.service';
 import headerSwoops from '../images/header-swoops.svg';
 
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 import Heading from '../components/Heading';
 import Spacer from '../components/Spacer';
+import Hr from '../components/Hr';
 import Button from '../components/Button';
 import Link from '../components/Link';
 import Star from '../components/Star';
 import Particle from '../components/Particle';
+import UnstyledButton from '../components/UnstyledButton';
 import CanvasFrame from '../components/CanvasFrame';
 import LoadScript from '../components/LoadScript/LoadScript';
 import SwoopyBackground from '../components/SwoopyBackground/SwoopyBackground';
@@ -44,10 +47,13 @@ const getCopyForFormat = format => {
       return (
         <>
           <Paragraph>
-            At this very moment, a computer in a server farm in Toronto is hard
-            at work generating high-definition images for the art you created.
-            You should receive an email within a few minutes with links to
-            download your artwork!
+            At this very moment, a computer in a server farm near Toronto,
+            Canada is working hard to produce high-definition print-ready image
+            files using the specifications you provided.
+          </Paragraph>
+
+          <Paragraph>
+            In a minute or two, you should receive an email with download links.
           </Paragraph>
         </>
       );
@@ -56,11 +62,19 @@ const getCopyForFormat = format => {
       return (
         <>
           <Paragraph>
-            At this very moment, a bunch of stuff is happening on a computer
-            deep in a Toronto server farm. It's creating high-definition images
-            for the artwork you created, and sending them across the internet.
-            You'll receive a copy in your email inbox within a few minutes, and
-            we'll begin producing your fine-art print shortly after that.
+            At this very moment, a computer in a server farm near Toronto,
+            Canada is working hard to produce high-definition print-ready image
+            files using the specifications you provided.
+          </Paragraph>
+
+          <Paragraph>
+            In a few minutes, you'll receive an email with download links for
+            your digital image assets.
+          </Paragraph>
+
+          <Paragraph>
+            We'll start work soon on your physical fine art print, and let you
+            know when it's shipped.
           </Paragraph>
         </>
       );
@@ -69,8 +83,9 @@ const getCopyForFormat = format => {
       return (
         <>
           <Paragraph>
-            We'll contact you within a couple days to let you know when your
-            fine art print has been produced, and is being shipped.
+            At this very moment, a computer in a server farm near Toronto,
+            Canada is hard at work preparing your artwork. We'll print it within
+            the next few days, and let you know when it's shipped.
           </Paragraph>
         </>
       );
@@ -164,32 +179,34 @@ const Thanks = ({ location }) => {
           </Heading>
           <Spacer size={40} />
 
-          <Paragraph>
-            At this very moment, a computer in a server farm near Toronto,
-            Canada is working hard to produce high-definition print-ready image
-            files using the specifications you provided.
-          </Paragraph>
-
-          <Paragraph>
-            In a minute or two, you should receive an email with download links.
-            <br />I hope your new artwork sparks a lot of joy.
-          </Paragraph>
-
           {getCopyForFormat(format)}
 
-          <Spacer size={50} />
+          <Paragraph>Thanks for creating with Tinkersynth!</Paragraph>
 
+          <Spacer size={32} />
+          <Hr />
+          <Spacer size={64} />
+
+          <Heading size={4}>Spread the word</Heading>
+          <Spacer size={16} />
           <Paragraph>
-            If you enjoyed creating art with this machine, spread the word!
-            These buttons will help show your art to the world:
+            You're one of the very first people to use Tinkersynth! If you
+            enjoyed it, could you please share it with your network, so they can
+            discover it as well?
           </Paragraph>
 
+          <Spacer size={16} />
           <ButtonsRow>
             <Button
               kind="flat"
               color="hsl(203, 89%, 53%)"
               onClick={ev => {
                 ev.preventDefault();
+
+                analytics.logEvent('share-after-purchase', {
+                  network: 'twitter',
+                });
+
                 const win = window.open(
                   twitterShareUrl,
                   'ShareOnTwitter',
@@ -207,6 +224,10 @@ const Thanks = ({ location }) => {
               onClick={ev => {
                 ev.preventDefault();
 
+                analytics.logEvent('share-after-purchase', {
+                  network: 'facebook',
+                });
+
                 const win = window.open(
                   `https://www.facebook.com/sharer/sharer.php?u=${homeUrl}`,
                   'facebook-share-dialog',
@@ -220,6 +241,29 @@ const Thanks = ({ location }) => {
               Facebook
             </Button>
           </ButtonsRow>
+
+          <Spacer size={32} />
+          <Hr />
+          <Spacer size={64} />
+
+          <Heading size={4}>Create more art</Heading>
+          <Spacer size={16} />
+          <Paragraph>
+            Continue experimenting to discover what else the Slopes machine can
+            do.
+          </Paragraph>
+
+          <Spacer size={32} />
+          <CreateMoreArtButton
+            as={Link}
+            to="/slopes"
+            onClick={() => {
+              analytics.logEvent('continue-creating-after-purchase');
+            }}
+          >
+            <Icon icon={arrowLeft} size={24} /> <Spacer inline size={UNIT} />{' '}
+            Continue creating
+          </CreateMoreArtButton>
 
           <Spacer size={UNIT * 2} />
         </Wrapper>
@@ -256,6 +300,28 @@ const Paragraph = styled.p`
 
 const ButtonsRow = styled.div`
   display: flex;
+  /* justify-content: center; */
+`;
+const DesktopOnly = styled.div`
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
+`;
+const CreateMoreArtButton = styled(UnstyledButton)`
+  width: 270px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: ${COLORS.white};
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
 `;
 
 export default Thanks;

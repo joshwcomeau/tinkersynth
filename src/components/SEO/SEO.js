@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
 
-import sampleImage from '../../images/sample.png';
+import ogSampleImage from '../../images/og-sample-image.png';
+import ogSampleImageTwitter from '../../images/og-sample-image-twitter.png';
 
 const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
   <StaticQuery
@@ -25,66 +26,66 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
           titleTemplate={`%s | ${data.site.siteMetadata.title}`}
           meta={[
             {
-              name: `description`,
+              name: 'description',
               content: metaDescription,
             },
             {
-              property: `og:title`,
+              property: 'og:title',
               content: ogTitle || title,
             },
             {
-              property: `og:description`,
+              property: 'og:description',
               content: metaDescription,
             },
             {
-              property: `og:url`,
+              property: 'og:url',
               content: url || backupOgUrl,
             },
             {
-              property: `og:type`,
-              content: `website`,
+              property: 'og:type',
+              content: 'website',
             },
             {
-              property: `og:image`,
-              content: sampleImage,
+              property: 'og:image',
+              content: ogSampleImage,
             },
             {
-              property: `og:image:type`,
+              property: 'og:image:type',
               content: 'image/png',
             },
             {
-              property: `og:image:width`,
+              property: 'og:image:width',
+              content: '630',
+            },
+            {
+              property: 'og:image:height',
               content: '1200',
             },
             {
-              property: `og:image:height`,
-              content: '1600',
+              name: 'twitter:card',
+              content: 'summary_large_image',
             },
             {
-              name: `twitter:card`,
-              content: `summary`,
+              name: 'twitter:image',
+              content: ogSampleImageTwitter,
             },
             {
-              name: `twitter:image`,
-              content: sampleImage,
-            },
-            {
-              name: `twitter:creator`,
+              name: 'twitter:creator',
               content: data.site.siteMetadata.author,
             },
             {
-              name: `twitter:title`,
+              name: 'twitter:title',
               content: ogTitle || title,
             },
             {
-              name: `twitter:description`,
+              name: 'twitter:description',
               content: metaDescription,
             },
           ]
             .concat(
               keywords.length > 0
                 ? {
-                    name: `keywords`,
+                    name: 'keywords',
                     content: keywords.join(`, `),
                   }
                 : []

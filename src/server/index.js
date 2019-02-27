@@ -110,6 +110,7 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     return res.status(200).send({
       ok: true,
+      format,
     });
   } catch (err) {
     console.error(err);

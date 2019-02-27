@@ -262,8 +262,6 @@ const generator = ({
     // interesting.
     const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0.01, 1);
 
-    console.log({ shiftedDotRatio });
-
     lines.forEach(row => {
       row.forEach(line => {
         if (!line) {

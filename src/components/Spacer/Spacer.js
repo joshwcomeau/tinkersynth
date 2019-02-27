@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Spacer = ({ size, inline }: Props) => (
-  <div
+  <span
     style={{
       width: size,
       height: size,

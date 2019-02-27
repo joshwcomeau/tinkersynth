@@ -291,7 +291,7 @@ const FAQ = () => {
           <QuestionAndAnswer
             id="damaged-during-shipping"
             question="Help! My order was damaged during shipping!"
-            isExpanded={openQuestionId === 'how-are-orders-shipped'}
+            isExpanded={openQuestionId === 'damaged-during-shipping'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>

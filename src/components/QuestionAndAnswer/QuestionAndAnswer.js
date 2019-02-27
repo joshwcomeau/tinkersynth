@@ -6,6 +6,7 @@ import { plus } from 'react-icons-kit/feather/plus';
 import { minus } from 'react-icons-kit/feather/minus';
 
 import { COLORS, UNIT } from '../../constants';
+import analytics from '../../services/analytics.service';
 import useToggle from '../../hooks/toggle.hook';
 
 import UnstyledButton from '../UnstyledButton';
@@ -34,7 +35,12 @@ const QuestionAndAnswer = ({
       <a id={id} />
 
       <Question
-        onClick={() => (isExpanded ? toggleExpanded(null) : toggleExpanded(id))}
+        onClick={() => {
+          if (!isExpanded) {
+            analytics.logEvent('expand-faq-question', { id });
+          }
+          return isExpanded ? toggleExpanded(null) : toggleExpanded(id);
+        }}
       >
         <Icon
           icon={isExpanded ? minus : plus}

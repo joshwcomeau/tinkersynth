@@ -9,7 +9,7 @@ const Page = ({ location }) => (
   <Layout pageId="slopes" theme="dark">
     <SEO
       title="Slopes"
-      ogTitle="Slopes Mk.1 Generative Art Machine"
+      ogTitle="Generative Art Machine"
       keywords={['generative art', 'art', 'online store']}
     />
 
