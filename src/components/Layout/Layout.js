@@ -13,6 +13,7 @@ import DevTools from '../DevTools';
 import ToastManager from '../ToastManager';
 import Header from '../Header';
 import Footer from '../Footer';
+import HiddenTopShelf from '../HiddenTopShelf';
 
 import 'focus-visible';
 import 'react-tippy/dist/tippy.css';
@@ -45,6 +46,7 @@ const Layout = ({
   return (
     <Provider store={store}>
       <ToastManager />
+      <HiddenTopShelf />
 
       <Wrapper
         style={{
