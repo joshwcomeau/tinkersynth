@@ -12,9 +12,10 @@ import Starfield from '../Starfield';
 
 const FlyingTruckDemo = ({}) => {
   const [rotation, setRotation] = React.useState(-30);
+  const [translate, setTranslate] = React.useState(0);
 
   const spring = useSpring({
-    rotate: `rotate(${rotation}deg)`,
+    transform: `rotate(${rotation}deg) translateX(${translate}px)`,
     config: {
       tension: 10,
       friction: 25,
@@ -36,6 +37,21 @@ const FlyingTruckDemo = ({}) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    let timeoutId;
+
+    const update = () => {
+      setTranslate(random(-30, 35));
+      timeoutId = window.setTimeout(update, random(1000, 2000));
+    };
+
+    update();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <FrontStarfield>
@@ -46,7 +62,7 @@ const FlyingTruckDemo = ({}) => {
       </BackStarfield>
       <InnerWrapper>
         <Float>
-          <TruckWrapper style={{ transform: spring.rotate }}>
+          <TruckWrapper style={{ transform: spring.transform }}>
             <Mailtruck />
             <FireWrapper>
               <AnimatedFire />

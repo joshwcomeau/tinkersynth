@@ -34,6 +34,7 @@ const images = [
 ];
 
 const FRAME_DURATION = 5000;
+const EXTENDED_FRAME_DURATION = 15000;
 
 const HomepageHero = () => {
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -45,15 +46,56 @@ const HomepageHero = () => {
     const nextImageIndex = (imageIndex + 1) % images.length;
 
     setImageIndex(nextImageIndex);
+
+    if (slideshowFrameDuration === EXTENDED_FRAME_DURATION) {
+      setSlideshowFrameDuration(FRAME_DURATION);
+    }
   }, slideshowFrameDuration);
 
   const manuallyTriggerSlideshow = index => {
     setImageIndex(index);
-    // End the automated slideshow when clicked
-    setSlideshowFrameDuration(null);
+    // Pause the automated slideshow when clicked
+    setSlideshowFrameDuration(EXTENDED_FRAME_DURATION);
   };
 
+  React.useEffect(
+    () => {
+      const handleKeydown = ev => {
+        switch (ev.key) {
+          case 'ArrowRight': {
+            const nextImageIndex = (imageIndex + 1) % images.length;
+            manuallyTriggerSlideshow(nextImageIndex);
+            return;
+          }
+
+          case 'ArrowLeft': {
+            let previousImageIndex = imageIndex - 1;
+
+            if (previousImageIndex < 0) {
+              previousImageIndex = images.length - 1;
+            }
+            manuallyTriggerSlideshow(previousImageIndex);
+            return;
+          }
+
+          default: {
+            return;
+          }
+        }
+      };
+
+      window.addEventListener('keydown', handleKeydown);
+
+      return () => {
+        window.removeEventListener('keydown', handleKeydown);
+      };
+    },
+    [imageIndex]
+  );
+
   const imageSrc = images[imageIndex];
+
+  console.log({ imageIndex });
 
   return (
     <Hero>
