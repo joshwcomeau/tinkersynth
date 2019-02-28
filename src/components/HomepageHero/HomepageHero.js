@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
+import ImageCache from '../../vendor/image-cache';
 
 import { COLORS, UNIT } from '../../constants';
 import { range, smoothScrollTo } from '../../utils';
@@ -36,6 +37,27 @@ const images = [
 const FRAME_DURATION = 5000;
 const EXTENDED_FRAME_DURATION = 15000;
 
+const useArrowKeys = (callback, dependencies) => {
+  React.useEffect(() => {
+    const arrows = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+    const handleKeydown = ev => {
+      // Ignore non-arrow keypresses.
+      if (!arrows.includes(ev.key)) {
+        return;
+      }
+
+      callback(ev.key);
+    };
+
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  }, dependencies);
+};
+
 const HomepageHero = () => {
   const [imageIndex, setImageIndex] = React.useState(0);
   const [slideshowFrameDuration, setSlideshowFrameDuration] = React.useState(
@@ -58,37 +80,40 @@ const HomepageHero = () => {
     setSlideshowFrameDuration(EXTENDED_FRAME_DURATION);
   };
 
-  React.useEffect(
-    () => {
-      const handleKeydown = ev => {
-        switch (ev.key) {
-          case 'ArrowRight': {
-            const nextImageIndex = (imageIndex + 1) % images.length;
-            manuallyTriggerSlideshow(nextImageIndex);
-            return;
-          }
+  // On mount, wait a little bit and then preload all ball images used in
+  // this visualization.
+  // We want to preload them so that there's no gap between ball-drops when
+  // moving the slider.
+  // We want to wait a bit so that we aren't fetching and processing the images
+  // during the hectic first couple seconds after initial mount.
+  React.useEffect(() => {
+    const imagesToPreload = images.slice(1);
 
-          case 'ArrowLeft': {
-            let previousImageIndex = imageIndex - 1;
+    const timeoutId = window.setTimeout(() => {
+      ImageCache.stuff(imagesToPreload);
+    }, 2000);
 
-            if (previousImageIndex < 0) {
-              previousImageIndex = images.length - 1;
-            }
-            manuallyTriggerSlideshow(previousImageIndex);
-            return;
-          }
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
-          default: {
-            return;
-          }
+  useArrowKeys(
+    key => {
+      let nextImageIndex;
+
+      if (key === 'ArrowLeft') {
+        nextImageIndex = imageIndex - 1;
+        if (nextImageIndex < 0) {
+          nextImageIndex = images.length - 1;
         }
-      };
+      } else if (key === 'ArrowRight') {
+        nextImageIndex = (imageIndex + 1) % images.length;
+      } else {
+        return;
+      }
 
-      window.addEventListener('keydown', handleKeydown);
-
-      return () => {
-        window.removeEventListener('keydown', handleKeydown);
-      };
+      manuallyTriggerSlideshow(nextImageIndex);
     },
     [imageIndex]
   );
