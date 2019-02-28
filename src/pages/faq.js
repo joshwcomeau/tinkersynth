@@ -540,6 +540,8 @@ const FAQ = () => {
             </Paragraph>
           </QuestionAndAnswer>
 
+          <Separator />
+
           <QuestionAndAnswer
             id="why-is-mobile-bad"
             question="What's the deal with the limited mobile experience?"
@@ -576,6 +578,28 @@ const FAQ = () => {
             <Paragraph>
               That said, the desktop experience offers so much more control.
               It's worth trying on a device with a larger screen, if possible.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="pen-plotter"
+            question="Is the art plottable by a pen plotter?"
+            isExpanded={openQuestionId === 'pen-plotter'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              <strong>Yes!</strong> Digital downloads purchased through
+              Tinkersynth provide a plotter-friendly SVG. All of the occlusion
+              is done mathematically, rather than relying on SVG fills or masks,
+              so that you can plot the SVG directly with programs like Inkscape.
+            </Paragraph>
+            <Paragraph>
+              (<TextLink to="https://axidraw.com/">Pen plotters</TextLink> are
+              machines that create art by mechanically moving a pen over paper.
+              The end result is a charming, clearly-not-printed effect that is
+              perfect for displaying the art created with Tinkersynth.)
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>
