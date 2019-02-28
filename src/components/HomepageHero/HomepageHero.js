@@ -6,8 +6,15 @@ import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 import { COLORS, UNIT } from '../../constants';
 import { range, smoothScrollTo } from '../../utils';
 import useInterval from '../../hooks/interval.hook';
+
 import artDemo1 from '../../images/art-demo-1.png';
 import artDemo2 from '../../images/art-demo-2.png';
+import artDemo3 from '../../images/art-demo-3.png';
+import artDemo4 from '../../images/art-demo-4.png';
+import artDemo5 from '../../images/art-demo-5.png';
+import artDemo6 from '../../images/art-demo-6.png';
+import artDemo7 from '../../images/art-demo-7.png';
+import artDemo8 from '../../images/art-demo-8.png';
 
 import UnstyledButton from '../UnstyledButton';
 import FadeOnChange from '../FadeOnChange';
@@ -15,12 +22,21 @@ import Link from '../Link';
 import SlideshowDots from '../SlideshowDots';
 import Spacer from '../Spacer';
 
-const images = [artDemo1, artDemo2];
+const images = [
+  artDemo3,
+  artDemo2,
+  artDemo7,
+  artDemo1,
+  artDemo4,
+  artDemo5,
+  artDemo6,
+  artDemo8,
+];
 
 const FRAME_DURATION = 5000;
 
 const HomepageHero = () => {
-  const [imageIndex, setImageIndex] = React.useState(1);
+  const [imageIndex, setImageIndex] = React.useState(0);
   const [slideshowFrameDuration, setSlideshowFrameDuration] = React.useState(
     FRAME_DURATION
   );

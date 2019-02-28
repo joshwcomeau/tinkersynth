@@ -204,6 +204,7 @@ const reducer = produce(
         if (state.history.length === 0) {
           return state;
         }
+        console.log(JSON.stringify(state.history, null, 2));
 
         const lastState = state.history.pop();
 

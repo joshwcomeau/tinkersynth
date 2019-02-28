@@ -57,7 +57,7 @@ const getDataForValue = (value: number) => {
       id: 'basketball',
       src: basketballSrc,
       dropFrom: 7,
-      bounciness: 0.85,
+      bounciness: 0.8,
       gravity: 0.25,
       squishiness: 1.4,
     };
