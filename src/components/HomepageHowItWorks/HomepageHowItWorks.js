@@ -54,71 +54,73 @@ const HomepageHowItWorks = () => {
   }, []);
 
   return (
-    <Wrapper>
-      <Header>
-        <Spacer size={72} />
-        <Heading size={3}>how it works</Heading>
-        <Spacer size={72} />
-      </Header>
-      <Row>
-        <Column
-          index={1}
-          title="Create some art"
-          description={
-            <>
-              There are no labels on Tinkersynth controls, but a bit of
-              experimentation is all it takes! What unexpected, delightful thing
-              will you create?
-            </>
-          }
-        >
-          <LineDemo
-            lineLength={lineLength}
-            lineCurve={lineCurve}
-            setLineLength={createSetterThatAlsoDisables(setLineLength)}
-            setLineCurve={createSetterThatAlsoDisables(setLineCurve)}
-          />
-        </Column>
+    <OuterWrapper id="homepage-how-it-works">
+      <MaxWidthWrapper>
+        <Header>
+          <Spacer size={72} />
+          <Heading size={3}>How it works</Heading>
+          <Spacer size={72} />
+        </Header>
+        <Row>
+          <Column
+            index={1}
+            title="Create some art"
+            description={
+              <>
+                There are no labels on Tinkersynth controls, but a bit of
+                experimentation is all it takes! What unexpected, delightful
+                thing will you create?
+              </>
+            }
+          >
+            <LineDemo
+              lineLength={lineLength}
+              lineCurve={lineCurve}
+              setLineLength={createSetterThatAlsoDisables(setLineLength)}
+              setLineCurve={createSetterThatAlsoDisables(setLineCurve)}
+            />
+          </Column>
 
-        <Column
-          index={2}
-          title="Order a print"
-          description={
-            <>
-              We sell beautiful fine-art prints, produced with ultra-premium
-              papers and rich archival inks.
-              <br />
-              <br />
-              You can also purchase raw assets, and manage the printing
-              yourself!
-            </>
-          }
-        >
-          <FlyingTruckDemo />
-        </Column>
+          <Column
+            index={2}
+            title="Order a print"
+            description={
+              <>
+                We sell beautiful fine-art prints, produced with ultra-premium
+                papers and rich archival inks.
+                <br />
+                <br />
+                You can also purchase raw assets, and manage the printing
+                yourself!
+              </>
+            }
+          >
+            <FlyingTruckDemo />
+          </Column>
 
-        <Column
-          index={3}
-          title="Display it proudly"
-          description={
-            <>
-              You collaborated with a machine to produce a unique piece of
-              generative artwork.
-              <br />
-              <br />
-              It’ll look great in your home.
-            </>
-          }
-        >
-          <CanvasDisplay lineLength={lineLength} lineCurve={lineCurve} />
-        </Column>
-      </Row>
-      <Spacer size={72} />
-    </Wrapper>
+          <Column
+            index={3}
+            title="Display it proudly"
+            description={
+              <>
+                You collaborated with a machine to produce a unique piece of
+                generative artwork.
+                <br />
+                <br />
+                It’ll look great in your home.
+              </>
+            }
+          >
+            <CanvasDisplay lineLength={lineLength} lineCurve={lineCurve} />
+          </Column>
+        </Row>
+        <Spacer size={72} />
+      </MaxWidthWrapper>
+    </OuterWrapper>
   );
 };
 
-const Wrapper = styled(MaxWidthWrapper)`
+const OuterWrapper = styled.div`
   background: rgba(255, 255, 255, 0.05);
 `;
 

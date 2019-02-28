@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from '@reach/router';
 
 import { COLORS, HEADER_HEIGHT, UNIT, BREAKPOINTS } from '../../constants';
 
 import Logo from '../Logo';
 import Spacer from '../Spacer';
+import Link from '../Link';
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';

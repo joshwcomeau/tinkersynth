@@ -4,13 +4,14 @@ import Icon from 'react-icons-kit';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 
 import { COLORS, UNIT } from '../../constants';
-import { range } from '../../utils';
+import { range, smoothScrollTo } from '../../utils';
 import useInterval from '../../hooks/interval.hook';
 import artDemo1 from '../../images/art-demo-1.png';
 import artDemo2 from '../../images/art-demo-2.png';
 
 import UnstyledButton from '../UnstyledButton';
 import FadeOnChange from '../FadeOnChange';
+import Link from '../Link';
 import SlideshowDots from '../SlideshowDots';
 import Spacer from '../Spacer';
 
@@ -61,14 +62,18 @@ const HomepageHero = () => {
           Create your own unique work of art, and purchase a fine-art print.
         </Subtitle>
         <Spacer size={UNIT * 9} />
-        <StartButton>Start creating</StartButton>
+
+        <StartButton as={Link} to="/slopes">
+          Start creating
+        </StartButton>
         <Spacer size={UNIT * 2} />
-        <LearnMoreButton>
-          <span>
-            Learn more
-            <Spacer inline size={UNIT} />
-            <Icon size={24} icon={chevronDown} />
-          </span>
+
+        <LearnMoreButton
+          onClick={() => smoothScrollTo('#homepage-how-it-works')}
+        >
+          Learn more
+          <Spacer inline size={UNIT} />
+          <Icon size={24} icon={chevronDown} />
         </LearnMoreButton>
       </HeroFooter>
     </Hero>

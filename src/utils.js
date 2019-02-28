@@ -278,3 +278,21 @@ export const shallowCompare = (o1, o2, keys) => {
     return o1[key] !== o2[key];
   });
 };
+
+export const smoothScrollTo = selector => {
+  const elem = document.querySelector(selector);
+
+  try {
+    window.requestAnimationFrame(() => {
+      const verticalOffset = elem.getBoundingClientRect().top;
+
+      window.scrollTo({
+        top: verticalOffset + window.pageYOffset,
+        left: 0,
+        behavior: 'smooth',
+      });
+    });
+  } catch (err) {
+    console.error('Could not find element', id);
+  }
+};

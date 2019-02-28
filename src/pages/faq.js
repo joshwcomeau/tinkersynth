@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 
 import { COLORS, UNIT } from '../constants';
+import { smoothScrollTo } from '../utils';
 import cc0Badge from '../images/cc0-badge.png';
 import faqPerfCount from '../videos/faq-perf-count.mp4';
 import faqPerfOcclusion from '../videos/faq-perf-occ.mp4';
@@ -18,27 +19,6 @@ import List from '../components/List';
 import TextLink from '../components/TextLink';
 import SimpleTable from '../components/SimpleTable';
 
-const navigateToId = id => {
-  const elem = document.querySelector(`#${id}`);
-
-  // HACK: I've totally broken out of React's abstraction here, because the
-  // alternative is more work.
-
-  try {
-    window.requestAnimationFrame(() => {
-      const verticalOffset = elem.getBoundingClientRect().top;
-
-      window.scrollTo({
-        top: verticalOffset + window.pageYOffset,
-        left: 0,
-        behavior: 'smooth',
-      });
-    });
-  } catch (err) {
-    console.error('Could not find element', id);
-  }
-};
-
 const IntraFAQLink = ({ id, setOpenQuestionId, children }) => (
   <TextLink
     to={`/faq?q=${id}`}
@@ -47,7 +27,10 @@ const IntraFAQLink = ({ id, setOpenQuestionId, children }) => (
       ev.stopPropagation();
 
       setOpenQuestionId(id);
-      navigateToId(id);
+
+      // HACK: I've totally broken out of React's abstraction here, because
+      // the alternative is more work.
+      smoothScrollTo(`#${id}`);
     }}
   >
     {children}
@@ -58,11 +41,11 @@ const FAQ = () => {
   const [openQuestionId, setOpenQuestionId] = React.useState(null);
 
   React.useEffect(() => {
-    const { q } = queryString.parse(location.search);
+    const { q: questionId } = queryString.parse(location.search);
 
-    if (q) {
-      setOpenQuestionId(q);
-      navigateToId(q);
+    if (questionId) {
+      setOpenQuestionId(questionId);
+      smoothScrollTo(`#${questionId}`);
     }
   }, []);
 
