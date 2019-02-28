@@ -600,6 +600,8 @@ export const removeTroublesomeLines = (width, height, lines) => {
   const checkBoundaries = createBoundaryChecker(width, height);
 
   return lines.filter(([p1, p2]) => {
-    return checkBoundaries(p1) || checkBoundaries(p2);
+    const distance = getDistanceBetweenPoints(p1, p2);
+
+    return distance < 100 && (checkBoundaries(p1) || checkBoundaries(p2));
   });
 };
