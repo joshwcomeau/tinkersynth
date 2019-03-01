@@ -3,8 +3,7 @@ import Helmet from 'react-helmet';
 import uuid from 'uuid';
 
 import LayoutSidePage from '../../../components/LayoutSidePage';
-import Purchase from '../../../server/email-templates/purchase';
-
+import Purchase from '../../../server/email-templates/purchase-incl-download';
 const templateProps = {
   format: 'vector',
   name: 'Josh Comeau',

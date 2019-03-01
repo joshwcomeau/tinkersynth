@@ -184,9 +184,9 @@ const FAQ = () => {
           <Separator />
 
           <QuestionAndAnswer
-            id="shipping"
+            id="shipping-duration"
             question="How long will shipping take?"
-            isExpanded={openQuestionId === 'shipping'}
+            isExpanded={openQuestionId === 'shipping-duration'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
@@ -198,8 +198,9 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              We generally try and use mid-tier shipping options. Here are some
-              approximate shipping times, depending on your location:
+              We generally try and use mid-tier shipping options with tracking
+              information. Here are some approximate shipping times, depending
+              on your location:
             </Paragraph>
 
             <SimpleTable>
@@ -220,12 +221,19 @@ const FAQ = () => {
                     <span style={{ fontSize: '0.8em' }}>(business days)</span>
                   </td>
                   <td>3-5 days</td>
-                  <td>5-8 days</td>
+                  <td>3-8 days</td>
                   <td>5-10 days</td>
                   <td>5-20 days</td>
                 </tr>
               </tbody>
             </SimpleTable>
+
+            <Paragraph>
+              These times <em>do not</em> include the original processing time.
+              This means that for an order to Canada, an order could take as
+              little as 4 business days, but as long as 14 business days (or
+              longer, in exceptional circumstances)
+            </Paragraph>
 
             <br />
             <br />

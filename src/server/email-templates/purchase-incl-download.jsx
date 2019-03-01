@@ -21,8 +21,6 @@ const Wrapper = ({ children }) => (
       <td
         style={{
           backgroundColor: '#EEE',
-          backgroundImage: `url(https://storage.googleapis.com/tinkersynth-email-assets/mountains.svg)`,
-          backgroundSize: 'cover',
           padding: 50,
         }}
         align="center"
@@ -72,35 +70,43 @@ const PurchaseTemplate = ({
     <p>Hi {name},</p>
 
     <p>
-      Good news - our server has been hard at work assembling the images of the
-      art you created through Tinkersynth, and they've just wrapped the job up.
-      Your assets are available to download now!
+      Good news - our server in Toronto just finished assembling all the pixels
+      for your artwork's raster images, and they're ready to download! We've
+      included 3 files, which we think should cover all feasible use-cases.
     </p>
-
-    {format === 'combo' && (
-      <p>
-        Your order also included a physical art print. We'll send you another
-        email once that has been printed and shipped.
-      </p>
-    )}
 
     <h4>Downloads</h4>
 
     <ul>
-      <li>
-        <a href={pngUrlOpaque} style={{ color: COLORS.blue[500] }}>
-          Raster image (solid background)
-        </a>
+      <li style={{ marginBottom: 20 }}>
+        <strong>
+          <a href={pngUrlOpaque} style={{ color: COLORS.blue[500] }}>
+            Raster image (solid background)
+          </a>
+        </strong>
+        <br />
+        This 300dpi .png file can be sent straight to your local print shop for
+        printing.
       </li>
-      <li>
-        <a href={pngUrlTransparent} style={{ color: COLORS.blue[500] }}>
-          Raster image (transparent background)
-        </a>
+      <li style={{ marginBottom: 20 }}>
+        <strong>
+          <a href={pngUrlTransparent} style={{ color: COLORS.blue[500] }}>
+            Raster image (transparent background)
+          </a>
+        </strong>
+        <br />
+        This 300dpi .png file has a transparent background. This is useful if
+        you want to print just the lines onto a shirt, change the background
+        color, etc.
       </li>
-      <li>
-        <a href={svgUrl} style={{ color: COLORS.blue[500] }}>
-          Vector image
-        </a>
+      <li style={{ marginBottom: 20 }}>
+        <strong>
+          <a href={svgUrl} style={{ color: COLORS.blue[500] }}>
+            Vector image
+          </a>
+        </strong>
+        <br />
+        This infinitely-scalable .svg is meant to be used
       </li>
     </ul>
 
@@ -110,7 +116,8 @@ const PurchaseTemplate = ({
 
     <p>
       Want to keep iterating on the design you came up with for this print? This
-      link will initialize the machine to the settings used for this order:
+      special link will initialize the machine to the settings used for this
+      order, so you can always pick up from where you left off with your order:
     </p>
 
     <a href={`https://tinkersynth.com/slopes?orderId=${orderId}`}>

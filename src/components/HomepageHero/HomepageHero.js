@@ -120,8 +120,6 @@ const HomepageHero = () => {
 
   const imageSrc = images[imageIndex];
 
-  console.log({ imageIndex });
-
   return (
     <Hero>
       <Spacer size={UNIT * 8} />

@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 
-import Purchase from './email-templates/purchase';
+import PurchaseIncludingDownload from './email-templates/purchase-incl-download';
+import PurchaseJustPhysicalPrint from './email-templates/purchase-just-physical';
 
 const postmark = require('postmark');
+
+const SEND_IN_DEV = true;
 
 // Send an email:
 var client = new postmark.ServerClient('b79d4a35-93f3-49b3-ab72-8278293863f6');
@@ -18,9 +21,12 @@ export const sendArtVectorEmail = (
   pngUrlOpaque
 ) => {
   // Don't send email in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (!SEND_IN_DEV && process.env.NODE_ENV !== 'production') {
     return;
   }
+
+  const Component =
+    format === 'print' ? PurchaseJustPhysicalPrint : PurchaseIncludingDownload;
 
   client
     .sendEmail({
@@ -28,7 +34,7 @@ export const sendArtVectorEmail = (
       To: email,
       Subject: 'Your art is ready to be downloaded!',
       HtmlBody: ReactDOMServer.renderToStaticMarkup(
-        <Purchase
+        <Component
           format={format}
           name={name}
           orderId={orderId}
@@ -47,7 +53,7 @@ export const sendArtVectorEmail = (
 
 export const notifyMe = (name, email, format, cost, orderId, chargeId) => {
   // Don't send email in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (!SEND_IN_DEV && process.env.NODE_ENV !== 'production') {
     return;
   }
 
@@ -82,7 +88,7 @@ export const sendContactEmail = (
   message
 ) => {
   // Don't send email in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (!SEND_IN_DEV && process.env.NODE_ENV !== 'production') {
     return new Promise(resolve =>
       resolve({
         test: true,

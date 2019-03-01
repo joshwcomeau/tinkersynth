@@ -60,9 +60,9 @@ const SlopesStorefront = ({
   // that to work I need to know the exact width of that column. So I work it
   // out in JS.
   const maxWrapperWidth = BREAKPOINT_SIZES.lg;
-  const secondColumnWidth = 441; //
+  const secondColumnWidth = 441;
   const sidePadding = (windowDimensions.width - maxWrapperWidth) / 2;
-  const secondColumnTrimWidth = secondColumnWidth + sidePadding;
+  const secondColumnTrimWidth = secondColumnWidth + sidePadding - 6;
 
   const { format, size } = storeData;
 
