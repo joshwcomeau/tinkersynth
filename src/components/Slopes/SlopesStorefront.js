@@ -115,6 +115,12 @@ const SlopesStorefront = ({
                   kind: value,
                 });
                 selectFormat('slopes', value);
+
+                // When selecting a vector format, we want to resize it to
+                // "medium", so that all vector formats are the same size.
+                if (value === 'vector') {
+                  selectSize('slopes', 'medium');
+                }
               }}
             />
           </StorefrontRow>

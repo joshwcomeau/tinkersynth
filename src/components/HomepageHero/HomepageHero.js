@@ -16,6 +16,7 @@ import artDemo5 from '../../images/art-demo-5.png';
 import artDemo6 from '../../images/art-demo-6.png';
 import artDemo7 from '../../images/art-demo-7.png';
 import artDemo8 from '../../images/art-demo-8.png';
+import artDemo9 from '../../images/art-demo-9.png';
 
 import UnstyledButton from '../UnstyledButton';
 import FadeOnChange from '../FadeOnChange';
@@ -30,6 +31,7 @@ const images = [
   artDemo1,
   artDemo4,
   artDemo5,
+  artDemo9,
   artDemo6,
   artDemo8,
 ];
@@ -184,6 +186,7 @@ const Title = styled.h3`
 const ArtDemo = styled.img`
   width: 450px;
   height: 600px;
+  backface-visibility: hidden;
 `;
 
 const HeroFooter = styled.div`

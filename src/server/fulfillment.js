@@ -9,6 +9,7 @@
 import uuid from 'uuid/v1';
 
 import { User, Order } from './database';
+import { generateNewOrderId } from './database.helpers';
 import { upload } from './google-cloud';
 import { parallel } from './utils';
 import { createRasterImage, createVectorImage } from './image-processing';
@@ -21,24 +22,22 @@ export default async function fulfill(
   shippingAddress,
   cost,
   userId,
+  userName,
   email,
   fileId,
   charge
 ) {
-  // Once the charge and the initial preview image are completed, we can
-  // return this stuff to the user. THere's more to do, but that can happen
-  // asynchronously.
-
-  const userName = charge.source.name;
-
   // Create a User, if we don't already have one.
   const [user, wasJustCreated] = await User.findOrCreate({
     where: { id: userId },
     defaults: { email, name: userName },
   });
 
+  const newOrderId = await generateNewOrderId();
+
   // Associate an Order with this user
   const order = await Order.create({
+    id: newOrderId,
     format,
     size,
     cost,
@@ -54,20 +53,21 @@ export default async function fulfill(
 
   await user.addOrder(order);
 
-  const vectorFile = await createVectorImage(size, artParams, { fileId });
-
-  const rasterFileOpaque = await createRasterImage(size, artParams, {
-    fileId,
-    name: 'opaque',
-    opaqueBackground: true,
-    pixelsPerInch: 300,
-  });
-  const rasterFileTransparent = await createRasterImage(size, artParams, {
-    fileId,
-    name: 'transparent',
-    opaqueBackground: false,
-    pixelsPerInch: 300,
-  });
+  const [vectorFile, rasterFileOpaque, rasterFileTransparent] = await parallel(
+    createVectorImage(size, artParams, { fileId }),
+    createRasterImage(size, artParams, {
+      fileId,
+      name: 'opaque',
+      opaqueBackground: true,
+      pixelsPerInch: 300,
+    }),
+    createRasterImage(size, artParams, {
+      fileId,
+      name: 'transparent',
+      opaqueBackground: false,
+      pixelsPerInch: 300,
+    })
+  );
 
   // prettier-ignore
   await parallel(

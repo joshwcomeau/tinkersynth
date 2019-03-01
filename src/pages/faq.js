@@ -551,6 +551,36 @@ const FAQ = () => {
           <Separator />
 
           <QuestionAndAnswer
+            id="can-i-save"
+            question="Is there a way to save my work?"
+            isExpanded={openQuestionId === 'can-i-save'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              At this time, there is no way to save individual works, other than
+              by purchasing them.
+            </Paragraph>
+
+            <Paragraph>
+              When you purchase an item (whether fine-art print or vector/raster
+              download), a special link is included with your confirmation
+              email. This link restores the machine to the settings used for
+              your purchase. This way, you can always pick up where you left
+              off.
+            </Paragraph>
+
+            <Paragraph>
+              Note that we didn't intend for saving to be a "premium" feature;
+              we'd love to offer the ability for everyone to create and share
+              collections of works. We hope to develop this in a future release,
+              but Tinkersynth is a very new product and a lot of quality-of-life
+              improvements didn't make it into this MVP.
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
             id="why-is-mobile-bad"
             question="What's the deal with the limited mobile experience?"
             isExpanded={openQuestionId === 'why-is-mobile-bad'}

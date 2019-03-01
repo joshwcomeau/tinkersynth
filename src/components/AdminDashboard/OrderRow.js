@@ -53,13 +53,7 @@ const OrderRow = ({ order, adminPassword, refreshDashboardData }) => {
 
   return (
     <tr>
-      <TableCell>
-        {order.previewUrl && (
-          <a href={order.pngUrlOpaque} target="_blank">
-            <img src={order.previewUrl} style={{ height: 50 }} />
-          </a>
-        )}
-      </TableCell>
+      <TableCell>{order.id}</TableCell>
       <TableCell>
         {format(new Date(order.createdAt), 'MMM D YYYY')}
         <Small>{format(new Date(order.createdAt), 'h:mm A')}</Small>

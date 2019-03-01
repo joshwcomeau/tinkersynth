@@ -56,7 +56,7 @@ const AdminDashboard = ({ adminPassword }) => {
       >
         <thead>
           <tr>
-            <HeaderCell>Preview</HeaderCell>
+            <HeaderCell>ID</HeaderCell>
             <HeaderCell>Date</HeaderCell>
             <HeaderCell>Customer</HeaderCell>
             <HeaderCell>Type</HeaderCell>
