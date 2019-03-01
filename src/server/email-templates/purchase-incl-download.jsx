@@ -7,58 +7,9 @@ import React from 'react';
 
 import { COLORS } from '../../constants';
 
-const Wrapper = ({ children }) => (
-  <table
-    width="100%"
-    style={{
-      fontSize: 18,
-      lineHeight: 1.4,
-      WebkitFontSmoothing: 'antialiased',
-      fontFamily: 'sans-serif',
-    }}
-  >
-    <tr>
-      <td
-        style={{
-          backgroundColor: '#EEE',
-          padding: 50,
-        }}
-        align="center"
-      >
-        <div style={{ textAlign: 'left', maxWidth: 730 }}>
-          <img
-            src="https://storage.googleapis.com/tinkersynth-email-assets/logo-with-name.png"
-            width={175}
-            style={{ transform: 'translateX(-4px)' }}
-          />
-        </div>
+import Wrapper from './wrapper';
 
-        <table
-          style={{
-            maxWidth: 730,
-          }}
-        >
-          <tr>
-            <td
-              style={{
-                background: '#FFF',
-                padding: 30,
-                paddingTop: 20,
-                borderRadius: 12,
-
-                boxShadow: '0px 5px 50px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              {children}
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-);
-
-const PurchaseTemplate = ({
+const PurchaseIncludingDownload = ({
   orderId,
   format,
   name,
@@ -151,4 +102,4 @@ const PurchaseTemplate = ({
   </Wrapper>
 );
 
-export default PurchaseTemplate;
+export default PurchaseIncludingDownload;
