@@ -92,9 +92,9 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
       currency: 'usd',
       zipCode: true,
       billingAddress: true,
-      shippingAddress: storeData.format === 'print',
+      shippingAddress: storeData.format !== 'vector',
       amount: cost,
-      token: (token, addressData) => {
+      token: (token, addressData, ...args) => {
         const data = {
           artParams,
           addressData,
@@ -102,6 +102,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
           size: storeData.size,
           cost,
           token,
+          email: token.email,
         };
 
         transition(status, 'SUBMIT');

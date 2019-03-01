@@ -6,7 +6,7 @@ const SwoopyBackground = ({ width, height }) => {
       viewBox="0 0 1305 225"
       fill="none"
       preserveAspectRatio="none"
-      style={{ width, height }}
+      style={{ width, height, display: 'block' }}
     >
       <mask
         id="swoop-bg-mask"

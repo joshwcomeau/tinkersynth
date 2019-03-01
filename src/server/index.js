@@ -83,6 +83,7 @@ app.post('/purchase/fulfill', async (req, res) => {
     artParams,
     shippingAddress,
     userId,
+    email,
     format,
     size,
     cost,
@@ -104,6 +105,7 @@ app.post('/purchase/fulfill', async (req, res) => {
       shippingAddress,
       cost,
       userId,
+      email,
       fileId,
       charge
     );

@@ -32,7 +32,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
       >
         <RadioListSelect.Option id="vector">
           <OrderFormatItem
-            title="Vector and Raster Download"
+            title="Vector / Raster Download"
             details="Digital delivery of print-ready image assets, including a  vector image (svg) and multiple 300dpi raster images (png)."
             price={calculateCost('vector')}
           />

@@ -22,7 +22,7 @@ import Star from '../components/Star';
 import Particle from '../components/Particle';
 import UnstyledButton from '../components/UnstyledButton';
 import CanvasFrame from '../components/CanvasFrame';
-import SwoopyBackground from '../components/SwoopyBackground/SwoopyBackground';
+import SwoopyBackground from '../components/SwoopyBackground';
 import Spin from '../components/Spin';
 
 const getWindowOptions = () => {
@@ -106,7 +106,7 @@ const Thanks = ({ location }) => {
     <Layout pageId="thanks" theme="dark" noHeaderBorder>
       <SEO title="Slopes" url="https://tinkersynth.com/slopes/" />
 
-      <SwoopyBackground width="100vw" height={175} />
+      <SwoopyBackground width="100%" height={175} />
 
       <Foreground>
         <Wrapper>

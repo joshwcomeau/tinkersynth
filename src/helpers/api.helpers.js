@@ -14,6 +14,7 @@ export const submitCharge = ({
   size,
   cost,
   token,
+  email,
 }) => {
   const userId = getDistinctId();
 
@@ -34,6 +35,7 @@ export const submitCharge = ({
     cost,
     token,
     userId,
+    email,
   });
 
   const fulfillUrl = `${getApiUrl()}/purchase/fulfill`;

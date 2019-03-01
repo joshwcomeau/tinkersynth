@@ -21,21 +21,20 @@ export default async function fulfill(
   shippingAddress,
   cost,
   userId,
+  email,
   fileId,
   charge
 ) {
   // Once the charge and the initial preview image are completed, we can
   // return this stuff to the user. THere's more to do, but that can happen
   // asynchronously.
-  //
-  // For some reason, Stripe doesn't make `receipt_email` available in test mode
-  const userEmail = charge.receipt_email || 'josh@tinkersynth.com';
+
   const userName = charge.source.name;
 
   // Create a User, if we don't already have one.
   const [user, wasJustCreated] = await User.findOrCreate({
     where: { id: userId },
-    defaults: { email: userEmail, name: userName },
+    defaults: { email, name: userName },
   });
 
   // Associate an Order with this user
