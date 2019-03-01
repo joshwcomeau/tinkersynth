@@ -91,7 +91,12 @@ app.post('/purchase/fulfill', async (req, res) => {
   } = req.body;
 
   try {
-    const charge = await createCharge(req.body);
+    try {
+      const charge = await createCharge(req.body);
+    } catch (err) {
+      console.log('ERROR CHARGING', err);
+      throw new Error(err);
+    }
 
     const fileId = uuid();
 

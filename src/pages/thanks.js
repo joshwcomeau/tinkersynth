@@ -95,7 +95,7 @@ const Thanks = ({ location }) => {
   const { format } = queryString.parse(location.search);
 
   const text = encodeURIComponent(
-    'I just created some generative art with Tinkersynth!'
+    'Create unique generative art with Tinkersynth'
   );
   const homeUrl = 'https://tinkersynth.com';
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;

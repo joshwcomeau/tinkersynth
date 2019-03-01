@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
 
-import ogSampleImage from '../../images/og-sample-image.png';
-import ogSampleImageTwitter from '../../images/og-sample-image-twitter.png';
+const ogSampleImageSrc =
+  'https://storage.googleapis.com/tinkersynth-email-assets/og-sample-image.png';
+const ogSampleImageTwitterSrc =
+  'https://storage.googleapis.com/tinkersynth-email-assets/og-sample-image-twitter.png';
 
 const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
   <StaticQuery
@@ -14,7 +16,7 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
 
       const backupOgUrl =
         typeof window === 'undefined'
-          ? 'https://tinkersynth.com/slopes/'
+          ? 'https://tinkersynth.com/'
           : window.location.href;
 
       return (
@@ -47,7 +49,7 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
             },
             {
               property: 'og:image',
-              content: ogSampleImage,
+              content: ogSampleImageSrc,
             },
             {
               property: 'og:image:type',
@@ -67,7 +69,7 @@ const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
             },
             {
               name: 'twitter:image',
-              content: ogSampleImageTwitter,
+              content: ogSampleImageTwitterSrc,
             },
             {
               name: 'twitter:creator',

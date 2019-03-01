@@ -6,7 +6,7 @@ import PurchaseJustPhysicalPrint from './email-templates/purchase-just-physical'
 
 const postmark = require('postmark');
 
-const SEND_IN_DEV = true;
+const SEND_IN_DEV = false;
 
 // Send an email:
 var client = new postmark.ServerClient('b79d4a35-93f3-49b3-ab72-8278293863f6');

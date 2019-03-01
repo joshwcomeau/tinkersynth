@@ -28,12 +28,18 @@ export default async function fulfill(
   charge
 ) {
   // Create a User, if we don't already have one.
+  console.log('START FULFILL');
+
   const [user, wasJustCreated] = await User.findOrCreate({
     where: { id: userId },
     defaults: { email, name: userName },
   });
 
+  console.log('GOT USER', user, wasJustCreated);
+
   const newOrderId = await generateNewOrderId();
+
+  console.log('ORERID', newOrderId);
 
   // Associate an Order with this user
   const order = await Order.create({
@@ -53,6 +59,8 @@ export default async function fulfill(
 
   await user.addOrder(order);
 
+  console.log(order, user);
+
   const [vectorFile, rasterFileOpaque, rasterFileTransparent] = await parallel(
     createVectorImage(size, artParams, { fileId }),
     createRasterImage(size, artParams, {
@@ -69,12 +77,16 @@ export default async function fulfill(
     })
   );
 
+  console.log({ vectorFile, rasterFileOpaque, rasterFileTransparent });
+
   // prettier-ignore
   await parallel(
     upload(vectorFile.path, 'svg'),
     upload(rasterFileOpaque.path, 'png',),
     upload(rasterFileTransparent.path, 'png')
   );
+
+  console.log('Upload complete');
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
   const svgUrl = `${urlPrefix}/${fileId}.svg`;
