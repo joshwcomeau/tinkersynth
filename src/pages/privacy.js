@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
       <SEO title="Privacy Policy" url="https://tinkersynth.com/slopes/" />
 
       <Paragraph>
-        <em>Last updated: February 14th</em>
+        <em>Last updated: February 28th</em>
       </Paragraph>
 
       <Paragraph>
@@ -41,14 +41,13 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         The main method of personal data collection happens when you purchase
-        artwork created through the Tinkersynth machines. We use Stripe for our
-        payment processor, and we delegate the hard work of collecting and
-        protecting sensitive information to them.
+        artwork created through the Tinkersynth machines.
       </Paragraph>
 
       <Paragraph>
-        Tinkersynth never collects information like your credit card number (or
-        other payment details), nor your billing address.
+        Tinkersynth never collects information like your credit card number. We
+        use Stripe for our payment processor, and we delegate the hard work of
+        collecting and protecting sensitive information to them.
       </Paragraph>
 
       <Paragraph>
@@ -58,9 +57,10 @@ const PrivacyPolicy = () => {
       </Paragraph>
 
       <Paragraph>
-        We also offer a contact form, for your convenience. This form collects a
-        name, email address, and message, and is sent directly to my email
-        address.
+        We also offer a <TextLink to="/contact">contact form</TextLink>, for
+        your convenience. This form collects a name, email address, and message,
+        and is sent directly to my email inbox by my server. This data is not
+        persisted in any database.
       </Paragraph>
 
       <Spacer size={UNIT * 4} />
@@ -86,13 +86,30 @@ const PrivacyPolicy = () => {
       </List>
 
       <Spacer size={UNIT * 4} />
+      <Heading size={4}>Social Trackers</Heading>
+      <Spacer size={UNIT * 2} />
+
+      <Paragraph>
+        Tinkersynth does not use Google Analytics, nor do we use the Facebook or
+        Twitter SDKs. We don't like how major platforms like these will follow
+        you around the internet, painting a clearer and clearer visit with every
+        page you visit.
+      </Paragraph>
+      <Paragraph>
+        This page instead uses{' '}
+        <TextLink to="https://usefathom.com/">Fathom</TextLink> for general page
+        analytics. Fathom is a paid service that protects user data and doesn't
+        share it with any major platforms.
+      </Paragraph>
+
+      <Spacer size={UNIT * 4} />
       <Heading size={4}>Data Usage</Heading>
       <Spacer size={UNIT * 2} />
 
       <Paragraph>
         There are two products available through Tinkersynth, which can be
         purchased separately, or combined into a pack: <em>source images</em> or{' '}
-        <em>Giclée prints</em>. The data usage depends on which item(s) are
+        <em>fine art prints</em>. The data usage depends on which item(s) are
         selected.
       </Paragraph>
 
@@ -103,11 +120,11 @@ const PrivacyPolicy = () => {
       </Paragraph>
 
       <Paragraph>
-        For Giclée prints, your first/last name and shipping address are used to
-        ship the artwork purchased. I share this information with the printing
-        shop, as they handle order fulfillment. For prints, I also use the
-        first/last name and email address to send a confirmation email, once the
-        print has shipped.
+        For fine art prints, your first/last name and shipping address are used
+        to ship the artwork purchased. I share this information with the
+        printing shop, as they handle order fulfillment. For prints, I also use
+        the first/last name and email address to send a confirmation email, once
+        the print has shipped.
       </Paragraph>
 
       <Paragraph>
@@ -116,14 +133,24 @@ const PrivacyPolicy = () => {
       </Paragraph>
 
       <Paragraph>
-        The above usages are exclusive. I won't use your email address to send
-        you unrequested marketing newsletters. I won't sell your personal data.
-        I'm not here for that.
+        I may reach out to you via email, in a personal non-automated way, to
+        ask for your feedback once you've received your artwork. This is not a
+        newsletter, or any sort of bulk mail. I'm just keen to hear what folks
+        do with the art they buy. I may request photos of the art, to display on
+        the Tinkersynth homepage. Of course this is entirely voluntary, and if
+        you'd rather never hear from me, please just reply to my email and let
+        me know. I'll disappear like a phantom.
+      </Paragraph>
+
+      <Paragraph>
+        The above usages are exclusive. I have no newsletter, and if I do create
+        one later, existing customers won't be auto-subscribed. I won't sell any
+        of the data I've collected. I'm not here for that.
       </Paragraph>
 
       <Paragraph>
         The non-personal analytics information collected is used exclusively by
-        Josh Comeau to understand how Tinkersynth is being used, and to educate
+        me, Josh Comeau, to understand how Tinkersynth is being used, to educate
         future product changes.
       </Paragraph>
 
@@ -131,19 +158,17 @@ const PrivacyPolicy = () => {
       <Heading size={4}>Cookies & Local Storage</Heading>
       <Spacer size={UNIT * 2} />
 
-      <Paragraph>
-        Tinkersynth doesn't use cookies at all. GDPR compliance without a huge
-        page-blocking banner 👌🏻.
-      </Paragraph>
+      <Paragraph>Tinkersynth doesn't use cookies at all.</Paragraph>
 
       <Paragraph>
-        On the other hand, Tinkersynth does use localStorage, an alternative
-        storage mechanism, to track a few things:
+        Tinkersynth does use localStorage, an alternative storage mechanism, to
+        track a few things:
       </Paragraph>
 
       <List>
         <List.Item>
-          The random UUID which identifies the current device
+          A random UUID which identifies the current device, generated on first
+          visit
         </List.Item>
         <List.Item>
           The current settings for the Slopes machine (this is a convenience for
@@ -151,7 +176,8 @@ const PrivacyPolicy = () => {
           the page).
         </List.Item>
         <List.Item>
-          Checkout settings, again for the convenience of the user.
+          Checkout settings, like which size and format is selected, for the
+          convenience of the user.
         </List.Item>
         <List.Item>
           The number of page-loads from this device. This is used to tweak the
@@ -166,7 +192,8 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         If anything about this policy is unclear, please reach out. Send an
-        email to <a href="mailto:josh@tinkersynth.com">josh@tinkersynth.com</a>.
+        email to <a href="mailto:josh@tinkersynth.com">josh@tinkersynth.com</a>,
+        or use the handy <TextLink to="/contact">contact page</TextLink>.
       </Paragraph>
 
       <Spacer size={UNIT * 12} />

@@ -27,7 +27,6 @@ import SlopesCanvasPreview from './SlopesCanvas.preview';
 import Pricetag from '../Pricetag';
 import UnstyledButton from '../UnstyledButton';
 import MountUponEnteringViewport from '../MountUponEnteringViewport';
-import LoadScript from '../LoadScript';
 import SlopesPurchaseButton from './SlopesPurchaseButton';
 
 const BACKDROP_HEIGHT = 300;

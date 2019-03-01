@@ -22,7 +22,6 @@ import Star from '../components/Star';
 import Particle from '../components/Particle';
 import UnstyledButton from '../components/UnstyledButton';
 import CanvasFrame from '../components/CanvasFrame';
-import LoadScript from '../components/LoadScript/LoadScript';
 import SwoopyBackground from '../components/SwoopyBackground/SwoopyBackground';
 import Spin from '../components/Spin';
 
