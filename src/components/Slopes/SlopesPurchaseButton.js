@@ -49,7 +49,7 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
     setStatus(nextStateKey);
   };
 
-  const handleSuccessfulPurchase = ({ format, previewUrl, width, height }) => {
+  const handleSuccessfulPurchase = ({ format }) => {
     // Whatever, the state machine is being problematic so I'm just setting it
     // directly.
     setStatus('success');
@@ -58,9 +58,6 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
 
     window.setTimeout(() => {
       const urlParams = queryString.stringify({
-        previewUrl,
-        width,
-        height,
         format,
       });
       navigate(`/thanks?${urlParams}`);

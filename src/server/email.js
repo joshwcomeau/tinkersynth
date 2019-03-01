@@ -28,11 +28,16 @@ export const sendArtVectorEmail = (
   const Component =
     format === 'print' ? PurchaseJustPhysicalPrint : PurchaseIncludingDownload;
 
+  const subject =
+    format === 'print'
+      ? 'Thanks for your order!'
+      : 'Your art is ready to be downloaded!';
+
   client
     .sendEmail({
       From: 'josh@tinkersynth.com',
       To: email,
-      Subject: 'Your art is ready to be downloaded!',
+      Subject: subject,
       HtmlBody: ReactDOMServer.renderToStaticMarkup(
         <Component
           format={format}

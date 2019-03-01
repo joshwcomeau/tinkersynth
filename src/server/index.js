@@ -95,7 +95,7 @@ app.post('/purchase/fulfill', async (req, res) => {
 
     const fileId = uuid();
 
-    const userName = shippingAddress.shipTo;
+    const userName = charge.source.name || shippingAddress.shipTo;
 
     // Kick-start the real business of sending emails and creating orders in
     // the local database... but we don't have to wait for it to complete.

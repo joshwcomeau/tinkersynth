@@ -77,13 +77,11 @@ export default async function fulfill(
   );
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
-  const previewUrl = `${urlPrefix}/${fileId}.preview.png`;
   const svgUrl = `${urlPrefix}/${fileId}.svg`;
   const pngUrlOpaque = `${urlPrefix}/${fileId}.opaque.png`;
   const pngUrlTransparent = `${urlPrefix}/${fileId}.transparent.png`;
 
   // Update the order model with these URLs
-  order.previewUrl = previewUrl;
   order.svgUrl = svgUrl;
   order.pngUrlOpaque = pngUrlOpaque;
   order.pngUrlTransparent = pngUrlTransparent;

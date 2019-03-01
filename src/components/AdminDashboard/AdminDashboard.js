@@ -58,10 +58,10 @@ const AdminDashboard = ({ adminPassword }) => {
           <tr>
             <HeaderCell>ID</HeaderCell>
             <HeaderCell>Date</HeaderCell>
-            <HeaderCell>Customer</HeaderCell>
+            <HeaderCell>Images</HeaderCell>
             <HeaderCell>Type</HeaderCell>
             <HeaderCell>Cost</HeaderCell>
-            <HeaderCell>Ship to</HeaderCell>
+            <HeaderCell>Customer</HeaderCell>
             <HeaderCell>Actions</HeaderCell>
           </tr>
         </thead>

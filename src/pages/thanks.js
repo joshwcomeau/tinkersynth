@@ -92,9 +92,7 @@ const getCopyForFormat = format => {
 };
 
 const Thanks = ({ location }) => {
-  const { previewUrl, format, width, height } = queryString.parse(
-    location.search
-  );
+  const { format } = queryString.parse(location.search);
 
   const text = encodeURIComponent(
     'I just created some generative art with Tinkersynth!'

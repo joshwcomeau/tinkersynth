@@ -18,7 +18,7 @@ const PurchaseIncludingDownload = ({
   pngUrlOpaque,
 }) => (
   <Wrapper>
-    <p>Hi {name},</p>
+    {name && <p>Hi {name}!</p>}
 
     <p>
       Good news - our server in Toronto just finished assembling all the pixels

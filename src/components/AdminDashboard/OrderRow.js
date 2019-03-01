@@ -25,7 +25,12 @@ const renderAddress = order => {
 
   return (
     <>
-      <strong>{order.shipTo}</strong>
+      {order.user.email}
+      <br />
+      <br />
+      <strong>Ship to:</strong>
+      <br />
+      {order.shipTo}
       <br />
       {order.streetAddress}
       <br />
@@ -58,7 +63,20 @@ const OrderRow = ({ order, adminPassword, refreshDashboardData }) => {
         {format(new Date(order.createdAt), 'MMM D YYYY')}
         <Small>{format(new Date(order.createdAt), 'h:mm A')}</Small>
       </TableCell>
-      <TableCell>{order.user.email}</TableCell>
+      <TableCell>
+        <a href={order.svgUrl} target="_blank">
+          SVG
+        </a>
+        <br />
+        <a href={order.pngUrlTransparent} target="_blank">
+          PNG (t)
+        </a>
+        <br />
+        <a href={order.pngUrlOpaque} target="_blank">
+          PNG (o)
+        </a>
+      </TableCell>
+
       <TableCell>
         {order.format}
         {order.format !== 'vector' && <Small>{order.size}</Small>}

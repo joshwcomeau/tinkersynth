@@ -40,7 +40,6 @@ export const Order = sequelize.define('order', {
   country: Sequelize.STRING,
   zipCode: Sequelize.STRING,
   // Image URLs
-  previewUrl: { type: Sequelize.STRING, allowNull: true },
   svgUrl: { type: Sequelize.STRING, allowNull: true },
   pngUrlOpaque: { type: Sequelize.STRING, allowNull: true },
   pngUrlTransparent: { type: Sequelize.STRING, allowNull: true },

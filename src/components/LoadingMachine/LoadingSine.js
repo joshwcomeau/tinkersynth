@@ -73,7 +73,13 @@ const LoadingSine = ({ width = 48, height = 34 }) => {
   }, []);
 
   return (
-    <svg width={width} height={height} viewBox="0 0 48 34" fill="none">
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 48 34"
+      fill="none"
+      style={{ backfaceVisibility: 'hidden' }}
+    >
       <rect width="48" height="34" rx="4" fill="#2B2B2B" />
       <polyline
         data-layer-name="sine-wave"

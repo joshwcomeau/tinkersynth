@@ -68,6 +68,18 @@ const SlopesIndex = ({ location }) => {
     }
   }, []);
 
+  // On mount, scroll to the top of the document
+
+  React.useEffect(() => {
+    window.setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 60);
+  }, []);
+
   const numOfVisits = getNumberOfVisits();
   const amountOfTimeToWait = numOfVisits > 3 ? 1 : 4000;
 
@@ -91,7 +103,7 @@ const SlopesIndex = ({ location }) => {
     [showLoading]
   );
 
-  useScrollDisabler(showLoading);
+  // useScrollDisabler(showLoading);
 
   const loadingElements = (
     <LoadingWrapper>
