@@ -218,38 +218,35 @@ const TouchSlider = ({
           }
         }
       }}
-    >
-      <Canvas
-        ref={canvasRef}
-        {...scaledCanvasProps}
-        onTouchStart={ev => {
-          ev.preventDefault();
-          ev.stopPropagation();
+      onTouchStart={ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
 
-          setDragging(true);
-          calculateAndSetNewValue(ev);
-        }}
-        onMouseDown={ev => {
-          setDragging(true);
-          if (!isMobile) {
-            setHoveredValue(null);
+        setDragging(true);
+        calculateAndSetNewValue(ev);
+      }}
+      onMouseDown={ev => {
+        setDragging(true);
+        if (!isMobile) {
+          setHoveredValue(null);
+        }
+        calculateAndSetNewValue(ev);
+      }}
+      onMouseMove={ev => {
+        // When the user hovers over the space, set the hover value
+        if (!isMobile) {
+          if (ev.buttons === 0) {
+            calculateAndSetNewValue(ev, setHoveredValue);
           }
-          calculateAndSetNewValue(ev);
-        }}
-        onMouseMove={ev => {
-          // When the user hovers over the space, set the hover value
-          if (!isMobile) {
-            if (ev.buttons === 0) {
-              calculateAndSetNewValue(ev, setHoveredValue);
-            }
-          }
-        }}
-        onMouseLeave={() => {
-          if (!isMobile) {
-            setHoveredValue(null);
-          }
-        }}
-      />
+        }
+      }}
+      onMouseLeave={() => {
+        if (!isMobile) {
+          setHoveredValue(null);
+        }
+      }}
+    >
+      <Canvas ref={canvasRef} {...scaledCanvasProps} />
     </UnstyledButton>
   );
 };
