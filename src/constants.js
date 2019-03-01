@@ -264,7 +264,7 @@ export const PRINT_SIZES = {
 
 export const STRIPE_PUBLIC_KEY =
   process.env.NODE_ENV === 'production'
-    ? 'pk_test_tYzaDp1UlScq9ZMnITWadUQb' // 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'
+    ? 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'
     : 'pk_test_tYzaDp1UlScq9ZMnITWadUQb';
 
 export const DEV_SERVER_PORT = 4000;
