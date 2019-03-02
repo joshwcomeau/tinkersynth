@@ -262,8 +262,18 @@ export const PRINT_SIZES = {
   large: { width: 24, height: 36 },
 };
 
-export const STRIPE_PUBLIC_KEY =
+// Toggle this variable to switch between test/live in production
+const TEST_STRIPE_IN_PRODUCTION = true;
+
+export const STRIPE_MODE =
   process.env.NODE_ENV === 'production'
+    ? TEST_STRIPE_IN_PRODUCTION
+      ? 'test'
+      : 'live'
+    : 'test';
+
+export const STRIPE_PUBLIC_KEY =
+  STRIPE_MODE === 'live'
     ? 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'
     : 'pk_test_tYzaDp1UlScq9ZMnITWadUQb';
 
