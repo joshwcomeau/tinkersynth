@@ -47,9 +47,26 @@ const OrderRow = ({ order, adminPassword, refreshDashboardData }) => {
   const [status, setStatus] = React.useState('idle');
 
   const toggleShipped = () => {
+    const carrier = window.prompt('Enter carrier');
+    const trackingNum = window.prompt('Enter tracking # (if available)');
+
+    const isCorrect = window.confirm(
+      `This order is shipped with ${carrier}, and the tracking number is ${trackingNum}`
+    );
+
+    if (!isCorrect) {
+      return;
+    }
+
     setStatus('loading');
 
-    postOrderShippedStatus(adminPassword, order.id, !order.shipped).then(() => {
+    postOrderShippedStatus(
+      adminPassword,
+      order.id,
+      carrier,
+      trackingNum,
+      !order.shipped
+    ).then(() => {
       refreshDashboardData().then(() => {
         setStatus('idle');
       });

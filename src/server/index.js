@@ -9,7 +9,7 @@ import fulfill from './fulfillment';
 import adminOnly from './admin-middleware';
 import { createCharge } from './stripe';
 import { createRasterImage, createVectorImage } from './image-processing';
-import { sendContactEmail } from './email';
+import { sendContactEmail, sendShippingNotificationEmail } from './email';
 
 import './database';
 
@@ -91,13 +91,7 @@ app.post('/purchase/fulfill', async (req, res) => {
   } = req.body;
 
   try {
-    let charge;
-    try {
-      charge = await createCharge(req.body);
-    } catch (err) {
-      console.log('ERROR CHARGING', err);
-      throw new Error(err);
-    }
+    const charge = await createCharge(req.body);
 
     const fileId = uuid();
 
@@ -146,13 +140,23 @@ app.get('/admin/dashboard', adminOnly, async (req, res) => {
 });
 
 app.put('/admin/toggle-order-shipped', adminOnly, async (req, res) => {
-  const { orderId, shipped } = req.body;
+  const { orderId, carrier, trackingNum, shipped } = req.body;
 
-  const order = await Order.findByPk(orderId);
+  const order = await Order.findByPk(orderId, { include: [User] });
 
   order.shipped = shipped;
 
   await order.save();
+
+  console.log({ order }, order.user);
+
+  await sendShippingNotificationEmail(
+    order.user.name,
+    order.user.email,
+    orderId,
+    carrier,
+    trackingNum
+  );
 
   res.send({ order });
 });

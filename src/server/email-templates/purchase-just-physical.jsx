@@ -53,7 +53,6 @@ const PurchaseJustPhysicalPrint = ({
 
     <p>
       If you have any questions or comments, feel free to reply to this email.
-      I'd love to hear from you!
     </p>
 
     <p

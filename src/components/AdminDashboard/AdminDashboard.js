@@ -28,7 +28,7 @@ const AdminDashboard = ({ adminPassword }) => {
     [adminPassword]
   );
 
-  if (!dashboardData || !dashboardData.orders) {
+  if (!dashboardData) {
     return 'Loading...';
   }
 

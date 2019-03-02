@@ -21,10 +21,32 @@ const PurchaseIncludingDownload = ({
     {name && <p>Hi {name}!</p>}
 
     <p>
-      Good news - our server in Toronto just finished assembling all the pixels
-      for your artwork's raster images, and they're ready to download! We've
-      included 3 files, which we think should cover all feasible use-cases.
+      Good news - our servers in Toronto have been hard at work assembling your
+      art, pixel by pixel, and they've just completed the job!
     </p>
+
+    {format === 'vector' && (
+      <>
+        <p>
+          We've produced two print-ready raster images, and a scalable vector
+          image. We hope that these assets will be useful for whatever creative
+          endeavors you have in mind!
+        </p>
+      </>
+    )}
+
+    {format === 'combo' && (
+      <>
+        <p>
+          Your purchase includes digital asset downloads, and this email
+          includes the 3 image files we've produced.
+        </p>
+        <p>
+          We'll email you in a few days to let you know when your physical fine
+          art print has shipped.
+        </p>
+      </>
+    )}
 
     <h4>Downloads</h4>
 
@@ -46,9 +68,8 @@ const PurchaseIncludingDownload = ({
           </a>
         </strong>
         <br />
-        This 300dpi .png file has a transparent background. This is useful if
-        you want to print just the lines onto a shirt, change the background
-        color, etc.
+        This 300dpi .png file uses a transparent background. Use this file if
+        you're printing onto a shirt, or want to change the background color.
       </li>
       <li style={{ marginBottom: 20 }}>
         <strong>
@@ -57,11 +78,22 @@ const PurchaseIncludingDownload = ({
           </a>
         </strong>
         <br />
-        This infinitely-scalable .svg is meant to be used
+        This infinitely-scalable .svg can be thought of as a film negative; it
+        can be used to produce raster images of any size.
       </li>
     </ul>
 
     <br />
+
+    <h4>Jpeg conversion</h4>
+
+    <p>
+      We've chosen the Portable Network Graphics (.png) format for our raster
+      images, because they produce less compression artifacts than jpegs. If
+      your print shop only accepts .jpg/.jpeg images, though, you can use an{' '}
+      <a href="https://png2jpg.com/">online conversion tool</a> to quickly
+      convert your .png into a .jpg.
+    </p>
 
     <h4>Continue Working</h4>
 
@@ -86,7 +118,6 @@ const PurchaseIncludingDownload = ({
 
     <p>
       If you have any questions or comments, feel free to reply to this email.
-      I'd love to hear from you!
     </p>
 
     <p

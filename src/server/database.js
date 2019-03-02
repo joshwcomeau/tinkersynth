@@ -18,6 +18,7 @@ const sequelize = new Sequelize({
 // ID.
 export const User = sequelize.define('user', {
   id: { type: Sequelize.UUID, primaryKey: true },
+  name: { type: Sequelize.STRING, allowNull: true },
   email: Sequelize.STRING,
 });
 

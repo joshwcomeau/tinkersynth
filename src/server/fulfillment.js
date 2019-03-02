@@ -12,7 +12,11 @@ import { User, Order } from './database';
 import { generateNewOrderId } from './database.helpers';
 import { upload } from './google-cloud';
 import { parallel } from './utils';
-import { createRasterImage, createVectorImage } from './image-processing';
+import {
+  createOutputDirectoryIfNecessary,
+  createRasterImage,
+  createVectorImage,
+} from './image-processing';
 import { sendArtVectorEmail, notifyMe } from './email';
 
 export default async function fulfill(
@@ -28,18 +32,12 @@ export default async function fulfill(
   charge
 ) {
   // Create a User, if we don't already have one.
-  console.log('START FULFILL');
-
   const [user, wasJustCreated] = await User.findOrCreate({
     where: { id: userId },
     defaults: { email, name: userName },
   });
 
-  console.log('GOT USER', user, wasJustCreated);
-
   const newOrderId = await generateNewOrderId();
-
-  console.log('ORERID', newOrderId);
 
   // Associate an Order with this user
   const order = await Order.create({
@@ -59,7 +57,11 @@ export default async function fulfill(
 
   await user.addOrder(order);
 
-  console.log(order, user);
+  // Ensure that the "output" directory exists
+  // NOTE: We need to do this _before_ starting to create the images in
+  // parallel. Was seeing a bug where all 3 images try to create the
+  // directory, since the `fs.stat` calls are all run at the same time.
+  await createOutputDirectoryIfNecessary();
 
   const [vectorFile, rasterFileOpaque, rasterFileTransparent] = await parallel(
     createVectorImage(size, artParams, { fileId }),
@@ -77,16 +79,12 @@ export default async function fulfill(
     })
   );
 
-  console.log({ vectorFile, rasterFileOpaque, rasterFileTransparent });
-
   // prettier-ignore
   await parallel(
     upload(vectorFile.path, 'svg'),
     upload(rasterFileOpaque.path, 'png',),
     upload(rasterFileTransparent.path, 'png')
   );
-
-  console.log('Upload complete');
 
   const urlPrefix = 'https://storage.googleapis.com/tinkersynth-art';
   const svgUrl = `${urlPrefix}/${fileId}.svg`;

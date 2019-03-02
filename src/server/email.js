@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import PurchaseIncludingDownload from './email-templates/purchase-incl-download';
 import PurchaseJustPhysicalPrint from './email-templates/purchase-just-physical';
+import ShippingNotification from './email-templates/shipping-notification';
 
 const postmark = require('postmark');
 
@@ -65,7 +66,7 @@ export const notifyMe = (name, email, format, cost, orderId, chargeId) => {
   client
     .sendEmail({
       From: 'josh@tinkersynth.com',
-      To: email,
+      To: 'josh@tinkersynth.com',
       Subject: 'New purchase on Tinkersynth!',
       TextBody: `
 Yay new order!
@@ -119,6 +120,48 @@ ${message}
     })
     .then(result => {
       console.info('Sent "sendContactEmail" email', result);
+
+      return result;
+    })
+    .catch(err => {
+      console.error(err);
+
+      throw new Error(err);
+    });
+};
+
+export const sendShippingNotificationEmail = (
+  name,
+  email,
+  orderId,
+  carrier,
+  trackingNum
+) => {
+  // Don't send email in development
+  if (!SEND_IN_DEV && process.env.NODE_ENV !== 'production') {
+    return new Promise(resolve =>
+      resolve({
+        test: true,
+      })
+    );
+  }
+
+  return client
+    .sendEmail({
+      From: 'josh@tinkersynth.com',
+      To: email,
+      Subject: 'Your order has shipped!',
+      HtmlBody: ReactDOMServer.renderToStaticMarkup(
+        <ShippingNotification
+          name={name}
+          orderId={orderId}
+          carrier={carrier}
+          trackingNum={trackingNum}
+        />
+      ),
+    })
+    .then(result => {
+      console.info('Sent "ShippingNotification" email', result);
 
       return result;
     })

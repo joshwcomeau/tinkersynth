@@ -89,11 +89,15 @@ const generateLines = (width, height, artParams) => {
   });
 };
 
-const getOrCreateOutputDirectory = () => {
+export const createOutputDirectoryIfNecessary = () => {
   const outputDirectoryPath = path.join(__dirname, '../../output');
 
   return new Promise((resolve, reject) => {
-    fs.stat(outputDirectoryPath, err => {
+    fs.stat(outputDirectoryPath, (err, info) => {
+      // NOTE: We _expect_ an error, the very first time this runs.
+      // This is because fs.stat returns an error if the directory doesn't
+      // exist.
+
       // If getting the stats for a directory throw an error, that suggests
       // that the directory doesn't exist.
       // fs.exists is so much more semantic, but apparently it's deprecated :/
@@ -129,8 +133,9 @@ export const createVectorImage = async (size, artParams, { fileId }) => {
   const lines = generateLines(width, height, artParams);
 
   const fileExtension = 'svg';
-  const outputDirectory = await getOrCreateOutputDirectory();
-  const filePath = path.join(outputDirectory, `${fileId}.${fileExtension}`);
+  console.log('--- CREATE SVG');
+  const outputDirectoryPath = path.join(__dirname, '../../output');
+  const filePath = path.join(outputDirectoryPath, `${fileId}.${fileExtension}`);
 
   const markup = polylinesToSVG(lines, {
     width,
@@ -172,9 +177,10 @@ export const createRasterImage = async (
   const lines = generateLines(width, height, artParams);
 
   const fileExtension = 'png';
-  const outputDirectory = await getOrCreateOutputDirectory();
+  console.log('--- CREATE PNG');
+  const outputDirectoryPath = path.join(__dirname, '../../output');
   const filePath = path.join(
-    outputDirectory,
+    outputDirectoryPath,
     `${fileId}.${name}.${fileExtension}`
   );
 

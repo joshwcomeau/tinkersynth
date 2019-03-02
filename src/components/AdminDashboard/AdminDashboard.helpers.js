@@ -19,13 +19,21 @@ export const fetchDashboardData = password => {
     });
 };
 
-export const postOrderShippedStatus = (password, orderId, newShippedStatus) => {
+export const postOrderShippedStatus = (
+  password,
+  orderId,
+  carrier,
+  trackingNum,
+  newShippedStatus
+) => {
   return window
     .fetch(`${getApiUrl()}/admin/toggle-order-shipped`, {
       method: 'PUT',
       body: JSON.stringify({
         orderId,
         shipped: newShippedStatus,
+        carrier,
+        trackingNum,
       }),
       mode: 'cors',
       cache: 'no-cache',
