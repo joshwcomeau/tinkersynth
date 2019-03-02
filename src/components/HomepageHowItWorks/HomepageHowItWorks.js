@@ -57,7 +57,7 @@ const HomepageHowItWorks = () => {
     <OuterWrapper id="homepage-how-it-works">
       <MaxWidthWrapper>
         <Header>
-          <Spacer size={72} />
+          <Spacer size={96} />
           <Heading size={3}>How it works</Heading>
           <Spacer size={72} />
         </Header>
@@ -67,9 +67,8 @@ const HomepageHowItWorks = () => {
             title="Create some art"
             description={
               <>
-                There are no labels on Tinkersynth controls, but a bit of
-                experimentation is all it takes! What unexpected, delightful
-                thing will you create?
+                There are no labels on Tinkersynth controls, so some
+                experimentation is required.
               </>
             }
           >
@@ -86,12 +85,7 @@ const HomepageHowItWorks = () => {
             title="Order a print"
             description={
               <>
-                We sell beautiful fine-art prints, produced with ultra-premium
-                papers and rich archival inks.
-                <br />
-                <br />
-                You can also purchase raw assets, and manage the printing
-                yourself!
+                Purchase a beautiful fine-art print, shipped right to your door
               </>
             }
           >
@@ -100,21 +94,18 @@ const HomepageHowItWorks = () => {
 
           <Column
             index={3}
-            title="Display it proudly"
+            title="Showcase your work"
             description={
               <>
                 You collaborated with a machine to produce a unique piece of
-                generative artwork.
-                <br />
-                <br />
-                It’ll look great in your home.
+                generative artwork! That's pretty cool.
               </>
             }
           >
             <CanvasDisplay lineLength={lineLength} lineCurve={lineCurve} />
           </Column>
         </Row>
-        <Spacer size={72} />
+        <Spacer size={96} />
       </MaxWidthWrapper>
     </OuterWrapper>
   );
@@ -131,6 +122,10 @@ const Header = styled.div`
 
 const Row = styled.div`
   display: flex;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
 `;
 
 export default HomepageHowItWorks;

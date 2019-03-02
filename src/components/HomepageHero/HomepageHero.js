@@ -149,12 +149,12 @@ const HomepageHero = () => {
         <StartButton as={Link} to="/slopes">
           Start creating
         </StartButton>
-        <Spacer size={UNIT * 2} />
+        <Spacer size={UNIT * 4} />
 
         <LearnMoreButton
           onClick={() => smoothScrollTo('#homepage-how-it-works')}
         >
-          Learn more
+          Or, keep reading
           <Spacer inline size={UNIT} />
           <Icon size={24} icon={chevronDown} />
         </LearnMoreButton>
@@ -184,8 +184,9 @@ const Title = styled.h3`
 `;
 
 const ArtDemo = styled.img`
-  width: 450px;
-  height: 600px;
+  width: 100%;
+  max-width: 450px;
+
   backface-visibility: hidden;
 `;
 
@@ -217,9 +218,6 @@ const StartButton = styled(HeroButton)`
 
 const LearnMoreButton = styled(HeroButton)`
   color: ${COLORS.white};
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
 `;
 
 export default HomepageHero;

@@ -6,6 +6,7 @@ import Spacer from '../components/Spacer';
 import SEO from '../components/SEO';
 import HomepageHowItWorks from '../components/HomepageHowItWorks';
 import HomepageHero from '../components/HomepageHero';
+import HomepagePrintInfo from '../components/HomepagePrintInfo';
 
 const Homepage = ({}) => {
   return (
@@ -16,9 +17,11 @@ const Homepage = ({}) => {
       />
 
       <HomepageHero />
-      <Spacer size={64} />
+      <Spacer size={24} />
       <HomepageHowItWorks />
-      <Spacer size={400} />
+      <Spacer size={24} />
+      <HomepagePrintInfo />
+      <Spacer size={96} />
     </Layout>
   );
 };

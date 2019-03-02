@@ -26,11 +26,15 @@ const Column = ({ index, title, description, children }) => (
 const Wrapper = styled.div`
   flex: 1;
   color: ${COLORS.white};
+
+  @media (max-width: 850px) {
+    margin-bottom: 36px;
+  }
 `;
 
 const InnerWrapper = styled.div`
   margin: auto;
-  max-width: 244px;
+  max-width: 260px;
   text-align: center;
 `;
 
@@ -39,7 +43,7 @@ const Title = styled(Heading)`
 `;
 
 const Details = styled(Paragraph)`
-  font-size: 16px;
+  font-size: 20px;
   color: inherit;
 `;
 
