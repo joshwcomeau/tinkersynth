@@ -68,12 +68,8 @@ const getCopyForFormat = format => {
 
           <Paragraph>
             In a few minutes, you'll receive an email with download links for
-            your digital image assets.
-          </Paragraph>
-
-          <Paragraph>
-            We'll start work soon on your physical fine art print, and let you
-            know when it's shipped.
+            your digital image assets. We'll start work soon on your physical
+            fine art print, and let you know when it's shipped.
           </Paragraph>
         </>
       );
