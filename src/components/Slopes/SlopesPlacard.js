@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import slopesPlacardSrc from '../../images/slopes-placard.svg';
 import analytics from '../../services/analytics.service';
 
+import { SlopesContext } from './SlopesState';
 import Spacer from '../Spacer';
 import Screw from '../Screw';
 import PopcornKernel from '../PopcornKernel';
@@ -34,7 +35,13 @@ const getPlacardContainerStyles = hangingOffside => {
 type Props = {
   handleRemoval: () => void,
 };
-const SlopesPlacard = ({ handleRemoval }: Props) => {
+const SlopesPlacard = ({ handleRemoval, enableMirrored }: Props) => {
+  const wasMirroredOnMount = React.useRef(enableMirrored);
+
+  if (wasMirroredOnMount.current) {
+    return null;
+  }
+
   const [isFalling, setIsFalling] = React.useState(false);
   const [hangingOffSide, setHangingOffSide] = React.useState(null);
 

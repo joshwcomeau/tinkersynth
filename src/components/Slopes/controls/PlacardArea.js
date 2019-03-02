@@ -3,20 +3,28 @@ import styled from 'styled-components';
 
 import useToggle from '../../../hooks/toggle.hook';
 
+import { SlopesContext } from '../SlopesState';
 import SlopesPlacard from '../SlopesPlacard';
 import HiddenCluster from './HiddenCluster';
 
-type Props = {};
+type Props = {
+  enableMirrored: boolean,
+};
 
-const PlacardArea = ({  }: Props) => {
-  const [isHiddenClusterUsable, toggleHiddenCluster] = useToggle(false);
+const PlacardArea = ({ enableMirrored }: Props) => {
+  const [isHiddenClusterUsable, toggleHiddenCluster] = useToggle(
+    enableMirrored
+  );
 
   return (
     <Wrapper>
       <PlacardWrapper
         style={{ pointerEvents: isHiddenClusterUsable ? 'none' : 'auto' }}
       >
-        <SlopesPlacard handleRemoval={toggleHiddenCluster} />
+        <SlopesPlacard
+          handleRemoval={toggleHiddenCluster}
+          enableMirrored={enableMirrored}
+        />
       </PlacardWrapper>
 
       <HiddenClusterWrapper>
@@ -45,4 +53,17 @@ const HiddenClusterWrapper = styled.div`
   z-index: 1;
 `;
 
-export default PlacardArea;
+const OptimizedPlacardArea = React.memo(PlacardArea);
+
+const PlacardAreaContainer = props => {
+  const slopesParams = React.useContext(SlopesContext);
+
+  return (
+    <OptimizedPlacardArea
+      {...props}
+      enableMirrored={slopesParams.enableMirrored}
+    />
+  );
+};
+
+export default PlacardAreaContainer;
