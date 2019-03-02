@@ -8,7 +8,15 @@ const ogSampleImageSrc =
 const ogSampleImageTwitterSrc =
   'https://storage.googleapis.com/tinkersynth-email-assets/og-sample-image-twitter.png';
 
-const SEO = ({ description, lang, meta, keywords, title, ogTitle, url }) => (
+const SEO = ({
+  description,
+  lang,
+  meta,
+  keywords = ['generative art', 'art', 'online store'],
+  title,
+  ogTitle,
+  url,
+}) => (
   <StaticQuery
     query={detailsQuery}
     render={data => {
