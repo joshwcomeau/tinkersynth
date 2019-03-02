@@ -46,7 +46,7 @@ const renderAddress = order => {
 const OrderRow = ({ order, adminPassword, refreshDashboardData }) => {
   const [status, setStatus] = React.useState('idle');
 
-  const toggleShipped = () => {
+  const markAsShipped = () => {
     const carrier = window.prompt('Enter carrier');
     const trackingNum = window.prompt('Enter tracking # (if available)');
 
@@ -109,10 +109,10 @@ const OrderRow = ({ order, adminPassword, refreshDashboardData }) => {
         <Spacer size={12} />
         {order.format !== 'vector' && (
           <Button
-            disabled={status === 'loading'}
+            disabled={status === 'loading' || order.shipped}
             style={{ padding: '0 12px', margin: 'auto' }}
             color={order.shipped ? COLORS.green[500] : COLORS.blue[500]}
-            onClick={() => toggleShipped()}
+            onClick={() => !order.shipped && markAsShipped()}
           >
             {status === 'loading'
               ? 'Loading...'
