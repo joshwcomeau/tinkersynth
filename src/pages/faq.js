@@ -267,13 +267,13 @@ const FAQ = () => {
 
           <QuestionAndAnswer
             id="how-are-orders-shipped"
-            question="How are orders shipped?"
+            question="How are orders packed?"
             isExpanded={openQuestionId === 'how-are-orders-shipped'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Fine art prints are shipped rolled inside shipping tubes. We take
-              care to wrap prints carefully.
+              Fine art prints are packed rolled inside shipping tubes, wrapped
+              in tissue paper to protect the prints.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -468,6 +468,28 @@ const FAQ = () => {
             <Paragraph>
               We recognize that this experience is not ideal, and we're working
               to improve upon it!
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="framed-orders"
+            question="Can I purchase a framed print?"
+            isExpanded={openQuestionId === 'framed-orders'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Unfortunately, we do not currently sell framed prints. All fine
+              art prints are shipped in a rolled tube. In the future, we may
+              look into selling framed prints directly.
+            </Paragraph>
+            <Paragraph>
+              In the meantime, finding a frame for your print shouldn't be too
+              much of a hassle! We made sure to choose conventional sizes for
+              our prints, so you ought to be able to find reasonably priced
+              frames available online. Custom framing through services like
+              Framebridge is also possible.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>

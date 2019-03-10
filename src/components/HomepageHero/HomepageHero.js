@@ -186,8 +186,13 @@ const Title = styled.h3`
 const ArtDemo = styled.img`
   width: 100%;
   max-width: 450px;
-
   backface-visibility: hidden;
+
+  @media (min-width: 450px) {
+    max-width: none;
+    width: 450px;
+    height: 600px;
+  }
 `;
 
 const HeroFooter = styled.div`
