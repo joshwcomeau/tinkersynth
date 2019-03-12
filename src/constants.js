@@ -263,7 +263,7 @@ export const PRINT_SIZES = {
 };
 
 // Toggle this variable to switch between test/live in production
-const TEST_STRIPE_IN_PRODUCTION = true;
+const TEST_STRIPE_IN_PRODUCTION = false;
 
 export const STRIPE_MODE =
   process.env.NODE_ENV === 'production'
