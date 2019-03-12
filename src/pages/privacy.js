@@ -192,8 +192,8 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         If anything about this policy is unclear, please reach out. Send an
-        email to <a href="mailto:josh@tinkersynth.com">josh@tinkersynth.com</a>,
-        or use the handy <TextLink to="/contact">contact page</TextLink>.
+        email to josh@tinkersynth.com, or use the handy{' '}
+        <TextLink to="/contact">contact page</TextLink>.
       </Paragraph>
 
       <Spacer size={UNIT * 12} />

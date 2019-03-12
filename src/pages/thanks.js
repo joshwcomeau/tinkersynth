@@ -96,6 +96,14 @@ const Thanks = ({ location }) => {
   const homeUrl = 'https://tinkersynth.com';
   var twitterShareUrl = `https://twitter.com/intent/tweet?url=${homeUrl}&text=${text}`;
 
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, []);
+
   return (
     <Layout pageId="thanks" theme="dark" noHeaderBorder>
       <SEO title="Slopes" url="https://tinkersynth.com/slopes/" />

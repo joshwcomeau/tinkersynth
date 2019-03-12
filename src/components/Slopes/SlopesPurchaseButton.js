@@ -80,8 +80,12 @@ const SlopesPurchaseButton = ({ artParams, storeData, cost }: Props) => {
   const openStripe = () => {
     analytics.logEvent('initiate-checkout', { machineName: 'slopes' });
 
-    const productName =
-      storeData.format === 'print' ? 'Art print' : 'Art download';
+    let productName = 'Art print';
+    if (storeData.format === 'vector') {
+      productName = 'Art download';
+    } else if (storeData.format === 'combo') {
+      productName = 'Art print + download';
+    }
 
     stripe.open({
       name: 'Tinkersynth',

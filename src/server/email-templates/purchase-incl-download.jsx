@@ -22,7 +22,7 @@ const PurchaseIncludingDownload = ({
 
     <p>
       Good news - our servers in Toronto have been hard at work assembling your
-      art, pixel by pixel, and they've just completed the job!
+      art, pixel by pixel, and they've just completed the job.
     </p>
 
     {format === 'vector' && (
@@ -30,7 +30,7 @@ const PurchaseIncludingDownload = ({
         <p>
           We've produced two print-ready raster images, and a scalable vector
           image. We hope that these assets will be useful for whatever creative
-          endeavors you have in mind!
+          endeavors you have in mind.
         </p>
       </>
     )}
