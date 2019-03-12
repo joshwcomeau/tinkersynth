@@ -15,15 +15,26 @@ import OrderRow from './OrderRow';
 const AdminDashboard = ({ adminPassword }) => {
   const [dashboardData, setDashboardData] = React.useState(null);
 
+  const updateDashboardData = () => {
+    if (typeof adminPassword !== 'string') {
+      return;
+    }
+
+    return fetchDashboardData(adminPassword).then(json => {
+      // HACK: I made a single test purchase, to verify that everything
+      // works. Filter it out, it shouldn't count.
+      //
+      // NOTE: A MUCH BETTER solution would be to add an `isTestOrder` param
+      // to the model, but this is much faster :)
+      const orders = json.orders.filter(order => order.id !== 20);
+
+      setDashboardData({ orders });
+    });
+  };
+
   React.useEffect(
     () => {
-      if (typeof adminPassword !== 'string') {
-        return;
-      }
-
-      fetchDashboardData(adminPassword).then(json => {
-        setDashboardData(json);
-      });
+      updateDashboardData();
     },
     [adminPassword]
   );
@@ -31,12 +42,6 @@ const AdminDashboard = ({ adminPassword }) => {
   if (!dashboardData) {
     return 'Loading...';
   }
-
-  const refreshDashboardData = () => {
-    return fetchDashboardData(adminPassword).then(json => {
-      setDashboardData(json);
-    });
-  };
 
   const totalSales = dashboardData.orders.reduce(
     (acc, order) => acc + order.cost,
@@ -71,7 +76,7 @@ const AdminDashboard = ({ adminPassword }) => {
               key={order.id}
               order={order}
               adminPassword={adminPassword}
-              refreshDashboardData={refreshDashboardData}
+              refreshDashboardData={updateDashboardData}
             />
           ))}
         </tbody>
