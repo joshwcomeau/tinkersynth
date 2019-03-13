@@ -21,12 +21,14 @@ const AdminDashboard = ({ adminPassword }) => {
     }
 
     return fetchDashboardData(adminPassword).then(json => {
-      // HACK: I made a single test purchase, to verify that everything
-      // works. Filter it out, it shouldn't count.
+      // HACK: I made a couple test purchases, to verify that everything
+      // works. Filter them out, they don't count.
       //
       // NOTE: A MUCH BETTER solution would be to add an `isTestOrder` param
       // to the model, but this is much faster :)
-      const orders = json.orders.filter(order => order.id !== 20);
+      const orders = json.orders.filter(
+        order => order.id !== 20 && order.id !== 21
+      );
 
       setDashboardData({ orders });
     });
