@@ -4,8 +4,9 @@ import Icon from 'react-icons-kit';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 import ImageCache from '../../vendor/image-cache';
 
-import { COLORS, UNIT } from '../../constants';
+import { COLORS, UNIT, BREAKPOINTS } from '../../constants';
 import { range, smoothScrollTo } from '../../utils';
+import { getDeviceType } from '../../helpers/responsive.helpers';
 import useInterval from '../../hooks/interval.hook';
 
 import artDemo1 from '../../images/art-demo-1.png';
@@ -23,6 +24,7 @@ import FadeOnChange from '../FadeOnChange';
 import Link from '../Link';
 import SlideshowDots from '../SlideshowDots';
 import Spacer from '../Spacer';
+import HomepageGetStartedButton from '../HomepageGetStartedButton';
 
 const images = [
   artDemo3,
@@ -35,6 +37,8 @@ const images = [
   artDemo6,
   artDemo8,
 ];
+
+const isMobile = getDeviceType() === 'mobile';
 
 const FRAME_DURATION = 5000;
 const EXTENDED_FRAME_DURATION = 15000;
@@ -129,7 +133,7 @@ const HomepageHero = () => {
       <Subtitle>Create and purchase</Subtitle>
       <Title>Unique generative art</Title>
 
-      <FadeOnChange changeKey={imageSrc}>
+      <FadeOnChange changeKey={imageSrc} duration={isMobile ? 0 : 300}>
         <ArtDemo src={imageSrc} />
       </FadeOnChange>
       <SlideshowDots
@@ -146,9 +150,8 @@ const HomepageHero = () => {
         </Subtitle>
         <Spacer size={UNIT * 9} />
 
-        <StartButton as={Link} to="/slopes">
-          Start creating
-        </StartButton>
+        <HomepageGetStartedButton copy="Start creating" />
+
         <Spacer size={UNIT * 4} />
 
         <LearnMoreButton
@@ -181,6 +184,10 @@ const Title = styled.h3`
   font-size: 40px;
   font-weight: 700;
   letter-spacing: -1px;
+
+  @media ${BREAKPOINTS.sm} {
+    font-size: 32px;
+  }
 `;
 
 const ArtDemo = styled.img`
@@ -209,16 +216,6 @@ const HeroButton = styled(UnstyledButton)`
   border-radius: 8px;
   font-size: 18px;
   font-weight: 600;
-`;
-
-const StartButton = styled(HeroButton)`
-  background: ${COLORS.gray[200]};
-  color: ${COLORS.gray[900]};
-
-  &:hover {
-    background: ${COLORS.white};
-    color: ${COLORS.black};
-  }
 `;
 
 const LearnMoreButton = styled(HeroButton)`

@@ -185,7 +185,7 @@ const Contact = () => {
           <Heading size={4}>Message Received.</Heading>
           <Spacer size={UNIT * 2} />
           <Paragraph>
-            Thanks for your inquiry! We'll get back to you within a day or two.
+            Thanks for your inquiry! We'll get back to you as soon as we can.
           </Paragraph>
         </Success>
       ) : (
