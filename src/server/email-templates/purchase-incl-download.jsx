@@ -80,6 +80,9 @@ const PurchaseIncludingDownload = ({
         <br />
         This infinitely-scalable .svg can be thought of as a film negative; it
         can be used to produce raster images of any size.
+        <br />
+        <br />
+        <strong>(Right-click and "Save as" to download)</strong>
       </li>
     </ul>
 
