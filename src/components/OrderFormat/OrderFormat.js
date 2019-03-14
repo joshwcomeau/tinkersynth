@@ -38,7 +38,7 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
           />
         </RadioListSelect.Option>
 
-        <RadioListSelect.Option id="print">
+        <RadioListSelect.Option id="combo">
           <OrderFormatItem
             title="Fine Art Print"
             details={
@@ -46,17 +46,11 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
                 Giclée art print, printed on <em>Epson Ultra-Premium Lustre</em>{' '}
                 paper, a 240gsm acid-free paper known for its rich blacks.
                 Printed with archival inks.
+                <br />
+                <br />
+                Also includes vector + raster downloads.
               </>
             }
-            price={calculateCost('print', 'small')}
-            variablePrice
-          />
-        </RadioListSelect.Option>
-
-        <RadioListSelect.Option id="combo">
-          <OrderFormatItem
-            title="Fine Art Print + Vector / Raster Download"
-            details="Combo pack: receive the fine art print alongside digitally-delivered print-ready image assets."
             price={calculateCost('combo', 'small')}
             variablePrice
           />

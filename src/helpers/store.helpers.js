@@ -1,6 +1,6 @@
 export const calculateCost = (format, size) => {
   if (format === 'vector') {
-    return 1900;
+    return 500;
   } else {
     // prettier-ignore
     switch (size) {
