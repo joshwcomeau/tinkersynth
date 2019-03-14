@@ -15,8 +15,8 @@ export const breakMachineWithKeyboard = (triggerRef: ?HTMLElement) => ({
     title: '😮 Surprise!',
     message: (
       <span>
-        You discovered an easter egg, you crafty devil. Keyboard navigation
-        allows you to <strong>exceed the range of some controls</strong>.<br />
+        You've discovered a neat trick. Using the keyboard allows you to{' '}
+        <strong>exceed the range of some controls</strong>.<br />
         <Spacer size={8} />
         What will you do with your new powers?
       </span>

@@ -148,8 +148,6 @@ app.put('/admin/toggle-order-shipped', adminOnly, async (req, res) => {
 
   await order.save();
 
-  console.log({ order }, order.user);
-
   await sendShippingNotificationEmail(
     order.user.name,
     order.user.email,

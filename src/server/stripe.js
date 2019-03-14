@@ -16,6 +16,8 @@ export const createCharge = ({
     description = `${description} - ${size}`;
   }
 
+  console.log({ cost, description, token, shippingAddress });
+
   return stripe.charges.create({
     amount: cost,
     currency: 'usd',
