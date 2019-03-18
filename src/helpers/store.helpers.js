@@ -1,12 +1,12 @@
 export const calculateCost = (format, size) => {
   if (format === 'vector') {
-    return 500;
+    return 1900;
   } else {
     // prettier-ignore
     switch (size) {
-      case 'small': return 9900;
-      case 'medium': return 14900;
-      case 'large': return 21900;
+      case 'small': return 4900;
+      case 'medium': return 6900;
+      case 'large': return 11900;
     }
   }
 };

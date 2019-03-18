@@ -43,12 +43,12 @@ const OrderFormat = ({ format, handleChangeFormat }) => {
             title="Fine Art Print"
             details={
               <>
-                Giclée art print, printed on <em>Epson Ultra-Premium Lustre</em>{' '}
-                paper, a 240gsm acid-free paper known for its rich blacks.
-                Printed with archival inks.
+                Giclée art print. We use a gallery-ready, professional printing
+                service, using archival inks and{' '}
+                <em>Epson Ultra-Premium Lustre</em> paper.
                 <br />
                 <br />
-                Also includes vector + raster downloads.
+                <strong>Includes vector + raster download as well.</strong>
               </>
             }
             price={calculateCost('combo', 'small')}
