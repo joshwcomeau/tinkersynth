@@ -50,7 +50,7 @@ const FAQ = () => {
   }, []);
 
   return (
-    <LayoutSidePage pageId="faq" title="Frequently Asked Questions">
+    <React.Fragment>
       <Section>
         <Header>
           <Heading size={4} style={{ color: COLORS.violet[500] }}>
@@ -664,9 +664,15 @@ const FAQ = () => {
           </QuestionAndAnswer>
         </Questions>
       </Section>
-    </LayoutSidePage>
+    </React.Fragment>
   );
 };
+
+const Wrapper = () => (
+  <LayoutSidePage pageId="faq" title="Frequently Asked Questions">
+    <FAQ />
+  </LayoutSidePage>
+);
 
 const Section = styled.div`
   margin-bottom: ${UNIT * 8}px;
@@ -703,4 +709,4 @@ const QuestionSubsection = styled.div`
   margin-bottom: ${UNIT * 4}px;
 `;
 
-export default FAQ;
+export default Wrapper;
