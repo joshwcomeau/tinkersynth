@@ -16,7 +16,6 @@ import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
 import SlopesControls from './SlopesControls';
-import SlopesStorefront from './SlopesStorefront';
 
 const getMachineWidth = (slopesBreakpoint, windowWidth) => {
   switch (slopesBreakpoint) {
@@ -96,8 +95,6 @@ const Slopes = ({ size, orderParams }) => {
       </MachineWrapper>
 
       <Spacer size={UNIT * 2} />
-
-      <SlopesStorefront windowDimensions={windowDimensions} />
     </SlopesProvider>
   );
 };

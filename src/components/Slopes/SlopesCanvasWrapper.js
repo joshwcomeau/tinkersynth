@@ -1,7 +1,5 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
-import { Tooltip } from 'react-tippy';
 import styled from 'styled-components';
 
 import {
@@ -26,6 +24,7 @@ import DestructiveCluster from './controls/DestructiveCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
 import UnstyledButton from '../UnstyledButton';
+import SlopesDownloadButton from './SlopesDownloadButton';
 
 type Props = {
   width: number,
@@ -34,59 +33,7 @@ type Props = {
   children: React$Node,
   enableDarkMode: boolean,
   enableMargins: boolean,
-  isAwareOfPurchaseOptions: boolean,
   isPoweredOn: boolean,
-};
-
-// Show the tooltip after 2 minutes
-const SHOW_PURCHASE_TOOLTIP_AFTER = 1000 * 60 * 2;
-
-const handleClickPurchase = () => {
-  analytics.logEvent('click-smaller-purchase', { machineName: 'slopes' });
-
-  // HACK: I've totally broken out of React's abstraction here, because the
-  // alternative is more work.
-  const storefrontEl = document.querySelector('#slopes-storefront');
-
-  const storefrontVerticalOffset = storefrontEl.getBoundingClientRect().top;
-
-  window.scrollTo({
-    top: storefrontVerticalOffset + window.pageYOffset,
-    left: 0,
-    behavior: 'smooth',
-  });
-};
-
-const useTooltip = isAwareOfPurchaseOptions => {
-  const [shouldShowTooltip, setShouldShowTooltip] = React.useState(false);
-
-  const timeoutId = React.useRef(null);
-
-  React.useEffect(() => {
-    if (isAwareOfPurchaseOptions) {
-      return;
-    }
-
-    timeoutId.current = window.setTimeout(() => {
-      setShouldShowTooltip(true);
-    }, SHOW_PURCHASE_TOOLTIP_AFTER);
-  }, []);
-
-  React.useEffect(
-    () => {
-      if (isAwareOfPurchaseOptions) {
-        window.clearTimeout(timeoutId.current);
-        setShouldShowTooltip(false);
-      }
-    },
-    [isAwareOfPurchaseOptions]
-  );
-
-  const dismissTooltip = () => {
-    setShouldShowTooltip(false);
-  };
-
-  return [shouldShowTooltip, dismissTooltip];
 };
 
 const SlopesCanvasWrapper = ({
@@ -96,15 +43,8 @@ const SlopesCanvasWrapper = ({
   children,
   enableDarkMode,
   enableMargins,
-  isAwareOfPurchaseOptions,
   isPoweredOn,
 }: Props) => {
-  const [showPurchaseTooltip, setShowPurchaseTooltip] = React.useState(false);
-
-  const [shouldShowTooltip, dismissTooltip] = useTooltip(
-    isAwareOfPurchaseOptions
-  );
-
   return (
     <Wrapper>
       <Machine>
@@ -144,34 +84,7 @@ const SlopesCanvasWrapper = ({
         <Footer>
           <PageCluster size={isFullExperience ? 38 : 48} />
 
-          <Tooltip
-            animation="fade"
-            animateFill={false}
-            arrow={true}
-            position="bottom"
-            html={
-              <TooltipContents onClick={dismissTooltip}>
-                <strong>Happy with your design?</strong>
-                <br />
-                <br />
-                You can purchase it as a print,
-                <br />
-                or as a vector image.
-              </TooltipContents>
-            }
-            open={shouldShowTooltip}
-            style={{
-              lineHeight: 1.4,
-            }}
-          >
-            <Button
-              color={COLORS.blue[500]}
-              onClick={handleClickPurchase}
-              size={isFullExperience ? 'medium' : 'large'}
-            >
-              Purchase
-            </Button>
-          </Tooltip>
+          <SlopesDownloadButton size={isFullExperience ? 'medium' : 'large'} />
         </Footer>
       </Machine>
     </Wrapper>
@@ -257,16 +170,4 @@ const Footer = styled.div`
 
 const Toggles = styled.div``;
 
-const TooltipContents = styled(UnstyledButton)`
-  font-size: 15px;
-  color: ${COLORS.white};
-  text-align: center;
-`;
-
-const mapStateToProps = state => {
-  return {
-    isAwareOfPurchaseOptions: state.machine.isAwareOfPurchaseOptions,
-  };
-};
-
-export default connect(mapStateToProps)(SlopesCanvasWrapperContainer);
+export default SlopesCanvasWrapperContainer;
