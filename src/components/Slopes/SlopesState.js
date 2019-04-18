@@ -221,19 +221,12 @@ const reducer = produce(
   }
 );
 
-export const SlopesProvider = ({
-  children,
-  orderParams,
-}: {
-  children: React$Node,
-  orderParams: ?Parameters,
-}) => {
+export const SlopesProvider = ({ children }: { children: React$Node }) => {
   const initialState = {
     history: [],
     animateTransitions: true,
     isPoweredOn: true,
-    parameters:
-      orderParams || retrieveLastSessionSlopesParams() || defaultParameters,
+    parameters: retrieveLastSessionSlopesParams() || defaultParameters,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);

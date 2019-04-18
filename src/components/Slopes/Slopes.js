@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
@@ -37,9 +36,7 @@ const getMachineWidth = (slopesBreakpoint, windowWidth) => {
   }
 };
 
-const Slopes = ({ size, orderParams }) => {
-  const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
-
+const Slopes = ({ size }) => {
   const windowDimensions = useWindowDimensions();
 
   // The full experience is only available on desktop.
@@ -47,9 +44,8 @@ const Slopes = ({ size, orderParams }) => {
   // good on smaller screens =(
   const isFullExperience = windowDimensions.width > 450;
 
-  // Our aspect ratio depends on the size selected.
-  // By default, our size is 18 x 24.
-  const aspectRatio = printWidth / printHeight;
+  // We now only support a single aspect ratio, a comfortable 3:4.
+  const aspectRatio = 3 / 4;
 
   const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(
     windowDimensions,
@@ -59,7 +55,7 @@ const Slopes = ({ size, orderParams }) => {
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
 
   return (
-    <SlopesProvider orderParams={orderParams}>
+    <SlopesProvider>
       {!isFullExperience && <LimitedExperienceNotice />}
       <MachineWrapper>
         <MainRow>
@@ -135,12 +131,4 @@ const MainRow = styled(MaxWidthWrapper)`
   }
 `;
 
-const mapStateToProps = state => {
-  const { size } = state.store.slopes;
-
-  return {
-    size,
-  };
-};
-
-export default connect(mapStateToProps)(Slopes);
+export default Slopes;

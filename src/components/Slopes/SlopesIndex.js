@@ -6,7 +6,6 @@ import queryString from 'query-string';
 
 import { COLORS, HEADER_HEIGHT } from '../../constants';
 import analytics from '../../services/analytics.service';
-import { getOrderDetails } from '../../helpers/api.helpers';
 import {
   getNumberOfVisits,
   markNewVisit,
@@ -18,8 +17,6 @@ import LoadScript from '../../components/LoadScript';
 import LoadingMachine from '../../components/LoadingMachine';
 
 const SlopesIndex = ({ location }) => {
-  const { orderId } = queryString.parse(location.search);
-
   // For our initial render, we'll show a loading indicator.
   //
   // (I'm violating a best practice, and deciding to show the loader for several
@@ -34,38 +31,12 @@ const SlopesIndex = ({ location }) => {
   const [hasLoadedSlopes, setHasLoadedSlopes] = React.useState(false);
   const slopesComponent = React.useRef(null);
 
-  // If the user supplied an orderId in the query params, we want to fetch that
-  // data before we mount our slopes.
-  // We use this as the default state, since if we don't have an orderId,
-  // we have no data we need to fetch (so we can mark it as fully fetched).
-  const [needsToFetchOrderData, setNeedsToFetchOrderData] = React.useState(
-    !!orderId
-  );
-
-  const [orderData, setOrderData] = React.useState();
-
   // On mount, start async-loading the Slopes component
   React.useEffect(() => {
     import('../../components/Slopes').then(Component => {
       slopesComponent.current = Component.default;
       setHasLoadedSlopes(true);
     });
-  }, []);
-
-  // On mount, kick off the order-data request if necessary
-  React.useEffect(() => {
-    if (needsToFetchOrderData) {
-      getOrderDetails(orderId).then(order => {
-        setNeedsToFetchOrderData(false);
-
-        if (!order) {
-          // This shouldn't happen, but whatever, ignore it if it does.
-          return;
-        }
-
-        setOrderData(order.params);
-      });
-    }
   }, []);
 
   // On mount, scroll to the top of the document
@@ -87,11 +58,7 @@ const SlopesIndex = ({ location }) => {
     setHasTimeElapsed(true);
   }, amountOfTimeToWait);
 
-  const showLoading =
-    !hasScriptLoaded ||
-    !hasTimeElapsed ||
-    needsToFetchOrderData ||
-    !hasLoadedSlopes;
+  const showLoading = !hasScriptLoaded || !hasTimeElapsed || !hasLoadedSlopes;
 
   React.useEffect(
     () => {
@@ -115,7 +82,7 @@ const SlopesIndex = ({ location }) => {
 
   return (
     <>
-      {showLoading ? loadingElements : <Slopes orderParams={orderData} />}
+      {showLoading ? loadingElements : <Slopes />}
 
       <LoadScript
         src="https://checkout.stripe.com/checkout.js"

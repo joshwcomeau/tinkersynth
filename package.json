@@ -8,16 +8,9 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "build-and-serve": "gatsby build && gatsby serve",
-    "build-server": "babel ./src --out-dir ./dist",
-    "watch-server": "babel --watch ./src --out-dir ./dist",
-    "deploy-server": "NODE_ENV=production fly deploy:production",
-    "restart-server": "NODE_ENV=production fly restart:production",
-    "build-and-deploy-server": "NODE_ENV=production npm run build-server && NODE_ENV=production fly deploy:production",
-    "start-server": "pm2 start dist/index.js",
     "develop": "gatsby develop -p 8765",
-    "start": "concurrently --kill-others \"npm run develop\" \"npm run watch-server\" \"nodemon dist/server/index.js\"",
-    "format": "prettier --write \"src/**/*.js\"",
-    "test": "node scripts/test.js"
+    "start": "npm run develop",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "dependencies": {
     "@google-cloud/storage": "^2.4.2",

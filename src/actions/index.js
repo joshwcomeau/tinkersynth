@@ -24,28 +24,7 @@ export const breakMachineWithKeyboard = (triggerRef: ?HTMLElement) => ({
   },
 });
 
-export const discoverStorefront = () => ({
-  type: 'DISCOVER_STOREFRONT',
-});
-
 export const dismissToast = (toastId: string) => ({
   type: 'DISMISS_TOAST',
   toastId,
-});
-
-export const selectFormat = (machineName: string, format: string) => ({
-  type: 'SELECT_FORMAT',
-  machineName,
-  format,
-});
-
-export const selectSize = (machineName: string, size: string) => ({
-  type: 'SELECT_SIZE',
-  machineName,
-  size,
-});
-
-export const authenticateAsAdmin = (password: string) => ({
-  type: 'AUTHENTICATE_AS_ADMIN',
-  password,
 });

@@ -256,25 +256,4 @@ export const Z_INDICES = {
 export const MIN_NUM_ROWS = 1;
 export const MAX_NUM_ROWS = 75;
 
-export const PRINT_SIZES = {
-  small: { width: 12, height: 18 },
-  medium: { width: 18, height: 24 },
-  large: { width: 24, height: 36 },
-};
-
-// Toggle this variable to switch between test/live in production
-const TEST_STRIPE_IN_PRODUCTION = false;
-
-export const STRIPE_MODE =
-  process.env.NODE_ENV === 'production'
-    ? TEST_STRIPE_IN_PRODUCTION
-      ? 'test'
-      : 'live'
-    : 'test';
-
-export const STRIPE_PUBLIC_KEY =
-  STRIPE_MODE === 'live'
-    ? 'pk_live_Tk5Y6iArWvMRFHcFkzxGYFGX'
-    : 'pk_test_tYzaDp1UlScq9ZMnITWadUQb';
-
 export const DEV_SERVER_PORT = 4000;
