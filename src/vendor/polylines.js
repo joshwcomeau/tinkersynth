@@ -21,9 +21,9 @@ const LINE_COLORS = [
   // COLORS.red[300],
   // COLORS.orange[300],
   COLORS.yellow[300],
-  // COLORS.green[300],
-  COLORS.aqua[300],
-  // COLORS.blue[300],
+  // COLORS.green[500],
+  // COLORS.aqua[500],
+  // COLORS.blue[500],
   // COLORS.violet[300],
   COLORS.pink[300],
 ];
@@ -106,11 +106,22 @@ export const renderPolylines = function(rows, opt: Options) {
   context.fillRect(0, 0, width, height);
 
   // Draw lines
-  rows.forEach((row, rowIndex) => {
+  [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach(function(points, segmentIndex) {
-      const color = LINE_COLORS[rowIndex % LINE_COLORS.length];
+      const isOddRow = rowIndex % 2 !== 0;
 
-      context.strokeStyle = color;
+      const index = isOddRow ? rowIndex : segmentIndex;
+
+      const color1 = LINE_COLORS[index % LINE_COLORS.length];
+      const color2 = LINE_COLORS[(index + 1) % LINE_COLORS.length];
+
+      // const gradient = context.createLinearGradient(0, 0, width, 0);
+      // gradient.addColorStop(0, color1);
+      // gradient.addColorStop(1, color2);
+
+      // context.strokeStyle = gradient;
+
+      context.strokeStyle = color1;
 
       context.beginPath();
 
