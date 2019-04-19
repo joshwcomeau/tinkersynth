@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -24,12 +25,12 @@ import DestructiveCluster from './controls/DestructiveCluster';
 import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
 import UnstyledButton from '../UnstyledButton';
-import SlopesDownloadButton from './SlopesDownloadButton';
 
 type Props = {
   width: number,
   height: number,
   isFullExperience: boolean,
+  toggleDownloadShelf: () => void,
   children: React$Node,
   enableDarkMode: boolean,
   enableMargins: boolean,
@@ -40,11 +41,15 @@ const SlopesCanvasWrapper = ({
   width,
   height,
   isFullExperience,
+  toggleDownloadShelf,
   children,
   enableDarkMode,
   enableMargins,
   isPoweredOn,
+  rememberCurrentlyFocusedElement,
 }: Props) => {
+  const downloadButtonRef = React.useRef(null);
+
   return (
     <Wrapper>
       <Machine>
@@ -84,7 +89,20 @@ const SlopesCanvasWrapper = ({
         <Footer>
           <PageCluster size={isFullExperience ? 38 : 48} />
 
-          <SlopesDownloadButton size={isFullExperience ? 'medium' : 'large'} />
+          <Button
+            ref={downloadButtonRef}
+            color={COLORS.blue[500]}
+            size={isFullExperience ? 'medium' : 'large'}
+            onClick={() => {
+              toggleDownloadShelf();
+
+              // After the user closes the shelf, we want to restore focus
+              // to this button, to make sure the focus is where we left off.
+              rememberCurrentlyFocusedElement(downloadButtonRef.current);
+            }}
+          >
+            Download
+          </Button>
         </Footer>
       </Machine>
     </Wrapper>
@@ -170,4 +188,7 @@ const Footer = styled.div`
 
 const Toggles = styled.div``;
 
-export default SlopesCanvasWrapperContainer;
+export default connect(
+  null,
+  { rememberCurrentlyFocusedElement: actions.rememberCurrentlyFocusedElement }
+)(SlopesCanvasWrapperContainer);

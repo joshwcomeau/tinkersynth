@@ -39,8 +39,6 @@ const Footer = ({ theme }) => {
 };
 
 const Wrapper = styled.div`
-  position: relative;
-  z-index: 2;
   padding: ${UNIT * 4}px 0px;
   background-color: ${COLORS.navy};
 `;

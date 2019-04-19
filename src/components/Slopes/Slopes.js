@@ -3,12 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
+import useToggle from '../../hooks/toggle.hook';
 import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
 import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import LimitedExperienceNotice from '../LimitedExperienceNotice';
+import DownloadShelf from '../DownloadShelf';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
 import { SlopesProvider } from './SlopesState';
@@ -37,6 +39,8 @@ const getMachineWidth = (slopesBreakpoint, windowWidth) => {
 };
 
 const Slopes = ({ size }) => {
+  const [showDownloadShelf, toggleShowDownloadShelf] = useToggle();
+
   const windowDimensions = useWindowDimensions();
 
   // The full experience is only available on desktop.
@@ -57,6 +61,7 @@ const Slopes = ({ size }) => {
   return (
     <SlopesProvider>
       {!isFullExperience && <LimitedExperienceNotice />}
+
       <MachineWrapper>
         <MainRow>
           {isFullExperience && (
@@ -77,6 +82,7 @@ const Slopes = ({ size }) => {
             height={canvasHeight}
             key={`${canvasWidth}/${canvasHeight}`}
             isFullExperience={isFullExperience}
+            toggleDownloadShelf={toggleShowDownloadShelf}
           >
             <SlopesCanvasMachine
               // Whenever the size changes, we want to redraw the canvas.
@@ -91,6 +97,11 @@ const Slopes = ({ size }) => {
       </MachineWrapper>
 
       <Spacer size={UNIT * 2} />
+
+      <DownloadShelf
+        isVisible={showDownloadShelf}
+        handleToggle={toggleShowDownloadShelf}
+      />
     </SlopesProvider>
   );
 };

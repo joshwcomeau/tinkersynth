@@ -6,7 +6,6 @@ import { useSpring, animated } from 'react-spring/hooks';
 import Icon from 'react-icons-kit';
 import { alertCircle } from 'react-icons-kit/feather/alertCircle';
 
-import * as actions from '../../actions';
 import { COLORS } from '../../constants';
 
 import UnstyledButton from '../UnstyledButton';

@@ -26,5 +26,16 @@ export const breakMachineWithKeyboard = (triggerRef: ?HTMLElement) => ({
 
 export const dismissToast = (toastId: string) => ({
   type: 'DISMISS_TOAST',
+  restoreFocus: true,
   toastId,
+});
+
+export const rememberCurrentlyFocusedElement = (triggerRef: ?HTMLElement) => ({
+  type: 'REMEMBER_CURRENTLY_FOCUSED_ELEMENT',
+  triggerRef,
+});
+
+export const restoreFocus = () => ({
+  type: 'RESTORE_FOCUS',
+  restoreFocus: true,
 });
