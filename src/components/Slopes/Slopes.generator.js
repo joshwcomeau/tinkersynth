@@ -154,7 +154,7 @@ const generator = ({
     start = performance.now();
   }
 
-  let lines = [];
+  let rows = [];
 
   // Precompute all row offsets
   const rowOffsets = range(numOfRows).map(rowIndex => {
@@ -223,11 +223,11 @@ const generator = ({
       row.push(line);
     });
 
-    lines.push(row);
+    rows.push(row);
   });
 
   if (enableOcclusion) {
-    const newLines = lines.map((row, rowIndex) => {
+    const newLines = rows.map((row, rowIndex) => {
       const previousRowIndices = getPossiblyOccludingRowIndices({
         rowIndex,
         rowHeight,
@@ -238,8 +238,8 @@ const generator = ({
       return row.map((line, sampleIndex) => {
         const previousLines = previousRowIndices
           .map(function mapPreviousLines(previousRowIndex) {
-            return lines[previousRowIndex]
-              ? lines[previousRowIndex][sampleIndex]
+            return rows[previousRowIndex]
+              ? rows[previousRowIndex][sampleIndex]
               : null;
           })
           .filter(line => !!line);
@@ -254,7 +254,7 @@ const generator = ({
       });
     });
 
-    lines = newLines;
+    rows = newLines;
   }
 
   if (dotRatio !== 0) {
@@ -262,7 +262,7 @@ const generator = ({
     // interesting.
     const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0.01, 1);
 
-    lines.forEach(row => {
+    rows.forEach(row => {
       row.forEach(line => {
         if (!line) {
           return;
@@ -281,7 +281,7 @@ const generator = ({
   }
 
   if (enableMirrored) {
-    lines.forEach((row, rowIndex) => {
+    rows.forEach((row, rowIndex) => {
       const mirroredRow = [];
 
       row.forEach((line, lineIndex) => {
@@ -294,7 +294,7 @@ const generator = ({
         // If both points are above the halfway point, we don't need to render
         // this line at all.
         if (line[0][1] > halfwayPoint && line[1][1] > halfwayPoint) {
-          lines[rowIndex][lineIndex] = null;
+          rows[rowIndex][lineIndex] = null;
           return;
         }
 
@@ -326,32 +326,54 @@ const generator = ({
         mirroredRow.push(flippedLine);
       });
 
-      lines.push(mirroredRow);
+      rows.push(mirroredRow);
     });
   }
 
-  lines = flatten(lines).filter(line => !!line);
+  // At this point, `rows` is an array of rows, and every row is an array of
+  // line segments. Every line segment is an array of two points, pseudo-tuple.
+  // This is a LOT of arrays, so here's an example:
+  /*
 
-  // If our lines are mostly-contiguous (perlinRatio of 1), we should create
+  rows === [
+    // Row 1
+    [
+      // Line segment 1
+      [
+        // Point 1
+        [120, 200],
+        // Point 2
+        [121, 199],
+      ],
+      // Sometimes, line segments are `null`, if this segment was occluded
+      null,
+    ]
+  ]
+  */
+
+  // Filter out all occluded-away line segments
+  rows = rows.map(row => row.filter(line => !!line));
+
+  // If our rows are mostly-contiguous (perlinRatio of 1), we should create
   // polylines instead of having many many 2-point line segments.
-  // This saves a ton of time when it comes to actually drawing the lines:
+  // This saves a ton of time when it comes to actually drawing the rows:
   // With standard settings, it goes from 30-40ms drawing time to 5-6ms.
   //
   // The data-munging cost of the `joinLineSegments` call is <1ms,
   // so this is a huge win :D
   const isMostlyContiguous = perlinRatio === 1 && dotRatio === 1;
   if (isMostlyContiguous) {
-    lines = joinLineSegments(lines);
+    rows = rows.map(joinLineSegments);
   }
 
-  // `polarTanRatio` can create lines with values far outside the canvas.
+  // `polarTanRatio` can create rows with values far outside the canvas.
   // This would normally be fine, except then their rendering is really
-  // unpredictable - the lines change depending on the window size, for example.
+  // unpredictable - the rows change depending on the window size, for example.
   // We should remove any "troublesome" line, to make rendering consistent.
   const requiresTrimming = polarTanRatio > 0;
 
   if (requiresTrimming) {
-    lines = removeTroublesomeLines(width, height, lines);
+    rows = rows.map(row => removeTroublesomeLines(width, height, row));
   }
 
   if (DEBUG_PERF) {
@@ -365,7 +387,7 @@ const generator = ({
     console.info(mean(RECORDED_TIMES));
   }
 
-  return lines;
+  return rows;
 };
 
 /**

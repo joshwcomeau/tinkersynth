@@ -1,9 +1,11 @@
 // @flow
 
 /**
- * Taken from canvas-sketch-util
+ * Taken and modified from canvas-sketch-util
  * https://github.com/mattdesl/canvas-sketch-util/blob/master/penplot.js
  */
+
+import { COLORS } from '../constants';
 
 type Options = {
   width: number,
@@ -14,6 +16,17 @@ type Options = {
   lineColor?: string,
   lineCap: string,
 };
+
+const LINE_COLORS = [
+  // COLORS.red[300],
+  // COLORS.orange[300],
+  COLORS.yellow[300],
+  // COLORS.green[300],
+  COLORS.aqua[300],
+  // COLORS.blue[300],
+  // COLORS.violet[300],
+  COLORS.pink[300],
+];
 
 export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
   opt = opt || {};
@@ -72,7 +85,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
 </svg>`;
 };
 
-export const renderPolylines = function(polylines, opt: Options) {
+export const renderPolylines = function(rows, opt: Options) {
   var context = opt.context;
   if (!context) throw new Error('Must specify "context" options');
 
@@ -93,18 +106,24 @@ export const renderPolylines = function(polylines, opt: Options) {
   context.fillRect(0, 0, width, height);
 
   // Draw lines
-  polylines.forEach(function(points) {
-    context.beginPath();
+  rows.forEach((row, rowIndex) => {
+    row.forEach(function(points, segmentIndex) {
+      const color = LINE_COLORS[rowIndex % LINE_COLORS.length];
 
-    points.forEach(function(p) {
-      context.lineTo(p[0], p[1]);
+      context.strokeStyle = color;
+
+      context.beginPath();
+
+      points.forEach(function(p) {
+        context.lineTo(p[0], p[1]);
+      });
+
+      // context.strokeStyle = opt.lineColor || 'black';
+      context.lineWidth = lineWidth;
+      context.lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
+      context.lineCap = opt.lineCap || 'butt';
+      context.stroke();
     });
-
-    context.strokeStyle = opt.lineColor || 'black';
-    context.lineWidth = lineWidth;
-    context.lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
-    context.lineCap = opt.lineCap || 'butt';
-    context.stroke();
   });
 };
 

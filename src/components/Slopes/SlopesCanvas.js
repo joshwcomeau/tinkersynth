@@ -65,14 +65,14 @@ const useCanvasDrawing = (
       }
 
       worker.current.onmessage = function({ data }) {
-        const { lines, ...passedData } = data;
+        const { rows, ...passedData } = data;
 
-        if (!lines) {
+        if (!rows) {
           return;
         }
 
         renderPolylines(
-          lines,
+          rows,
           getRenderOptions(
             width,
             height,

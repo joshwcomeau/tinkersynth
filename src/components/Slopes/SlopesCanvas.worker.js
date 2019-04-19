@@ -21,7 +21,7 @@ onmessage = throttle(function({ data }) {
     scaleRatio,
   } = data;
 
-  const lines = generator(data);
+  const rows = generator(data);
 
   if (supportsOffscreenCanvas) {
     const isFirstMessage = !ctx;
@@ -41,7 +41,7 @@ onmessage = throttle(function({ data }) {
     }
 
     renderPolylines(
-      lines,
+      rows,
       getRenderOptions(
         data.width,
         data.height,
@@ -54,6 +54,6 @@ onmessage = throttle(function({ data }) {
     );
   } else {
     // $FlowIgnore
-    postMessage({ lines, ...data });
+    postMessage({ rows, ...data });
   }
 }, 17);
