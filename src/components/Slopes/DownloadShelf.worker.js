@@ -1,9 +1,10 @@
-import { COLORS } from '../../constants';
-import { throttle } from '../../utils';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
+
+import { clipLinesWithMargin } from '../../helpers/line.helpers';
 
 import generator from './Slopes.generator';
 import { getRenderOptions } from './SlopesCanvas.helpers';
+import { getMarginSize } from './Slopes.helpers';
 import transformParameters from './Slopes.params';
 
 // The offscreenCanvas API doesn't like when we try to pass the canvas multiple
@@ -25,10 +26,22 @@ self.onmessage = ({ data }) => {
     ...params,
   });
 
-  const rows = generator({
+  let rows = generator({
     ...slopeValues,
     width: canvasDimensions.width,
     height: canvasDimensions.height,
+  });
+
+  const fullMarginSize = getMarginSize(canvasDimensions.height);
+  const actualMarginSize = params.enableMargins
+    ? fullMarginSize
+    : fullMarginSize * 0.1;
+
+  rows = clipLinesWithMargin({
+    rows,
+    width: canvasDimensions.width,
+    height: canvasDimensions.height,
+    margins: [actualMarginSize, actualMarginSize],
   });
 
   const renderOptions = getRenderOptions(

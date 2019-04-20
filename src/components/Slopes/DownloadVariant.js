@@ -139,8 +139,9 @@ const PreviewImage = styled.img`
   display: block;
   object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 4px);
   animation: ${fadeIn} 300ms ease-out;
 `;
 
+// $FlowIgnore
 export default React.memo(DownloadVariant);
