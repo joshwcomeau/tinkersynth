@@ -63,7 +63,11 @@ const Slopes = ({ size }) => {
       {!isFullExperience && <LimitedExperienceNotice />}
 
       <MachineWrapper>
-        <MainRow>
+        <MainRow
+          style={{
+            transform: showDownloadShelf ? `scale(0.95, 0.95)` : `scale(1, 1)`,
+          }}
+        >
           {isFullExperience && (
             <ControlsWrapper>
               <SlopesControls
@@ -125,6 +129,8 @@ const MainRow = styled(MaxWidthWrapper)`
   */
   flex-direction: row-reverse;
   justify-content: space-between;
+  transition: transform 400ms;
+  transform-origin: top center;
 
   @media (max-width: ${SLOPES_BREAKPOINTS.xlarge}px) {
     padding-left: ${UNIT}px;

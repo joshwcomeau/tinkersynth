@@ -10,7 +10,6 @@ import useWorker from '../../hooks/worker.hook.js';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
-import MaxWidthWrapper from '../MaxWidthWrapper';
 
 import { getCanvasDimensions, getRenderOptions } from './SlopesCanvas.helpers';
 import generator from './Slopes.generator';
@@ -104,9 +103,10 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
   return (
     <Shelf isVisible={isVisible} handleToggle={handleToggle}>
+      <Heading size={3}>Download</Heading>
       <Wrapper>
         <Info>
-          <Heading size={3}>Download</Heading>
+          <p>Choose between vector (SVG) and raster (PNG) file formats.</p>
         </Info>
 
         <Downloads>
@@ -121,7 +121,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   );
 };
 
-const Wrapper = styled(MaxWidthWrapper)`
+const Wrapper = styled.div`
   display: flex;
 `;
 
@@ -139,7 +139,8 @@ const PreviewImage = styled.img`
   display: block;
   margin-right: 24px;
   width: ${PREVIEW_WIDTH}px;
-  height: ${PREVIEW_HEIGHT}px;
+  height: ${PREVIEW_WIDTH}px;
+  object-fit: cover;
 
   &:last-of-type {
     margin-right: 0px;

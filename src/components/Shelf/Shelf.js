@@ -107,7 +107,7 @@ const Wrapper = styled.div`
 const IconWrapper = styled(UnstyledButton)`
   position: absolute;
   top: 0;
-  right: 32px;
+  right: 16px;
   transform: translateY(-50%);
   padding: 16px;
   background: #fff;
