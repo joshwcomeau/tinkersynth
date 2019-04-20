@@ -44,9 +44,9 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'framed-preview',
+  scaleRatio: number = 1,
   context: CanvasRenderingContext2D,
   devicePixelRatio: number,
-  scaleRatio: number = 1,
   { enableDarkMode, dotRatio }: any
 ) => {
   const MIN_WIDTH = 1;

@@ -7,6 +7,8 @@
 
 import { COLORS } from '../constants';
 
+import type { Rows } from '../types';
+
 type Options = {
   width: number,
   height: number,
@@ -85,7 +87,7 @@ export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
 </svg>`;
 };
 
-export const renderPolylines = function(rows, opt: Options) {
+export const renderPolylines = function(rows: Rows, opt: Options) {
   var context = opt.context;
   if (!context) throw new Error('Must specify "context" options');
 

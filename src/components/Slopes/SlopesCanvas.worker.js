@@ -13,15 +13,16 @@ import { getRenderOptions } from './SlopesCanvas.helpers';
 // be stored in this variable:
 let ctx;
 
-onmessage = throttle(function({ data }) {
+self.onmessage = throttle(function({ data }) {
   const {
     canvas,
     devicePixelRatio,
     supportsOffscreenCanvas,
-    scaleRatio,
+    messageData,
+    messageData: { width, height, kind, scaleRatio },
   } = data;
 
-  const rows = generator(data);
+  const rows = generator(messageData);
 
   if (supportsOffscreenCanvas) {
     const isFirstMessage = !ctx;
@@ -34,8 +35,8 @@ onmessage = throttle(function({ data }) {
       // - Scale the context to match
       //
       // Because this is running off the main thread, we don't have access to
-      // `canvas.width` or `canvas.style.width`, so we can only do that second
-      // part. We're trusting SlopesCanvas.js to also take devicePixelRatio into
+      // `canvas.style.width`, so we can only do that second part.
+      // We're trusting SlopesCanvas.js to also take devicePixelRatio into
       // account.
       ctx.scale(devicePixelRatio, devicePixelRatio);
     }
@@ -43,17 +44,17 @@ onmessage = throttle(function({ data }) {
     renderPolylines(
       rows,
       getRenderOptions(
-        data.width,
-        data.height,
-        data.kind,
+        width,
+        height,
+        kind,
+        scaleRatio,
         ctx,
         devicePixelRatio,
-        scaleRatio,
-        data
+        messageData
       )
     );
   } else {
     // $FlowIgnore
-    postMessage({ rows, ...data });
+    self.postMessage({ rows, ...messageData });
   }
 }, 17);
