@@ -35,6 +35,7 @@ type Props = {
   enableDarkMode: boolean,
   enableMargins: boolean,
   isPoweredOn: boolean,
+  rememberCurrentlyFocusedElement: (ref: HTMLElement) => any,
 };
 
 const SlopesCanvasWrapper = ({

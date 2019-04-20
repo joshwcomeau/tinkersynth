@@ -39,7 +39,9 @@ const useCanvasDrawing = (
     worker.current = new Worker();
 
     return () => {
-      worker.current.terminate();
+      if (worker.current) {
+        worker.current.terminate();
+      }
     };
   }, []);
 
