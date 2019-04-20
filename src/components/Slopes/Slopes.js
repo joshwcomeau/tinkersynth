@@ -14,7 +14,7 @@ import {
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import LimitedExperienceNotice from '../LimitedExperienceNotice';
-import DownloadShelf from '../DownloadShelf';
+import DownloadShelf from './DownloadShelf';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
 import { SlopesProvider } from './SlopesState';

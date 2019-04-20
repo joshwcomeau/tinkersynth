@@ -68,7 +68,7 @@ const Shelf = ({ children, handleToggle, isVisible, restoreFocus }: Props) => {
           <Contents
             style={{
               opacity: isVisible ? 1 : 0,
-              transition: isVisible ? 'opacity 500ms 300ms' : 'opacity 500ms',
+              transition: isVisible ? 'opacity 300ms 300ms' : 'opacity 500ms',
             }}
           >
             {children}

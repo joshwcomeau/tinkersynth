@@ -6,18 +6,17 @@ import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import {
-  getCanvasDimensions,
-  getRenderOptions,
-} from '../Slopes/SlopesCanvas.helpers';
-import generator from '../Slopes/Slopes.generator';
-import { SLOPES_ASPECT_RATIO } from '../Slopes/Slopes.constants';
-import { SlopesContext } from '../Slopes/SlopesState';
-import transformParameters from '../Slopes/Slopes.params';
+import useWorker from '../../hooks/worker.hook.js';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
 import MaxWidthWrapper from '../MaxWidthWrapper';
+
+import { getCanvasDimensions, getRenderOptions } from './SlopesCanvas.helpers';
+import generator from './Slopes.generator';
+import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
+import { SlopesContext } from './SlopesState';
+import DownloadShelfWorker from './DownloadShelf.worker';
 
 type Props = {
   isVisible: boolean,
@@ -44,48 +43,44 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   const [svgMarkup, setSvgMarkup] = React.useState(null);
   const [previewUri, setPreviewUri] = React.useState(null);
 
+  const worker = useWorker(DownloadShelfWorker);
+
+  worker.onmessage = ({ data }) => {
+    const { markup } = data;
+
+    const parent = document.createElement('div');
+    parent.innerHTML = markup;
+    const svgNode = parent.firstChild;
+
+    // We want to scale up the raster image
+    const previewScale = previewHeight / canvasDimensions.height;
+
+    svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
+      setPreviewUri(uri);
+    });
+
+    setSvgMarkup(markup);
+  };
+
   React.useEffect(
     () => {
       if (isVisible) {
-        const drawingVariables = transformParameters({
-          ...canvasDimensions,
+        const relevantParams = {
           ...slopesParams,
-        });
-
-        let data = {
-          ...canvasDimensions,
-          ...drawingVariables,
         };
 
-        const rows = generator(data);
+        delete relevantParams.disabledParams;
+        delete relevantParams.shuffle;
+        delete relevantParams.toggleMachinePower;
+        delete relevantParams.toggleParameter;
+        delete relevantParams.tweakParameter;
 
-        const renderOptions = getRenderOptions(
-          canvasDimensions.width,
-          canvasDimensions.height,
-          'download-opaque',
-          window.devicePixelRatio,
-          data
-        );
+        let messageData = {
+          canvasDimensions,
+          params: relevantParams,
+        };
 
-        // Create vector (SVG) markup.
-        // We'll use this for the raster format as well, to guarantee
-        // consistency between both.
-        const markup = polylinesToSVG(rows, renderOptions);
-
-        const parent = document.createElement('div');
-        parent.innerHTML = markup;
-        const svgNode = parent.firstChild;
-
-        // We want to scale up the raster image
-        const previewScale = previewHeight / canvasDimensions.height;
-
-        svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
-          setPreviewUri(uri);
-        });
-
-        setSvgMarkup(markup);
-
-        //
+        worker.postMessage(messageData);
 
         // Construct the canvas for download
         // const canvasEl = document.createElement('canvas');
