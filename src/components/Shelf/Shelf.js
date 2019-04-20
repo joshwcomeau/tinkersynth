@@ -10,6 +10,7 @@ import { COLORS, Z_INDICES } from '../../constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import UnstyledButton from '../UnstyledButton';
+import ScrollDisabler from '../ScrollDisabler';
 
 type Props = {
   children: React$Node,
@@ -18,6 +19,27 @@ type Props = {
 };
 
 const Shelf = ({ children, handleToggle, isVisible, restoreFocus }: Props) => {
+  React.useEffect(
+    () => {
+      const handleKeypress = event => {
+        if (event.key === 'Escape') {
+          handleToggle();
+        }
+      };
+
+      if (isVisible) {
+        window.addEventListener('keydown', handleKeypress);
+      } else {
+        window.removeEventListener('keydown', handleKeypress);
+      }
+
+      return () => {
+        window.removeEventListener('keydown', handleKeypress);
+      };
+    },
+    [isVisible]
+  );
+
   return (
     <>
       <Backdrop
@@ -53,6 +75,8 @@ const Shelf = ({ children, handleToggle, isVisible, restoreFocus }: Props) => {
           </Contents>
         </MaxWidthWrapper>
       </Wrapper>
+
+      {isVisible && <ScrollDisabler />}
     </>
   );
 };
@@ -83,7 +107,7 @@ const Wrapper = styled.div`
 const IconWrapper = styled(UnstyledButton)`
   position: absolute;
   top: 0;
-  right: 0;
+  right: 32px;
   transform: translateY(-50%);
   padding: 16px;
   background: #fff;
@@ -91,7 +115,8 @@ const IconWrapper = styled(UnstyledButton)`
 `;
 
 const Contents = styled.div`
-  padding: 32px;
+  padding-top: 32px;
+  padding-bottom: 32px;
 `;
 
 export default connect(
