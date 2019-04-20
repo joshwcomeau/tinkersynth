@@ -7,6 +7,8 @@ import {
 } from '../../constants';
 import { clamp, normalize } from '../../utils';
 
+import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
+
 /**
  * The canvas dimensions are actually quite complicated!
  *
@@ -16,7 +18,10 @@ import { clamp, normalize } from '../../utils';
  * On mobile, we do the opposite, since we want to always fill the available
  * width.
  */
-export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
+export const getCanvasDimensions = (
+  windowDimensions,
+  aspectRatio = SLOPES_ASPECT_RATIO
+) => {
   const defaultHeight = 552;
   const defaultWidth = defaultHeight * aspectRatio;
 
@@ -49,7 +54,6 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  context: CanvasRenderingContext2D,
   devicePixelRatio: number,
   { enableDarkMode, dotRatio }: any
 ) => {
@@ -99,7 +103,6 @@ export const getRenderOptions = (
   return {
     width,
     height,
-    context,
     lineColor: enableDarkMode ? COLORS.white : COLORS.black,
     backgroundColor,
     lineWidth,

@@ -47,7 +47,8 @@ self.onmessage = throttle(function({ data }) {
 
     renderPolylines(
       rows,
-      getRenderOptions(width, height, kind, ctx, devicePixelRatio, messageData)
+      ctx,
+      getRenderOptions(width, height, kind, devicePixelRatio, messageData)
     );
   } else {
     // $FlowIgnore

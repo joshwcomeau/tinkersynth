@@ -30,65 +30,81 @@ const LINE_COLORS = [
   COLORS.pink[300],
 ];
 
-export const polylinesToSVG = function polylinesToSVG(polylines, opt: Options) {
-  opt = opt || {};
+const getColorForLine = (rowIndex, segmentIndex) => {
+  const color1 = LINE_COLORS[rowIndex % LINE_COLORS.length];
+  const color2 = LINE_COLORS[(rowIndex + 1) % LINE_COLORS.length];
 
-  var width = opt.width;
-  var height = opt.height;
+  return { color1, color2 };
+};
+
+export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
+  const { width, height, backgroundColor, lineWidth, lineCap } = opt;
 
   var computeBounds =
     typeof width === 'undefined' || typeof height === 'undefined';
+
   if (computeBounds) {
     throw new Error('Must specify "width" and "height" options');
   }
 
-  var units = 'px';
+  const units = 'px';
+  const viewWidth = `${width}px`;
+  const viewHeight = `${height}px`;
+  const lineJoin = lineCap === 'round' ? 'round' : 'miter';
 
-  var commands = [];
+  const paths = [];
 
-  polylines.forEach(function(line) {
-    line.forEach(function(point, index) {
-      var type = index === 0 ? 'M' : 'L';
-      const [x, y] = point;
-      commands.push(type + x + ' ' + y);
+  rows.forEach((row, rowIndex) => {
+    const strokeStyle = getColorForLine(rowIndex).color1;
+
+    const pathCommands = [];
+
+    row.forEach((points, segmentIndex) => {
+      points.forEach((point, index) => {
+        var type = index === 0 ? 'M' : 'L';
+        const [x, y] = point;
+        pathCommands.push(type + x + ' ' + y);
+      });
     });
+
+    const path = `
+<path
+  d="${pathCommands.join(' ')}"
+  stroke="${strokeStyle}"
+  stroke-width="${lineWidth}${units}"
+  fill="none"
+  stroke-linecap="${lineCap}"
+  stroke-linejoin="${lineJoin}"
+/>`;
+
+    paths.push(path);
   });
 
-  var svgPath = commands.join(' ');
-  var viewWidth = `${width}px`;
-  var viewHeight = `${height}px`;
-  var fillStyle = opt.backgroundColor || 'none';
-  var strokeStyle = opt.lineColor || 'black';
-  var lineWidth = opt.lineWidth || 1;
-  var lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
-  var lineCap = opt.lineCap || 'butt';
+  const pathsMarkup = paths.join('\n');
 
   return `
 <svg
   width="${viewWidth}"
   height="${viewHeight}"
-  viewBox="0 0 ${viewWidth} ${viewHeight}"
+  viewBox="0 0 ${width} ${height}"
 >
   <rect
     x="0"
     y="0"
     width="${viewWidth}"
     height="${viewHeight}"
-    fill="${fillStyle}"
+    fill="${backgroundColor}"
   />
-  <path
-    d="${svgPath}"
-    stroke="${strokeStyle}"
-    stroke-width="${lineWidth}${units}"
-    fill="none"
-    stroke-linecap="${lineCap}"
-    stroke-linejoin="${lineJoin}"
-  />
+
+  ${pathsMarkup}
 </svg>`;
 };
 
-export const renderPolylines = function(rows: Rows, opt: Options) {
-  var context = opt.context;
+export const renderPolylines = function(
+  rows: Rows,
+  context: CanvasRenderingContext2D,
+  opt: Options
+) {
   if (!context) throw new Error('Must specify "context" options');
 
   var width = opt.width;
@@ -110,20 +126,13 @@ export const renderPolylines = function(rows: Rows, opt: Options) {
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach(function(points, segmentIndex) {
-      const isOddRow = rowIndex % 2 !== 0;
-
-      const index = isOddRow ? rowIndex : segmentIndex;
-
-      const color1 = LINE_COLORS[index % LINE_COLORS.length];
-      const color2 = LINE_COLORS[(index + 1) % LINE_COLORS.length];
+      context.strokeStyle = getColorForLine(rowIndex, segmentIndex).color1;
 
       // const gradient = context.createLinearGradient(0, 0, width, 0);
       // gradient.addColorStop(0, color1);
       // gradient.addColorStop(1, color2);
 
       // context.strokeStyle = gradient;
-
-      context.strokeStyle = color1;
 
       context.beginPath();
 

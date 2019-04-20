@@ -6,7 +6,11 @@ import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import useToggle from '../../hooks/toggle.hook';
 import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
 import { getCanvasDimensions } from './SlopesCanvas.helpers';
-import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
+import {
+  SLOPES_ASPECT_RATIO,
+  SLOPES_BREAKPOINTS,
+  getSlopesBreakpoint,
+} from './Slopes.constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import LimitedExperienceNotice from '../LimitedExperienceNotice';
@@ -48,12 +52,8 @@ const Slopes = ({ size }) => {
   // good on smaller screens =(
   const isFullExperience = windowDimensions.width > 450;
 
-  // We now only support a single aspect ratio, a comfortable 3:4.
-  const aspectRatio = 3 / 4;
-
   const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(
-    windowDimensions,
-    aspectRatio
+    windowDimensions
   );
 
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
