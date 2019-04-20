@@ -1,4 +1,11 @@
 // @flow
+//
+// NOTE: This hook has a bug. It only updates captured scroll position on
+// mount. We should recapture whenever `disableScrolling` changes.
+// This is not a hard problem (it should involve some React state, and an
+// effect hook with a `disableScrolling` dependency), but I'm lazy.
+// The ScrollDisabler component doesn't suffer from this bug.
+
 import React from 'react';
 
 const useScrollDisabler = (disableScrolling: boolean) => {

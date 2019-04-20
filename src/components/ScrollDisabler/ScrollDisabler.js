@@ -1,3 +1,6 @@
+// TODO: Switch to the scroll-disabler hook.
+// The problem with the hook is that it only captures initial scroll position,
+// not the most recent scroll position when disabling starts :/
 import { PureComponent } from 'react';
 
 class ScrollDisabler extends PureComponent {
