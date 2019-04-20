@@ -57,6 +57,7 @@
     "redux-devtools-log-monitor": "^1.4.0",
     "redux-localstorage-simple": "^2.1.5",
     "resize-observer-polyfill": "1.5.1",
+    "save-svg-as-png": "^1.4.12",
     "seed-random": "^2.2.0",
     "seeded-random": "^1.0.1",
     "sequelize": "^4.42.0",

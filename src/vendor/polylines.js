@@ -48,8 +48,6 @@ export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
   }
 
   const units = 'px';
-  const viewWidth = `${width}px`;
-  const viewHeight = `${height}px`;
   const lineJoin = lineCap === 'round' ? 'round' : 'miter';
 
   const paths = [];
@@ -82,17 +80,16 @@ export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
 
   const pathsMarkup = paths.join('\n');
 
-  return `
-<svg
-  width="${viewWidth}"
-  height="${viewHeight}"
+  return `<svg
+  width="${width}"
+  height="${height}"
   viewBox="0 0 ${width} ${height}"
 >
   <rect
     x="0"
     y="0"
-    width="${viewWidth}"
-    height="${viewHeight}"
+    width="${width}"
+    height="${height}"
     fill="${backgroundColor}"
   />
 
