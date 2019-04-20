@@ -52,7 +52,7 @@ export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
 
   const paths = [];
 
-  rows.forEach((row, rowIndex) => {
+  [...rows].reverse().forEach((row, rowIndex) => {
     const strokeStyle = getColorForLine(rowIndex).color1;
 
     const pathCommands = [];
@@ -85,14 +85,6 @@ export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
   height="${height}"
   viewBox="0 0 ${width} ${height}"
 >
-  <rect
-    x="0"
-    y="0"
-    width="${width}"
-    height="${height}"
-    fill="${backgroundColor}"
-  />
-
   ${pathsMarkup}
 </svg>`;
 };

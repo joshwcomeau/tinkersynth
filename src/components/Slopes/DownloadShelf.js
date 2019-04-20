@@ -10,12 +10,14 @@ import useWorker from '../../hooks/worker.hook.js';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
+import Spacer from '../Spacer';
 
 import { getCanvasDimensions, getRenderOptions } from './SlopesCanvas.helpers';
 import generator from './Slopes.generator';
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 import { SlopesContext } from './SlopesState';
 import DownloadShelfWorker from './DownloadShelf.worker';
+import DownloadVariant from './DownloadVariant';
 
 type Props = {
   isVisible: boolean,
@@ -23,8 +25,7 @@ type Props = {
   lineData: any,
 };
 
-const PREVIEW_HEIGHT = 240;
-const PREVIEW_WIDTH = PREVIEW_HEIGHT * SLOPES_ASPECT_RATIO;
+const PREVIEW_SIZE = 180;
 
 const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   const windowDimensions = useWindowDimensions();
@@ -39,8 +40,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
   const slopesParams = React.useContext(SlopesContext);
 
-  const [svgMarkup, setSvgMarkup] = React.useState(null);
-  const [previewUri, setPreviewUri] = React.useState(null);
+  const [svgNode, setSvgNode] = React.useState(null);
 
   const worker = useWorker(DownloadShelfWorker);
 
@@ -49,25 +49,22 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
     const parent = document.createElement('div');
     parent.innerHTML = markup;
-    const svgNode = parent.firstChild;
+    setSvgNode(parent.firstChild);
 
-    // We want to scale up the raster image
-    const previewScale = previewHeight / canvasDimensions.height;
+    // // We want to scale up the raster image
+    // const previewScale = previewHeight / canvasDimensions.height;
 
-    svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
-      setPreviewUri(uri);
-    });
+    // svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
+    //   setPreviewUri(uri);
+    // });
 
-    setSvgMarkup(markup);
+    // setSvgMarkup(markup);
   };
 
   React.useEffect(
     () => {
       if (isVisible) {
-        const relevantParams = {
-          ...slopesParams,
-        };
-
+        const relevantParams = { ...slopesParams };
         delete relevantParams.disabledParams;
         delete relevantParams.shuffle;
         delete relevantParams.toggleMachinePower;
@@ -96,6 +93,11 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
         // canvasEl.toBlob(function(blob) {
         //   FileSaver.saveAs(blob, 'pretty image.png');
         // });
+      } else {
+        // Wait until the animation completes
+        window.setTimeout(() => {
+          setSvgNode(null);
+        }, 600);
       }
     },
     [isVisible]
@@ -110,11 +112,35 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
         </Info>
 
         <Downloads>
-          <Previews>
-            <PreviewImage src={previewUri} />
-            <PreviewImage src={previewUri} />
-            <PreviewImage src={previewUri} />
-          </Previews>
+          <Variants>
+            <DownloadVariant
+              size={PREVIEW_SIZE}
+              originalCanvasWidth={canvasDimensions.width}
+              svgNode={svgNode}
+              kind="opaque-png"
+              enableDarkMode={slopesParams.enableDarkMode}
+            />
+
+            <Spacer size={24} />
+
+            <DownloadVariant
+              size={PREVIEW_SIZE}
+              originalCanvasWidth={canvasDimensions.width}
+              svgNode={svgNode}
+              kind="transparent-png"
+              enableDarkMode={slopesParams.enableDarkMode}
+            />
+
+            <Spacer size={24} />
+
+            <DownloadVariant
+              size={PREVIEW_SIZE}
+              originalCanvasWidth={canvasDimensions.width}
+              svgNode={svgNode}
+              kind="svg"
+              enableDarkMode={slopesParams.enableDarkMode}
+            />
+          </Variants>
         </Downloads>
       </Wrapper>
     </Shelf>
@@ -131,20 +157,8 @@ const Info = styled.div`
 
 const Downloads = styled.div``;
 
-const Previews = styled.div`
+const Variants = styled.div`
   display: flex;
-`;
-
-const PreviewImage = styled.img`
-  display: block;
-  margin-right: 24px;
-  width: ${PREVIEW_WIDTH}px;
-  height: ${PREVIEW_WIDTH}px;
-  object-fit: cover;
-
-  &:last-of-type {
-    margin-right: 0px;
-  }
 `;
 
 export default DownloadShelf;

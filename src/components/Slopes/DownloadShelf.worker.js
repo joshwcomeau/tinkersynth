@@ -25,8 +25,6 @@ self.onmessage = ({ data }) => {
     ...params,
   });
 
-  console.log('generator', { ...slopeValues, height: canvasDimensions.height });
-
   const rows = generator({
     ...slopeValues,
     width: canvasDimensions.width,
@@ -48,7 +46,6 @@ self.onmessage = ({ data }) => {
 
   // $FlowIgnore
   const workDuration = performance.now() - workStartsAt;
-  console.log({ workDuration });
   // We want to wait up to 600ms, so that we don't interrupt the slide
   // animation with this message
   const timeRemaining = 600 - workDuration;
