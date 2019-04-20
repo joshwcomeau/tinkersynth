@@ -14,20 +14,15 @@ import transformParameters from './Slopes.params';
 import SlopesWorker from './SlopesCanvas.worker';
 import { getRenderOptions } from './SlopesCanvas.helpers';
 
+import type { RenderImageKind } from '../../types';
+
 type Props = {
   width: number,
   height: number,
-  kind: 'main' | 'framed-preview',
-  scaleRatio?: number,
+  kind: RenderImageKind,
 };
 
-const SlopesCanvas = ({
-  width,
-  height,
-  kind,
-  scaleRatio = 1,
-  ...params
-}: Props) => {
+const SlopesCanvas = ({ width, height, kind, ...params }: Props) => {
   const { style, ...dimensions } = getScaledCanvasProps(width, height);
   const devicePixelRatio = getDevicePixelRatio();
 
@@ -48,7 +43,6 @@ const SlopesCanvas = ({
     width,
     height,
     kind,
-    scaleRatio,
     ...drawingVariables,
   };
 
@@ -71,7 +65,6 @@ const SlopesCanvas = ({
           kind,
           context,
           devicePixelRatio,
-          scaleRatio,
           passedData
         )
       );

@@ -1,5 +1,10 @@
 // @flow
-import { COLORS, UNIT } from '../../constants';
+import {
+  COLORS,
+  UNIT,
+  LIGHT_BACKGROUND,
+  DARK_BACKGROUND,
+} from '../../constants';
 import { clamp, normalize } from '../../utils';
 
 /**
@@ -43,8 +48,7 @@ export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
 export const getRenderOptions = (
   width: number,
   height: number,
-  kind: 'main' | 'framed-preview',
-  scaleRatio: number = 1,
+  kind: 'main' | 'download-transparent' | 'download-opaque',
   context: CanvasRenderingContext2D,
   devicePixelRatio: number,
   { enableDarkMode, dotRatio }: any
@@ -52,24 +56,36 @@ export const getRenderOptions = (
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
 
-  let lineWidth =
-    dotRatio === 0
-      ? MIN_WIDTH
-      : clamp(
-          normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
-          MIN_WIDTH,
-          MAX_WIDTH
-        );
+  let lineWidth;
+  let backgroundColor = 'transparent';
 
-  if (kind === 'framed-preview') {
-    // In the smaller framed preview, we scale the canvas down, so we need to
-    // boost the line thickness
-    lineWidth *= 1 / scaleRatio;
+  switch (kind) {
+    case 'main': {
+      lineWidth =
+        dotRatio === 0
+          ? MIN_WIDTH
+          : clamp(
+              normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
+              MIN_WIDTH,
+              MAX_WIDTH
+            );
 
-    // ...of course, we should also take in our devicePixelRatio, to make sure it
-    // looks clean and nice on retina displays.
-    if (lineWidth > 1 && devicePixelRatio > 1) {
-      lineWidth /= devicePixelRatio;
+      break;
+    }
+
+    case 'download-transparent':
+    case 'download-opaque': {
+      // When creating a high-res asset to be downloaded, we need to increase the
+      // lineWidth accordingly.
+      // Our default width/height are 414 x 552
+      const previewWidth = 414;
+      lineWidth = Math.round(width / previewWidth);
+
+      if (kind === 'download-opaque') {
+        backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+      }
+
+      break;
     }
   }
 
@@ -85,7 +101,7 @@ export const getRenderOptions = (
     height,
     context,
     lineColor: enableDarkMode ? COLORS.white : COLORS.black,
-    backgroundColor: 'transparent',
+    backgroundColor,
     lineWidth,
     lineCap,
   };

@@ -19,8 +19,8 @@ type Props = {
 
 const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   // TODO: Should this be tweakable?
-  const width = 5400;
-  const height = 7200;
+  const outputWidth = 5400;
+  const outputHeight = 7200;
 
   const slopesParams = React.useContext(SlopesContext);
 
@@ -29,23 +29,19 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
       if (isVisible) {
         // Construct the canvas for download
         const canvasEl = document.createElement('canvas');
-        canvasEl.setAttribute('width', String(width));
-        canvasEl.setAttribute('height', String(height));
+        canvasEl.setAttribute('width', String(outputWidth));
+        canvasEl.setAttribute('height', String(outputHeight));
 
         const context = canvasEl.getContext('2d');
 
         const drawingVariables = transformParameters({
-          height,
+          height: outputHeight,
           ...slopesParams,
         });
 
         let data = {
-          width,
-          height,
-          kind: 'main',
-          supportsOffscreenCanvas: false,
-          scaleRatio: 1,
-          devicePixelRatio: window.devicePixelRatio,
+          width: outputWidth,
+          height: outputHeight,
           ...drawingVariables,
         };
 
@@ -54,12 +50,11 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
         renderPolylines(
           rows,
           getRenderOptions(
-            width,
-            height,
-            'main',
+            outputWidth,
+            outputHeight,
+            'download-opaque',
             context,
             window.devicePixelRatio,
-            1,
             data
           )
         );

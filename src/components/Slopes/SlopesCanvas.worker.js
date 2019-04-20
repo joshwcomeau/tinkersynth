@@ -19,11 +19,15 @@ self.onmessage = throttle(function({ data }) {
     devicePixelRatio,
     supportsOffscreenCanvas,
     messageData,
-    messageData: { width, height, kind, scaleRatio },
+    messageData: { width, height, kind },
   } = data;
 
   const rows = generator(messageData);
 
+  // If the browser supports OffscreenCanvas, we can paint to the canvas right
+  // here and now!
+  // Otherwise, we'll just post the calculated rows back to the main thread,
+  // and the host component can paint to the canvas.
   if (supportsOffscreenCanvas) {
     const isFirstMessage = !ctx;
 
@@ -37,21 +41,13 @@ self.onmessage = throttle(function({ data }) {
       // Because this is running off the main thread, we don't have access to
       // `canvas.style.width`, so we can only do that second part.
       // We're trusting SlopesCanvas.js to also take devicePixelRatio into
-      // account.
+      // account!!
       ctx.scale(devicePixelRatio, devicePixelRatio);
     }
 
     renderPolylines(
       rows,
-      getRenderOptions(
-        width,
-        height,
-        kind,
-        scaleRatio,
-        ctx,
-        devicePixelRatio,
-        messageData
-      )
+      getRenderOptions(width, height, kind, ctx, devicePixelRatio, messageData)
     );
   } else {
     // $FlowIgnore

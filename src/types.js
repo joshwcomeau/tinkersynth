@@ -22,3 +22,8 @@ export type Line = Array<Point>;
 export type Rows = Array<Array<Line>>;
 
 export type CanvasSize = 'small' | 'medium' | 'large';
+
+export type RenderImageKind =
+  | 'main'
+  | 'download-transparent'
+  | 'download-opaque';
