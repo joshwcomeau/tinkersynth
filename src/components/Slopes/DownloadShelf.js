@@ -31,6 +31,8 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   const windowDimensions = useWindowDimensions();
   const canvasDimensions = getCanvasDimensions(windowDimensions);
 
+  const timeoutId = React.useRef(null);
+
   // TODO: Should this be tweakable?
   const outputWidth = 5400;
   const outputHeight = 7200;
@@ -63,6 +65,8 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
   React.useEffect(
     () => {
+      window.clearTimeout(timeoutId.current);
+
       if (isVisible) {
         const relevantParams = { ...slopesParams };
         delete relevantParams.disabledParams;
@@ -95,13 +99,18 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
         // });
       } else {
         // Wait until the animation completes
-        window.setTimeout(() => {
-          setSvgNode(null);
+        timeoutId.current = window.setTimeout(() => {
+          if (svgNode) {
+            svgNode.remove();
+            setSvgNode(null);
+          }
         }, 600);
       }
     },
     [isVisible]
   );
+
+  React.useEffect(() => () => window.clearTimeout(timeoutId.current));
 
   return (
     <Shelf isVisible={isVisible} handleToggle={handleToggle}>

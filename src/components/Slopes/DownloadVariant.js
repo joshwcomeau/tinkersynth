@@ -40,6 +40,9 @@ const DownloadVariant = ({
 
   React.useEffect(
     () => {
+      // When the download shelf is hidden, we unset the SVG node.
+      // We want to remove our preview, so that we don't show stale previews
+      // the next time the shelf is opened.
       if (!svgNode) {
         setPreviewUri(null);
         return;
