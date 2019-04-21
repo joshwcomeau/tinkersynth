@@ -98,7 +98,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
             Tinkersynth works can now be downloaded for free! Choose the format
             that works best for you.
             <br />
-            <TextLink target="_blank" to="/faq#formats">
+            <TextLink target="_blank" to="/faq?q=formats">
               Learn more about the options
             </TextLink>
             .
@@ -109,10 +109,10 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
           <Paragraph style={{ fontSize: 16 }}>
             Licensed under <strong>CC Attribution-NonCommercial 4.0</strong>.
             <br />
-            Please use them in your non-commercial artistic endeavours, or
-            contact us for pricing.
+            Please use them in your personal artistic endeavours, or contact us
+            for pricing.
             <br />
-            <TextLink to="/faq#license" target="_blank">
+            <TextLink to="/faq?q=license" target="_blank">
               More information
             </TextLink>
             .
