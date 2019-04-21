@@ -6,10 +6,13 @@ import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
 import { DARK_BACKGROUND, LIGHT_BACKGROUND } from '../../constants';
+import generateRandomName from '../../services/random-name.service';
 import darkTilesSrc from '../../images/transparent-tiles-dark.svg';
 import lightTilesSrc from '../../images/transparent-tiles-light.svg';
 
 import UnstyledButton from '../UnstyledButton';
+
+import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 
 type Props = {
   size: number,
@@ -19,11 +22,30 @@ type Props = {
   enableDarkMode: boolean,
 };
 
+const OUTPUT_HEIGHT = 7200;
+const OUTPUT_WIDTH = OUTPUT_HEIGHT * SLOPES_ASPECT_RATIO;
+
 const getBackground = (kind, enableDarkMode) => {
   if (kind === 'opaque-png') {
     return enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
   } else {
     return enableDarkMode ? `url(${darkTilesSrc})` : `url(${lightTilesSrc})`;
+  }
+};
+
+const handleClick = (filename, kind, originalCanvasWidth, svgNode) => {
+  switch (kind) {
+    case 'transparent-png': {
+      const scale = OUTPUT_WIDTH / originalCanvasWidth;
+
+      svgToPng.saveSvgAsPng(svgNode, filename, { scale });
+
+      break;
+    }
+
+    default: {
+      throw new Error('Unrecognized kind: ' + kind);
+    }
   }
 };
 
@@ -37,6 +59,7 @@ const DownloadVariant = ({
   const background = getBackground(kind, enableDarkMode);
 
   const [previewUri, setPreviewUri] = React.useState(null);
+  const filename = React.useRef(generateRandomName());
 
   React.useEffect(
     () => {
@@ -47,6 +70,11 @@ const DownloadVariant = ({
         setPreviewUri(null);
         return;
       }
+
+      // Refresh the name when the shelf is reopened.
+      // Ideally this would only happen when the artwork has changed, but
+      // whatever this is easier.
+      filename.current = generateRandomName();
 
       const previewScale = size / originalCanvasWidth;
 
@@ -78,7 +106,12 @@ const DownloadVariant = ({
   }
 
   return (
-    <Wrapper style={{ width: size, height: size, background }}>
+    <Wrapper
+      style={{ width: size, height: size, background }}
+      onClick={() =>
+        handleClick(filename.current, kind, originalCanvasWidth, svgNode)
+      }
+    >
       {previewUri && <PreviewImage src={previewUri} />}
       <Overlay
         style={{
