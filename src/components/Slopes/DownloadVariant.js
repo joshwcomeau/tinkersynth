@@ -33,12 +33,42 @@ const getBackground = (kind, enableDarkMode) => {
   }
 };
 
-const handleClick = (filename, kind, originalCanvasWidth, svgNode) => {
+const handleClick = (
+  filename,
+  kind,
+  originalCanvasWidth,
+  background,
+  svgNode
+) => {
+  const scale = OUTPUT_WIDTH / originalCanvasWidth;
+
   switch (kind) {
     case 'transparent-png': {
-      const scale = OUTPUT_WIDTH / originalCanvasWidth;
-
       svgToPng.saveSvgAsPng(svgNode, filename, { scale });
+
+      break;
+    }
+
+    case 'opaque-png': {
+      // Ok this one is a bit tricky. We need to modify the SVG to include a
+      // full-size background.
+      const svgWidth = originalCanvasWidth;
+      const svgHeight = svgWidth * (1 / SLOPES_ASPECT_RATIO);
+
+      const nodeClone = svgNode.cloneNode(true);
+
+      const rect = document.createElement('rect');
+      rect.setAttribute('x', '0');
+      rect.setAttribute('y', '0');
+      rect.setAttribute('width', svgWidth);
+      rect.setAttribute('height', svgHeight);
+      rect.setAttribute('fill', background);
+
+      nodeClone.prepend(rect);
+
+      console.log(nodeClone);
+
+      svgToPng.saveSvgAsPng(nodeClone, filename, { scale });
 
       break;
     }
@@ -109,7 +139,13 @@ const DownloadVariant = ({
     <Wrapper
       style={{ width: size, height: size, background }}
       onClick={() =>
-        handleClick(filename.current, kind, originalCanvasWidth, svgNode)
+        handleClick(
+          filename.current,
+          kind,
+          originalCanvasWidth,
+          background,
+          svgNode
+        )
       }
     >
       {previewUri && <PreviewImage src={previewUri} />}
