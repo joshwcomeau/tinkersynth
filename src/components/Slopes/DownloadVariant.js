@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import Icon from 'react-icons-kit';
+import { loader } from 'react-icons-kit/feather/loader';
 import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
@@ -10,6 +12,7 @@ import darkTilesSrc from '../../images/transparent-tiles-dark.svg';
 import lightTilesSrc from '../../images/transparent-tiles-light.svg';
 
 import UnstyledButton from '../UnstyledButton';
+import Spin from '../Spin';
 
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 
@@ -32,55 +35,6 @@ const getBackground = (kind, enableDarkMode) => {
   }
 };
 
-const handleClick = (
-  filename,
-  kind,
-  originalCanvasWidth,
-  background,
-  svgNode
-) => {
-  const scale = OUTPUT_WIDTH / originalCanvasWidth;
-
-  switch (kind) {
-    case 'transparent-png': {
-      svgToPng.saveSvgAsPng(svgNode, filename, { scale });
-
-      break;
-    }
-
-    case 'opaque-png': {
-      // Ok this one is a bit tricky. We need to modify the SVG to include a
-      // full-size background.
-      const svgWidth = originalCanvasWidth;
-      const svgHeight = svgWidth * (1 / SLOPES_ASPECT_RATIO);
-
-      const nodeClone = svgNode.cloneNode(true);
-
-      const rect = document.createElement('rect');
-      rect.setAttribute('x', '0');
-      rect.setAttribute('y', '0');
-      rect.setAttribute('width', svgWidth);
-      rect.setAttribute('height', svgHeight);
-      rect.setAttribute('fill', background);
-
-      nodeClone.prepend(rect);
-
-      svgToPng.saveSvgAsPng(nodeClone, filename, { scale });
-
-      break;
-    }
-
-    case 'svg': {
-      svgToPng.saveSvg(svgNode, filename);
-      break;
-    }
-
-    default: {
-      throw new Error('Unrecognized kind: ' + kind);
-    }
-  }
-};
-
 const DownloadVariant = ({
   size,
   originalCanvasWidth,
@@ -91,6 +45,7 @@ const DownloadVariant = ({
   const background = getBackground(kind, enableDarkMode);
 
   const [previewUri, setPreviewUri] = React.useState(null);
+  const [isPreparing, setIsPreparing] = React.useState(false);
   const filename = React.useRef(generateRandomName());
 
   React.useEffect(
@@ -117,6 +72,57 @@ const DownloadVariant = ({
     [svgNode]
   );
 
+  const handleClick = () => {
+    const scale = OUTPUT_WIDTH / originalCanvasWidth;
+
+    switch (kind) {
+      case 'transparent-png': {
+        setIsPreparing(true);
+
+        svgToPng
+          .saveSvgAsPng(svgNode, filename.current, { scale })
+          .then(() => setIsPreparing(false));
+
+        break;
+      }
+
+      case 'opaque-png': {
+        setIsPreparing(true);
+
+        // Ok this one is a bit tricky. We need to modify the SVG to include a
+        // full-size background.
+        const svgWidth = originalCanvasWidth;
+        const svgHeight = svgWidth * (1 / SLOPES_ASPECT_RATIO);
+
+        const nodeClone = svgNode.cloneNode(true);
+
+        const rect = document.createElement('rect');
+        rect.setAttribute('x', '0');
+        rect.setAttribute('y', '0');
+        rect.setAttribute('width', svgWidth);
+        rect.setAttribute('height', svgHeight);
+        rect.setAttribute('fill', background);
+
+        nodeClone.prepend(rect);
+
+        svgToPng
+          .saveSvgAsPng(nodeClone, filename.current, { scale })
+          .then(() => setIsPreparing(false));
+
+        break;
+      }
+
+      case 'svg': {
+        svgToPng.saveSvg(svgNode, filename.current);
+        break;
+      }
+
+      default: {
+        throw new Error('Unrecognized kind: ' + kind);
+      }
+    }
+  };
+
   let label;
   let sublabel = '';
   switch (kind) {
@@ -139,7 +145,8 @@ const DownloadVariant = ({
 
   return (
     <Wrapper
-      style={{ width: size, height: size, background }}
+      style={{ width: size, height: size * (4 / 3), background }}
+      disabled={isPreparing}
       onClick={() =>
         handleClick(
           filename.current,
@@ -149,15 +156,38 @@ const DownloadVariant = ({
           svgNode
         )
       }
+      onContextMenu={ev => {
+        ev.preventDefault();
+
+        handleClick(
+          filename.current,
+          kind,
+          originalCanvasWidth,
+          background,
+          svgNode
+        );
+      }}
     >
       {previewUri && <PreviewImage src={previewUri} />}
+
+      {isPreparing && (
+        <IconWrapper
+          style={{
+            color: enableDarkMode ? '#FFF' : '#000',
+          }}
+        >
+          <Spin>
+            <Icon icon={loader} size={32} />
+          </Spin>
+        </IconWrapper>
+      )}
+
       <Overlay
         style={{
           color: enableDarkMode ? 'white' : 'black',
           textShadow: enableDarkMode && '1px 1px 0px rgba(0, 0, 0, 0.5)',
         }}
       >
-        {sublabel && <Sublabel>{sublabel}</Sublabel>}
         <Label>{label}</Label>
       </Overlay>
     </Wrapper>
@@ -177,8 +207,23 @@ const fadeIn = keyframes`
 `;
 
 const Wrapper = styled(UnstyledButton)`
-  /* TODO: hover effects */
   position: relative;
+  border-radius: 2px;
+  overflow: hidden; /* For the border radius */
+
+  &:disabled {
+    opacity: 0.7;
+  }
+`;
+
+const IconWrapper = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  margin: auto;
 `;
 
 const Overlay = styled.div`
@@ -196,7 +241,7 @@ const Overlay = styled.div`
 `;
 
 const Label = styled.div`
-  font-size: 64px;
+  font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;
 `;

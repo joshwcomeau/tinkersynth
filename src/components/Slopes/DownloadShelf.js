@@ -6,10 +6,14 @@ import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import useWorker from '../../hooks/worker.hook.js';
+import { COLORS, UNIT } from '../../constants';
+import ccLicenseSrc from '../../images/cc-license.png';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
 import Spacer from '../Spacer';
+import TextLink from '../TextLink';
+import Paragraph from '../Paragraph';
 
 import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import generator from './Slopes.generator';
@@ -85,13 +89,45 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
   return (
     <Shelf isVisible={isVisible} handleToggle={handleToggle}>
-      <Heading size={3}>Download</Heading>
       <Wrapper>
         <Info>
-          <p>Choose between vector (SVG) and raster (PNG) file formats.</p>
+          <InfoHeader>
+            <Heading size={3}>Download</Heading>
+          </InfoHeader>
+          <Paragraph>
+            Tinkersynth works can now be downloaded for free! Choose the format
+            that works best for you.
+            <br />
+            <TextLink target="_blank" to="/faq#formats">
+              Learn more about the options
+            </TextLink>
+            .
+          </Paragraph>
+
+          <Spacer size={UNIT * 2} />
+
+          <Paragraph style={{ fontSize: 16 }}>
+            Licensed under <strong>CC Attribution-NonCommercial 4.0</strong>.
+            Please use them in your non-commercial artistic endeavours, or
+            contact us for pricing.
+            <br />
+            <TextLink to="/faq#license" target="_blank">
+              More information
+            </TextLink>
+            .
+          </Paragraph>
+
+          <TextLink to="https://creativecommons.org/licenses/by-nc/4.0/">
+            <img src={ccLicenseSrc} />
+          </TextLink>
         </Info>
 
+        <Spacer size={24} />
+
         <Downloads>
+          <DownloadHeader>
+            <Heading size={5}>Click to download:</Heading>
+          </DownloadHeader>
           <Variants>
             <DownloadVariant
               size={PREVIEW_SIZE}
@@ -129,13 +165,22 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
 const Wrapper = styled.div`
   display: flex;
+  align-items: flex-end;
 `;
 
 const Info = styled.div`
   flex: 1;
 `;
 
+const InfoHeader = styled.header`
+  margin-bottom: ${UNIT * 4}px;
+`;
+
 const Downloads = styled.div``;
+const DownloadHeader = styled.header`
+  text-align: center;
+  margin-bottom: ${UNIT * 4}px;
+`;
 
 const Variants = styled.div`
   display: flex;
