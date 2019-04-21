@@ -108,6 +108,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
 
           <Paragraph style={{ fontSize: 16 }}>
             Licensed under <strong>CC Attribution-NonCommercial 4.0</strong>.
+            <br />
             Please use them in your non-commercial artistic endeavours, or
             contact us for pricing.
             <br />

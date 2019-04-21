@@ -210,6 +210,14 @@ const Wrapper = styled(UnstyledButton)`
   position: relative;
   border-radius: 2px;
   overflow: hidden; /* For the border radius */
+  border: 3px solid #fff;
+  transition: 300ms;
+  will-change: transform;
+
+  &:hover {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.35);
+    transform: translateY(-3px);
+  }
 
   &:disabled {
     opacity: 0.7;
@@ -218,9 +226,10 @@ const Wrapper = styled(UnstyledButton)`
 
 const IconWrapper = styled.div`
   position: absolute;
-  top: 16px;
+  top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   width: 32px;
   height: 32px;
   margin: auto;
@@ -243,7 +252,8 @@ const Overlay = styled.div`
 const Label = styled.div`
   font-size: 42px;
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
 `;
 
 const Sublabel = styled.div`
