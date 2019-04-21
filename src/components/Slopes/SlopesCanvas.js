@@ -59,15 +59,7 @@ const SlopesCanvas = ({ width, height, kind, ...params }: Props) => {
       renderPolylines(
         rows,
         context,
-        getRenderOptions(
-          width,
-          height,
-          // TODO: Do I need `kind`?
-          kind,
-          context,
-          devicePixelRatio,
-          passedData
-        )
+        getRenderOptions(width, height, kind, passedData)
       );
     }
   );

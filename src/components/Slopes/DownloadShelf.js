@@ -12,7 +12,7 @@ import Shelf from '../Shelf';
 import Heading from '../Heading';
 import Spacer from '../Spacer';
 
-import { getCanvasDimensions, getRenderOptions } from './SlopesCanvas.helpers';
+import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import generator from './Slopes.generator';
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 import { SlopesContext } from './SlopesState';
@@ -37,9 +37,6 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   const outputWidth = 5400;
   const outputHeight = 7200;
 
-  const previewWidth = 180;
-  const previewHeight = previewWidth * (4 / 3);
-
   const slopesParams = React.useContext(SlopesContext);
 
   const [svgNode, setSvgNode] = React.useState(null);
@@ -52,15 +49,6 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
     const parent = document.createElement('div');
     parent.innerHTML = markup;
     setSvgNode(parent.firstChild);
-
-    // // We want to scale up the raster image
-    // const previewScale = previewHeight / canvasDimensions.height;
-
-    // svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
-    //   setPreviewUri(uri);
-    // });
-
-    // setSvgMarkup(markup);
   };
 
   React.useEffect(
@@ -81,22 +69,6 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
         };
 
         worker.postMessage(messageData);
-
-        // Construct the canvas for download
-        // const canvasEl = document.createElement('canvas');
-        // canvasEl.setAttribute('width', String(outputWidth));
-        // canvasEl.setAttribute('height', String(outputHeight));
-
-        // const context = canvasEl.getContext('2d');
-
-        // renderPolylines(
-        //   rows,
-
-        // );
-
-        // canvasEl.toBlob(function(blob) {
-        //   FileSaver.saveAs(blob, 'pretty image.png');
-        // });
       } else {
         // Wait until the animation completes
         timeoutId.current = window.setTimeout(() => {

@@ -54,41 +54,31 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  devicePixelRatio: number,
   { enableDarkMode, dotRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
 
-  let lineWidth;
-  let backgroundColor = 'transparent';
+  const lineWidth =
+    dotRatio === 0
+      ? MIN_WIDTH
+      : clamp(
+          normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
+          MIN_WIDTH,
+          MAX_WIDTH
+        );
+
+  let backgroundColor;
 
   switch (kind) {
-    case 'main': {
-      lineWidth =
-        dotRatio === 0
-          ? MIN_WIDTH
-          : clamp(
-              normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
-              MIN_WIDTH,
-              MAX_WIDTH
-            );
-
+    case 'main':
+    case 'download-transparent': {
+      backgroundColor = 'transparent';
       break;
     }
 
-    case 'download-transparent':
     case 'download-opaque': {
-      // When creating a high-res asset to be downloaded, we need to increase the
-      // lineWidth accordingly.
-      // Our default width/height are 414 x 552
-      const previewWidth = 414;
-      lineWidth = Math.round(width / previewWidth);
-
-      if (kind === 'download-opaque') {
-        backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
-      }
-
+      backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
       break;
     }
   }
