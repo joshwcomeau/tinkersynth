@@ -20,14 +20,16 @@ type Options = {
 };
 
 const LINE_COLORS = [
+  '#FF0000',
+  '#00FFFF',
   // COLORS.red[300],
   // COLORS.orange[300],
-  COLORS.yellow[300],
+  // COLORS.yellow[300],
   // COLORS.green[500],
   // COLORS.aqua[500],
   // COLORS.blue[500],
   // COLORS.violet[300],
-  COLORS.pink[300],
+  // COLORS.pink[300],
 ];
 
 const getColorForLine = (rowIndex, segmentIndex) => {

@@ -66,10 +66,14 @@ const handleClick = (
 
       nodeClone.prepend(rect);
 
-      console.log(nodeClone);
-
       svgToPng.saveSvgAsPng(nodeClone, filename, { scale });
 
+      break;
+    }
+
+    case 'svg': {
+      const blob = new Blob([svgNode.outerHTML], { type: 'image/svg+xml' });
+      FileSaver.saveAs(blob, `${filename}.svg`);
       break;
     }
 
