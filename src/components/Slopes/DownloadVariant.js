@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import FileSaver from 'file-saver';
 import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
@@ -72,8 +71,7 @@ const handleClick = (
     }
 
     case 'svg': {
-      const blob = new Blob([svgNode.outerHTML], { type: 'image/svg+xml' });
-      FileSaver.saveAs(blob, `${filename}.svg`);
+      svgToPng.saveSvg(svgNode, filename);
       break;
     }
 

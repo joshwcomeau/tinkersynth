@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import FileSaver from 'file-saver';
 import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
