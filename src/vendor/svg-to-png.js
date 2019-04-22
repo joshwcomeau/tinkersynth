@@ -367,7 +367,9 @@
     const convertToPng = ({ src, width, height }) => {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-      const pixelRatio = window.devicePixelRatio || 1;
+      // NOTE (josh): I always want to use `1` since I want my output size
+      // to be the same regardless of device.
+      const pixelRatio = 1; // window.devicePixelRatio || 1;
 
       canvas.width = width * pixelRatio;
       canvas.height = height * pixelRatio;

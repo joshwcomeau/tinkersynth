@@ -66,7 +66,7 @@ const FAQ = () => {
           >
             <Paragraph>
               Tinkersynth is a collection
-              <Asterisk tooltip="Well, er, so far it's just the one machine... but we hope to add others!" />{' '}
+              <Asterisk tooltip="Well, er, so far it's just the one machine... but I hope to add others!" />{' '}
               of software machines that can be used to produce unique{' '}
               <TextLink to="https://en.wikipedia.org/wiki/Generative_art">
                 generative art
@@ -75,7 +75,7 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              More concretely, Tinkersynth is an art store where you build art
+              More concretely, Tinkersynth is a design tool where you build art
               by poking at sliders and buttons. The goal isn't to provide a
               linear path to a specific piece of art, but rather to encourage
               experimentation. Tinkersynth prioritizes being delighted by
@@ -84,24 +84,28 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              Once you're satisfied with your creation, you can{' '}
-              <IntraFAQLink
-                id="purchase-options"
-                setOpenQuestionId={setOpenQuestionId}
-              >
-                purchase it
-              </IntraFAQLink>
-              ! You can choose to buy a high-quality vector/raster download
-              pack, a premium Giclée print, or both.
+              In a former life, Tinkersynth was also a store which sold the
+              rights to digital products, as well as physical fine-art prints.
+              This can still be done on-demand (
+              <TextLink to="/contact">Contact me</TextLink> for more info!), but
+              I didn't want to stifle creativity. If you want to use this art as
+              a starting point for your own endeavours, have at it!
+            </Paragraph>
+
+            <Paragraph>
+              Tinkersynth was created and maintained by a single person, Josh
+              Comeau. You can support me on{' '}
+              <TextLink to="TODO">Patreon</TextLink>, or buy my art on{' '}
+              <TextLink to="TODO">Etsy</TextLink>.
             </Paragraph>
           </QuestionAndAnswer>
 
           <Separator />
 
           <QuestionAndAnswer
-            id="what-is-generative-art"
+            id="how-does-it-work"
             question="How does it work?"
-            isExpanded={openQuestionId === 'what-is-generative-art'}
+            isExpanded={openQuestionId === 'how-does-it-work'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
@@ -120,7 +124,8 @@ const FAQ = () => {
               produces generative art by following an algorithm as well. You can
               produce 10 identical pieces by following the same steps, and you
               can produce different pieces by modifying those steps, or changing
-              the input parameters (like which gear to use).
+              the input parameters (like which gear to use, how many rotations
+              to do, etc).
             </Paragraph>
 
             <Paragraph>
@@ -128,9 +133,9 @@ const FAQ = () => {
               <TextLink to="https://blogs.scientificamerican.com/blogs/assets/sa-visual/Image/SciAm_pulsar.jpg">
                 data visualizations of electromagnetic radiation
               </TextLink>
-              . In its simplest form, it draws each row 1 at a time, using a
-              form of randomization known as perlin noise to come up with the
-              slopes.
+              , most famously seen on the Unknown Pleasures album cover. In its
+              simplest form, it draws each row 1 at a time, using a form of
+              randomization known as perlin noise to come up with the slopes.
             </Paragraph>
 
             <Paragraph>
@@ -157,216 +162,98 @@ const FAQ = () => {
           </QuestionAndAnswer>
 
           <Separator />
+
+          <QuestionAndAnswer
+            id="what-happened-store"
+            question="What happened to the store?"
+            isExpanded={openQuestionId === 'what-happened-store'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              In the initial version of Tinkersynth, I sold digital downloads
+              and fine-art prints of the art created through the machine. This
+              new version doesn't.
+            </Paragraph>
+
+            <Paragraph>
+              The short version is that the store wasn't very lucrative, and I
+              felt weird that I was charging people who wanted to pursue a
+              creative art project. I love the idea of people using Tinkersynth
+              as input to a subsequent creative project. The new model allows
+              for remixing :D
+            </Paragraph>
+
+            <Paragraph>
+              If you have a commercial project in mind for your Tinkersynth
+              creation, or if you'd like a beautiful fine-art print for your
+              home, you can <TextLink to="/contact">contact me</TextLink> and we
+              can work something out.
+            </Paragraph>
+
+            <Paragraph>
+              If you're interested in supporting this project, I have a{' '}
+              <TextLink to="TODO">Patreon</TextLink>, and I sell art on{' '}
+              <TextLink to="TODO">Etsy</TextLink>.
+            </Paragraph>
+          </QuestionAndAnswer>
         </Questions>
       </Section>
 
       <Section>
         <Header>
           <Heading size={4} style={{ color: COLORS.violet[500] }}>
-            Shipping
+            Downloads
           </Heading>
         </Header>
 
         <Questions>
           <QuestionAndAnswer
-            id="shipping-from-where"
-            question="Where are orders shipped from?"
-            isExpanded={openQuestionId === 'shipping-from-where'}
+            id="formats"
+            question="What are the download formats?"
+            isExpanded={openQuestionId === 'formats'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Tinkersynth uses a fulfillment service that ships from the United
-              States as well as Europe. We choose the closest centre when
-              shipping your order.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="shipping-duration"
-            question="How long will shipping take?"
-            isExpanded={openQuestionId === 'shipping-duration'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              Because Tinkersynth products are made-to-order (there's no way
-              around this, since you're the one creating them!), there's a short
-              period of fulfillment where your order is printed and packaged. We
-              aim to have all orders in the mail carrier's hands within{' '}
-              <strong>6 business days</strong>.
-            </Paragraph>
-
-            <Paragraph>
-              We generally try and use mid-tier shipping options with tracking
-              information. Here are some approximate shipping times, depending
-              on your location:
-            </Paragraph>
-
-            <SimpleTable>
-              <thead>
-                <tr>
-                  <th />
-                  <th>United States</th>
-                  <th>Canada</th>
-                  <th>Europe</th>
-                  <th>Worldwide</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <strong>Duration</strong>
-                    <br />
-                    <span style={{ fontSize: '0.8em' }}>(business days)</span>
-                  </td>
-                  <td>3-5 days</td>
-                  <td>3-8 days</td>
-                  <td>5-10 days</td>
-                  <td>5-20 days</td>
-                </tr>
-              </tbody>
-            </SimpleTable>
-
-            <Paragraph>
-              These times <em>do not</em> include the original processing time.
-              This means that for an order to Canada, an order could take as
-              little as 4 business days, but as long as 14 business days (or
-              longer, in exceptional circumstances)
-            </Paragraph>
-
-            <br />
-            <br />
-
-            <Paragraph>
-              Unfortunately, we don't offer the option to pay extra for "rush"
-              shipping. If this is something that interests you, please{' '}
-              <TextLink to="/contact">reach out</TextLink> and let us know - we
-              may consider building in support for this, in the future.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="worldwide-shipping"
-            question="Do you really ship anywhere in the world?"
-            isExpanded={openQuestionId === 'worldwide-shipping'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              Tinkersynth uses a fulfillment shipping service to manage
-              shipping, and they claim to offer worldwide shipping. In certain
-              extreme cases, if they are not able to accommodate your address,
-              we may have to cancel and refund your order. This has never
-              happened so far, though.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="how-are-orders-shipped"
-            question="How are orders packed?"
-            isExpanded={openQuestionId === 'how-are-orders-shipped'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              Fine art prints are packed rolled inside shipping tubes, wrapped
-              in tissue paper to protect the prints.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="damaged-during-shipping"
-            question="Help! My order was damaged during shipping!"
-            isExpanded={openQuestionId === 'damaged-during-shipping'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              It's really important to us that you receive a perfect-condition
-              piece of artwork. If your art is damaged in transit, please send a
-              photo of the damage to josh@tinkersynth.com.
-            </Paragraph>
-
-            <Paragraph>
-              We'll either issue a full refund immediately, or ship it again,
-              whichever you'd prefer.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-        </Questions>
-      </Section>
-
-      <Section>
-        <Header>
-          <Heading size={4} style={{ color: COLORS.violet[500] }}>
-            Store
-          </Heading>
-        </Header>
-
-        <Questions>
-          <QuestionAndAnswer
-            id="purchase-options"
-            question="What are the purchase options?"
-            isExpanded={openQuestionId === 'purchase-options'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              When purchasing art through Tinkersynth, we offer two products: a
-              digital download, and a physical fine art print.
-            </Paragraph>
-
-            <br />
-            <Heading size={5}>Download</Heading>
-            <br />
-            <Paragraph>
-              When purchasing an option that includes a digital download, you'll
-              receive an email a few moments after purchase with links to
-              download the assets.
-            </Paragraph>
-
-            <Paragraph>
-              Specifically, we'll send you the following files:
+              Tinkersynth downloads are available in multiple formats. The
+              format you want will depend on your usecase.
             </Paragraph>
 
             <List>
               <List.Item>
-                A 300dpi raster image in .png format with a transparent
-                background (only the lines).
+                <strong>Opaque PNG</strong> - This is essentially a scaled-up
+                version of the asset previewed through the machine. It's a .PNG,
+                and it's large enough to print an 18" x 24" print at 300 DPI
+                (Dots Per Inch).
+                <br />
+                <br />
+                This is a great option for managing a fine-art print. You can
+                send it straight to your printer.
               </List.Item>
               <List.Item>
-                A 300dpi raster image in .png format with an opaque background
-                (white lines on black background, or black lines on white
-                background).
+                <strong>Transparent PNG</strong> - Identical to the "Opaque
+                PNG", except without a background.
+                <br />
+                <br />
+                This can be a good option for printing as well - if you want to
+                print on a shirt, and the shirt is already a color similar to
+                the background, for example.
               </List.Item>
               <List.Item>
-                An infinitely-scalable vector image in .svg format.
+                <strong>SVG</strong> - Finally, the SVG download is the most
+                powerful/flexible. SVG is a vector format, which means that you
+                can resize it to any size and it'll look crisp and sharp.
+                <br />
+                <br />
+                This is a great option for creating derivative works, since you
+                can select and modify individual layers, and easily tweak things
+                like line width and color. It's also useful if you'd like to
+                make a <em>huge</em> print.
               </List.Item>
             </List>
 
             <Paragraph>
-              This is a great, flexible option. You can manage the printing
-              yourself with these assets, or use them for any other purpose.
-            </Paragraph>
-
-            <br />
-            <Heading size={5}>Fine art prints</Heading>
-            <br />
-
-            <Paragraph>
-              We also sell fine art Giclée prints. We use{' '}
-              <em>Epson ultra-premium lustre paper</em>, a heavy 240-gsm
-              acid-free paper whose ink retention captures rich, deep blacks.
-              The ink is a high-quality archival ink with solid monochromatic
-              reproduction.
-            </Paragraph>
-
-            <Paragraph>
-              Please note that this option doesn't include a frame.
+              We do not offer downloads in .jpg format, altough online
+              PNG-to-JPG converters can be used to easily produce .jpg files.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -374,122 +261,46 @@ const FAQ = () => {
 
           <QuestionAndAnswer
             id="license"
-            question="What's the license for purchased artwork?"
+            question="What license are downloads released under?"
             isExpanded={openQuestionId === 'license'}
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Artwork created and purchased through Tinkersynth is released
-              under a{' '}
+              The art you download from Tinkersynth is licensed under a{' '}
               <strong>
-                <TextLink to="https://creativecommons.org/share-your-work/public-domain/cc0/">
-                  Creative Commons Zero
-                </TextLink>
+                Creative Commons Attribution-NonCommercial 4.0 International
               </strong>{' '}
-              (CC0) license.
-            </Paragraph>
-
-            <TextLink to="https://creativecommons.org/share-your-work/public-domain/cc0/">
-              <img src={cc0Badge} width={200} />
-            </TextLink>
-            <br />
-            <br />
-
-            <Paragraph>
-              This license was chosen because it is the <em>most permissive</em>{' '}
-              license available. It allows the artwork created and purchased
-              through Tinkersynth to be used however you want, even
-              commercially. You can use it as your next album cover, or produce
-              and sell throw pillows with your design.
+              license.
             </Paragraph>
 
             <Paragraph>
-              Unlike most Creative Commons licenses, CC0 does not require any
-              attribution. This means you can use your artwork without
-              mentioning Tinkersynth at all (although we're grateful if you do!)
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="refund"
-            question="Can I get a refund?"
-            isExpanded={openQuestionId === 'refund'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              For our fine art prints, we generally are unable to offer refunds.
-              By design, Tinkersynth art is one-of-a-kind, and made-to-order;
-              we'd have no way of reselling a returned piece of artwork.
+              More information about this license is available{' '}
+              <TextLink to="https://creativecommons.org/licenses/by-nc/4.0/">
+                on the Creative Commons website
+              </TextLink>
+              , but to summarize:
             </Paragraph>
 
-            <Paragraph>
-              That said, if your item was damaged in shipping, or has some sort
-              of cosmetic flaw, we'll gladly refund your money, or ship a new
-              print, whichever you'd prefer. This hasn't happened yet, but it's
-              important to us that you receive a high-quality piece of art.
-            </Paragraph>
+            <List>
+              <List.Item>
+                You are free to create and share derivative works. I'd love to
+                see what you come up with!
+              </List.Item>
+              <List.Item>
+                Please attribute Tinkersynth when sharing. For attribution, you
+                can reference this website, or its creator, Josh Comeau.
+              </List.Item>
+              <List.Item>
+                Please don't do anything commercial with the downloads. I feel
+                funny about people selling art created in minutes through a tool
+                that took days to build. This applies to derivations as well.
+              </List.Item>
+            </List>
 
             <Paragraph>
-              For our digital download packages, we <em>generally</em> don't
-              offer refunds, although there's a little bit more flexibility.
-              Please <TextLink to="/contact">contact us</TextLink> and let us
-              know if you'd like a refund.
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="multiple-purchases"
-            question="Can I purchase multiple prints?"
-            isExpanded={openQuestionId === 'multiple-purchases'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              In the future, we plan to build in support for a typical shopping
-              cart experience, where you can create and save multiple prints and
-              then check out all at once.
-            </Paragraph>
-
-            <Paragraph>
-              Once this happens, we'll be able to offer discounts for grouped
-              art prints, as shipping can be combined on multiple items.
-            </Paragraph>
-
-            <Paragraph>
-              In the meantime, we're happy to offer a{' '}
-              <strong>10% discount on multiple art-print orders!</strong> Just{' '}
-              <TextLink to="/contact">contact us</TextLink> after purchase, and
-              we'll issue a 10% refund on all orders that haven't yet shipped.
-            </Paragraph>
-
-            <Paragraph>
-              We recognize that this experience is not ideal, and we're working
-              to improve upon it!
-            </Paragraph>
-          </QuestionAndAnswer>
-
-          <Separator />
-
-          <QuestionAndAnswer
-            id="framed-orders"
-            question="Can I purchase a framed print?"
-            isExpanded={openQuestionId === 'framed-orders'}
-            toggleExpanded={setOpenQuestionId}
-          >
-            <Paragraph>
-              Unfortunately, we do not currently sell framed prints. All fine
-              art prints are shipped in a rolled tube. In the future, we may
-              look into selling framed prints directly.
-            </Paragraph>
-            <Paragraph>
-              In the meantime, finding a frame for your print shouldn't be too
-              much of a hassle! We made sure to choose conventional sizes for
-              our prints, so you ought to be able to find reasonably priced
-              frames available online. Custom framing through services like
-              Framebridge is also possible.
+              If you wish to use a Tinkersynth creation in a commercial way,
+              please <TextLink to="/contact">contact me</TextLink> and we'll see
+              if we can work something out.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>
@@ -579,24 +390,15 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              At this time, there is no way to save individual works, other than
-              by purchasing them.
+              You can download your works at any time to preserve a copy,
+              although there is no way to restore from a previously-downloaded
+              state.
             </Paragraph>
 
             <Paragraph>
-              When you purchase an item (whether fine-art print or vector/raster
-              download), a special link is included with your confirmation
-              email. This link restores the machine to the settings used for
-              your purchase. This way, you can always pick up where you left
-              off.
-            </Paragraph>
-
-            <Paragraph>
-              Note that we didn't intend for saving to be a "premium" feature;
-              we'd love to offer the ability for everyone to create and share
-              collections of works. We hope to develop this in a future release,
-              but Tinkersynth is a very new product and a lot of quality-of-life
-              improvements didn't make it into this MVP.
+              Tinkersynth does use device storage to store the current settings,
+              so you can close/reopen the tab without losing your work. But you
+              can't restore to a previous state.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -609,9 +411,9 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Originally, we had hoped to create a first-class mobile
-              experience, on par with the desktop experience. During
-              development, it became clear that it wasn't really feasible.
+              Originally, I had hoped to create a first-class mobile experience,
+              on par with the desktop experience. During development, it became
+              clear that it wasn't really feasible.
             </Paragraph>
             <Paragraph>
               The Tinkersynth machines work so well because of the tight
@@ -627,10 +429,10 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              We decided to offer a limited subset for mobile, where the primary
+              I decided to offer a limited subset for mobile, where the primary
               mechanism for generating new art was the grey "Shuffle" button.
               This button randomizes all the other controls, and can produce an
-              incredible range of potential outputs. With this solution, we can
+              incredible range of potential outputs. With this solution, I can
               fit the entire thing on your phone's screen, and still offer the
               ability to create interesting, unique works of art.
             </Paragraph>
@@ -650,10 +452,10 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              <strong>Yes!</strong> Digital downloads purchased through
-              Tinkersynth provide a plotter-friendly SVG. All of the occlusion
-              is done mathematically, rather than relying on SVG fills or masks,
-              so that you can plot the SVG directly with programs like Inkscape.
+              <strong>Yes!</strong> The "SVG" download option should be
+              plotter-friendly. All of the occlusion is done mathematically,
+              rather than relying on fills or masks, so that you can plot the
+              SVG directly with programs like Inkscape.
             </Paragraph>
             <Paragraph>
               (<TextLink to="https://axidraw.com/">Pen plotters</TextLink> are

@@ -7,14 +7,6 @@ import { getRenderOptions } from './SlopesCanvas.helpers';
 import { getMarginSize } from './Slopes.helpers';
 import transformParameters from './Slopes.params';
 
-// The offscreenCanvas API doesn't like when we try to pass the canvas multiple
-// times between worker and main thread.
-//
-// The very first message received will include data.canvas and
-// data.devicePixelRatio, and we'll use those to prepare the `ctx`, which will
-// be stored in this variable:
-let ctx;
-
 self.onmessage = ({ data }) => {
   const workStartsAt = performance.now();
 
@@ -48,7 +40,6 @@ self.onmessage = ({ data }) => {
     canvasDimensions.width,
     canvasDimensions.height,
     'download-opaque',
-    1,
     slopeValues
   );
 
