@@ -5,15 +5,12 @@ import styled from 'styled-components';
 
 import { UNIT, COLORS } from '../../constants';
 import * as actions from '../../actions';
-import analytics from '../../services/analytics.service';
 import slopesPlacardMobile from '../../images/slopes-placard-mobile.png';
-import { getSwatchById } from '../../services/art-swatches.service.js';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
 import BigOminousButton from '../BigOminousButton';
 import { SlopesContext } from './SlopesState';
-import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PlacardArea from './controls/PlacardArea';
 import ColorCluster from './controls/ColorCluster';
 import { InstrumentCluster } from '../ControlPanel';
@@ -29,7 +26,6 @@ type Props = {
   toggleDownloadShelf: () => void,
   children: React$Node,
   isPoweredOn: boolean,
-  backgroundColor: string,
   rememberCurrentlyFocusedElement: (ref: HTMLElement) => any,
 };
 
@@ -40,7 +36,6 @@ const SlopesCanvasWrapper = ({
   toggleDownloadShelf,
   children,
   isPoweredOn,
-  backgroundColor,
   rememberCurrentlyFocusedElement,
 }: Props) => {
   const downloadButtonRef = React.useRef(null);
@@ -62,12 +57,7 @@ const SlopesCanvasWrapper = ({
 
         <InnerWrapper>
           {!isPoweredOn && <PoweredOffCanvas />}
-          <ChildWrapper style={{ backgroundColor }}>{children}</ChildWrapper>
-          <SlopesCanvasMargins
-            width={width}
-            height={height}
-            backgroundColor={backgroundColor}
-          />
+          <ChildWrapper>{children}</ChildWrapper>
         </InnerWrapper>
 
         <Spacer size={UNIT} />
@@ -101,14 +91,10 @@ const OptimizedSlopesCanvasWrapper = React.memo(SlopesCanvasWrapper);
 const SlopesCanvasWrapperContainer = (props: any) => {
   const slopesParams = React.useContext(SlopesContext);
 
-  const swatch = getSwatchById(slopesParams.swatchId);
-  const { backgroundColor } = swatch;
-
   return (
     <OptimizedSlopesCanvasWrapper
       {...props}
       isPoweredOn={slopesParams.isPoweredOn}
-      backgroundColor={backgroundColor}
     />
   );
 };
@@ -155,6 +141,7 @@ const InnerWrapper = styled.div`
 const ChildWrapper = styled.div`
   position: relative;
   z-index: 1;
+  background: #000;
 `;
 
 const TopPanel = styled.div`

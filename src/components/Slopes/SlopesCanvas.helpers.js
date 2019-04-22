@@ -70,13 +70,13 @@ export const getRenderOptions = (
 
   switch (kind) {
     case 'main':
-    case 'download-transparent': {
-      backgroundColor = 'transparent';
+    case 'download-opaque': {
+      backgroundColor = swatch.backgroundColor;
       break;
     }
 
-    case 'download-opaque': {
-      backgroundColor = swatch.backgroundColor;
+    case 'download-transparent': {
+      backgroundColor = 'transparent';
       break;
     }
   }
