@@ -1,10 +1,5 @@
 // @flow
-import {
-  COLORS,
-  UNIT,
-  LIGHT_BACKGROUND,
-  DARK_BACKGROUND,
-} from '../../constants';
+import { COLORS, UNIT } from '../../constants';
 import { clamp, normalize } from '../../utils';
 import { getSwatchById } from '../../services/art-swatches.service';
 

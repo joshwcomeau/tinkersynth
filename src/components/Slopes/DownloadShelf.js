@@ -8,6 +8,7 @@ import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import useWorker from '../../hooks/worker.hook.js';
 import { COLORS, UNIT } from '../../constants';
 import ccLicenseSrc from '../../images/cc-license.png';
+import { getSwatchById } from '../../services/art-swatches.service';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
@@ -25,12 +26,11 @@ import DownloadVariant from './DownloadVariant';
 type Props = {
   isVisible: boolean,
   handleToggle: () => void,
-  lineData: any,
 };
 
 const PREVIEW_SIZE = 180;
 
-const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
+const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
   const windowDimensions = useWindowDimensions();
   const canvasDimensions = getCanvasDimensions(windowDimensions);
 
@@ -43,6 +43,8 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
   const slopesParams = React.useContext(SlopesContext);
 
   const [svgNode, setSvgNode] = React.useState(null);
+
+  const swatch = getSwatchById(slopesParams.swatchId);
 
   const worker = useWorker(DownloadShelfWorker);
 
@@ -135,7 +137,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="opaque-png"
-              enableDarkMode={slopesParams.enableDarkMode}
+              swatch={swatch}
             />
 
             <Spacer size={24} />
@@ -145,7 +147,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="transparent-png"
-              enableDarkMode={slopesParams.enableDarkMode}
+              swatch={swatch}
             />
 
             <Spacer size={24} />
@@ -155,7 +157,7 @@ const DownloadShelf = ({ isVisible, handleToggle, lineData }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="svg"
-              enableDarkMode={slopesParams.enableDarkMode}
+              swatch={swatch}
             />
           </Variants>
         </Downloads>

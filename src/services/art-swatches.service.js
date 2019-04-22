@@ -43,11 +43,6 @@ const ballPositions = {
       yRatio: -0.1,
       sizeRatio: 0.45,
     },
-    '#A1EF8B': {
-      xRatio: 0.15,
-      yRatio: -0.1,
-      sizeRatio: 0.45,
-    },
   },
 };
 
@@ -87,8 +82,8 @@ const ART_SWATCHES: Array<SwatchData> = [
   }),
   new Swatch({
     id: 'mossy-day',
-    colors: ['#D3F6DB', '#92D5E6', '#772D8B', '#A1EF8B'],
-    backgroundColor: '#000000',
+    colors: ['#D3F6DB', '#92D5E6', '#772D8B'],
+    backgroundColor: '#A1EF8B',
   }),
 ];
 

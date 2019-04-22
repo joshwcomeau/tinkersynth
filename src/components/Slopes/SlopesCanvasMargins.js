@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
 
-import { UNIT, LIGHT_BACKGROUND, DARK_BACKGROUND } from '../../constants';
 import { getMarginSize } from './Slopes.helpers';
 
 const ACTION_SIZE = 38;

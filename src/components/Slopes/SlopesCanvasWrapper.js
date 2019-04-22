@@ -3,12 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import {
-  UNIT,
-  COLORS,
-  LIGHT_BACKGROUND,
-  DARK_BACKGROUND,
-} from '../../constants';
+import { UNIT, COLORS } from '../../constants';
 import * as actions from '../../actions';
 import analytics from '../../services/analytics.service';
 import slopesPlacardMobile from '../../images/slopes-placard-mobile.png';

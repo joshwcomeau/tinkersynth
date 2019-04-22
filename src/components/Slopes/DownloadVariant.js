@@ -6,7 +6,6 @@ import { loader } from 'react-icons-kit/feather/loader';
 import svgToPng from '../../vendor/svg-to-png';
 import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
-import { DARK_BACKGROUND, LIGHT_BACKGROUND } from '../../constants';
 import generateRandomName from '../../services/random-name.service';
 import darkTilesSrc from '../../images/transparent-tiles-dark.svg';
 import lightTilesSrc from '../../images/transparent-tiles-light.svg';
@@ -16,37 +15,42 @@ import Spin from '../Spin';
 
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 
+import type { SwatchData } from '../../types';
+
 type Props = {
   size: number,
   originalCanvasWidth: number,
   svgNode: ?HTMLElement,
   kind: 'transparent-png' | 'opaque-png' | 'svg',
-  enableDarkMode: boolean,
+  swatch: SwatchData,
 };
 
 const OUTPUT_HEIGHT = 7200;
 const OUTPUT_WIDTH = OUTPUT_HEIGHT * SLOPES_ASPECT_RATIO;
-
-const getBackground = (kind, enableDarkMode) => {
-  if (kind === 'opaque-png') {
-    return enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
-  } else {
-    return enableDarkMode ? `url(${darkTilesSrc})` : `url(${lightTilesSrc})`;
-  }
-};
 
 const DownloadVariant = ({
   size,
   originalCanvasWidth,
   svgNode,
   kind,
-  enableDarkMode,
+  swatch,
 }: Props) => {
-  const background = getBackground(kind, enableDarkMode);
-
   const [previewUri, setPreviewUri] = React.useState(null);
   const [isPreparing, setIsPreparing] = React.useState(false);
   const filename = React.useRef(generateRandomName());
+
+  // NOTE: Since most backgrounds are dark, I'm just assuming that we only
+  // consider '#FFF' a light background. Ideally, though, we should be smarter,
+  // maybe convert the color to HSL and look at lightness?
+  const isLightBackground = swatch.backgroundColor === '#FFFFFF';
+  const textColor = isLightBackground ? 'black' : 'white';
+
+  // prettier-ignore
+  const background = kind === 'opaque-png'
+    ? swatch.backgroundColor
+    : isLightBackground
+      ? `url(${lightTilesSrc})`
+      : `url(${darkTilesSrc})`;
 
   React.useEffect(
     () => {
@@ -173,7 +177,7 @@ const DownloadVariant = ({
       {isPreparing && (
         <IconWrapper
           style={{
-            color: enableDarkMode ? '#FFF' : '#000',
+            color: textColor,
           }}
         >
           <Spin>
@@ -184,8 +188,8 @@ const DownloadVariant = ({
 
       <Overlay
         style={{
-          color: enableDarkMode ? 'white' : 'black',
-          textShadow: enableDarkMode && '1px 1px 0px rgba(0, 0, 0, 0.5)',
+          color: textColor,
+          textShadow: !isLightBackground && '1px 1px 0px rgba(0, 0, 0, 0.5)',
         }}
       >
         <Label>{label}</Label>
