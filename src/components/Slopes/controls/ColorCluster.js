@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
 
-import Swatch from '../../Swatch';
+import ColorPicker from '../../ColorPicker';
 import Spacer from '../../Spacer';
 
 import { SlopesContext } from '../SlopesState';
@@ -14,14 +14,19 @@ import type { ToggleParameterAction } from '../SlopesState';
 
 type Props = {
   size: number,
-  colors: Colors,
+  selectedSwatchId: string,
   isPoweredOn: boolean,
   toggleParameter: ToggleParameterAction,
 };
 
-const ColorCluster = ({ size, colors, isPoweredOn, toggleParameter }) => (
+const ColorCluster = ({
+  size,
+  selectedSwatchId,
+  isPoweredOn,
+  toggleParameter,
+}) => (
   <Wrapper>
-    <Swatch size={size} colors={colors} isSelected={true} />
+    <ColorPicker size={size} />
   </Wrapper>
 );
 
@@ -31,16 +36,10 @@ const OptimizedColorCluster = React.memo(ColorCluster);
 const PageContainer = ({ size }: { size: number }) => {
   const slopesParams = React.useContext(SlopesContext);
 
-  // TEMP
-  const colors = {
-    backgroundColor: '#000000',
-    foregroundColors: ['#FF0000', '#00FFFF'],
-  };
-
   return (
     <OptimizedColorCluster
       size={size}
-      colors={colors}
+      selectedSwatchId="red-aqua" // TEMP!
       isPoweredOn={slopesParams.isPoweredOn}
       toggleParameter={slopesParams.toggleParameter}
     />

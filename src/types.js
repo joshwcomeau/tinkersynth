@@ -23,9 +23,15 @@ export type Rows = Array<Array<Line>>;
 
 export type CanvasSize = 'small' | 'medium' | 'large';
 
-export type Colors = {
+export type SwatchData = {
+  id: string,
   backgroundColor: string,
   foregroundColors: Array<string>,
+  positions: Array<{
+    x: number,
+    y: number,
+    size: number,
+  }>,
 };
 
 export type RenderImageKind =

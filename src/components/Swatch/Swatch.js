@@ -4,28 +4,33 @@ import styled from 'styled-components';
 
 import { random } from '../../utils';
 
-import type { Colors } from '../../types';
+import type { SwatchData } from '../../types';
 
 type Props = {
-  colors: Colors,
+  swatch: SwatchData,
   size: number,
   isSelected: boolean,
 };
 
-const Swatch = ({ size, isSelected, colors }: Props) => {
-  const { backgroundColor, foregroundColors } = colors;
+const Swatch = ({ size, isSelected, swatch }: Props) => {
+  const { colors, backgroundColor } = swatch;
 
   return (
     <Wrapper style={{ width: size, height: size, backgroundColor }}>
-      {foregroundColors.map((color, index) => (
-        <Ball
-          key={index}
-          color={color}
-          offsetX={random(size * -0.2, size * 0.2)}
-          offsetY={random(size * -0.2, size * 0.2)}
-          size={random(size * 0.2, size * 0.4)}
-        />
-      ))}
+      {colors.map((color, index) => {
+        const { x, y, ballSize } = swatch.getBallPositions(size, index);
+
+        return (
+          <Ball
+            key={index}
+            color={color.hex}
+            borderColor={backgroundColor}
+            x={x}
+            y={y}
+            size={ballSize}
+          />
+        );
+      })}
     </Wrapper>
   );
 };
@@ -44,9 +49,10 @@ const Ball = styled.div`
   margin: auto;
   width: ${props => props.size}px;
   height: ${props => props.size}px;
-  transform: ${props => `translate(${props.offsetX}px, ${props.offsetY}px)}`};
+  transform: ${props => `translate(${props.x}px, ${props.y}px)}`};
   background-color: ${props => props.color};
   border-radius: 50%;
+  border: 2px solid ${props => props.borderColor};
 `;
 
 export default Swatch;
