@@ -10,23 +10,22 @@ import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
 
 import type { Colors } from '../../../types';
-import type { ToggleParameterAction } from '../SlopesState';
+import type { tweakParameterAction } from '../SlopesState';
 
 type Props = {
   size: number,
-  selectedSwatchId: string,
+  swatchId: string,
   isPoweredOn: boolean,
-  toggleParameter: ToggleParameterAction,
+  tweakParameter: tweakParameterAction,
 };
 
-const ColorCluster = ({
-  size,
-  selectedSwatchId,
-  isPoweredOn,
-  toggleParameter,
-}) => (
+const ColorCluster = ({ size, swatchId, isPoweredOn, tweakParameter }) => (
   <Wrapper>
-    <ColorPicker size={size} />
+    <ColorPicker
+      swatchId={swatchId}
+      size={size}
+      updateValue={val => tweakParameter('swatchId', val)}
+    />
   </Wrapper>
 );
 
@@ -39,9 +38,9 @@ const PageContainer = ({ size }: { size: number }) => {
   return (
     <OptimizedColorCluster
       size={size}
-      selectedSwatchId="red-aqua" // TEMP!
+      swatchId={slopesParams.swatchId}
       isPoweredOn={slopesParams.isPoweredOn}
-      toggleParameter={slopesParams.toggleParameter}
+      tweakParameter={slopesParams.tweakParameter}
     />
   );
 };

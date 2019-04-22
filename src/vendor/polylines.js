@@ -14,33 +14,20 @@ type Options = {
   height: number,
   context?: CanvasRenderingContext2D,
   lineWidth?: number,
-  backgroundColor?: string,
-  lineColor?: string,
+  backgroundColor: string,
+  lineColors: string,
   lineCap: string,
 };
 
-const LINE_COLORS = [
-  '#FF0000',
-  '#00FFFF',
-  // COLORS.red[300],
-  // COLORS.orange[300],
-  // COLORS.yellow[300],
-  // COLORS.green[500],
-  // COLORS.aqua[500],
-  // COLORS.blue[500],
-  // COLORS.violet[300],
-  // COLORS.pink[300],
-];
-
-const getColorForLine = (rowIndex, segmentIndex) => {
-  const color1 = LINE_COLORS[rowIndex % LINE_COLORS.length];
-  const color2 = LINE_COLORS[(rowIndex + 1) % LINE_COLORS.length];
-
-  return { color1, color2 };
-};
-
 export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
-  const { width, height, backgroundColor, lineWidth, lineCap } = opt;
+  const {
+    width,
+    height,
+    backgroundColor,
+    lineColors,
+    lineWidth,
+    lineCap,
+  } = opt;
 
   var computeBounds =
     typeof width === 'undefined' || typeof height === 'undefined';
@@ -55,7 +42,8 @@ export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
   const paths = [];
 
   [...rows].reverse().forEach((row, rowIndex) => {
-    const strokeStyle = getColorForLine(rowIndex).color1;
+    // TODO: I need more controls, for coloring styles
+    const strokeStyle = lineColors[rowIndex % lineColors.length];
 
     const pathCommands = [];
 
@@ -117,7 +105,7 @@ export const renderPolylines = function(
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach(function(points, segmentIndex) {
-      context.strokeStyle = getColorForLine(rowIndex, segmentIndex).color1;
+      context.strokeStyle = opt.lineColors[rowIndex % opt.lineColors.length];
 
       // const gradient = context.createLinearGradient(0, 0, width, 0);
       // gradient.addColorStop(0, color1);

@@ -23,15 +23,17 @@ export type Rows = Array<Array<Line>>;
 
 export type CanvasSize = 'small' | 'medium' | 'large';
 
+export type SwatchBallPosition = {
+  x: number,
+  y: number,
+  ballSize: number,
+};
+
 export type SwatchData = {
   id: string,
   backgroundColor: string,
-  foregroundColors: Array<string>,
-  positions: Array<{
-    x: number,
-    y: number,
-    size: number,
-  }>,
+  colors: Array<string>,
+  getBallPositions: (color: string, parentSize: number) => SwatchBallPosition,
 };
 
 export type RenderImageKind =

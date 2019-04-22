@@ -13,6 +13,7 @@ import type { Curve } from '../../types';
 
 type InputParameters = {
   seed: number,
+  swatchId: string,
   height: number,
   amplitudeAmount: number,
   perspective: number,
@@ -30,13 +31,13 @@ type InputParameters = {
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
-  enableDarkMode: boolean,
   enableMargins: boolean,
   enableMirrored: boolean,
 };
 
 const transformParameters = ({
   seed,
+  swatchId,
   height,
   amplitudeAmount,
   wavelength,
@@ -54,7 +55,6 @@ const transformParameters = ({
   waterBoilAmount,
   ballSize,
   dotAmount,
-  enableDarkMode,
   enableMargins,
   enableMirrored,
 }: InputParameters) => {
@@ -183,7 +183,7 @@ const transformParameters = ({
     peaksCurve,
     selfSimilarity,
     seed,
-    enableDarkMode,
+    swatchId,
     enableMargins,
     enableMirrored,
   };

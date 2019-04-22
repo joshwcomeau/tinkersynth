@@ -12,17 +12,18 @@ import {
 import * as actions from '../../actions';
 import analytics from '../../services/analytics.service';
 import slopesPlacardMobile from '../../images/slopes-placard-mobile.png';
+import { getSwatchById } from '../../services/art-swatches.service.js';
 
 import Spacer from '../Spacer';
 import Button from '../Button';
 import BigOminousButton from '../BigOminousButton';
 import { SlopesContext } from './SlopesState';
+import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PlacardArea from './controls/PlacardArea';
 import ColorCluster from './controls/ColorCluster';
 import { InstrumentCluster } from '../ControlPanel';
 
 import DestructiveCluster from './controls/DestructiveCluster';
-import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
 import UnstyledButton from '../UnstyledButton';
 
@@ -32,9 +33,8 @@ type Props = {
   isFullExperience: boolean,
   toggleDownloadShelf: () => void,
   children: React$Node,
-  enableDarkMode: boolean,
-  enableMargins: boolean,
   isPoweredOn: boolean,
+  backgroundColor: string,
   rememberCurrentlyFocusedElement: (ref: HTMLElement) => any,
 };
 
@@ -44,9 +44,8 @@ const SlopesCanvasWrapper = ({
   isFullExperience,
   toggleDownloadShelf,
   children,
-  enableDarkMode,
-  enableMargins,
   isPoweredOn,
+  backgroundColor,
   rememberCurrentlyFocusedElement,
 }: Props) => {
   const downloadButtonRef = React.useRef(null);
@@ -68,20 +67,11 @@ const SlopesCanvasWrapper = ({
 
         <InnerWrapper>
           {!isPoweredOn && <PoweredOffCanvas />}
-          <ChildWrapper
-            style={{
-              backgroundColor: enableDarkMode
-                ? DARK_BACKGROUND
-                : LIGHT_BACKGROUND,
-            }}
-          >
-            {children}
-          </ChildWrapper>
+          <ChildWrapper style={{ backgroundColor }}>{children}</ChildWrapper>
           <SlopesCanvasMargins
             width={width}
             height={height}
-            enableDarkMode={enableDarkMode}
-            enableMargins={enableMargins}
+            backgroundColor={backgroundColor}
           />
         </InnerWrapper>
 
@@ -116,12 +106,14 @@ const OptimizedSlopesCanvasWrapper = React.memo(SlopesCanvasWrapper);
 const SlopesCanvasWrapperContainer = (props: any) => {
   const slopesParams = React.useContext(SlopesContext);
 
+  const swatch = getSwatchById(slopesParams.swatchId);
+  const { backgroundColor } = swatch;
+
   return (
     <OptimizedSlopesCanvasWrapper
       {...props}
-      enableDarkMode={slopesParams.enableDarkMode}
-      enableMargins={slopesParams.enableMargins}
       isPoweredOn={slopesParams.isPoweredOn}
+      backgroundColor={backgroundColor}
     />
   );
 };

@@ -25,15 +25,12 @@ self.onmessage = ({ data }) => {
   });
 
   const fullMarginSize = getMarginSize(canvasDimensions.height);
-  const actualMarginSize = params.enableMargins
-    ? fullMarginSize
-    : fullMarginSize * 0.1;
 
   rows = clipLinesWithMargin({
     rows,
     width: canvasDimensions.width,
     height: canvasDimensions.height,
-    margins: [actualMarginSize, actualMarginSize],
+    margins: [fullMarginSize, fullMarginSize],
   });
 
   const renderOptions = getRenderOptions(

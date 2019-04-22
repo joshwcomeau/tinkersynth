@@ -5,12 +5,14 @@ import { chevronUp } from 'react-icons-kit/feather/chevronUp';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 
 import { COLORS } from '../../constants';
-import artSwatches from '../../art-swatches.js';
+import artSwatches from '../../services/art-swatches.service.js';
 
 import Swatch from '../Swatch';
 import UnstyledButton from '../UnstyledButton';
 
-const ColorPicker = ({ size }) => {
+const ColorPicker = ({ size, swatchId, updateValue }) => {
+  const swatchIndex = artSwatches.findIndex(swatch => swatch.id === swatchId);
+
   return (
     <Wrapper style={{ width: size * 1.5, height: size }}>
       <Swatches>
@@ -24,15 +26,15 @@ const ColorPicker = ({ size }) => {
       <Controls style={{ width: size / 2 }}>
         <IncrementDecrementButton
           style={{ width: size / 2, height: size / 2 }}
-          disabled={false}
-          onClick={() => console.log('Click')}
+          disabled={swatchIndex === 0}
+          onClick={() => updateValue(artSwatches[swatchIndex - 1].id)}
         >
           <Icon icon={chevronUp} size={16} />
         </IncrementDecrementButton>
         <IncrementDecrementButton
           style={{ width: size / 2, height: size / 2 }}
-          disabled={false}
-          onClick={() => console.log('Click!')}
+          disabled={swatchIndex === artSwatches.length - 1}
+          onClick={() => updateValue(artSwatches[swatchIndex + 1].id)}
         >
           <Icon icon={chevronDown} size={16} />
         </IncrementDecrementButton>
@@ -76,6 +78,19 @@ const IncrementDecrementButton = styled(UnstyledButton)`
   align-items: center;
   color: white;
   cursor: pointer;
+
+  &:active {
+    background: ${COLORS.pink[300]};
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0;
+  }
+
+  & svg {
+    display: block !important;
+  }
 `;
 
 export default ColorPicker;

@@ -35,7 +35,7 @@ type HistorySnapshot = {
 
 const defaultParameters = {
   seed: getRandomSeed(),
-  enableDarkMode: sample([true, false]),
+  swatchId: 'inverted-black-on-white',
   enableMargins: sample([true, false]),
   enableOcclusion: true,
   amplitudeAmount: 50,
@@ -75,7 +75,7 @@ const poweredOffParameters = {
 
 type Parameters = {
   seed: number,
-  enableDarkMode: boolean,
+  swatchId: string,
   enableMargins: boolean,
   enableOcclusion: boolean,
   amplitudeAmount: number,
@@ -193,7 +193,7 @@ const reducer = produce(
 
         state.parameters = {
           ...defaultParameters,
-          enableDarkMode: state.parameters.enableDarkMode,
+          swatchId: state.parameters.swatchId,
           enableMargins: state.parameters.enableMargins,
         };
 
@@ -222,11 +222,16 @@ const reducer = produce(
 );
 
 export const SlopesProvider = ({ children }: { children: React$Node }) => {
+  const lastSessionParams = retrieveLastSessionSlopesParams() || {};
+
   const initialState = {
     history: [],
     animateTransitions: true,
     isPoweredOn: true,
-    parameters: retrieveLastSessionSlopesParams() || defaultParameters,
+    parameters: {
+      ...defaultParameters,
+      ...lastSessionParams,
+    },
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -294,7 +299,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
     <SlopesContext.Provider
       value={{
         seed: state.parameters.seed,
-        enableDarkMode: state.parameters.enableDarkMode,
+        swatchId: state.parameters.swatchId,
         enableMargins: state.parameters.enableMargins,
         amplitudeAmount: state.parameters.amplitudeAmount,
         octaveAmount: state.parameters.octaveAmount,

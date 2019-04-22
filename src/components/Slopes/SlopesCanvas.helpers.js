@@ -6,6 +6,7 @@ import {
   DARK_BACKGROUND,
 } from '../../constants';
 import { clamp, normalize } from '../../utils';
+import { getSwatchById } from '../../services/art-swatches.service';
 
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 
@@ -54,7 +55,7 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  { enableDarkMode, dotRatio }: any
+  { swatchId, dotRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
@@ -68,6 +69,8 @@ export const getRenderOptions = (
           MAX_WIDTH
         );
 
+  const swatch = getSwatchById(swatchId);
+
   let backgroundColor;
 
   switch (kind) {
@@ -78,7 +81,7 @@ export const getRenderOptions = (
     }
 
     case 'download-opaque': {
-      backgroundColor = enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+      backgroundColor = swatch.backgroundColor;
       break;
     }
   }
@@ -93,8 +96,8 @@ export const getRenderOptions = (
   return {
     width,
     height,
-    lineColor: enableDarkMode ? COLORS.white : COLORS.black,
     backgroundColor,
+    lineColors: swatch.colors,
     lineWidth,
     lineCap,
   };

@@ -18,7 +18,7 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
   return (
     <Wrapper style={{ width: size, height: size, backgroundColor }}>
       {colors.map((color, index) => {
-        const { x, y, ballSize } = swatch.getBallPositions(size, index);
+        const { x, y, ballSize } = swatch.getBallPositions(color, size);
 
         return (
           <Ball
