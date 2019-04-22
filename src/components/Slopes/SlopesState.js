@@ -36,7 +36,6 @@ type HistorySnapshot = {
 const defaultParameters = {
   seed: getRandomSeed(),
   swatchId: 'inverted-black-on-white',
-  enableMargins: sample([true, false]),
   enableOcclusion: true,
   amplitudeAmount: 50,
   wavelength: 25,
@@ -76,7 +75,6 @@ const poweredOffParameters = {
 type Parameters = {
   seed: number,
   swatchId: string,
-  enableMargins: boolean,
   enableOcclusion: boolean,
   amplitudeAmount: number,
   wavelength: number,
@@ -194,7 +192,6 @@ const reducer = produce(
         state.parameters = {
           ...defaultParameters,
           swatchId: state.parameters.swatchId,
-          enableMargins: state.parameters.enableMargins,
         };
 
         return state;
@@ -300,7 +297,6 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
       value={{
         seed: state.parameters.seed,
         swatchId: state.parameters.swatchId,
-        enableMargins: state.parameters.enableMargins,
         amplitudeAmount: state.parameters.amplitudeAmount,
         octaveAmount: state.parameters.octaveAmount,
         perspective: state.parameters.perspective,

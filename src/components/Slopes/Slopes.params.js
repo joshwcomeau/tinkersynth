@@ -31,7 +31,6 @@ type InputParameters = {
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
-  enableMargins: boolean,
   enableMirrored: boolean,
 };
 
@@ -55,7 +54,6 @@ const transformParameters = ({
   waterBoilAmount,
   ballSize,
   dotAmount,
-  enableMargins,
   enableMirrored,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
@@ -184,7 +182,6 @@ const transformParameters = ({
     selfSimilarity,
     seed,
     swatchId,
-    enableMargins,
     enableMirrored,
   };
 };
