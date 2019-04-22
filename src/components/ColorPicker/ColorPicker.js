@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Icon } from 'react-icons-kit';
 import { chevronUp } from 'react-icons-kit/feather/chevronUp';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
+import { useSpring, animated } from 'react-spring/hooks';
 
 import { COLORS } from '../../constants';
 import artSwatches from '../../services/art-swatches.service.js';
@@ -13,12 +14,31 @@ import UnstyledButton from '../UnstyledButton';
 const ColorPicker = ({ size, swatchId, updateValue }) => {
   const swatchIndex = artSwatches.findIndex(swatch => swatch.id === swatchId);
 
+  const swatchWrapperHeight = size * 0.7;
+  const initialPadding = (size - swatchWrapperHeight) / 2;
+
+  const swatchHeight = swatchWrapperHeight - 8;
+
+  const offsetY = swatchIndex * swatchWrapperHeight * -1;
+
+  const spring = useSpring({
+    transform: `translateY(${offsetY}px)`,
+  });
+
   return (
     <Wrapper style={{ width: size * 1.5, height: size }}>
-      <Swatches>
+      <Gradient />
+      <Swatches style={{ paddingTop: initialPadding }}>
         {artSwatches.map(swatch => (
-          <SwatchWrapper key={swatch.id} style={{ width: size, height: size }}>
-            <Swatch size={size * 0.6} swatch={swatch} />
+          <SwatchWrapper
+            key={swatch.id}
+            style={{
+              width: size,
+              height: swatchWrapperHeight,
+              ...spring,
+            }}
+          >
+            <Swatch size={swatchHeight} swatch={swatch} />
           </SwatchWrapper>
         ))}
       </Swatches>
@@ -45,7 +65,7 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
 
 const Wrapper = styled.div`
   position: relative;
-  background: ${COLORS.gray[900]};
+  background: ${COLORS.gray[800]};
   border-radius: 4px;
   overflow: hidden;
   display: flex;
@@ -56,20 +76,41 @@ const Wrapper = styled.div`
 `;
 
 const Swatches = styled.div`
+  position: relative;
   flex: 1;
 `;
 
-const SwatchWrapper = styled.div`
+const SwatchWrapper = styled(animated.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  will-change: transform;
 `;
 
 const Controls = styled.div`
+  position: relative;
+  z-index: 3;
   height: 100%;
   display: flex;
   flex-direction: column;
   background: ${COLORS.gray[1000]};
+`;
+
+const Gradient = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
 `;
 
 const IncrementDecrementButton = styled(UnstyledButton)`

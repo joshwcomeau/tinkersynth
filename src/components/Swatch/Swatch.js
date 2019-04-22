@@ -23,7 +23,7 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
         return (
           <Ball
             key={index}
-            color={color.hex}
+            color={color}
             borderColor={backgroundColor}
             x={x}
             y={y}
