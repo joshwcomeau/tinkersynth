@@ -18,7 +18,7 @@ import Button from '../Button';
 import BigOminousButton from '../BigOminousButton';
 import { SlopesContext } from './SlopesState';
 import PlacardArea from './controls/PlacardArea';
-import PageCluster from './controls/PageCluster';
+import ColorCluster from './controls/ColorCluster';
 import { InstrumentCluster } from '../ControlPanel';
 
 import DestructiveCluster from './controls/DestructiveCluster';
@@ -88,12 +88,12 @@ const SlopesCanvasWrapper = ({
         <Spacer size={UNIT} />
 
         <Footer>
-          <PageCluster size={isFullExperience ? 38 : 48} />
+          <ColorCluster size={48} />
 
           <Button
             ref={downloadButtonRef}
             color={COLORS.blue[500]}
-            size={isFullExperience ? 'medium' : 'large'}
+            size="large"
             onClick={() => {
               toggleDownloadShelf();
 

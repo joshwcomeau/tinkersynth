@@ -23,6 +23,11 @@ export type Rows = Array<Array<Line>>;
 
 export type CanvasSize = 'small' | 'medium' | 'large';
 
+export type Colors = {
+  backgroundColor: string,
+  foregroundColors: Array<string>,
+};
+
 export type RenderImageKind =
   | 'main'
   | 'download-transparent'
