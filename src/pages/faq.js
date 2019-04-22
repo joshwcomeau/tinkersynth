@@ -466,6 +466,66 @@ const FAQ = () => {
           </QuestionAndAnswer>
         </Questions>
       </Section>
+
+      <Section>
+        <Header>
+          <Heading size={4} style={{ color: COLORS.violet[500] }}>
+            Source
+          </Heading>
+        </Header>
+
+        <Questions>
+          <QuestionAndAnswer
+            id="oss"
+            question="Is Tinkersynth open-source?"
+            isExpanded={openQuestionId === 'oss'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Sort of. Tinkersynth's code has been made public for educational
+              purposes, so that those who are curious can disect and understand
+              how it's built.
+            </Paragraph>
+
+            <Paragraph>
+              It's not open-source in the conventional sense, though; it is
+              published without license, and thus I retain the full copyright.
+              Feel free to fork the repo and experiment, but please create your
+              own original works from scratch, not using Tinkersynth as a base.
+            </Paragraph>
+
+            <Paragraph>
+              With that in mind, you can find the source here:{' '}
+              <TextLink to="https://github.com/joshwcomeau/tinkersynth">
+                https://github.com/joshwcomeau/tinkersynth
+              </TextLink>
+            </Paragraph>
+          </QuestionAndAnswer>
+
+          <Separator />
+
+          <QuestionAndAnswer
+            id="contribute"
+            question="Can I contribute to Tinkersynth?"
+            isExpanded={openQuestionId === 'contribute'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              Sorry, I'm afraid I'm not looking for contributors at this time.
+              Tinkersynth is a passion project of mine, something I do in my
+              spare time to be creative and experiment. Accepting contributions
+              means I'd be doing code reviews and assigning issues, and that
+              feels a little bit too much like my day job.
+            </Paragraph>
+
+            <Paragraph>
+              Please feel empowered to create your own version of Tinkersynth
+              though! Generative art is still a new field, and there's ample
+              room for new inventions =D
+            </Paragraph>
+          </QuestionAndAnswer>
+        </Questions>
+      </Section>
     </React.Fragment>
   );
 };
