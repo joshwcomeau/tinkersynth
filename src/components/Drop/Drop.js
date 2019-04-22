@@ -17,7 +17,7 @@ type Props = {
   children: React$Node,
 };
 
-const PRECISION = 0.2;
+const PRECISION = 0.15;
 
 const useDropPhysics = ({
   distance,
@@ -38,7 +38,6 @@ const useDropPhysics = ({
       const tickOrDefault = lastTickAt.current || performance.now() - 30;
       const now = performance.now();
       const timeSinceLastTick = (now - tickOrDefault) / 1000;
-      lastTickAt.current = now;
 
       const originalVelocity = velocity.current;
 
@@ -60,7 +59,7 @@ const useDropPhysics = ({
         if (tentativeNewPosition < distance) {
           setAmountFallen(tentativeNewPosition);
         } else {
-          velocity.current = augmentedVelocity * (-1 * bounciness);
+          velocity.current = velocity.current * (-1 * bounciness);
           setAmountFallen(distance);
         }
 
@@ -75,6 +74,8 @@ const useDropPhysics = ({
           }
         }
       });
+
+      lastTickAt.current = now;
 
       return () => {
         window.cancelAnimationFrame(animationFrameId.current);
