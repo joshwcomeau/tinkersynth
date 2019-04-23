@@ -5,63 +5,69 @@ import { useSpring, animated } from 'react-spring/hooks';
 import { COLORS } from '../../../constants';
 import { normalize, clamp } from '../../../utils';
 
+import Svg from '../../Svg';
+
 const springConfig = {
   tension: 120,
   friction: 7,
 };
 
-const GradientWidthVisualization = ({ value, size, isAnimated }) => {
-  console.log(value);
+const getPoints = (width, height, value) => {
+  const verticalShift = normalize(value, 0, 100, 0, -4);
 
+  // Our first point starts at the bottom midpoint and stretches to the left
+  // as the value increases
+  const p1 = [normalize(value, 0, 100, width / 2, 0), height + verticalShift];
+
+  // Our second point doesnt move (should it?)
+  const p2 = [width / 2, verticalShift];
+
+  // Our last point is a mirror of the first one
+  const p3 = [
+    normalize(value, 0, 100, width / 2, width),
+    height + verticalShift,
+  ];
+
+  return [p1.join(','), p2.join(','), p3.join(',')].join(' ');
+};
+
+const GradientWidthVisualization = ({ value, size, isAnimated }) => {
   const spring = useSpring({
-    transform: `scaleX(${value * 0.015 + 0.2})`,
+    value,
     config: springConfig,
     immediate: !isAnimated,
   });
 
+  const triangleWidth = size - 14;
+  const triangleHeight = size - 20;
+
   return (
     <Wrapper style={{ width: size, height: size }}>
-      <Shadow />
-      <WidthGradient style={spring} />
+      <Svg
+        width={triangleWidth}
+        height={triangleHeight}
+        viewBox="0 0 30 24"
+        fill="none"
+      >
+        <Polygon
+          points={spring.value.interpolate(value => getPoints(30, 24, value))}
+          fill="none"
+          stroke={COLORS.yellow[500]}
+          strokeWidth={3}
+        />
+      </Svg>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  /*
-  It's possible for the WidthGradient to overflow, but we don't want to show it
-  */
-  overflow: hidden;
 `;
 
-const Shadow = styled.div`
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
-`;
-
-const WidthGradient = styled(animated.div)`
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: -25%;
-  right: -25%;
-  bottom: 0;
-  transform-origin: center center;
-  background: linear-gradient(
-    270deg,
-    hsla(200, 90%, 55%, 0%) 0%,
-    hsla(200, 90%, 55%, 100%) 51.04%,
-    hsla(200, 90%, 55%, 0%) 100%
-  );
+const Polygon = styled(animated.polygon)`
+  will-change: transform;
 `;
 
 export default GradientWidthVisualization;
