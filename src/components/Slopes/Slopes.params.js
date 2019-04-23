@@ -31,6 +31,7 @@ type InputParameters = {
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
+  lineThicknessAmount: number,
   enableMirrored: boolean,
 };
 
@@ -54,6 +55,7 @@ const transformParameters = ({
   waterBoilAmount,
   ballSize,
   dotAmount,
+  lineThicknessAmount,
   enableMirrored,
 }: InputParameters) => {
   // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
@@ -154,10 +156,14 @@ const transformParameters = ({
   // dotAmount -> dotRatio
   //
   // This will control a few things:
-  // - samplesPerRow, low values = less samples
+  // - samplesPerRow, low values = less samples (NOTE: Not for long!)
   // - lineWidth, low values = thicker lines (bigger dots)
   // - The actual segment size, calculated in the generator
   const dotRatio = dotAmount / 100;
+
+  // Line thickness controls the width in px of the line.
+  // Parameter range is from 0px to 10px
+  const lineThickness = lineThicknessAmount / 10;
 
   return {
     distanceBetweenRows,
@@ -176,6 +182,7 @@ const transformParameters = ({
     amplitudeRatio,
     polarHoleSize,
     dotRatio,
+    lineThickness,
     // Some fields are just passed right through, no macros:
     enableOcclusion,
     peaksCurve,

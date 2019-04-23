@@ -97,7 +97,7 @@ export const renderPolylines = function(
   }
 
   // Choose a default line width based on a relatively fine-tip pen
-  var lineWidth = opt.lineWidth || 1;
+  var lineWidth = opt.lineWidth;
 
   // Clear canvas
   context.clearRect(0, 0, width, height);

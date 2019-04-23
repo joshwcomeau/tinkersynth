@@ -51,6 +51,7 @@ const defaultParameters = {
   waterBoilAmount: 100,
   ballSize: 50,
   dotAmount: 0,
+  lineThicknessAmount: 10,
   peaksCurve: DEFAULT_PEAKS_CURVE,
   enableMirrored: false, // SECRET PARAM :o
 };
@@ -69,6 +70,7 @@ const poweredOffParameters = {
   peaksCurveAmount: 0,
   waterBoilAmount: 0,
   ballSize: 0,
+  lineThicknessAmount: 0,
   dotAmount: 0,
 };
 
@@ -90,6 +92,7 @@ type Parameters = {
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
+  lineThicknessAmount: number,
   peaksCurve: Curve,
   enableMirrored: boolean,
 };

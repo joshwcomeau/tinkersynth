@@ -50,19 +50,12 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  { swatchId, dotRatio }: any
+  { swatchId, lineThickness, dotRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
 
-  const lineWidth =
-    dotRatio === 0
-      ? MIN_WIDTH
-      : clamp(
-          normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
-          MIN_WIDTH,
-          MAX_WIDTH
-        );
+  const lineWidth = lineThickness;
 
   const swatch = getSwatchById(swatchId);
 

@@ -369,8 +369,7 @@ const generator = ({
   // be joined. Also, polarTanRatio (split universe) is not safe to join (it
   // creates a bunch of weird additional lines).
   const isMostlyContiguous = perlinRatio === 1;
-  const safeToJoin = polarTanRatio === 0;
-  if (isMostlyContiguous && safeToJoin) {
+  if (isMostlyContiguous) {
     rows = rows.map(joinLineSegments);
   }
 

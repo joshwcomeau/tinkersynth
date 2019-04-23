@@ -21,6 +21,7 @@ import { InstrumentCluster } from '../../ControlPanel';
 import OcclusionVisualization from './OcclusionVisualization';
 import LegoBrickVisualization from './LegoBrickVisualization';
 import SimilarityVisualization from './SimilarityVisualization';
+import PersonInflateVisualization from './PersonInflateVisualization';
 
 import type {
   ToggleParameterAction,
@@ -33,6 +34,8 @@ type Props = {
   enableOcclusion: boolean,
   waterBoilAmount: number,
   isWaterBoilAmountDisabled: boolean,
+  lineThicknessAmount: number,
+  isLineThicknessAmountDisabled: boolean,
   toggleParameter: ToggleParameterAction,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
@@ -45,6 +48,8 @@ const LineCluster = ({
   enableOcclusion,
   waterBoilAmount,
   isWaterBoilAmountDisabled,
+  lineThicknessAmount,
+  isLineThicknessAmountDisabled,
   toggleParameter,
   tweakParameter,
   animateTransitions,
@@ -54,7 +59,7 @@ const LineCluster = ({
 
   const OUTER_BORDER_WIDTH = 1;
 
-  const touchSliderWidth = columnWidth - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
+  const touchSliderWidth = columnWidth - UNIT * 0.5 - OUTER_BORDER_WIDTH * 2;
 
   const occlusionToggleSize = rowHeight;
 
@@ -85,7 +90,45 @@ const LineCluster = ({
           />
         </Row>
 
-        <Spacer size={UNIT * 4 + OUTER_BORDER_WIDTH * 2} />
+        <Spacer size={UNIT + OUTER_BORDER_WIDTH * 2} />
+
+        <ControlCompartment
+          orientation="horizontal"
+          isDisabled={isWaterBoilAmountDisabled}
+        >
+          <TouchSliderIconControl
+            value={waterBoilAmount}
+            updateValue={val => tweakParameter('waterBoilAmount', val)}
+            width={touchSliderWidth}
+            height={rowHeight}
+            visualizationComponent={SimilarityVisualization}
+            isAnimated={animateTransitions}
+            isPoweredOn={isPoweredOn}
+          />
+        </ControlCompartment>
+      </Row>
+
+      <Spacer size={UNIT} />
+
+      <Row>
+        <Row>
+          <ControlCompartment
+            orientation="horizontal"
+            isDisabled={isLineThicknessAmountDisabled}
+          >
+            <TouchSliderIconControl
+              value={lineThicknessAmount}
+              updateValue={val => tweakParameter('lineThicknessAmount', val)}
+              width={touchSliderWidth}
+              height={rowHeight}
+              visualizationComponent={PersonInflateVisualization}
+              isAnimated={animateTransitions}
+              isPoweredOn={isPoweredOn}
+            />
+          </ControlCompartment>
+        </Row>
+
+        <Spacer size={UNIT + OUTER_BORDER_WIDTH * 2} />
 
         <ControlCompartment
           orientation="horizontal"
@@ -118,6 +161,8 @@ const LineClusterContainer = ({ columnWidth }) => {
       enableOcclusion={slopesParams.enableOcclusion}
       waterBoilAmount={slopesParams.waterBoilAmount}
       isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
+      lineThicknessAmount={slopesParams.lineThicknessAmount}
+      isLineThicknessAmountDisabled={slopesParams.disabledParams.lineThickness}
       toggleParameter={slopesParams.toggleParameter}
       tweakParameter={slopesParams.tweakParameter}
       isPoweredOn={slopesParams.isPoweredOn}
