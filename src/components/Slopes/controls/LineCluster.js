@@ -1,9 +1,18 @@
+/**
+ * This cluster features:
+ * - Dots
+ * - Line occlusion toggle
+ * - Line thickness
+ * - Line similarity
+ * - points per line
+ */
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { UNIT } from '../../../constants';
 
 import TouchSliderIconControl from '../../TouchSliderIconControl';
+import ControlCompartment from '../../ControlCompartment/ControlCompartment';
 import ToggleControl from '../../ToggleControl';
 import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
@@ -11,6 +20,7 @@ import { InstrumentCluster } from '../../ControlPanel';
 
 import OcclusionVisualization from './OcclusionVisualization';
 import LegoBrickVisualization from './LegoBrickVisualization';
+import SimilarityVisualization from './SimilarityVisualization';
 
 import type {
   ToggleParameterAction,
@@ -19,9 +29,10 @@ import type {
 
 type Props = {
   width: number,
-  hideOcclusionToggle: boolean,
   dotAmount: number,
   enableOcclusion: boolean,
+  waterBoilAmount: number,
+  isWaterBoilAmountDisabled: boolean,
   toggleParameter: ToggleParameterAction,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
@@ -30,9 +41,10 @@ type Props = {
 
 const LineCluster = ({
   columnWidth,
-  hideOcclusionToggle,
   dotAmount,
   enableOcclusion,
+  waterBoilAmount,
+  isWaterBoilAmountDisabled,
   toggleParameter,
   tweakParameter,
   animateTransitions,
@@ -41,47 +53,71 @@ const LineCluster = ({
   const rowHeight = 54;
 
   const OUTER_BORDER_WIDTH = 1;
-  const innerWidth = columnWidth - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
+
+  const touchSliderWidth = columnWidth - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
+
+  const occlusionToggleSize = rowHeight;
+
+  // Dot amount is special, since it shares its space with the occlusion toggle
+  const dotAmountWidth = touchSliderWidth - UNIT - occlusionToggleSize;
 
   return (
-    <InstrumentCluster direction="row">
-      <TouchSliderIconControl
-        value={dotAmount}
-        updateValue={val => tweakParameter('dotAmount', val)}
-        width={innerWidth}
-        height={54}
-        visualizationComponent={LegoBrickVisualization}
-        isAnimated={animateTransitions}
-        isPoweredOn={isPoweredOn}
-      />
-      {!hideOcclusionToggle && (
-        <>
+    <InstrumentCluster direction="column">
+      <Row>
+        <Row>
+          <TouchSliderIconControl
+            value={dotAmount}
+            updateValue={val => tweakParameter('dotAmount', val)}
+            width={dotAmountWidth}
+            height={rowHeight}
+            visualizationComponent={LegoBrickVisualization}
+            isAnimated={animateTransitions}
+            isPoweredOn={isPoweredOn}
+          />
           <Spacer size={UNIT} />
           <ToggleControl
-            width={rowHeight}
-            height={rowHeight}
+            width={occlusionToggleSize}
+            height={occlusionToggleSize}
             value={enableOcclusion}
             updateValue={() => toggleParameter('enableOcclusion')}
             visualizationComponent={OcclusionVisualization}
             isPoweredOn={isPoweredOn}
           />
-        </>
-      )}
+        </Row>
+
+        <Spacer size={UNIT * 4 + OUTER_BORDER_WIDTH * 2} />
+
+        <ControlCompartment
+          orientation="horizontal"
+          isDisabled={isWaterBoilAmountDisabled}
+        >
+          <TouchSliderIconControl
+            value={waterBoilAmount}
+            updateValue={val => tweakParameter('waterBoilAmount', val)}
+            width={touchSliderWidth}
+            height={rowHeight}
+            visualizationComponent={SimilarityVisualization}
+            isAnimated={animateTransitions}
+            isPoweredOn={isPoweredOn}
+          />
+        </ControlCompartment>
+      </Row>
     </InstrumentCluster>
   );
 };
 
 const OptimizedLineCluster = React.memo(LineCluster);
 
-const LineClusterContainer = ({ columnWidth, hideOcclusionToggle }) => {
+const LineClusterContainer = ({ columnWidth }) => {
   const slopesParams = useContext(SlopesContext);
 
   return (
     <OptimizedLineCluster
       columnWidth={columnWidth}
-      hideOcclusionToggle={hideOcclusionToggle}
       dotAmount={slopesParams.dotAmount}
       enableOcclusion={slopesParams.enableOcclusion}
+      waterBoilAmount={slopesParams.waterBoilAmount}
+      isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
       toggleParameter={slopesParams.toggleParameter}
       tweakParameter={slopesParams.tweakParameter}
       isPoweredOn={slopesParams.isPoweredOn}
@@ -89,5 +125,12 @@ const LineClusterContainer = ({ columnWidth, hideOcclusionToggle }) => {
     />
   );
 };
+
+const Row = styled.div`
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+`;
 
 export default LineClusterContainer;

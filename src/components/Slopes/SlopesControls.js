@@ -12,7 +12,6 @@ import PlacardArea from './controls/PlacardArea';
 import Engraving from './Engraving';
 import PerspectiveCluster from './controls/PerspectiveCluster';
 import PeaksCluster from './controls/PeaksCluster';
-import SimilarityCluster from './controls/SimilarityCluster';
 import SettingsCluster from './controls/SettingsCluster';
 import PolarCluster from './controls/PolarCluster';
 import NoiseCluster from './controls/NoiseCluster';
@@ -66,10 +65,7 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
       <Spacer size={UNIT * 2} />
 
       <DesktopOnlyRow>
-        <LineCluster
-          columnWidth={columnWidth}
-          hideOcclusionToggle={windowDimensions.width < BREAKPOINT_SIZES.sm}
-        />
+        <LineCluster columnWidth={columnWidth} />
 
         <MobileOnly>
           <Spacer size={UNIT * 2} />
