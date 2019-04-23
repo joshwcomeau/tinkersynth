@@ -43,6 +43,8 @@ const AudioCluster = ({
   const OUTER_BORDER_WIDTH = 1;
   const innerWidth = width - UNIT * 2 - OUTER_BORDER_WIDTH * 2;
 
+  const controlHeight = 40;
+
   return (
     <InstrumentCluster direction="column">
       <ControlCompartment
@@ -54,7 +56,7 @@ const AudioCluster = ({
           value={amplitudeAmount}
           updateValue={val => tweakParameter('amplitudeAmount', val)}
           width={innerWidth}
-          height={47}
+          height={controlHeight}
           visualizationComponent={AmplitudeVisualization}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}
@@ -73,7 +75,7 @@ const AudioCluster = ({
           value={wavelength}
           updateValue={val => tweakParameter('wavelength', val)}
           width={innerWidth}
-          height={47}
+          height={controlHeight}
           visualizationComponent={WavelengthVisualization}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}
@@ -92,7 +94,7 @@ const AudioCluster = ({
           value={octaveAmount}
           updateValue={val => tweakParameter('octaveAmount', val)}
           width={innerWidth}
-          height={47}
+          height={controlHeight}
           visualizationComponent={OctaveVisualization}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}

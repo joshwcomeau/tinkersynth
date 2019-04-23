@@ -42,7 +42,7 @@ const PeaksCluster = ({
   const sliderPadding = 4;
 
   const bezierControlWidth = innerWidth - sliderWidth - UNIT;
-  const bezierControlHeight = 170;
+  const bezierControlHeight = 142;
 
   const sliderHeight = bezierControlHeight;
 

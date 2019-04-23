@@ -40,7 +40,11 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
     <ControlPanel width={width} padding={padding}>
       <Row style={{ zIndex: 2 }}>
         <PlacardArea />
-        <SettingsCluster squeeze={columnWidth <= 550} />
+        <Row style={{ paddingTop: 15 }}>
+          <SettingsCluster squeeze={columnWidth <= 550} />
+          <Spacer size={8} />
+          <DestructiveCluster />
+        </Row>
       </Row>
       <Spacer size={UNIT * 2} />
       <DesktopOnlyRow>
@@ -54,8 +58,6 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
         <Spacer size={UNIT * 2} />
 
         <Column>
-          <SimilarityCluster width={columnWidth} />
-          <Spacer size={UNIT * 2} />
           <PolarCluster width={columnWidth} />
           <Spacer size={UNIT * 2} />
           <NoiseCluster width={columnWidth} />
@@ -72,8 +74,6 @@ const SlopesControls = ({ width, windowDimensions }: Props) => {
         <MobileOnly>
           <Spacer size={UNIT * 2} />
         </MobileOnly>
-
-        <DestructiveCluster />
       </DesktopOnlyRow>
     </ControlPanel>
   );
