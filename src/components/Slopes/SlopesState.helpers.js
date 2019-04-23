@@ -41,7 +41,7 @@ export const updateDisabledParams = (disabledObj, params) => {
   disabledObj.current.wavelength = params.splitUniverse === 100;
   disabledObj.current.waterBoilAmount =
     params.splitUniverse === 100 || params.spikyness === 100;
-  disabledObj.current.personInflateAmount = params.splitUniverse === 100;
+  disabledObj.current.peaksCurveAmount = params.splitUniverse === 100;
   disabledObj.current.omega = params.polarAmount === 0;
   disabledObj.current.omega = params.polarAmount === 0;
   disabledObj.current.staticAmount =
@@ -74,7 +74,7 @@ export const shuffleParameters = state => {
     state.parameters.peaksCurve = getRandomPeaksCurve();
   }
   if (Math.random() > 0.25) {
-    state.parameters.personInflateAmount = getRandomSliderValue();
+    state.parameters.peaksCurveAmount = getRandomSliderValue();
   }
   if (Math.random() > 0.25) {
     // Amplitudes below 25 don't really look good

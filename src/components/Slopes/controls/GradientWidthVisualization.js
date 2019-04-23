@@ -52,7 +52,7 @@ const GradientWidthVisualization = ({ value, size, isAnimated }) => {
         <Polygon
           points={spring.value.interpolate(value => getPoints(30, 24, value))}
           fill="none"
-          stroke={COLORS.yellow[500]}
+          stroke={COLORS.yellow[300]}
           strokeWidth={3}
         />
       </Svg>

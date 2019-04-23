@@ -25,7 +25,7 @@ type InputParameters = {
   splitUniverse: number,
   enableOcclusion: boolean,
   peaksCurve: Curve,
-  personInflateAmount: number,
+  peaksCurveAmount: number,
   wavelength: number,
   octaveAmount: number,
   waterBoilAmount: number,
@@ -50,7 +50,7 @@ const transformParameters = ({
   splitUniverse,
   enableOcclusion,
   peaksCurve,
-  personInflateAmount,
+  peaksCurveAmount,
   waterBoilAmount,
   ballSize,
   dotAmount,
@@ -120,7 +120,7 @@ const transformParameters = ({
   // to be up to 3x taller than they'd otherwise be.
   const amplitudeRatio = (amplitudeAmount / 100) * 3;
 
-  // Transform our `personInflateAmount` to control how wide the effect of the
+  // Transform our `peaksCurveAmount` to control how wide the effect of the
   // peaks curve is.
   //
   // HACK: So, `peaksCurveStrength` is used as an exponent,
@@ -144,7 +144,7 @@ const transformParameters = ({
       endPoint: [1, 1],
       controlPoint1: [0, 0],
     },
-    normalize(personInflateAmount, 0, 100, 5, 0)
+    normalize(peaksCurveAmount, 0, 100, 5, 0)
   );
 
   const polarHoleSize = normalize(ballSize, 0, 100, 5, 150);

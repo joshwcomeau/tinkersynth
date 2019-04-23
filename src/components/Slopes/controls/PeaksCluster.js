@@ -20,8 +20,8 @@ import type { TweakParameterAction } from '../SlopesState';
 type Props = {
   width: number,
   peaksCurve: Curve,
-  personInflateAmount: number,
-  isPersonInflateAmountDisabled: boolean,
+  peaksCurveAmount: number,
+  isPeaksCurveAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
   isPoweredOn: boolean,
@@ -30,8 +30,8 @@ type Props = {
 const PeaksCluster = ({
   width,
   peaksCurve,
-  personInflateAmount,
-  isPersonInflateAmountDisabled,
+  peaksCurveAmount,
+  isPeaksCurveAmountDisabled,
   tweakParameter,
   animateTransitions,
   isPoweredOn,
@@ -62,16 +62,16 @@ const PeaksCluster = ({
       <ControlCompartment
         orientation="vertical"
         numOfDoors={1}
-        isDisabled={isPersonInflateAmountDisabled}
+        isDisabled={isPeaksCurveAmountDisabled}
       >
         <SliderIconControl
           width={sliderWidth}
           height={sliderHeight}
           padding={sliderPadding}
-          value={personInflateAmount}
-          updateValue={val => tweakParameter('personInflateAmount', val)}
+          value={peaksCurveAmount}
+          updateValue={val => tweakParameter('peaksCurveAmount', val)}
           visualizationComponent={GradientWidthVisualization}
-          disabled={isPersonInflateAmountDisabled}
+          disabled={isPeaksCurveAmountDisabled}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}
         />
@@ -90,10 +90,8 @@ const PeaksContainer = ({ width }: { width: number }) => {
     <OptimizedPeaksCluster
       width={width}
       peaksCurve={slopesParams.peaksCurve}
-      personInflateAmount={slopesParams.personInflateAmount}
-      isPersonInflateAmountDisabled={
-        slopesParams.disabledParams.personInflateAmount
-      }
+      peaksCurveAmount={slopesParams.peaksCurveAmount}
+      isPeaksCurveAmountDisabled={slopesParams.disabledParams.peaksCurveAmount}
       tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
       isPoweredOn={slopesParams.isPoweredOn}
