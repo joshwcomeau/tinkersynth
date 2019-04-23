@@ -4,9 +4,12 @@ import styled, { keyframes } from 'styled-components';
 import Icon from 'react-icons-kit';
 import { loader } from 'react-icons-kit/feather/loader';
 import svgToPng from '../../vendor/svg-to-png';
-import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
 import generateRandomName from '../../services/random-name.service';
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 import darkTilesSrc from '../../images/transparent-tiles-dark.svg';
 import lightTilesSrc from '../../images/transparent-tiles-light.svg';
 

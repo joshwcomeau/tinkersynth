@@ -1,5 +1,7 @@
-import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
-
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 import { clipLinesWithMargin } from '../../helpers/line.helpers';
 
 import generator from './Slopes.generator';

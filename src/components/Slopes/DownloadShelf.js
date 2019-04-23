@@ -2,13 +2,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import svgToPng from '../../vendor/svg-to-png';
-import { renderPolylines, polylinesToSVG } from '../../vendor/polylines';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import useWorker from '../../hooks/worker.hook.js';
 import { COLORS, UNIT } from '../../constants';
 import ccLicenseSrc from '../../images/cc-license.png';
 import { getSwatchById } from '../../services/art-swatches.service';
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';

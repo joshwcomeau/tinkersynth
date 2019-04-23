@@ -1,6 +1,5 @@
 // @flow
 import React, { useRef, useEffect, useContext } from 'react';
-import { renderPolylines } from '../../vendor/polylines';
 
 import { COLORS } from '../../constants';
 import { clamp, mix, normalize } from '../../utils';
@@ -9,6 +8,10 @@ import {
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
 import useCanvas from '../../hooks/canvas.hook';
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 
 import transformParameters from './Slopes.params';
 import SlopesWorker from './SlopesCanvas.worker';

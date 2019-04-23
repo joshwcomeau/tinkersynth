@@ -1,11 +1,11 @@
 // @flow
-
 /**
- * Taken and modified from canvas-sketch-util
+ * Taken and modified from canvas-sketch-util, by Matt Deslauriers
  * https://github.com/mattdesl/canvas-sketch-util/blob/master/penplot.js
  */
 
 import { COLORS } from '../constants';
+import { arePointsEqual } from '../helpers/line.helpers';
 
 import type { Rows, ColoringMode } from '../types';
 
@@ -29,6 +29,20 @@ const getColorForLine = (rowIndex, segmentIndex, coloringMode, lineColors) => {
   }
 };
 
+const generateSvgPath = (pathCommands, color, { lineWidth, lineCap }) => {
+  const lineJoin = lineCap === 'round' ? 'round' : 'miter';
+
+  return `
+  <path
+    d="${pathCommands.join(' ')}"
+    stroke="${color}"
+    stroke-width="${lineWidth}px"
+    fill="none"
+    stroke-linecap="${lineCap}"
+    stroke-linejoin="${lineJoin}"
+  />`;
+};
+
 export const polylinesToSVG = function polylinesToSVG(
   rows: Rows,
   opt: Options
@@ -36,49 +50,46 @@ export const polylinesToSVG = function polylinesToSVG(
   const {
     width,
     height,
+    coloringMode,
     backgroundColor,
     lineColors,
     lineWidth,
     lineCap,
   } = opt;
 
-  var computeBounds =
-    typeof width === 'undefined' || typeof height === 'undefined';
-
-  if (computeBounds) {
+  if (typeof width === 'undefined' || typeof height === 'undefined') {
     throw new Error('Must specify "width" and "height" options');
   }
 
-  const units = 'px';
   const lineJoin = lineCap === 'round' ? 'round' : 'miter';
 
   const paths = [];
 
   [...rows].reverse().forEach((row, rowIndex) => {
-    // TODO: I need more controls, for coloring styles
-    const strokeStyle = lineColors[rowIndex % lineColors.length];
+    if (coloringMode === 'row') {
+      // In the default mode, every row gets its own color.
+      // This means that we can join all contiguous segments, to avoid the
+      // weird stitching error that occurs otherwise.
+      const color = lineColors[rowIndex % lineColors.length];
 
-    const pathCommands = [];
+      const pathCommands = [];
 
-    row.forEach((points, segmentIndex) => {
-      points.forEach((point, index) => {
-        var type = index === 0 ? 'M' : 'L';
-        const [x, y] = point;
-        pathCommands.push(type + x + ' ' + y);
+      row.forEach((lines, segmentIndex) => {
+        lines.forEach((point, index) => {
+          const command = index === 0 ? 'M' : 'L';
+          const [x, y] = point;
+
+          pathCommands.push(`${command}${x} ${y}`);
+        });
       });
-    });
 
-    const path = `
-<path
-  d="${pathCommands.join(' ')}"
-  stroke="${strokeStyle}"
-  stroke-width="${lineWidth}${units}"
-  fill="none"
-  stroke-linecap="${lineCap}"
-  stroke-linejoin="${lineJoin}"
-/>`;
-
-    paths.push(path);
+      const path = generateSvgPath(pathCommands, color, opt);
+      paths.push(path);
+    } else if (coloringMode === 'segment') {
+      // In `segment` mode, every two-point line is colored differently. This
+      // produces a wonderful effect when using dotRatio or spikyness.
+      throw new Error('Not implemented yet');
+    }
   });
 
   const pathsMarkup = paths.join('\n');
@@ -101,8 +112,6 @@ export const renderPolylines = function(
 
   const { width, height, coloringMode, lineColors } = opt;
 
-  console.log({ coloringMode });
-
   if (typeof width === 'undefined' || typeof height === 'undefined') {
     throw new Error('Must specify "width" and "height" options');
   }
@@ -119,7 +128,7 @@ export const renderPolylines = function(
 
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
-    row.forEach(function(points, segmentIndex) {
+    row.forEach(function(line, segmentIndex) {
       context.strokeStyle = getColorForLine(
         rowIndex,
         segmentIndex,
@@ -127,19 +136,12 @@ export const renderPolylines = function(
         lineColors
       );
 
-      // const gradient = context.createLinearGradient(0, 0, width, 0);
-      // gradient.addColorStop(0, color1);
-      // gradient.addColorStop(1, color2);
-
-      // context.strokeStyle = gradient;
-
       context.beginPath();
 
-      points.forEach(function(p) {
+      line.forEach(function(p) {
         context.lineTo(p[0], p[1]);
       });
 
-      // context.strokeStyle = opt.lineColor || 'black';
       context.lineWidth = lineWidth;
       context.lineJoin = opt.lineCap === 'round' ? 'round' : 'miter';
       context.lineCap = opt.lineCap || 'butt';

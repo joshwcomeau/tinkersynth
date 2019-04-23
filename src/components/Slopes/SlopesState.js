@@ -36,7 +36,7 @@ type HistorySnapshot = {
 const defaultParameters = {
   seed: getRandomSeed(),
   swatchId: 'inverted-black-on-white',
-  coloringMode: 'segment',
+  coloringMode: 'row',
   enableOcclusion: true,
   amplitudeAmount: 50,
   wavelength: 25,

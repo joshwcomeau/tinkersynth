@@ -1,6 +1,9 @@
 import { COLORS } from '../../constants';
 import { throttle } from '../../utils';
-import { renderPolylines } from '../../vendor/polylines';
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 
 import generator from './Slopes.generator';
 import { getRenderOptions } from './SlopesCanvas.helpers';

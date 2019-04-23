@@ -354,15 +354,23 @@ const generator = ({
   // Filter out all occluded-away line segments
   rows = rows.map(row => row.filter(line => !!line));
 
-  // If our rows are mostly-contiguous (perlinRatio of 1), we should create
-  // polylines instead of having many many 2-point line segments.
+  // If it's safe to do so, we should create polylines instead of having many
+  // many 2-point line segments.
   // This saves a ton of time when it comes to actually drawing the rows:
   // With standard settings, it goes from 30-40ms drawing time to 5-6ms.
   //
+  // (Note that this is not captured in the DEBUG_PERF here, since it affects
+  // the paint-to-canvas time, not the calculate-rows time.)
+  //
   // The data-munging cost of the `joinLineSegments` call is <1ms,
   // so this is a huge win :D
-  const isMostlyContiguous = perlinRatio === 1 && dotRatio === 1;
-  if (isMostlyContiguous) {
+  //
+  // I take perlinRatio (spikyness) into account because spikes should not
+  // be joined. Also, polarTanRatio (split universe) is not safe to join (it
+  // creates a bunch of weird additional lines).
+  const isMostlyContiguous = perlinRatio === 1;
+  const safeToJoin = polarTanRatio === 0;
+  if (isMostlyContiguous && safeToJoin) {
     rows = rows.map(joinLineSegments);
   }
 
