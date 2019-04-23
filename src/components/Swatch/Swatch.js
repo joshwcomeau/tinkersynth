@@ -24,14 +24,20 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
         return (
           <Spring
             key={index}
-            to={{ x: isSelected ? x : 0, y: isSelected ? y : 0 }}
+            native
+            to={{
+              transform: `translate(
+                ${isSelected ? x : 0}px,
+                ${isSelected ? y : 0}px
+              )`,
+            }}
             config={{
               tension: 500,
               friction: 20,
               mass: ballSize * 0.5,
             }}
           >
-            {interpolated => (
+            {style => (
               <Ball
                 color={color}
                 style={{
@@ -39,10 +45,7 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
                   height: ballSize,
                   backgroundColor: color,
                   borderColor: backgroundColor,
-                  transform: `translate(
-                    ${interpolated.x}px,
-                    ${interpolated.y}px
-                  )`,
+                  ...style,
                 }}
               />
             )}
