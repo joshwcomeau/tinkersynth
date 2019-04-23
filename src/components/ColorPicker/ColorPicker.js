@@ -38,7 +38,11 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
               ...spring,
             }}
           >
-            <Swatch size={swatchHeight} swatch={swatch} />
+            <Swatch
+              size={swatchHeight}
+              swatch={swatch}
+              isSelected={swatch.id === swatchId}
+            />
           </SwatchWrapper>
         ))}
       </Swatches>

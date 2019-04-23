@@ -112,7 +112,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
             Licensed under <strong>CC Attribution-NonCommercial 4.0</strong>.
             <br />
             Please use them in your personal artistic endeavours, or contact us
-            for pricing.
+            for commercial license pricing.
             <br />
             <TextLink to="/faq?q=license" target="_blank">
               More information
@@ -140,7 +140,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
               swatch={swatch}
             />
 
-            <Spacer size={24} />
+            <Spacer size={16} />
 
             <DownloadVariant
               size={PREVIEW_SIZE}
@@ -150,7 +150,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
               swatch={swatch}
             />
 
-            <Spacer size={24} />
+            <Spacer size={16} />
 
             <DownloadVariant
               size={PREVIEW_SIZE}
@@ -169,10 +169,21 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
 const Wrapper = styled.div`
   display: flex;
   align-items: flex-end;
+  max-height: 70vh;
+  overflow: scroll;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Info = styled.div`
   flex: 1;
+
+  @media (max-width: 1024px) {
+    margin-bottom: 24px;
+  }
 `;
 
 const InfoHeader = styled.header`
@@ -187,6 +198,11 @@ const DownloadHeader = styled.header`
 
 const Variants = styled.div`
   display: flex;
+
+  @media (max-width: 550px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export default DownloadShelf;

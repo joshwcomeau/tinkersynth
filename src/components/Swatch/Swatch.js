@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { Spring, animated } from 'react-spring';
 
 import { random } from '../../utils';
 
@@ -21,14 +22,21 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
         const { x, y, ballSize } = swatch.getBallPositions(color, size);
 
         return (
-          <Ball
+          <Spring
             key={index}
-            color={color}
-            borderColor={backgroundColor}
-            x={x}
-            y={y}
-            size={ballSize}
-          />
+            native
+            to={{ x: isSelected ? x : 0, y: isSelected ? y : 0 }}
+          >
+            {interpolated => (
+              <Ball
+                color={color}
+                x={interpolated.x}
+                y={interpolated.y}
+                size={ballSize}
+                style={{ borderColor: backgroundColor }}
+              />
+            )}
+          </Spring>
         );
       })}
     </Wrapper>
@@ -40,7 +48,7 @@ const Wrapper = styled.div`
   border-radius: 50%;
 `;
 
-const Ball = styled.div`
+const Ball = styled(animated.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -52,7 +60,7 @@ const Ball = styled.div`
   transform: ${props => `translate(${props.x}px, ${props.y}px)}`};
   background-color: ${props => props.color};
   border-radius: 50%;
-  border: 2px solid ${props => props.borderColor};
+  border: 2px solid;
 `;
 
 export default Swatch;
