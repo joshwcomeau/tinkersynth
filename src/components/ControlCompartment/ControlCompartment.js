@@ -15,7 +15,6 @@ type Props = {
   orientation: 'horizontal' | 'vertical',
   numOfDoors?: 1 | 2,
   isDisabled: boolean,
-  clickDisabledCompartment: (elem: HTMLElement) => void,
   children: React$Node,
 };
 
@@ -43,7 +42,6 @@ const ControlCompartment = ({
   orientation,
   isDisabled,
   numOfDoors = 2,
-  clickDisabledCompartment,
   children,
 }: Props) => {
   const iconButtonRef = useRef();

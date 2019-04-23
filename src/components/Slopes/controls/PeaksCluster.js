@@ -11,7 +11,7 @@ import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
-import PersonInflateVisualization from './PersonInflateVisualization';
+import GradientWidthVisualization from './GradientWidthVisualization';
 import WavelengthVisualization from './WavelengthVisualization';
 
 import type { Curve } from '../../../types';
@@ -70,7 +70,7 @@ const PeaksCluster = ({
           padding={sliderPadding}
           value={personInflateAmount}
           updateValue={val => tweakParameter('personInflateAmount', val)}
-          visualizationComponent={PersonInflateVisualization}
+          visualizationComponent={GradientWidthVisualization}
           disabled={isPersonInflateAmountDisabled}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}
