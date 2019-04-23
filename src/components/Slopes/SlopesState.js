@@ -17,7 +17,7 @@ import {
 import analytics from '../../services/analytics.service';
 import { sum, mean, sample, debounce } from '../../utils';
 
-import type { Curve } from '../../types';
+import type { Curve, ColoringMode } from '../../types';
 
 const HISTORY_SIZE_LIMIT = 5;
 
@@ -36,6 +36,7 @@ type HistorySnapshot = {
 const defaultParameters = {
   seed: getRandomSeed(),
   swatchId: 'inverted-black-on-white',
+  coloringMode: 'segment',
   enableOcclusion: true,
   amplitudeAmount: 50,
   wavelength: 25,
@@ -75,6 +76,7 @@ const poweredOffParameters = {
 type Parameters = {
   seed: number,
   swatchId: string,
+  coloringMode: ColoringMode,
   enableOcclusion: boolean,
   amplitudeAmount: number,
   wavelength: number,
@@ -192,6 +194,7 @@ const reducer = produce(
         state.parameters = {
           ...defaultParameters,
           swatchId: state.parameters.swatchId,
+          coloringMode: state.parameters.coloringMode,
         };
 
         return state;
@@ -295,25 +298,7 @@ export const SlopesProvider = ({ children }: { children: React$Node }) => {
   return (
     <SlopesContext.Provider
       value={{
-        seed: state.parameters.seed,
-        swatchId: state.parameters.swatchId,
-        amplitudeAmount: state.parameters.amplitudeAmount,
-        octaveAmount: state.parameters.octaveAmount,
-        perspective: state.parameters.perspective,
-        lineAmount: state.parameters.lineAmount,
-        spikyness: state.parameters.spikyness,
-        staticAmount: state.parameters.staticAmount,
-        polarAmount: state.parameters.polarAmount,
-        omega: state.parameters.omega,
-        splitUniverse: state.parameters.splitUniverse,
-        enableOcclusion: state.parameters.enableOcclusion,
-        peaksCurve: state.parameters.peaksCurve,
-        personInflateAmount: state.parameters.personInflateAmount,
-        wavelength: state.parameters.wavelength,
-        waterBoilAmount: state.parameters.waterBoilAmount,
-        ballSize: state.parameters.ballSize,
-        dotAmount: state.parameters.dotAmount,
-        enableMirrored: state.parameters.enableMirrored,
+        ...state.parameters,
 
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,

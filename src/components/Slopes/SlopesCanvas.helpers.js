@@ -50,7 +50,7 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  { swatchId, dotRatio }: any
+  { swatchId, coloringMode, dotRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
@@ -91,6 +91,7 @@ export const getRenderOptions = (
   return {
     width,
     height,
+    coloringMode,
     backgroundColor,
     lineColors: swatch.colors,
     lineWidth,

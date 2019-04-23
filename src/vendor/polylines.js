@@ -7,16 +7,26 @@
 
 import { COLORS } from '../constants';
 
-import type { Rows } from '../types';
+import type { Rows, ColoringMode } from '../types';
 
 type Options = {
   width: number,
   height: number,
   context?: CanvasRenderingContext2D,
+  coloringMode: ColoringMode,
   lineWidth: number,
   backgroundColor: string,
   lineColors: string,
   lineCap: string,
+};
+
+const getColorForLine = (rowIndex, segmentIndex, coloringMode, lineColors) => {
+  if (coloringMode === 'row') {
+    return lineColors[rowIndex % lineColors.length];
+  } else {
+    const rowOffset = rowIndex % lineColors.length;
+    return lineColors[(segmentIndex + rowOffset) % lineColors.length];
+  }
 };
 
 export const polylinesToSVG = function polylinesToSVG(
@@ -89,8 +99,10 @@ export const renderPolylines = function(
 ) {
   if (!context) throw new Error('Must specify "context" options');
 
-  var width = opt.width;
-  var height = opt.height;
+  const { width, height, coloringMode, lineColors } = opt;
+
+  console.log({ coloringMode });
+
   if (typeof width === 'undefined' || typeof height === 'undefined') {
     throw new Error('Must specify "width" and "height" options');
   }
@@ -108,7 +120,12 @@ export const renderPolylines = function(
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach(function(points, segmentIndex) {
-      context.strokeStyle = opt.lineColors[rowIndex % opt.lineColors.length];
+      context.strokeStyle = getColorForLine(
+        rowIndex,
+        segmentIndex,
+        coloringMode,
+        lineColors
+      );
 
       // const gradient = context.createLinearGradient(0, 0, width, 0);
       // gradient.addColorStop(0, color1);

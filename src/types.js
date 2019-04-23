@@ -36,6 +36,8 @@ export type SwatchData = {
   getBallPositions: (color: string, parentSize: number) => SwatchBallPosition,
 };
 
+export type ColoringMode = 'row' | 'segment';
+
 export type RenderImageKind =
   | 'main'
   | 'download-transparent'

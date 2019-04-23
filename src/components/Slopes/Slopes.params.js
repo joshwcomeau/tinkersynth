@@ -9,11 +9,12 @@ import { MIN_NUM_ROWS, MAX_NUM_ROWS } from '../../constants';
 import { normalize, mix, clamp } from '../../utils';
 import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 
-import type { Curve } from '../../types';
+import type { Curve, ColoringMode } from '../../types';
 
 type InputParameters = {
   seed: number,
   swatchId: string,
+  coloringMode: ColoringMode,
   height: number,
   amplitudeAmount: number,
   perspective: number,
@@ -37,6 +38,7 @@ type InputParameters = {
 const transformParameters = ({
   seed,
   swatchId,
+  coloringMode,
   height,
   amplitudeAmount,
   wavelength,
@@ -182,6 +184,7 @@ const transformParameters = ({
     selfSimilarity,
     seed,
     swatchId,
+    coloringMode,
     enableMirrored,
   };
 };
