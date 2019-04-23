@@ -31,6 +31,26 @@ type Props = {
 const OUTPUT_HEIGHT = 7200;
 const OUTPUT_WIDTH = OUTPUT_HEIGHT * SLOPES_ASPECT_RATIO;
 
+const generateOpaqueClone = (svgNode, originalCanvasWidth, background) => {
+  // Ok this one is a bit tricky. We need to modify the SVG to include a
+  // full-size background.
+  const svgWidth = originalCanvasWidth;
+  const svgHeight = svgWidth * (1 / SLOPES_ASPECT_RATIO);
+
+  const nodeClone = svgNode.cloneNode(true);
+
+  const rect = document.createElement('rect');
+  rect.setAttribute('x', '0');
+  rect.setAttribute('y', '0');
+  rect.setAttribute('width', svgWidth);
+  rect.setAttribute('height', svgHeight);
+  rect.setAttribute('fill', background);
+
+  nodeClone.prepend(rect);
+
+  return nodeClone;
+};
+
 const DownloadVariant = ({
   size,
   originalCanvasWidth,
@@ -48,12 +68,12 @@ const DownloadVariant = ({
   const isLightBackground = swatch.backgroundColor === '#FFFFFF';
   const textColor = isLightBackground ? 'black' : 'white';
 
-  // prettier-ignore
-  const background = kind === 'opaque-png'
-    ? swatch.backgroundColor
-    : isLightBackground
-      ? `url(${lightTilesSrc})`
-      : `url(${darkTilesSrc})`;
+  const background =
+    kind === 'transparent-png'
+      ? isLightBackground
+        ? `url(${lightTilesSrc})`
+        : `url(${darkTilesSrc})`
+      : swatch.backgroundColor;
 
   React.useEffect(
     () => {
@@ -96,31 +116,27 @@ const DownloadVariant = ({
       case 'opaque-png': {
         setIsPreparing(true);
 
-        // Ok this one is a bit tricky. We need to modify the SVG to include a
-        // full-size background.
-        const svgWidth = originalCanvasWidth;
-        const svgHeight = svgWidth * (1 / SLOPES_ASPECT_RATIO);
-
-        const nodeClone = svgNode.cloneNode(true);
-
-        const rect = document.createElement('rect');
-        rect.setAttribute('x', '0');
-        rect.setAttribute('y', '0');
-        rect.setAttribute('width', svgWidth);
-        rect.setAttribute('height', svgHeight);
-        rect.setAttribute('fill', background);
-
-        nodeClone.prepend(rect);
+        const opaqueClone = generateOpaqueClone(
+          svgNode,
+          originalCanvasWidth,
+          background
+        );
 
         svgToPng
-          .saveSvgAsPng(nodeClone, filename.current, { scale })
+          .saveSvgAsPng(opaqueClone, filename.current, { scale })
           .then(() => setIsPreparing(false));
 
         break;
       }
 
       case 'svg': {
-        svgToPng.saveSvg(svgNode, filename.current);
+        const opaqueClone = generateOpaqueClone(
+          svgNode,
+          originalCanvasWidth,
+          background
+        );
+
+        svgToPng.saveSvg(opaqueClone, filename.current);
         break;
       }
 
