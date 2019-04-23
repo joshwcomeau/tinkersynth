@@ -7,26 +7,16 @@
 import { COLORS } from '../constants';
 import { arePointsEqual } from '../helpers/line.helpers';
 
-import type { Rows, ColoringMode } from '../types';
+import type { Rows } from '../types';
 
 type Options = {
   width: number,
   height: number,
   context?: CanvasRenderingContext2D,
-  coloringMode: ColoringMode,
   lineWidth: number,
   backgroundColor: string,
   lineColors: string,
   lineCap: string,
-};
-
-const getColorForLine = (rowIndex, segmentIndex, coloringMode, lineColors) => {
-  if (coloringMode === 'row') {
-    return lineColors[rowIndex % lineColors.length];
-  } else {
-    const rowOffset = rowIndex % lineColors.length;
-    return lineColors[(segmentIndex + rowOffset) % lineColors.length];
-  }
 };
 
 const generateSvgPath = (pathCommands, color, { lineWidth, lineCap }) => {
@@ -50,7 +40,6 @@ export const polylinesToSVG = function polylinesToSVG(
   const {
     width,
     height,
-    coloringMode,
     backgroundColor,
     lineColors,
     lineWidth,
@@ -66,30 +55,21 @@ export const polylinesToSVG = function polylinesToSVG(
   const paths = [];
 
   [...rows].reverse().forEach((row, rowIndex) => {
-    if (coloringMode === 'row') {
-      // In the default mode, every row gets its own color.
-      // This means that we can join all contiguous segments, to avoid the
-      // weird stitching error that occurs otherwise.
-      const color = lineColors[rowIndex % lineColors.length];
-
+    row.forEach((lines, segmentIndex) => {
       const pathCommands = [];
 
-      row.forEach((lines, segmentIndex) => {
-        lines.forEach((point, index) => {
-          const command = index === 0 ? 'M' : 'L';
-          const [x, y] = point;
+      const color = getColorForLine(rowIndex, segmentIndex, lineColors);
 
-          pathCommands.push(`${command}${x} ${y}`);
-        });
+      lines.forEach((point, index) => {
+        const command = index === 0 ? 'M' : 'L';
+        const [x, y] = point;
+
+        pathCommands.push(`${command}${x} ${y}`);
       });
 
       const path = generateSvgPath(pathCommands, color, opt);
       paths.push(path);
-    } else if (coloringMode === 'segment') {
-      // In `segment` mode, every two-point line is colored differently. This
-      // produces a wonderful effect when using dotRatio or spikyness.
-      throw new Error('Not implemented yet');
-    }
+    });
   });
 
   const pathsMarkup = paths.join('\n');
@@ -110,7 +90,7 @@ export const renderPolylines = function(
 ) {
   if (!context) throw new Error('Must specify "context" options');
 
-  const { width, height, coloringMode, lineColors } = opt;
+  const { width, height, lineColors } = opt;
 
   if (typeof width === 'undefined' || typeof height === 'undefined') {
     throw new Error('Must specify "width" and "height" options');
@@ -128,18 +108,13 @@ export const renderPolylines = function(
 
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
-    row.forEach(function(line, segmentIndex) {
-      context.strokeStyle = getColorForLine(
-        rowIndex,
-        segmentIndex,
-        coloringMode,
-        lineColors
-      );
+    row.forEach(function(lines, segmentIndex) {
+      context.strokeStyle = getColorForLine(rowIndex, segmentIndex, lineColors);
 
       context.beginPath();
 
-      line.forEach(function(p) {
-        context.lineTo(p[0], p[1]);
+      lines.forEach(function(point, segmentIndex) {
+        context.lineTo(point[0], point[1]);
       });
 
       context.lineWidth = lineWidth;
@@ -148,6 +123,28 @@ export const renderPolylines = function(
       context.stroke();
     });
   });
+};
+
+// SURPRISING COMPLEXITY WARNING
+// With most settings, every row will contain a small number (usually 1) of
+// polylines (a line with many points). The `segmentIndex` refers to these
+// segments.
+//
+// When `perlinRatio` is less than 1, or `dotRatio` is more than 0, suddenly
+// every row has MANY lines, and each line only has 2 points. Each row is no
+// longer contiguous, and so the segment indexes come into play.
+//
+// Originally, I was going to have different "color modes" that the user could
+// toggle between, but I realized that the data format I already had meant I
+// could choose a "good looking" option automatically depending on the data.
+//
+// The one drawback to this is that if a line is occluded, when that line comes
+// back in, it'll be a different color (since it's a different segment).
+// I could fix this by deriving the color mode from that setting, but for now
+// I don't care enough.
+const getColorForLine = (rowIndex, segmentIndex, lineColors) => {
+  const rowOffset = rowIndex % lineColors.length;
+  return lineColors[(segmentIndex + rowOffset) % lineColors.length];
 };
 
 export default renderPolylines;

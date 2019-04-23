@@ -17,7 +17,7 @@ import {
 import analytics from '../../services/analytics.service';
 import { sum, mean, sample, debounce } from '../../utils';
 
-import type { Curve, ColoringMode } from '../../types';
+import type { Curve } from '../../types';
 
 const HISTORY_SIZE_LIMIT = 5;
 
@@ -36,7 +36,6 @@ type HistorySnapshot = {
 const defaultParameters = {
   seed: getRandomSeed(),
   swatchId: 'inverted-black-on-white',
-  coloringMode: 'row',
   enableOcclusion: true,
   amplitudeAmount: 50,
   wavelength: 25,
@@ -76,7 +75,6 @@ const poweredOffParameters = {
 type Parameters = {
   seed: number,
   swatchId: string,
-  coloringMode: ColoringMode,
   enableOcclusion: boolean,
   amplitudeAmount: number,
   wavelength: number,
@@ -194,7 +192,6 @@ const reducer = produce(
         state.parameters = {
           ...defaultParameters,
           swatchId: state.parameters.swatchId,
-          coloringMode: state.parameters.coloringMode,
         };
 
         return state;

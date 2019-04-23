@@ -52,6 +52,8 @@ export const retrieveLastSessionSlopesParams = () => {
 
   const persistedState = window.localStorage.getItem(SLOPES_STATE_KEY);
 
+  console.log(persistedState);
+
   if (!persistedState) {
     return null;
   }
@@ -60,6 +62,7 @@ export const retrieveLastSessionSlopesParams = () => {
 };
 
 export const setSlopesParams = params => {
+  console.log('SET', params);
   if (typeof window === 'undefined') {
     return;
   }
