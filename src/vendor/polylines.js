@@ -13,13 +13,16 @@ type Options = {
   width: number,
   height: number,
   context?: CanvasRenderingContext2D,
-  lineWidth?: number,
+  lineWidth: number,
   backgroundColor: string,
   lineColors: string,
   lineCap: string,
 };
 
-export const polylinesToSVG = function polylinesToSVG(rows, opt: Options) {
+export const polylinesToSVG = function polylinesToSVG(
+  rows: Rows,
+  opt: Options
+) {
   const {
     width,
     height,

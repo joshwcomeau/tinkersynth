@@ -324,6 +324,14 @@
         }
       );
 
+      const src = clone.outerHTML;
+
+      if (typeof done === 'function') {
+        return done(src, width, height);
+      } else {
+        return { src, width, height };
+      }
+
       return inlineCss(el, options).then(css => {
         const style = document.createElement('style');
         style.setAttribute('type', 'text/css');

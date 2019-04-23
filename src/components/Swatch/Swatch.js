@@ -24,21 +24,32 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
         return (
           <Spring
             key={index}
-            native
             to={{ x: isSelected ? x : 0, y: isSelected ? y : 0 }}
+            config={{
+              tension: 500,
+              friction: 20,
+              mass: ballSize * 0.5,
+            }}
           >
             {interpolated => (
               <Ball
                 color={color}
-                x={interpolated.x}
-                y={interpolated.y}
-                size={ballSize}
-                style={{ borderColor: backgroundColor }}
+                style={{
+                  width: ballSize,
+                  height: ballSize,
+                  backgroundColor: color,
+                  borderColor: backgroundColor,
+                  transform: `translate(
+                    ${interpolated.x}px,
+                    ${interpolated.y}px
+                  )`,
+                }}
               />
             )}
           </Spring>
         );
       })}
+      <Border style={{ borderColor: backgroundColor }} />
     </Wrapper>
   );
 };
@@ -46,21 +57,32 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
 const Wrapper = styled.div`
   position: relative;
   border-radius: 50%;
+  /* Hide the balls if they spring out of the container */
+  overflow: hidden;
 `;
 
 const Ball = styled(animated.div)`
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  transform: ${props => `translate(${props.x}px, ${props.y}px)}`};
   background-color: ${props => props.color};
   border-radius: 50%;
   border: 2px solid;
+`;
+
+const Border = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 3px solid;
+  border-radius: 50%;
 `;
 
 export default Swatch;

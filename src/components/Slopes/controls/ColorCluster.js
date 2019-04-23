@@ -9,14 +9,13 @@ import Spacer from '../../Spacer';
 
 import { SlopesContext } from '../SlopesState';
 
-import type { Colors } from '../../../types';
-import type { tweakParameterAction } from '../SlopesState';
+import type { TweakParameterAction } from '../SlopesState';
 
 type Props = {
   size: number,
   swatchId: string,
   isPoweredOn: boolean,
-  tweakParameter: tweakParameterAction,
+  tweakParameter: TweakParameterAction,
 };
 
 const ColorCluster = ({ size, swatchId, isPoweredOn, tweakParameter }) => (

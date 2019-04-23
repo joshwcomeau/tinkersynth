@@ -69,7 +69,7 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
 
 const Wrapper = styled.div`
   position: relative;
-  background: ${COLORS.gray[800]};
+  background: ${COLORS.gray[900]};
   border-radius: 4px;
   overflow: hidden;
   display: flex;

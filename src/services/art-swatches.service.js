@@ -35,9 +35,9 @@ const ART_SWATCHES: Array<SwatchData> = [
     backgroundColor: '#000000',
   }),
   new Swatch({
-    id: 'mossy-day',
-    colors: ['#D3F6DB', '#92D5E6', '#772D8B'],
-    backgroundColor: '#A1EF8B',
+    id: 'soft-pastels',
+    colors: ['#8CEEEE', '#26BFBF', '#FF8A47', '#FC6170', '#FFD747'],
+    backgroundColor: '#000000',
   }),
   new Swatch({
     id: 'marbles',
@@ -67,10 +67,12 @@ const ballPositions = {
     '#FF0000': { xRatio: -0.1, yRatio: 0.05, sizeRatio: 0.6 },
     '#00FFFF': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
   },
-  'mossy-day': {
-    '#D3F6DB': { xRatio: -0.1, yRatio: 0.05, sizeRatio: 0.6 },
-    '#92D5E6': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
-    '#772D8B': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
+  'soft-pastels': {
+    '#8CEEEE': { xRatio: -0.35, yRatio: 0.2, sizeRatio: 0.8 },
+    '#26BFBF': { xRatio: 0.25, yRatio: 0.1, sizeRatio: 0.65 },
+    '#FF8A47': { xRatio: -0.1, yRatio: -0.2, sizeRatio: 0.5 },
+    '#FC6170': { xRatio: 0.25, yRatio: -0.2, sizeRatio: 0.5 },
+    '#FFD747': { xRatio: 0, yRatio: 0.05, sizeRatio: 0.4 },
   },
   marbles: {
     '#0066FF': { xRatio: -0.15, yRatio: 0.1, sizeRatio: 0.65 },
