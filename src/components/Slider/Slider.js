@@ -41,7 +41,6 @@ const Slider = ({
   updateValue,
   width,
   height,
-  numOfNotches = 18,
   handleWidth = 30,
   handleHeight = 21,
   isDisabled,
@@ -125,6 +124,8 @@ const Slider = ({
 
     setDragging(true);
   };
+
+  const numOfNotches = Math.round(height / 6);
 
   return (
     <Wrapper ref={sliderRef} style={{ width, height }} onClick={updatePosition}>
