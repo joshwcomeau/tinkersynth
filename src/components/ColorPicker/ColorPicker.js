@@ -25,40 +25,62 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
     transform: `translateY(${offsetY}px)`,
   });
 
+  const incrementBy = amount => () => {
+    let nextIndex = swatchIndex + amount;
+
+    // Allow the user to cycle past the end, back to the beginning.
+    if (nextIndex === artSwatches.length) {
+      nextIndex = 0;
+    } else if (nextIndex < 0) {
+      nextIndex = artSwatches.length - 1;
+    }
+
+    updateValue(artSwatches[nextIndex].id);
+  };
+
+  const increment = incrementBy(1);
+  const decrement = incrementBy(-1);
+
   return (
     <Wrapper style={{ width: size * 1.5, height: size }}>
-      <Gradient />
-      <Swatches style={{ paddingTop: initialPadding }}>
-        {artSwatches.map(swatch => (
-          <SwatchWrapper
-            key={swatch.id}
-            style={{
-              width: size,
-              height: swatchWrapperHeight,
-              ...spring,
-            }}
-          >
-            <Swatch
-              size={swatchHeight}
-              swatch={swatch}
-              isSelected={swatch.id === swatchId}
-            />
-          </SwatchWrapper>
-        ))}
-      </Swatches>
+      {/*
+        NOTE: Putting a click-handler on a div because it is unnecessary for
+        keyboard users. It does the same thing as the 'down' arrow, so it's
+        just a redundant focus-snatcher. Adding the click handler because
+        sometimes mouse users will click it.
+      */}
+      <VisualizationWrapper onClick={increment}>
+        <Gradient />
+        <Swatches style={{ paddingTop: initialPadding }}>
+          {artSwatches.map(swatch => (
+            <SwatchWrapper
+              key={swatch.id}
+              style={{
+                width: size,
+                height: swatchWrapperHeight,
+                ...spring,
+              }}
+            >
+              <Swatch
+                size={swatchHeight}
+                swatch={swatch}
+                isSelected={swatch.id === swatchId}
+              />
+            </SwatchWrapper>
+          ))}
+        </Swatches>
+      </VisualizationWrapper>
 
       <Controls style={{ width: size / 2 }}>
         <IncrementDecrementButton
           style={{ width: size / 2, height: size / 2 }}
-          disabled={swatchIndex === 0}
-          onClick={() => updateValue(artSwatches[swatchIndex - 1].id)}
+          onClick={decrement}
         >
           <Icon icon={chevronUp} size={16} />
         </IncrementDecrementButton>
         <IncrementDecrementButton
           style={{ width: size / 2, height: size / 2 }}
-          disabled={swatchIndex === artSwatches.length - 1}
-          onClick={() => updateValue(artSwatches[swatchIndex + 1].id)}
+          onClick={increment}
         >
           <Icon icon={chevronDown} size={16} />
         </IncrementDecrementButton>
@@ -79,9 +101,12 @@ const Wrapper = styled.div`
   }
 `;
 
+const VisualizationWrapper = styled.div`
+  flex: 1;
+`;
+
 const Swatches = styled.div`
   position: relative;
-  flex: 1;
 `;
 
 const SwatchWrapper = styled(animated.div)`
