@@ -154,11 +154,6 @@ const transformParameters = ({
   const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
 
   // dotAmount -> dotRatio
-  //
-  // This will control a few things:
-  // - samplesPerRow, low values = less samples (NOTE: Not for long!)
-  // - lineWidth, low values = thicker lines (bigger dots)
-  // - The actual segment size, calculated in the generator
   const dotRatio = dotAmount / 100;
 
   // Line thickness controls the width in px of the line.

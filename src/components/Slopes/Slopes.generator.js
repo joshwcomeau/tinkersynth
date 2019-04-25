@@ -102,9 +102,6 @@ const generator = ({
   // canvas, so we need more than 1 point per width-pixel to represent it.
   const samplesPerRowWidthMultiplier = mix(1, 0.5, polarRatio);
 
-  // When our `dotAmount` value gets really low, we actually want to decrease
-  // the samples per row. In combination with tweaking the lineWIdth, this will
-  // give us bigger dots, spaced further apart.
   const dotAmountMultiplier = clamp(normalize(dotRatio, 0, 1, 1, 0.2), 0, 1);
 
   const samplesPerRow = Math.ceil(
@@ -258,8 +255,9 @@ const generator = ({
   }
 
   if (dotRatio !== 0) {
-    // `dotRatio` is linear between 0 and 1, but most of the range isn't that
-    // interesting.
+    // In addition to trimming the lines into dots, we also want to increase
+    // the spacing between the dots. This is so that it's clearer what's
+    // happening (the dots are often too close together to tell)
     const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0.01, 1);
 
     rows.forEach(row => {
