@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tooltip } from 'react-tippy';
+
+import useToggle from '../../hooks/toggle.hook';
+import { setTimeoutPromise } from '../../utils';
 
 import Cat from '../Cat';
+
+const PATREON_URL = 'https://patreon.com';
 
 const useTranslateFromOffscreen = (ref, walkSpeed, handleReachDestination) => {
   const lastFrameAt = React.useRef(null);
@@ -56,19 +62,124 @@ const useTranslateFromOffscreen = (ref, walkSpeed, handleReachDestination) => {
 
 const SlopesCat = ({ walkSpeed = 8 }) => {
   const [status, setStatus] = React.useState('walking');
+  const [hasSeenTooltip, setHasSeenTooltip] = React.useState(false);
+  const timeoutId = React.useRef(null);
 
   const wrapperRef = React.useRef(null);
-  const offset = useTranslateFromOffscreen(wrapperRef, walkSpeed, () => {
-    setStatus('sitting');
+  const offset = useTranslateFromOffscreen(wrapperRef, walkSpeed, async () => {
+    setStatus('walk-sit-transition');
   });
 
+  const handleMouseEnter = () => {
+    if (status === 'walking') {
+      // Ignore events during the initial intro stage
+      return;
+    }
+
+    if (status === 'sitting') {
+      // After X seconds, a sitting cat will lie down after the mouse leaves.
+      // If the mouse re-enters, we should reset that timer, so that the cat
+      // doesn't decide to nap while the user is reading the tooltip.
+      window.clearTimeout(timeoutId.current);
+    }
+  };
+
+  const handleMouseLeave = async () => {
+    if (status === 'walking') {
+      // Ignore events during the initial intro stage
+      return;
+    }
+
+    if (status === 'sitting' && !hasSeenTooltip) {
+      // A little bit after the user finishes with the tooltip, we want the
+      // cat to relax a bit
+
+      timeoutId.current = window.setTimeout(() => {
+        setHasSeenTooltip(true);
+        setStatus('sit-lie-transition');
+      }, 3000);
+    }
+  };
+
+  React.useEffect(
+    () => {
+      switch (status) {
+        case 'walk-sit-transition': {
+          timeoutId.current = window.setTimeout(() => {
+            setStatus('sitting');
+          }, 200);
+          break;
+        }
+
+        case 'sit-lie-transition': {
+          timeoutId.current = window.setTimeout(() => {
+            setStatus('lying-awake');
+          }, 200);
+          break;
+        }
+
+        case 'lying-awake': {
+          timeoutId.current = window.setTimeout(() => {
+            setStatus('lying-asleep');
+          }, 6000);
+          break;
+        }
+      }
+    },
+    [status]
+  );
+
   return (
-    <Wrapper ref={wrapperRef} style={{ transform: `translateX(${offset}px)` }}>
-      <Cat status={status} />
+    <Wrapper
+      ref={wrapperRef}
+      target="_blank"
+      href={PATREON_URL}
+      style={{ transform: `translateX(${offset}px)` }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Tooltip
+        animation="fade"
+        duration={200}
+        distance={-10}
+        tabIndex={0}
+        animateFill={false}
+        followCursor={false}
+        interactive={true}
+        arrow={true}
+        hideDelay={500}
+        html={
+          <>
+            Enjoying Tinkersynth? Support its creator{' '}
+            <PatreonTooltipLink href={PATREON_URL} target="_blank">
+              on Patreon
+            </PatreonTooltipLink>
+            !
+          </>
+        }
+        disabled={status === 'walking'}
+        style={{
+          lineHeight: 1.4,
+        }}
+      >
+        <Cat status={status} />
+      </Tooltip>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.a`
+  display: block;
+
+  @media (max-width: 1024px) {
+    /* Don't show the cat when the machines are stacked */
+    display: none;
+  }
+`;
+
+const PatreonTooltipLink = styled.a`
+  color: white;
+  font-weight: bold;
+`;
 
 export default SlopesCat;
