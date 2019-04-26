@@ -9,7 +9,7 @@ import OcclusionLine from './OcclusionLine';
 type Props = {
   width: number,
   height: number,
-  value: number,
+  value: boolean,
 };
 
 const OcclusionVisualization = ({ width, height, value }: Props) => {

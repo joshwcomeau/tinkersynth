@@ -13,12 +13,11 @@ import { UNIT } from '../../../constants';
 
 import TouchSliderIconControl from '../../TouchSliderIconControl';
 import ControlCompartment from '../../ControlCompartment/ControlCompartment';
-import ToggleControl from '../../ToggleControl';
+import OcclusionToggle from './OcclusionToggle';
 import Spacer from '../../Spacer';
 import { SlopesContext } from '../SlopesState';
 import { InstrumentCluster } from '../../ControlPanel';
 
-import OcclusionVisualization from './OcclusionVisualization';
 import LegoBrickVisualization from './LegoBrickVisualization';
 import SimilarityVisualization from './SimilarityVisualization';
 import PersonInflateVisualization from './PersonInflateVisualization';
@@ -57,7 +56,7 @@ const LineCluster = ({
   animateTransitions,
   isPoweredOn,
 }) => {
-  const rowHeight = 54;
+  const rowHeight = 40;
 
   const OUTER_BORDER_WIDTH = 1;
 
@@ -82,12 +81,10 @@ const LineCluster = ({
             isPoweredOn={isPoweredOn}
           />
           <Spacer size={UNIT} />
-          <ToggleControl
-            width={occlusionToggleSize}
-            height={occlusionToggleSize}
-            value={enableOcclusion}
-            updateValue={() => toggleParameter('enableOcclusion')}
-            visualizationComponent={OcclusionVisualization}
+          <OcclusionToggle
+            size={occlusionToggleSize}
+            isActive={enableOcclusion}
+            handleToggle={() => toggleParameter('enableOcclusion')}
             isPoweredOn={isPoweredOn}
           />
         </Row>

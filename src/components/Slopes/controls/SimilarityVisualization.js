@@ -16,7 +16,7 @@ type Props = {
 
 const SimilarityVisualization = ({ size, value, isAnimated }: Props) => {
   return (
-    <Svg width={size - 9} height={size - 9} viewBox="0 0 32 32">
+    <Svg width={size} height={size} viewBox="0 0 32 32">
       {/* Steam */}
       {isAnimated && (
         <FadeAfterChange as="g" value={value} sustain={500} release={2000}>
