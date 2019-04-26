@@ -72,9 +72,11 @@ const SlopesCanvasWrapper = ({
             onClick={() => {
               toggleDownloadShelf();
 
-              // After the user closes the shelf, we want to restore focus
-              // to this button, to make sure the focus is where we left off.
-              rememberCurrentlyFocusedElement(downloadButtonRef.current);
+              if (downloadButtonRef.current) {
+                // After the user closes the shelf, we want to restore focus
+                // to this button, to make sure the focus is where we left off.
+                rememberCurrentlyFocusedElement(downloadButtonRef.current);
+              }
             }}
           >
             Download
@@ -121,8 +123,7 @@ const Header = styled.div`
 `;
 
 const Machine = styled.div`
-  position: sticky;
-  top: 28px;
+  top: 0;
   perspective: 200px;
   user-select: none;
   padding: ${UNIT}px;
@@ -151,7 +152,7 @@ const TopPanel = styled.div`
   top: -15px;
   left: 0;
   right: 0;
-  background: ${COLORS.gray[300]};
+  background: linear-gradient(to top, ${COLORS.gray[400]}, ${COLORS.gray[500]});
   transform: rotateX(25deg);
   transform-origin: bottom center;
 `;

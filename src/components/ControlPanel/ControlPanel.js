@@ -76,7 +76,7 @@ const TopPanel = styled.div`
   top: -200px;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, ${COLORS.gray[300]}, ${COLORS.gray[400]});
+  background: linear-gradient(to top, ${COLORS.gray[400]}, ${COLORS.gray[500]});
   transform: rotateX(25deg);
   transform-origin: bottom center;
 `;

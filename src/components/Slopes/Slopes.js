@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
 import useToggle from '../../hooks/toggle.hook';
-import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
+import { COLORS, UNIT, HEADER_HEIGHT } from '../../constants';
 import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import {
   SLOPES_ASPECT_RATIO,
@@ -17,6 +17,7 @@ import LimitedExperienceNotice from '../LimitedExperienceNotice';
 import DownloadShelf from './DownloadShelf';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
+import SlopesCat from './SlopesCat';
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
@@ -97,6 +98,12 @@ const Slopes = ({ size }) => {
               height={canvasHeight}
             />
           </SlopesCanvasWrapper>
+
+          {isFullExperience && (
+            <CatWrapper>
+              <SlopesCat />
+            </CatWrapper>
+          )}
         </MainRow>
       </MachineWrapper>
 
@@ -146,6 +153,13 @@ const MainRow = styled(MaxWidthWrapper)`
     align-items: center;
     padding-top: ${UNIT * 2}px;
   }
+`;
+
+const CatWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+  bottom: -16px;
+  left: 15%;
 `;
 
 export default Slopes;
