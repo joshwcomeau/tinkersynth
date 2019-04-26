@@ -36,9 +36,10 @@ type InputParameters = {
 };
 
 const transformParameters = ({
+  width,
+  height,
   seed,
   swatchId,
-  height,
   amplitudeAmount,
   wavelength,
   octaveAmount,
@@ -56,22 +57,23 @@ const transformParameters = ({
   ballSize,
   dotAmount,
   lineThicknessAmount,
+  resolution,
   enableMirrored,
 }: InputParameters) => {
-  // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
+  // For certain control parameters, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
   // interesting than the values from 95 to 100.
   //
   // To do this, we need to normalize our values to 0-1, and then use a bezier
   // curve to map the values onto.
-  const perspectiveScaleCurve = {
+  const sharpRisingCurve = {
     startPoint: [0, 0],
     endPoint: [1, 1],
     controlPoint1: [1, 0],
   };
 
   const [, perspectiveCurved] = getValuesForBezierCurve(
-    perspectiveScaleCurve,
+    sharpRisingCurve,
     perspective / 100
   );
 
@@ -160,6 +162,13 @@ const transformParameters = ({
   // Parameter range is from 0px to 10px
   const lineThickness = lineThicknessAmount / 10;
 
+  let [, baseSamplesPerRow] = getValuesForBezierCurve(
+    sharpRisingCurve,
+    resolution / 100
+  );
+
+  baseSamplesPerRow = normalize(baseSamplesPerRow, 0, 1, 3, width * 1.5);
+
   return {
     distanceBetweenRows,
     perlinRatio,
@@ -178,7 +187,8 @@ const transformParameters = ({
     polarHoleSize,
     dotRatio,
     lineThickness,
-    // Some fields are just passed right through, no macros:
+    baseSamplesPerRow,
+    // Some fields are just passed right through:
     enableOcclusion,
     peaksCurve,
     selfSimilarity,

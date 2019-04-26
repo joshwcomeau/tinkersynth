@@ -86,6 +86,7 @@ const generator = ({
   peaksCurve,
   selfSimilarity,
   seed,
+  baseSamplesPerRow,
   enableMirrored,
 }) => {
   // For aesthetic reasons, I don't want the lines to start at the very bottom
@@ -105,10 +106,10 @@ const generator = ({
   const dotAmountMultiplier = clamp(normalize(dotRatio, 0, 1, 1, 0.2), 0, 1);
 
   const samplesPerRow = Math.ceil(
-    width * samplesPerRowWidthMultiplier * dotAmountMultiplier
+    baseSamplesPerRow * samplesPerRowWidthMultiplier * dotAmountMultiplier
   );
 
-  const distanceBetweenSamples = width / samplesPerRow;
+  const distanceBetweenSamples = width / (samplesPerRow - 1);
 
   const sampleData = {
     width,

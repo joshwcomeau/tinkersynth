@@ -34,8 +34,8 @@ const SlopesCanvas = ({ width, height, kind, ...params }: Props) => {
   // calculation. There is not a 1:1 mapping between them: a single
   // high-level param might tweak several low-level vars, and the same
   // variable might be affected by multiple params.
-  // $FlowFixMe
   const drawingVariables = transformParameters({
+    width,
     height,
     ...params,
   });

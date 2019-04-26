@@ -36,6 +36,7 @@ type Props = {
   isWaterBoilAmountDisabled: boolean,
   lineThicknessAmount: number,
   isLineThicknessAmountDisabled: boolean,
+  resolution: number,
   toggleParameter: ToggleParameterAction,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
@@ -50,6 +51,7 @@ const LineCluster = ({
   isWaterBoilAmountDisabled,
   lineThicknessAmount,
   isLineThicknessAmountDisabled,
+  resolution,
   toggleParameter,
   tweakParameter,
   animateTransitions,
@@ -130,13 +132,10 @@ const LineCluster = ({
 
         <Spacer size={UNIT + OUTER_BORDER_WIDTH * 2} />
 
-        <ControlCompartment
-          orientation="horizontal"
-          isDisabled={isWaterBoilAmountDisabled}
-        >
+        <ControlCompartment orientation="horizontal">
           <TouchSliderIconControl
-            value={waterBoilAmount}
-            updateValue={val => tweakParameter('waterBoilAmount', val)}
+            value={resolution}
+            updateValue={val => tweakParameter('resolution', val)}
             width={touchSliderWidth}
             height={rowHeight}
             visualizationComponent={SimilarityVisualization}
@@ -163,6 +162,7 @@ const LineClusterContainer = ({ columnWidth }) => {
       isWaterBoilAmountDisabled={slopesParams.disabledParams.waterBoilAmount}
       lineThicknessAmount={slopesParams.lineThicknessAmount}
       isLineThicknessAmountDisabled={slopesParams.disabledParams.lineThickness}
+      resolution={slopesParams.resolution}
       toggleParameter={slopesParams.toggleParameter}
       tweakParameter={slopesParams.tweakParameter}
       isPoweredOn={slopesParams.isPoweredOn}
