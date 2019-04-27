@@ -173,11 +173,12 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-end;
   max-height: 70vh;
-  overflow: scroll;
 
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
+    overflow: scroll;
+    padding-bottom: 24px; /* Allow space for shadows, etc */
   }
 `;
 
