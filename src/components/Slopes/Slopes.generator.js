@@ -103,10 +103,8 @@ const generator = ({
   // canvas, so we need more than 1 point per width-pixel to represent it.
   const samplesPerRowWidthMultiplier = mix(1, 0.5, polarRatio);
 
-  const dotAmountMultiplier = clamp(normalize(dotRatio, 0, 1, 1, 0.2), 0, 1);
-
   const samplesPerRow = Math.ceil(
-    baseSamplesPerRow * samplesPerRowWidthMultiplier * dotAmountMultiplier
+    baseSamplesPerRow * samplesPerRowWidthMultiplier
   );
 
   const distanceBetweenSamples = width / (samplesPerRow - 1);
@@ -272,8 +270,8 @@ const generator = ({
         const deltaY = p2[1] - p1[1];
 
         line[1] = [
-          p1[0] + deltaX * shiftedDotRatio,
-          p1[1] + deltaY * shiftedDotRatio,
+          p1[0] + deltaX * (1 - dotRatio),
+          p1[1] + deltaY * (1 - dotRatio),
         ];
       });
     });

@@ -15,14 +15,22 @@ type Props = {
   size: number,
   swatchId: string,
   isPoweredOn: boolean,
+  animateTransitions: boolean,
   tweakParameter: TweakParameterAction,
 };
 
-const ColorCluster = ({ size, swatchId, isPoweredOn, tweakParameter }) => (
+const ColorCluster = ({
+  size,
+  swatchId,
+  isPoweredOn,
+  animateTransitions,
+  tweakParameter,
+}) => (
   <Wrapper>
     <ColorPicker
       swatchId={swatchId}
       size={size}
+      isAnimated={animateTransitions}
       updateValue={val => tweakParameter('swatchId', val)}
     />
   </Wrapper>
@@ -40,6 +48,7 @@ const PageContainer = ({ size }: { size: number }) => {
       swatchId={slopesParams.swatchId}
       isPoweredOn={slopesParams.isPoweredOn}
       tweakParameter={slopesParams.tweakParameter}
+      animateTransitions={slopesParams.animateTransitions}
     />
   );
 };

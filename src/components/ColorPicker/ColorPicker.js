@@ -11,7 +11,7 @@ import artSwatches from '../../services/art-swatches.service.js';
 import Swatch from '../Swatch';
 import UnstyledButton from '../UnstyledButton';
 
-const ColorPicker = ({ size, swatchId, updateValue }) => {
+const ColorPicker = ({ size, swatchId, isAnimated, updateValue }) => {
   const swatchIndex = artSwatches.findIndex(swatch => swatch.id === swatchId);
 
   const swatchWrapperHeight = size * 0.7;
@@ -23,6 +23,7 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
 
   const spring = useSpring({
     transform: `translateY(${offsetY}px)`,
+    immediate: !isAnimated,
   });
 
   const incrementBy = amount => () => {
@@ -65,6 +66,7 @@ const ColorPicker = ({ size, swatchId, updateValue }) => {
                 size={swatchHeight}
                 swatch={swatch}
                 isSelected={swatch.id === swatchId}
+                isAnimated={isAnimated}
               />
             </SwatchWrapper>
           ))}

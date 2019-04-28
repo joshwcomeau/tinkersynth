@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 
 import { sample, random } from '../../utils';
+import ART_SWATCHES from '../../services/art-swatches.service';
 
 export const DEFAULT_PEAKS_CURVE = {
   startPoint: [0.5, 0],
@@ -125,7 +126,15 @@ export const shuffleParameters = state => {
 
   // splitUniverse is _such_ a drastic effect. Let's make it stick to 0
   // most of the time.
-  state.parameters.splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
+  state.parameters.splitUniverse = sample([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    getRandomSliderValue(),
+  ]);
 
   // Performance suffers when we add lots of lines. Let's keep it generally
   // to a pretty low number
@@ -227,6 +236,16 @@ export const shuffleParameters = state => {
       50,
       getRandomSliderValue(),
     ]);
+  }
+
+  // IF splitUniverse is non-zero, having low resolution can lead to
+  // invisible canvases. Let's avoid this.
+  if (state.parameters.splitUniverse > 0 && state.parameters.resolution < 20) {
+    state.parameters.resolution = 50;
+  }
+
+  if (Math.random() > 0.5) {
+    state.parameters.swatchId = sample(ART_SWATCHES).id;
   }
 
   return state;

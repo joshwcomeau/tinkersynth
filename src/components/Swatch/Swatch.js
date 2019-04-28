@@ -11,9 +11,10 @@ type Props = {
   swatch: SwatchData,
   size: number,
   isSelected: boolean,
+  isAnimated: boolean,
 };
 
-const Swatch = ({ size, isSelected, swatch }: Props) => {
+const Swatch = ({ swatch, size, isSelected, isAnimated }: Props) => {
   const { colors, backgroundColor } = swatch;
 
   return (
@@ -25,6 +26,7 @@ const Swatch = ({ size, isSelected, swatch }: Props) => {
           <Spring
             key={index}
             native
+            immediate={!isAnimated}
             to={{
               transform: `translate(
                 ${isSelected ? x : 0}px,
