@@ -36,20 +36,48 @@ const useImage = src => {
   return [img.current, hasImageLoaded];
 };
 
-const drawPixellatedImage = (ctx, img, value, size, aspectRatio) => {
+const drawPixellatedImage = (canvas, ctx, img, value, size, aspectRatio) => {
   // TODO: prop?
   const padding = 4;
 
-  const maxWidth = size - padding * 2;
+  const calculateCanvas = document.createElement('canvas');
+  calculateCanvas.width = size * window.devicePixelRatio;
+  calculateCanvas.height = size * window.devicePixelRatio;
+  const calcCtx = calculateCanvas.getContext('2d');
+
+  const maxWidth = size * window.devicePixelRatio - padding * 2;
 
   const scaledWidth = normalize(value, 0, 100, 2, maxWidth);
   const scaledHeight = scaledWidth * aspectRatio;
 
-  console.log('DRAW', scaledWidth);
+  calcCtx.clearRect(
+    0,
+    0,
+    size * window.devicePixelRatio,
+    size * window.devicePixelRatio
+  );
+  ctx.clearRect(
+    0,
+    0,
+    size * window.devicePixelRatio,
+    size * window.devicePixelRatio
+  );
 
-  ctx.clearRect(0, 0, size, size);
+  // Draw a tiny image into the canvas
+  calcCtx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
-  ctx.drawImage(img, padding, padding, scaledWidth, scaledHeight);
+  // Scale that tiny version up
+  ctx.drawImage(
+    calculateCanvas,
+    0,
+    0,
+    scaledWidth,
+    scaledHeight,
+    padding,
+    padding,
+    maxWidth,
+    maxWidth * aspectRatio
+  );
 };
 
 const Pixellate = ({ size, aspectRatio, value, src }: Props) => {
@@ -71,11 +99,17 @@ const Pixellate = ({ size, aspectRatio, value, src }: Props) => {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
 
-      // TODO: Reenable
       // const devicePixelRatio = getDevicePixelRatio();
       // ctx.scale(devicePixelRatio, devicePixelRatio);
 
-      drawPixellatedImage(ctx, img, value, size, aspectRatio);
+      drawPixellatedImage(
+        canvasRef.current,
+        ctx,
+        img,
+        value,
+        size,
+        aspectRatio
+      );
 
       setCtx(ctx);
     },
@@ -88,7 +122,14 @@ const Pixellate = ({ size, aspectRatio, value, src }: Props) => {
         return;
       }
 
-      drawPixellatedImage(ctx, img, value, size, aspectRatio);
+      drawPixellatedImage(
+        canvasRef.current,
+        ctx,
+        img,
+        value,
+        size,
+        aspectRatio
+      );
     },
     [ctx, value]
   );
