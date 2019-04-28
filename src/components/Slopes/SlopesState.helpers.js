@@ -162,7 +162,7 @@ export const shuffleParameters = state => {
         ])
       : getRandomBooleanValue();
 
-  if (Math.random() > 0.5) {
+  if (Math.random() > 0.25) {
     state.parameters.lineThicknessAmount = sample([
       2.5,
       5,
@@ -179,16 +179,52 @@ export const shuffleParameters = state => {
       20,
       20,
       30,
+      50,
+      75,
+      100,
+      100,
+      getRandomSliderValue(),
+    ]);
+  }
+
+  if (Math.random() > 0.5) {
+    state.parameters.resolution = sample([
+      1,
+      5,
+      5,
+      5,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      10,
+      10,
+      10,
+      15,
+      15,
+      20,
+      20,
+      25,
+      30,
+      35,
       40,
       50,
-      60,
-      70,
-      80,
-      90,
-      100,
-      100,
-      100,
-      100,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
       getRandomSliderValue(),
     ]);
   }

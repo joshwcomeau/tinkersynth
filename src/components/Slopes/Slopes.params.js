@@ -12,9 +12,10 @@ import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 import type { Curve } from '../../types';
 
 type InputParameters = {
+  width: number,
+  height: number,
   seed: number,
   swatchId: string,
-  height: number,
   amplitudeAmount: number,
   perspective: number,
   lineAmount: number,
@@ -32,6 +33,7 @@ type InputParameters = {
   ballSize: number,
   dotAmount: number,
   lineThicknessAmount: number,
+  resolution: number,
   enableMirrored: boolean,
 };
 
@@ -167,7 +169,7 @@ const transformParameters = ({
     resolution / 100
   );
 
-  baseSamplesPerRow = normalize(baseSamplesPerRow, 0, 1, 3, width * 1.5);
+  baseSamplesPerRow = normalize(baseSamplesPerRow, 0, 1, 3, width * 2);
 
   return {
     distanceBetweenRows,
