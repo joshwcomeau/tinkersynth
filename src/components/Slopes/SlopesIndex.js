@@ -13,7 +13,6 @@ import {
 import useTimeout from '../../hooks/timeout.hook';
 import useScrollDisabler from '../../hooks/scroll-disabler.hook';
 
-import LoadScript from '../../components/LoadScript';
 import LoadingMachine from '../../components/LoadingMachine';
 
 const SlopesIndex = ({ location }) => {
@@ -26,7 +25,6 @@ const SlopesIndex = ({ location }) => {
   // I'm not sure how to use @loadable to signal to me when the component is
   // actually ready to be rendered,
 
-  const [hasScriptLoaded, setHasScriptLoaded] = React.useState(false);
   const [hasTimeElapsed, setHasTimeElapsed] = React.useState(false);
   const [hasLoadedSlopes, setHasLoadedSlopes] = React.useState(false);
   const slopesComponent = React.useRef(null);
@@ -58,7 +56,7 @@ const SlopesIndex = ({ location }) => {
     setHasTimeElapsed(true);
   }, amountOfTimeToWait);
 
-  const showLoading = !hasScriptLoaded || !hasTimeElapsed || !hasLoadedSlopes;
+  const showLoading = !hasTimeElapsed || !hasLoadedSlopes;
 
   React.useEffect(
     () => {
@@ -80,16 +78,7 @@ const SlopesIndex = ({ location }) => {
 
   const Slopes = slopesComponent.current;
 
-  return (
-    <>
-      {showLoading ? loadingElements : <Slopes />}
-
-      <LoadScript
-        src="https://checkout.stripe.com/checkout.js"
-        onLoad={() => setHasScriptLoaded(true)}
-      />
-    </>
-  );
+  return <>{showLoading ? loadingElements : <Slopes />}</>;
 };
 
 const LoadingWrapper = styled.div`
