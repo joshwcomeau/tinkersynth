@@ -51,12 +51,15 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-fathom',
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        // your Fathom server URL
-        trackingUrl: 'tinkersynth.usesfathom.com',
-        // unique site id (optional, required for Fathom v1.1.0+)
-        siteId: 'WZOTQZMZ',
+        trackingId: 'UA-139212705-1',
+        // Puts tracking script in the head instead of the body
+        head: false,
+        // Setting this parameter is optional
+        anonymize: true,
+        // Setting this parameter is also optional
+        respectDNT: true,
       },
     },
   ],
