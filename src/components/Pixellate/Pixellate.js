@@ -6,6 +6,7 @@ import {
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
+import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 import { normalize } from '../../utils';
 
 type Props = {
@@ -112,7 +113,17 @@ const drawPixellatedImage = (
 
   const maxWidth = sizeForDevice - padding * 2;
 
-  const scaledWidth = normalize(value, 0, 100, 2, maxWidth);
+  const [, curvedValue] = getValuesForBezierCurve(
+    {
+      startPoint: [1, 0],
+      endPoint: [1, 1],
+      controlPoint1: [0, 0],
+    },
+    value / 100
+  );
+
+  const scaledWidth = normalize(curvedValue, 0, 1, 2, maxWidth);
+
   const scaledHeight = scaledWidth * aspectRatio;
 
   workCanvasCtx.clearRect(0, 0, sizeForDevice, sizeForDevice);
