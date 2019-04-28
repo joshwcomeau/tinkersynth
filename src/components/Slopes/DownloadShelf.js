@@ -8,10 +8,7 @@ import useWorker from '../../hooks/worker.hook.js';
 import { COLORS, UNIT } from '../../constants';
 import ccLicenseSrc from '../../images/cc-license.png';
 import { getSwatchById } from '../../services/art-swatches.service';
-import {
-  renderPolylines,
-  polylinesToSVG,
-} from '../../services/polylines.service';
+import { renderPolylines } from '../../services/polylines.service';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';

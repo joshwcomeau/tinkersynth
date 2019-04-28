@@ -16,6 +16,7 @@ type Options = {
   lineWidth: number,
   backgroundColor: string,
   lineColors: string,
+  colorMode: 'row' | 'segment',
   lineCap: string,
 };
 
@@ -42,6 +43,7 @@ export const polylinesToSVG = function polylinesToSVG(
     height,
     backgroundColor,
     lineColors,
+    colorMode,
     lineWidth,
     lineCap,
   } = opt;
@@ -58,7 +60,12 @@ export const polylinesToSVG = function polylinesToSVG(
     row.forEach((lines, segmentIndex) => {
       const pathCommands = [];
 
-      const color = getColorForLine(rowIndex, segmentIndex, lineColors);
+      const color = getColorForLine(
+        colorMode,
+        rowIndex,
+        segmentIndex,
+        lineColors
+      );
 
       lines.forEach((point, index) => {
         const command = index === 0 ? 'M' : 'L';
@@ -109,7 +116,12 @@ export const renderPolylines = function(
   // Draw lines
   [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach(function(lines, segmentIndex) {
-      context.strokeStyle = getColorForLine(rowIndex, segmentIndex, lineColors);
+      context.strokeStyle = getColorForLine(
+        opt.colorMode,
+        rowIndex,
+        segmentIndex,
+        lineColors
+      );
 
       context.beginPath();
 
@@ -125,26 +137,14 @@ export const renderPolylines = function(
   });
 };
 
-// SURPRISING COMPLEXITY WARNING
-// With most settings, every row will contain a small number (usually 1) of
-// polylines (a line with many points). The `segmentIndex` refers to these
-// segments.
-//
-// When `perlinRatio` is less than 1, or `dotRatio` is more than 0, suddenly
-// every row has MANY lines, and each line only has 2 points. Each row is no
-// longer contiguous, and so the segment indexes come into play.
-//
-// Originally, I was going to have different "color modes" that the user could
-// toggle between, but I realized that the data format I already had meant I
-// could choose a "good looking" option automatically depending on the data.
-//
-// The one drawback to this is that if a line is occluded, when that line comes
-// back in, it'll be a different color (since it's a different segment).
-// I could fix this by deriving the color mode from that setting, but for now
-// I don't care enough.
-const getColorForLine = (rowIndex, segmentIndex, lineColors) => {
+const getColorForLine = (colorMode, rowIndex, segmentIndex, lineColors) => {
   const rowOffset = rowIndex % lineColors.length;
-  return lineColors[(segmentIndex + rowOffset) % lineColors.length];
+
+  if (colorMode === 'row') {
+    return lineColors[rowOffset];
+  } else {
+    return lineColors[(segmentIndex + rowOffset) % lineColors.length];
+  }
 };
 
 export default renderPolylines;

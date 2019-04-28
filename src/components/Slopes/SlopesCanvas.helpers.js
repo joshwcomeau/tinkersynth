@@ -50,7 +50,7 @@ export const getRenderOptions = (
   width: number,
   height: number,
   kind: 'main' | 'download-transparent' | 'download-opaque',
-  { swatchId, lineThickness, dotRatio }: any
+  { swatchId, lineThickness, dotRatio, perlinRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
@@ -81,11 +81,16 @@ export const getRenderOptions = (
   // 0, it makes sense to use a round linecap. Otherwise, use the default butt
   const lineCap = dotRatio > 0 ? 'round' : 'butt';
 
+  // If the lines are "broken", we want to color every segment differently.
+  // Otherwise, we want to alternate rows instead.
+  const colorMode = dotRatio === 0 && perlinRatio === 1 ? 'row' : 'segment';
+
   return {
     width,
     height,
     backgroundColor,
     lineColors: swatch.colors,
+    colorMode,
     lineWidth,
     lineCap,
   };
