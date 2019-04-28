@@ -2,68 +2,66 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import catSrc from '../../images/cat.png';
+import {
+  getScaledCanvasProps,
+  getDevicePixelRatio,
+} from '../../helpers/canvas.helpers';
 
 type Props = {
-  amount: number,
+  size: number,
+  value: number,
+  src: string,
+  imagePositionValues: [number, number, number, number],
 };
-
-// const useImage = src => {
-//   const [hasImageLoaded, setHasImageLoaded] = React.useState(false);
-//   const img = React.useRef(null);
-
-//   // On mount, load the image
-//   React.useEffect(() => {
-//     img.current = new Image();
-
-//     img.current.addEventListener(
-//       'load',
-//       () => {
-//         setHasImageLoaded(true);
-//       },
-//       false
-//     );
-//     img.current.src = catSrc;
-//   }, []);
-
-//   return [img.current, hasImageLoaded];
-// };
 
 const useImage = src => {
-  const [image, setImage] = React.useState(null);
+  const [hasImageLoaded, setHasImageLoaded] = React.useState(false);
+  const img = React.useRef(null);
 
+  // On mount, load the image
   React.useEffect(() => {
-    const img = new Image();
-    img.src = src;
+    img.current = new Image();
 
-    setImage(img);
+    img.current.addEventListener(
+      'load',
+      () => {
+        setHasImageLoaded(true);
+      },
+      false
+    );
+    img.current.src = src;
   }, []);
 
-  return image;
+  return [img.current, hasImageLoaded];
 };
 
-const Pixellate = ({ amount }) => {
+const Pixellate = ({ size, value, src, imagePositionValues }) => {
   const canvasRef = React.createRef(null);
   const ctxRef = React.createRef(null);
 
-  const img = useImage(catSrc);
+  const [img, hasImageLoaded] = useImage(src);
 
   React.useEffect(
     () => {
-      if (!img) {
+      if (!hasImageLoaded || !canvasRef.current) {
         return;
       }
 
       ctxRef.current = canvasRef.current.getContext('2d');
+      const ctx = ctxRef.current;
 
-      ctxRef.current.drawImage(img, 0, 0);
+      const devicePixelRatio = getDevicePixelRatio();
+
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+
+      ctx.drawImage(img, ...imagePositionValues);
     },
-    [img]
+    [hasImageLoaded]
   );
 
-  React.useEffect(() => {}, []);
+  const scaledCanvasProps = getScaledCanvasProps(size, size);
 
-  return <Canvas ref={canvasRef} />;
+  return <Canvas ref={canvasRef} {...scaledCanvasProps} />;
 };
 
 const Canvas = styled.canvas``;
