@@ -15,6 +15,51 @@ type Props = {
   src: string,
 };
 
+const Pixellate = ({ size, aspectRatio, value, src }: Props) => {
+  const canvasRef = React.useRef(null);
+
+  const [ctx, setCtx] = React.useState(null);
+
+  const workCanvasCtx = useWorkCanvas(size);
+
+  const [img, hasImageLoaded] = useImage(src);
+
+  React.useEffect(
+    () => {
+      if (!hasImageLoaded || !canvasRef.current) {
+        return;
+      }
+
+      const ctx = canvasRef.current.getContext('2d');
+
+      ctx.msImageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
+
+      drawPixellatedImage(ctx, img, value, size, aspectRatio, workCanvasCtx);
+
+      setCtx(ctx);
+    },
+    [hasImageLoaded]
+  );
+
+  React.useEffect(
+    () => {
+      if (!ctx) {
+        return;
+      }
+
+      drawPixellatedImage(ctx, img, value, size, aspectRatio, workCanvasCtx);
+    },
+    [ctx, value]
+  );
+
+  const scaledCanvasProps = getScaledCanvasProps(size, size);
+
+  return <canvas ref={canvasRef} {...scaledCanvasProps} />;
+};
+
 const useImage = src => {
   const [hasImageLoaded, setHasImageLoaded] = React.useState(false);
   const img = React.useRef(null);
@@ -36,39 +81,50 @@ const useImage = src => {
   return [img.current, hasImageLoaded];
 };
 
-const drawPixellatedImage = (canvas, ctx, img, value, size, aspectRatio) => {
+const useWorkCanvas = size => {
+  const [workCanvasCtx] = React.useState(() => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const dpr = getDevicePixelRatio();
+
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+
+    return ctx;
+  });
+
+  return workCanvasCtx;
+};
+
+const drawPixellatedImage = (
+  ctx,
+  img,
+  value,
+  size,
+  aspectRatio,
+  workCanvasCtx
+) => {
   // TODO: prop?
   const padding = 4;
 
-  const calculateCanvas = document.createElement('canvas');
-  calculateCanvas.width = size * window.devicePixelRatio;
-  calculateCanvas.height = size * window.devicePixelRatio;
-  const calcCtx = calculateCanvas.getContext('2d');
+  const sizeForDevice = size * (window.devicePixelRatio || 1);
 
-  const maxWidth = size * window.devicePixelRatio - padding * 2;
+  const maxWidth = sizeForDevice - padding * 2;
 
   const scaledWidth = normalize(value, 0, 100, 2, maxWidth);
   const scaledHeight = scaledWidth * aspectRatio;
 
-  calcCtx.clearRect(
-    0,
-    0,
-    size * window.devicePixelRatio,
-    size * window.devicePixelRatio
-  );
-  ctx.clearRect(
-    0,
-    0,
-    size * window.devicePixelRatio,
-    size * window.devicePixelRatio
-  );
+  workCanvasCtx.clearRect(0, 0, sizeForDevice, sizeForDevice);
+  ctx.clearRect(0, 0, sizeForDevice, sizeForDevice);
 
   // Draw a tiny image into the canvas
-  calcCtx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+  // $FlowIgnore
+  workCanvasCtx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
   // Scale that tiny version up
   ctx.drawImage(
-    calculateCanvas,
+    workCanvasCtx.canvas,
     0,
     0,
     scaledWidth,
@@ -79,66 +135,5 @@ const drawPixellatedImage = (canvas, ctx, img, value, size, aspectRatio) => {
     maxWidth * aspectRatio
   );
 };
-
-const Pixellate = ({ size, aspectRatio, value, src }: Props) => {
-  const canvasRef = React.createRef(null);
-  const [ctx, setCtx] = React.useState(null);
-
-  const [img, hasImageLoaded] = useImage(src);
-
-  React.useEffect(
-    () => {
-      if (!hasImageLoaded || !canvasRef.current) {
-        return;
-      }
-
-      const ctx = canvasRef.current.getContext('2d');
-
-      ctx.msImageSmoothingEnabled = false;
-      ctx.mozImageSmoothingEnabled = false;
-      ctx.webkitImageSmoothingEnabled = false;
-      ctx.imageSmoothingEnabled = false;
-
-      // const devicePixelRatio = getDevicePixelRatio();
-      // ctx.scale(devicePixelRatio, devicePixelRatio);
-
-      drawPixellatedImage(
-        canvasRef.current,
-        ctx,
-        img,
-        value,
-        size,
-        aspectRatio
-      );
-
-      setCtx(ctx);
-    },
-    [hasImageLoaded]
-  );
-
-  React.useEffect(
-    () => {
-      if (!ctx) {
-        return;
-      }
-
-      drawPixellatedImage(
-        canvasRef.current,
-        ctx,
-        img,
-        value,
-        size,
-        aspectRatio
-      );
-    },
-    [ctx, value]
-  );
-
-  const scaledCanvasProps = getScaledCanvasProps(size, size);
-
-  return <Canvas ref={canvasRef} {...scaledCanvasProps} />;
-};
-
-const Canvas = styled.canvas``;
 
 export default Pixellate;
