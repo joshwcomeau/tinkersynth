@@ -21,6 +21,7 @@ import { InstrumentCluster } from '../../ControlPanel';
 import LegoBrickVisualization from './LegoBrickVisualization';
 import SimilarityVisualization from './SimilarityVisualization';
 import PersonInflateVisualization from './PersonInflateVisualization';
+import BlurryCatVisualization from './BlurryCatVisualization';
 
 import type {
   ToggleParameterAction,
@@ -135,7 +136,7 @@ const LineCluster = ({
             updateValue={val => tweakParameter('resolution', val)}
             width={touchSliderWidth}
             height={rowHeight}
-            visualizationComponent={SimilarityVisualization}
+            visualizationComponent={BlurryCatVisualization}
             isAnimated={animateTransitions}
             isPoweredOn={isPoweredOn}
           />
