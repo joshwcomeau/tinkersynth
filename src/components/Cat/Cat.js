@@ -7,23 +7,6 @@ import spritesheetSrc from '../../images/cat-spritesheet.png';
 const SPRITESHEET_HEIGHT = 125;
 const SPRITESHEET_CELL_WIDTH = 160;
 
-// type SimpleState = {
-//   frames: Array<number>,
-//   rate: number,
-// };
-
-// type TransitionState = {
-//   ...SimpleState,
-//   transitionFrom: number,
-// }
-
-// const actions = {
-//   walking: {
-//     transition: [],
-//     loop: [0, 1, 2],
-//   },
-// }
-
 type Status =
   | 'walking'
   | 'walk-sit-transition'

@@ -3,18 +3,36 @@ import styled from 'styled-components';
 import { Tooltip } from 'react-tippy';
 
 import useToggle from '../../hooks/toggle.hook';
-import { setTimeoutPromise } from '../../utils';
+import useTimeout from '../../hooks/timeout.hook';
 
 import Cat from '../Cat';
+import useLocalStorageState from '../../hooks/local-storage-state.hook';
 
 const PATREON_URL = 'https://patreon.com';
 
-const useTranslateFromOffscreen = (ref, walkSpeed, handleReachDestination) => {
+const useTranslateFromOffscreen = (
+  ref,
+  walkSpeed,
+  delay,
+  status,
+  handleReachDestination
+) => {
   const lastFrameAt = React.useRef(null);
   const [offset, setOffset] = React.useState(0);
 
+  const [hasStarted, setHasStarted] = React.useState(false);
+
+  useTimeout(() => {
+    setHasStarted(true);
+  }, delay);
+
   React.useEffect(() => {
-    // TODO: Add timeout so that this doesn't start right away.
+    // On returning visits, we want to jump straight to the "cat sleeping
+    // peacefully" step. No sense showing the user the cat animation over and
+    // over
+    if (status === 'lying-asleep') {
+      return;
+    }
 
     // We want to have the cat walk in from beyond the left edge of the screen.
     // To accomplish this, we need to know how many pixels that is, so we know
@@ -25,57 +43,73 @@ const useTranslateFromOffscreen = (ref, walkSpeed, handleReachDestination) => {
     setOffset(-totalWalkDistance);
   }, []);
 
-  React.useEffect(() => {
-    if (Math.abs(offset) > walkSpeed) {
-      window.requestAnimationFrame(() => {
-        // Allow the entity to move in either direction
-        const multiplier = offset > 0 ? -1 : 1;
+  React.useEffect(
+    () => {
+      if (!hasStarted) {
+        return;
+      }
 
-        let increment;
+      if (Math.abs(offset) > walkSpeed) {
+        window.requestAnimationFrame(() => {
+          // Allow the entity to move in either direction
+          const multiplier = offset > 0 ? -1 : 1;
 
-        if (typeof lastFrameAt.current === 'number') {
-          const timeSinceLastFrame = performance.now() - lastFrameAt.current;
-          // I assume I want to move `walkSpeed` pixels every 1/60th of a
-          // second. If the animation is running slower than that, I should
-          // move further on each frame.
-          const framesPerSecond = timeSinceLastFrame;
-          const fpsAdjustment = framesPerSecond / 60;
+          let increment;
 
-          increment = walkSpeed * fpsAdjustment;
-        } else {
-          increment = walkSpeed;
-        }
-        setOffset(offset + increment);
+          if (typeof lastFrameAt.current === 'number') {
+            const timeSinceLastFrame = performance.now() - lastFrameAt.current;
+            // I assume I want to move `walkSpeed` pixels every 1/60th of a
+            // second. If the animation is running slower than that, I should
+            // move further on each frame.
+            const framesPerSecond = timeSinceLastFrame;
+            const fpsAdjustment = framesPerSecond / 60;
 
-        lastFrameAt.current = performance.now();
-      });
-    } else if (offset !== 0) {
-      window.requestAnimationFrame(() => {
-        setOffset(0);
-        handleReachDestination();
-      });
-    }
-  });
+            increment = walkSpeed * fpsAdjustment;
+          } else {
+            increment = walkSpeed;
+          }
+          setOffset(offset + increment);
+
+          lastFrameAt.current = performance.now();
+        });
+      } else if (offset !== 0) {
+        window.requestAnimationFrame(() => {
+          setOffset(0);
+          handleReachDestination();
+        });
+      }
+    },
+    [offset, hasStarted]
+  );
 
   return offset;
 };
 
-const SlopesCat = ({ walkSpeed = 8 }) => {
-  const [status, setStatus] = React.useState('walking');
-  const [hasSeenTooltip, setHasSeenTooltip] = React.useState(false);
-  const timeoutId = React.useRef(null);
+const SlopesCat = ({ walkSpeed = 8, delay = 15000 }) => {
+  const [hasSeenCat, setHasSeenCat] = useLocalStorageState(
+    'tinkersynth-has-seen-slopes-cat',
+    false
+  );
 
+  const [status, setStatus] = React.useState(
+    hasSeenCat ? 'lying-asleep' : 'walking'
+  );
+  const [hasSeenTooltip, setHasSeenTooltip] = React.useState(false);
+
+  const timeoutId = React.useRef(null);
   const wrapperRef = React.useRef(null);
-  const offset = useTranslateFromOffscreen(wrapperRef, walkSpeed, async () => {
-    setStatus('walk-sit-transition');
-  });
+
+  const offset = useTranslateFromOffscreen(
+    wrapperRef,
+    walkSpeed,
+    delay,
+    status,
+    async () => {
+      setStatus('walk-sit-transition');
+    }
+  );
 
   const handleMouseEnter = () => {
-    if (status === 'walking') {
-      // Ignore events during the initial intro stage
-      return;
-    }
-
     if (status === 'sitting') {
       // After X seconds, a sitting cat will lie down after the mouse leaves.
       // If the mouse re-enters, we should reset that timer, so that the cat
@@ -85,11 +119,6 @@ const SlopesCat = ({ walkSpeed = 8 }) => {
   };
 
   const handleMouseLeave = async () => {
-    if (status === 'walking') {
-      // Ignore events during the initial intro stage
-      return;
-    }
-
     if (status === 'sitting' && !hasSeenTooltip) {
       // A little bit after the user finishes with the tooltip, we want the
       // cat to relax a bit
@@ -124,6 +153,11 @@ const SlopesCat = ({ walkSpeed = 8 }) => {
           }, 6000);
           break;
         }
+
+        case 'lying-asleep': {
+          setHasSeenCat(true);
+          break;
+        }
       }
     },
     [status]
@@ -149,15 +183,18 @@ const SlopesCat = ({ walkSpeed = 8 }) => {
         arrow={true}
         hideDelay={500}
         html={
-          <>
-            Enjoying Tinkersynth? Support its creator{' '}
-            <PatreonTooltipLink href={PATREON_URL} target="_blank">
-              on Patreon
-            </PatreonTooltipLink>
-            !
-          </>
+          status === 'lying-asleep' ? (
+            'zzZZZ ZZZZZzzzZ'
+          ) : (
+            <>
+              Enjoying Tinkersynth? Support its creator{' '}
+              <PatreonTooltipLink href={PATREON_URL} target="_blank">
+                on Patreon
+              </PatreonTooltipLink>
+              !
+            </>
+          )
         }
-        disabled={status === 'walking'}
         style={{
           lineHeight: 1.4,
         }}
