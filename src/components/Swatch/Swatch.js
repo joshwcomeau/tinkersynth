@@ -17,9 +17,14 @@ type Props = {
 const Swatch = ({ swatch, size, isSelected, isAnimated }: Props) => {
   const { colors, backgroundColor } = swatch;
 
+  // The "Jelly Beans" palette has 14 colors, and it's a lot to animate.
+  // With that many colors, it won't be obvious if we omit a few.
+  // Clamp all palettes to 10 colors or less.
+  const colorSubset = colors.slice(0, 10);
+
   return (
     <Wrapper style={{ width: size, height: size, backgroundColor }}>
-      {colors.map((color, index) => {
+      {colorSubset.map((color, index) => {
         const { x, y, ballSize } = swatch.getBallPositions(color, size);
 
         return (
@@ -90,4 +95,5 @@ const Border = styled.div`
   border-radius: 50%;
 `;
 
-export default Swatch;
+// $FlowIgnore
+export default React.memo(Swatch);
