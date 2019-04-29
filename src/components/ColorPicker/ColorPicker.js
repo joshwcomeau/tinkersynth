@@ -4,6 +4,7 @@ import { Icon } from 'react-icons-kit';
 import { chevronUp } from 'react-icons-kit/feather/chevronUp';
 import { chevronDown } from 'react-icons-kit/feather/chevronDown';
 import { useSpring, animated } from 'react-spring/hooks';
+import { Tooltip } from 'react-tippy';
 
 import { COLORS } from '../../constants';
 import artSwatches from '../../services/art-swatches.service.js';
@@ -12,7 +13,13 @@ import Swatch from '../Swatch';
 import UnstyledButton from '../UnstyledButton';
 
 const ColorPicker = ({ size, swatchId, isAnimated, updateValue }) => {
-  const swatchIndex = artSwatches.findIndex(swatch => swatch.id === swatchId);
+  let swatchIndex = artSwatches.findIndex(swatch => swatch.id === swatchId);
+
+  if (swatchIndex === -1) {
+    swatchIndex = 0;
+  }
+
+  const swatch = artSwatches[swatchIndex];
 
   const swatchWrapperHeight = size * 0.7;
   const initialPadding = (size - swatchWrapperHeight) / 2;
@@ -44,35 +51,48 @@ const ColorPicker = ({ size, swatchId, isAnimated, updateValue }) => {
 
   return (
     <Wrapper style={{ width: size * 1.5, height: size }}>
-      {/*
+      <Tooltip
+        interactiveBorder={10}
+        animation="fade"
+        duration={200}
+        tabIndex={0}
+        animateFill={false}
+        followCursor={false}
+        arrow={true}
+        html={swatch.label}
+        style={{
+          lineHeight: 1.4,
+        }}
+      >
+        {/*
         NOTE: Putting a click-handler on a div because it is unnecessary for
         keyboard users. It does the same thing as the 'down' arrow, so it's
         just a redundant focus-snatcher. Adding the click handler because
         sometimes mouse users will click it.
       */}
-      <VisualizationWrapper onClick={increment}>
-        <Gradient />
-        <Swatches style={{ paddingTop: initialPadding }}>
-          {artSwatches.map(swatch => (
-            <SwatchWrapper
-              key={swatch.id}
-              style={{
-                width: size,
-                height: swatchWrapperHeight,
-                ...spring,
-              }}
-            >
-              <Swatch
-                size={swatchHeight}
-                swatch={swatch}
-                isSelected={swatch.id === swatchId}
-                isAnimated={isAnimated}
-              />
-            </SwatchWrapper>
-          ))}
-        </Swatches>
-      </VisualizationWrapper>
-
+        <VisualizationWrapper onClick={increment}>
+          <Gradient />
+          <Swatches style={{ paddingTop: initialPadding }}>
+            {artSwatches.map(swatch => (
+              <SwatchWrapper
+                key={swatch.id}
+                style={{
+                  width: size,
+                  height: swatchWrapperHeight,
+                  ...spring,
+                }}
+              >
+                <Swatch
+                  size={swatchHeight}
+                  swatch={swatch}
+                  isSelected={swatch.id === swatchId}
+                  isAnimated={isAnimated}
+                />
+              </SwatchWrapper>
+            ))}
+          </Swatches>
+        </VisualizationWrapper>
+      </Tooltip>
       <Controls style={{ width: size / 2 }}>
         <IncrementDecrementButton
           style={{ width: size / 2, height: size / 2 }}

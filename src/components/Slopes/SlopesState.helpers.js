@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 
 import { sample, random } from '../../utils';
-import ART_SWATCHES from '../../services/art-swatches.service';
 
 export const DEFAULT_PEAKS_CURVE = {
   startPoint: [0.5, 0],
@@ -242,10 +241,6 @@ export const shuffleParameters = state => {
   // invisible canvases. Let's avoid this.
   if (state.parameters.splitUniverse > 0 && state.parameters.resolution < 20) {
     state.parameters.resolution = 50;
-  }
-
-  if (Math.random() > 0.5) {
-    state.parameters.swatchId = sample(ART_SWATCHES).id;
   }
 
   return state;
