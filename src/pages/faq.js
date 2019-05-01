@@ -5,7 +5,7 @@ import queryString from 'query-string';
 
 import { COLORS, UNIT, ETSY_URL, PATREON_URL } from '../constants';
 import { smoothScrollTo } from '../utils';
-import cc0Badge from '../images/cc0-badge.png';
+import ccLicense from '../images/cc-license.png';
 import faqPerfCount from '../videos/faq-perf-count.mp4';
 import faqPerfOcclusion from '../videos/faq-perf-occ-modern.mp4';
 import faqPerfResolution from '../videos/faq-perf-resolution.mp4';
@@ -52,6 +52,10 @@ const FAQ = () => {
 
   return (
     <React.Fragment>
+      <Paragraph>
+        <em>Last updated: May 1st 2019</em>.
+      </Paragraph>
+
       <Section>
         <Header>
           <Heading size={4} style={{ color: COLORS.violet[500] }}>
@@ -66,13 +70,12 @@ const FAQ = () => {
             toggleExpanded={setOpenQuestionId}
           >
             <Paragraph>
-              Tinkersynth is a collection
-              <Asterisk tooltip="Well, er, so far it's just the one machine... but I hope to add others!" />{' '}
-              of software machines that can be used to produce unique{' '}
+              Tinkersynth is an experimental art project. It lets you create
+              unique
               <TextLink to="https://en.wikipedia.org/wiki/Generative_art">
                 generative art
               </TextLink>{' '}
-              via serendipitous experimentation.
+              by making serendipitous discoveries through experimentation.
             </Paragraph>
 
             <Paragraph>

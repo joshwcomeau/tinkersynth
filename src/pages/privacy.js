@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
       <SEO title="Privacy Policy" url="https://tinkersynth.com/slopes/" />
 
       <Paragraph>
-        <em>Last updated: April 29th</em>.{' '}
+        <em>Last updated: May 1st 2019</em>.{' '}
         <TextLink to="/privacy-2019-02-28">View older policy</TextLink>.
       </Paragraph>
 
@@ -80,7 +80,7 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         Tinkersynth now uses Google Analytics to grant insights into how people
-        are using the product. Before April 29th, I used{' '}
+        are using the product. Before May 1st, I used{' '}
         <TextLink to="https://usefathom.com/">Fathom</TextLink>, but as
         Tinkersynth is transforming from a for-profit store to a
         100%-free-to-use service, it is no longer financially viable to continue
@@ -116,11 +116,6 @@ const PrivacyPolicy = () => {
       </List>
 
       <Paragraph>
-        I may switch back to Fathom at some point. If this is important to you,{' '}
-        <TextLink to="/contact">let me know</TextLink>!
-      </Paragraph>
-
-      <Paragraph>
         Tinkersynth does not use any Facebook or Twitter SDKs.
       </Paragraph>
 
@@ -130,7 +125,7 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         When contacting me, either by email or through our{' '}
-        <TextLink to="/contact">contact form</TextLink>, I use that email to
+        <TextLink to="/contact">contact form</TextLink>, I use that data to
         respond to your query.
       </Paragraph>
 
@@ -154,9 +149,10 @@ const PrivacyPolicy = () => {
       </Paragraph>
 
       <Paragraph>
-        The above usages are exclusive. I have no newsletter, and if I do create
-        one later, existing customers won't be auto-subscribed. I won't sell or
-        share any of the data I've collected. I'm not here for that.
+        <strong>The above usages are exclusive.</strong> I have no newsletter,
+        and if I do create one later, existing customers won't be
+        auto-subscribed. I won't sell or share any of the data I've collected.
+        I'm not here for that.
       </Paragraph>
 
       <Spacer size={UNIT * 4} />
