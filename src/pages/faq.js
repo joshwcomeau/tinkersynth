@@ -7,7 +7,8 @@ import { COLORS, UNIT, ETSY_URL, PATREON_URL } from '../constants';
 import { smoothScrollTo } from '../utils';
 import cc0Badge from '../images/cc0-badge.png';
 import faqPerfCount from '../videos/faq-perf-count.mp4';
-import faqPerfOcclusion from '../videos/faq-perf-occ.mp4';
+import faqPerfOcclusion from '../videos/faq-perf-occ-modern.mp4';
+import faqPerfResolution from '../videos/faq-perf-resolution.mp4';
 
 import LayoutSidePage from '../components/LayoutSidePage';
 import QuestionAndAnswer from '../components/QuestionAndAnswer';
@@ -293,9 +294,20 @@ const FAQ = () => {
               <List.Item>
                 Please don't do anything commercial with the downloads. I feel
                 funny about people selling art created in minutes through a tool
-                that took days to build. This applies to derivations as well.
+                that took days to build.
               </List.Item>
             </List>
+
+            <Paragraph>
+              If you use Tinkersynth as input to your creative process, and the
+              output is so different that it would be unrecognizeable as a
+              Tinkersynth design, please feel free to use it commercially, or
+              however you wish. The art is 100% yours at that point. I'm not
+              sure if this is technically within the bounds of the license (I
+              just picked the closest representation of what I want I could
+              find), but please feel free to contact me and I'll grant a
+              personal exemption after seeing the work.
+            </Paragraph>
 
             <Paragraph>
               If you wish to use a Tinkersynth creation in a commercial way,
@@ -345,7 +357,7 @@ const FAQ = () => {
                 muted
                 playsInline
                 src={faqPerfCount}
-                style={{ width: 312 }}
+                width={312}
               />
               <Spacer size={UNIT * 2} />
               <Paragraph>
@@ -357,14 +369,7 @@ const FAQ = () => {
             <QuestionSubsection>
               <Heading size={5}>Disabling line occlusion</Heading>
               <Spacer size={UNIT * 2} />
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                src={faqPerfOcclusion}
-                style={{ width: 312 }}
-              />
+              <video autoPlay loop muted playsInline src={faqPerfOcclusion} />
               <Spacer size={UNIT * 2} />
               <Paragraph>
                 One of the more computationally-intensive steps is making sure
@@ -373,11 +378,25 @@ const FAQ = () => {
               </Paragraph>
             </QuestionSubsection>
 
+            <QuestionSubsection>
+              <Heading size={5}>Lowering the resolution</Heading>
+              <Spacer size={UNIT * 2} />
+              <video autoPlay loop muted playsInline src={faqPerfResolution} />
+              <Spacer size={UNIT * 2} />
+              <Paragraph>
+                Every line in Tinkersynth is made up of a number of smaller
+                straight lines. To get the lines looking perfectly smooth, we
+                need <em>a lot</em> of these lines. In Tinkersynth 2.0, you can
+                lower the number of points per row, which dramatically improves
+                performance.
+              </Paragraph>
+            </QuestionSubsection>
+
             <Paragraph>
               Even if you want your final piece of artwork to include many
-              occluded lines, it can be advantageous to experiment with these
-              recommended settings, and then crank them up once you're happy
-              with the result.
+              occluded lines, or lots of points, it can be advantageous to
+              experiment with these recommended settings, lowering them while
+              you work and then cranking them up once you're ready to download.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -457,6 +476,14 @@ const FAQ = () => {
               rather than relying on fills or masks, so that you can plot the
               SVG directly with programs like Inkscape.
             </Paragraph>
+
+            <Paragraph>
+              Note that the plotter will assume that every line should be the
+              same color. There is currently no way to export multiple files for
+              each color, although with some patience this can be done in
+              programs like Inkscape or Illustrator.
+            </Paragraph>
+
             <Paragraph>
               (<TextLink to="https://axidraw.com/">Pen plotters</TextLink> are
               machines that create art by mechanically moving a pen over paper.
