@@ -9,6 +9,7 @@ import { COLORS, UNIT } from '../../constants';
 import ccLicenseSrc from '../../images/cc-license.png';
 import { getSwatchById } from '../../services/art-swatches.service';
 import { renderPolylines } from '../../services/polylines.service';
+import generateRandomName from '../../services/random-name.service';
 
 import Shelf from '../Shelf';
 import Heading from '../Heading';
@@ -33,6 +34,7 @@ const PREVIEW_SIZE = 180;
 const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
   const windowDimensions = useWindowDimensions();
   const canvasDimensions = getCanvasDimensions(windowDimensions);
+  const [filename, setFilename] = React.useState(null);
 
   const timeoutId = React.useRef(null);
 
@@ -61,6 +63,8 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
       window.clearTimeout(timeoutId.current);
 
       if (isVisible) {
+        setFilename(generateRandomName());
+
         const relevantParams = { ...slopesParams };
         delete relevantParams.disabledParams;
         delete relevantParams.shuffle;
@@ -137,6 +141,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="opaque-png"
+              filename={filename}
               swatch={swatch}
             />
 
@@ -147,6 +152,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="transparent-png"
+              filename={filename}
               swatch={swatch}
             />
 
@@ -157,6 +163,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
               originalCanvasWidth={canvasDimensions.width}
               svgNode={svgNode}
               kind="svg"
+              filename={filename}
               swatch={swatch}
             />
           </Variants>

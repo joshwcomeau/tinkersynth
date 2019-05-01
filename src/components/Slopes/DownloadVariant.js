@@ -25,6 +25,7 @@ type Props = {
   originalCanvasWidth: number,
   svgNode: ?HTMLElement,
   kind: 'transparent-png' | 'opaque-png' | 'svg',
+  filename: string,
   swatch: SwatchData,
 };
 
@@ -56,11 +57,11 @@ const DownloadVariant = ({
   originalCanvasWidth,
   svgNode,
   kind,
+  filename,
   swatch,
 }: Props) => {
   const [previewUri, setPreviewUri] = React.useState(null);
   const [isPreparing, setIsPreparing] = React.useState(false);
-  const filename = React.useRef(generateRandomName());
 
   // NOTE: Since most backgrounds are dark, I'm just assuming that we only
   // consider '#FFF' a light background. Ideally, though, we should be smarter,
@@ -85,11 +86,6 @@ const DownloadVariant = ({
         return;
       }
 
-      // Refresh the name when the shelf is reopened.
-      // Ideally this would only happen when the artwork has changed, but
-      // whatever this is easier.
-      filename.current = generateRandomName();
-
       const previewScale = size / originalCanvasWidth;
 
       svgToPng.svgAsPngUri(svgNode, { scale: previewScale }, uri => {
@@ -106,8 +102,10 @@ const DownloadVariant = ({
       case 'transparent-png': {
         setIsPreparing(true);
 
+        const fullPath = `${filename} (transparent).png`;
+
         svgToPng
-          .saveSvgAsPng(svgNode, filename.current, { scale })
+          .saveSvgAsPng(svgNode, fullPath, { scale })
           .then(() => setIsPreparing(false));
 
         break;
@@ -122,8 +120,10 @@ const DownloadVariant = ({
           background
         );
 
+        const fullPath = `${filename} (opaque).png`;
+
         svgToPng
-          .saveSvgAsPng(opaqueClone, filename.current, { scale })
+          .saveSvgAsPng(opaqueClone, fullPath, { scale })
           .then(() => setIsPreparing(false));
 
         break;
@@ -136,7 +136,9 @@ const DownloadVariant = ({
           background
         );
 
-        svgToPng.saveSvg(opaqueClone, filename.current);
+        const fullPath = `${filename}.svg`;
+
+        svgToPng.saveSvg(opaqueClone, fullPath);
         break;
       }
 
