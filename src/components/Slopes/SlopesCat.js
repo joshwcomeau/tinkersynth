@@ -4,11 +4,10 @@ import { Tooltip } from 'react-tippy';
 
 import useToggle from '../../hooks/toggle.hook';
 import useTimeout from '../../hooks/timeout.hook';
+import { PATREON_URL } from '../../constants';
 
 import Cat from '../Cat';
 import useLocalStorageState from '../../hooks/local-storage-state.hook';
-
-const PATREON_URL = 'https://patreon.com';
 
 const useTranslateFromOffscreen = (
   ref,
@@ -115,6 +114,8 @@ const SlopesCat = ({ walkSpeed = 8, delay = 15000 }) => {
       // If the mouse re-enters, we should reset that timer, so that the cat
       // doesn't decide to nap while the user is reading the tooltip.
       window.clearTimeout(timeoutId.current);
+    } else if (status === 'lying-asleep') {
+      setStatus('lying-awake');
     }
   };
 
@@ -183,17 +184,13 @@ const SlopesCat = ({ walkSpeed = 8, delay = 15000 }) => {
         arrow={true}
         hideDelay={500}
         html={
-          status === 'lying-asleep' ? (
-            'zzZZZ ZZZZZzzzZ'
-          ) : (
-            <>
-              Enjoying Tinkersynth? Support its creator{' '}
-              <PatreonTooltipLink href={PATREON_URL} target="_blank">
-                on Patreon
-              </PatreonTooltipLink>
-              !
-            </>
-          )
+          <>
+            Enjoying Tinkersynth? Support its creator{' '}
+            <PatreonTooltipLink href={PATREON_URL} target="_blank">
+              on Patreon
+            </PatreonTooltipLink>
+            !
+          </>
         }
         style={{
           lineHeight: 1.4,
