@@ -11,7 +11,7 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import HeaderNavigationItem from './HeaderNavigationItem';
 import Particle from '../Particle';
 import LogoWithName from '../LogoWithName';
-import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
+import HamburgerMenu from '../HamburgerMenu';
 
 const Header = ({ theme, noBorder }) => {
   const navigationLinkColor =
@@ -20,7 +20,7 @@ const Header = ({ theme, noBorder }) => {
   return (
     <OuterWrapper showBorder={!noBorder}>
       <InnerWrapper>
-        <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
+        <Link to="/slopes" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName theme={theme} id="site-header" />
         </Link>
 
@@ -31,6 +31,9 @@ const Header = ({ theme, noBorder }) => {
             </HeaderNavigationItem>
             <HeaderNavigationItem color={navigationLinkColor} to="/faq">
               FAQ
+            </HeaderNavigationItem>
+            <HeaderNavigationItem color={navigationLinkColor} to="/backers">
+              Backers
             </HeaderNavigationItem>
             <HeaderNavigationItem color={navigationLinkColor} to="/contact">
               Contact

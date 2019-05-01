@@ -13,7 +13,7 @@ const Footer = ({ theme }) => {
   return (
     <Wrapper>
       <InnerWrapper>
-        <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
+        <Link to="/slopes" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName id="footer-logo" theme="dark" />
         </Link>
 
