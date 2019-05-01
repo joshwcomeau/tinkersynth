@@ -1,17 +1,10 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tooltip } from 'react-tippy';
 import styled from 'styled-components';
 
-import {
-  UNIT,
-  COLORS,
-  LIGHT_BACKGROUND,
-  DARK_BACKGROUND,
-} from '../../constants';
+import { UNIT, COLORS } from '../../constants';
 import * as actions from '../../actions';
-import analytics from '../../services/analytics.service';
 import slopesPlacardMobile from '../../images/slopes-placard-mobile.png';
 
 import Spacer from '../Spacer';
@@ -19,11 +12,10 @@ import Button from '../Button';
 import BigOminousButton from '../BigOminousButton';
 import { SlopesContext } from './SlopesState';
 import PlacardArea from './controls/PlacardArea';
-import PageCluster from './controls/PageCluster';
+import ColorCluster from './controls/ColorCluster';
 import { InstrumentCluster } from '../ControlPanel';
 
 import DestructiveCluster from './controls/DestructiveCluster';
-import SlopesCanvasMargins from './SlopesCanvasMargins';
 import PoweredOffCanvas from './PoweredOffCanvas';
 import UnstyledButton from '../UnstyledButton';
 
@@ -31,79 +23,22 @@ type Props = {
   width: number,
   height: number,
   isFullExperience: boolean,
+  toggleDownloadShelf: () => void,
   children: React$Node,
-  enableDarkMode: boolean,
-  enableMargins: boolean,
-  isAwareOfPurchaseOptions: boolean,
   isPoweredOn: boolean,
-};
-
-// Show the tooltip after 2 minutes
-const SHOW_PURCHASE_TOOLTIP_AFTER = 1000 * 60 * 2;
-
-const handleClickPurchase = () => {
-  analytics.logEvent('click-smaller-purchase', { machineName: 'slopes' });
-
-  // HACK: I've totally broken out of React's abstraction here, because the
-  // alternative is more work.
-  const storefrontEl = document.querySelector('#slopes-storefront');
-
-  const storefrontVerticalOffset = storefrontEl.getBoundingClientRect().top;
-
-  window.scrollTo({
-    top: storefrontVerticalOffset + window.pageYOffset,
-    left: 0,
-    behavior: 'smooth',
-  });
-};
-
-const useTooltip = isAwareOfPurchaseOptions => {
-  const [shouldShowTooltip, setShouldShowTooltip] = React.useState(false);
-
-  const timeoutId = React.useRef(null);
-
-  React.useEffect(() => {
-    if (isAwareOfPurchaseOptions) {
-      return;
-    }
-
-    timeoutId.current = window.setTimeout(() => {
-      setShouldShowTooltip(true);
-    }, SHOW_PURCHASE_TOOLTIP_AFTER);
-  }, []);
-
-  React.useEffect(
-    () => {
-      if (isAwareOfPurchaseOptions) {
-        window.clearTimeout(timeoutId.current);
-        setShouldShowTooltip(false);
-      }
-    },
-    [isAwareOfPurchaseOptions]
-  );
-
-  const dismissTooltip = () => {
-    setShouldShowTooltip(false);
-  };
-
-  return [shouldShowTooltip, dismissTooltip];
+  rememberCurrentlyFocusedElement: (ref: HTMLElement) => any,
 };
 
 const SlopesCanvasWrapper = ({
   width,
   height,
   isFullExperience,
+  toggleDownloadShelf,
   children,
-  enableDarkMode,
-  enableMargins,
-  isAwareOfPurchaseOptions,
   isPoweredOn,
+  rememberCurrentlyFocusedElement,
 }: Props) => {
-  const [showPurchaseTooltip, setShowPurchaseTooltip] = React.useState(false);
-
-  const [shouldShowTooltip, dismissTooltip] = useTooltip(
-    isAwareOfPurchaseOptions
-  );
+  const downloadButtonRef = React.useRef(null);
 
   return (
     <Wrapper>
@@ -122,56 +57,30 @@ const SlopesCanvasWrapper = ({
 
         <InnerWrapper>
           {!isPoweredOn && <PoweredOffCanvas />}
-          <ChildWrapper
-            style={{
-              backgroundColor: enableDarkMode
-                ? DARK_BACKGROUND
-                : LIGHT_BACKGROUND,
-            }}
-          >
-            {children}
-          </ChildWrapper>
-          <SlopesCanvasMargins
-            width={width}
-            height={height}
-            enableDarkMode={enableDarkMode}
-            enableMargins={enableMargins}
-          />
+          <ChildWrapper>{children}</ChildWrapper>
         </InnerWrapper>
 
         <Spacer size={UNIT} />
 
         <Footer>
-          <PageCluster size={isFullExperience ? 38 : 48} />
+          <ColorCluster size={48} />
 
-          <Tooltip
-            animation="fade"
-            animateFill={false}
-            arrow={true}
-            position="bottom"
-            html={
-              <TooltipContents onClick={dismissTooltip}>
-                <strong>Happy with your design?</strong>
-                <br />
-                <br />
-                You can purchase it as a print,
-                <br />
-                or as a vector image.
-              </TooltipContents>
-            }
-            open={shouldShowTooltip}
-            style={{
-              lineHeight: 1.4,
+          <Button
+            ref={downloadButtonRef}
+            color={COLORS.blue[500]}
+            size="large"
+            onClick={() => {
+              toggleDownloadShelf();
+
+              if (downloadButtonRef.current) {
+                // After the user closes the shelf, we want to restore focus
+                // to this button, to make sure the focus is where we left off.
+                rememberCurrentlyFocusedElement(downloadButtonRef.current);
+              }
             }}
           >
-            <Button
-              color={COLORS.blue[500]}
-              onClick={handleClickPurchase}
-              size={isFullExperience ? 'medium' : 'large'}
-            >
-              Purchase
-            </Button>
-          </Tooltip>
+            Download
+          </Button>
         </Footer>
       </Machine>
     </Wrapper>
@@ -187,8 +96,6 @@ const SlopesCanvasWrapperContainer = (props: any) => {
   return (
     <OptimizedSlopesCanvasWrapper
       {...props}
-      enableDarkMode={slopesParams.enableDarkMode}
-      enableMargins={slopesParams.enableMargins}
       isPoweredOn={slopesParams.isPoweredOn}
     />
   );
@@ -216,8 +123,6 @@ const Header = styled.div`
 `;
 
 const Machine = styled.div`
-  position: sticky;
-  top: 28px;
   perspective: 200px;
   user-select: none;
   padding: ${UNIT}px;
@@ -236,6 +141,7 @@ const InnerWrapper = styled.div`
 const ChildWrapper = styled.div`
   position: relative;
   z-index: 1;
+  background: #000;
 `;
 
 const TopPanel = styled.div`
@@ -245,7 +151,7 @@ const TopPanel = styled.div`
   top: -15px;
   left: 0;
   right: 0;
-  background: ${COLORS.gray[300]};
+  background: linear-gradient(to top, ${COLORS.gray[400]}, ${COLORS.gray[500]});
   transform: rotateX(25deg);
   transform-origin: bottom center;
 `;
@@ -257,16 +163,7 @@ const Footer = styled.div`
 
 const Toggles = styled.div``;
 
-const TooltipContents = styled(UnstyledButton)`
-  font-size: 15px;
-  color: ${COLORS.white};
-  text-align: center;
-`;
-
-const mapStateToProps = state => {
-  return {
-    isAwareOfPurchaseOptions: state.machine.isAwareOfPurchaseOptions,
-  };
-};
-
-export default connect(mapStateToProps)(SlopesCanvasWrapperContainer);
+export default connect(
+  null,
+  { rememberCurrentlyFocusedElement: actions.rememberCurrentlyFocusedElement }
+)(SlopesCanvasWrapperContainer);

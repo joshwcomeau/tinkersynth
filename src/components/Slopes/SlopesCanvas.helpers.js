@@ -1,6 +1,9 @@
 // @flow
 import { COLORS, UNIT } from '../../constants';
 import { clamp, normalize } from '../../utils';
+import { getSwatchById } from '../../services/art-swatches.service';
+
+import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 
 /**
  * The canvas dimensions are actually quite complicated!
@@ -11,7 +14,10 @@ import { clamp, normalize } from '../../utils';
  * On mobile, we do the opposite, since we want to always fill the available
  * width.
  */
-export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
+export const getCanvasDimensions = (
+  windowDimensions,
+  aspectRatio = SLOPES_ASPECT_RATIO
+) => {
   const defaultHeight = 552;
   const defaultWidth = defaultHeight * aspectRatio;
 
@@ -43,33 +49,28 @@ export const getCanvasDimensions = (windowDimensions, aspectRatio) => {
 export const getRenderOptions = (
   width: number,
   height: number,
-  kind: 'main' | 'framed-preview',
-  context: CanvasRenderingContext2D,
-  devicePixelRatio: number,
-  scaleRatio: number = 1,
-  { enableDarkMode, dotRatio }: any
+  kind: 'main' | 'download-transparent' | 'download-opaque',
+  { swatchId, lineThickness, dotRatio, perlinRatio }: any
 ) => {
   const MIN_WIDTH = 1;
   const MAX_WIDTH = 2.5;
 
-  let lineWidth =
-    dotRatio === 0
-      ? MIN_WIDTH
-      : clamp(
-          normalize(dotRatio, 0.5, 1, MIN_WIDTH, MAX_WIDTH),
-          MIN_WIDTH,
-          MAX_WIDTH
-        );
+  const lineWidth = lineThickness;
 
-  if (kind === 'framed-preview') {
-    // In the smaller framed preview, we scale the canvas down, so we need to
-    // boost the line thickness
-    lineWidth *= 1 / scaleRatio;
+  const swatch = getSwatchById(swatchId);
 
-    // ...of course, we should also take in our devicePixelRatio, to make sure it
-    // looks clean and nice on retina displays.
-    if (lineWidth > 1 && devicePixelRatio > 1) {
-      lineWidth /= devicePixelRatio;
+  let backgroundColor;
+
+  switch (kind) {
+    case 'main':
+    case 'download-opaque': {
+      backgroundColor = swatch.backgroundColor;
+      break;
+    }
+
+    case 'download-transparent': {
+      backgroundColor = 'transparent';
+      break;
     }
   }
 
@@ -80,12 +81,16 @@ export const getRenderOptions = (
   // 0, it makes sense to use a round linecap. Otherwise, use the default butt
   const lineCap = dotRatio > 0 ? 'round' : 'butt';
 
+  // If the lines are "broken", we want to color every segment differently.
+  // Otherwise, we want to alternate rows instead.
+  const colorMode = dotRatio === 0 && perlinRatio === 1 ? 'row' : 'segment';
+
   return {
     width,
     height,
-    context,
-    lineColor: enableDarkMode ? COLORS.white : COLORS.black,
-    backgroundColor: 'transparent',
+    backgroundColor,
+    lineColors: swatch.colors,
+    colorMode,
     lineWidth,
     lineCap,
   };

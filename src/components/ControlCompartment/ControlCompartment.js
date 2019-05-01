@@ -6,7 +6,6 @@ import { useSpring, animated } from 'react-spring/hooks';
 import Icon from 'react-icons-kit';
 import { alertCircle } from 'react-icons-kit/feather/alertCircle';
 
-import * as actions from '../../actions';
 import { COLORS } from '../../constants';
 
 import UnstyledButton from '../UnstyledButton';
@@ -16,7 +15,6 @@ type Props = {
   orientation: 'horizontal' | 'vertical',
   numOfDoors?: 1 | 2,
   isDisabled: boolean,
-  clickDisabledCompartment: (elem: HTMLElement) => void,
   children: React$Node,
 };
 
@@ -44,7 +42,6 @@ const ControlCompartment = ({
   orientation,
   isDisabled,
   numOfDoors = 2,
-  clickDisabledCompartment,
   children,
 }: Props) => {
   const iconButtonRef = useRef();

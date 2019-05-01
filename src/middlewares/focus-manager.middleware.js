@@ -6,7 +6,7 @@ export default () => {
       returnFocusTo = action.triggerRef;
     }
 
-    if (action.type === 'DISMISS_TOAST' && returnFocusTo) {
+    if (action.restoreFocus && returnFocusTo) {
       returnFocusTo.focus();
     }
 

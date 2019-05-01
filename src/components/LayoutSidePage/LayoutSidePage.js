@@ -10,15 +10,10 @@ import MaxWidthWrapper from '../MaxWidthWrapper';
 import Spacer from '../Spacer';
 import PageHeader from '../PageHeader';
 
-const LayoutSidePage = ({ pageId, title, children, adminPage }) => {
+const LayoutSidePage = ({ pageId, title, children }) => {
   return (
-    <Layout pageId={pageId} adminPage={adminPage}>
-      {!adminPage && (
-        <SEO
-          title={title}
-          keywords={['generative art', 'art', 'online store']}
-        />
-      )}
+    <Layout pageId={pageId}>
+      <SEO title={title} keywords={['generative art', 'art', 'online store']} />
 
       <Wrapper maxWidth="1000px">
         <PageHeader>{title}</PageHeader>

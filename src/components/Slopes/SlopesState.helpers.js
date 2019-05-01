@@ -41,7 +41,7 @@ export const updateDisabledParams = (disabledObj, params) => {
   disabledObj.current.wavelength = params.splitUniverse === 100;
   disabledObj.current.waterBoilAmount =
     params.splitUniverse === 100 || params.spikyness === 100;
-  disabledObj.current.personInflateAmount = params.splitUniverse === 100;
+  disabledObj.current.peaksCurveAmount = params.splitUniverse === 100;
   disabledObj.current.omega = params.polarAmount === 0;
   disabledObj.current.omega = params.polarAmount === 0;
   disabledObj.current.staticAmount =
@@ -74,7 +74,7 @@ export const shuffleParameters = state => {
     state.parameters.peaksCurve = getRandomPeaksCurve();
   }
   if (Math.random() > 0.25) {
-    state.parameters.personInflateAmount = getRandomSliderValue();
+    state.parameters.peaksCurveAmount = getRandomSliderValue();
   }
   if (Math.random() > 0.25) {
     // Amplitudes below 25 don't really look good
@@ -125,7 +125,15 @@ export const shuffleParameters = state => {
 
   // splitUniverse is _such_ a drastic effect. Let's make it stick to 0
   // most of the time.
-  state.parameters.splitUniverse = sample([0, 0, 0, 0, getRandomSliderValue()]);
+  state.parameters.splitUniverse = sample([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    getRandomSliderValue(),
+  ]);
 
   // Performance suffers when we add lots of lines. Let's keep it generally
   // to a pretty low number
@@ -161,6 +169,79 @@ export const shuffleParameters = state => {
           true,
         ])
       : getRandomBooleanValue();
+
+  if (Math.random() > 0.25) {
+    state.parameters.lineThicknessAmount = sample([
+      2.5,
+      5,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      15,
+      20,
+      20,
+      20,
+      30,
+      50,
+      75,
+      100,
+      100,
+      getRandomSliderValue(),
+    ]);
+  }
+
+  if (Math.random() > 0.5) {
+    state.parameters.resolution = sample([
+      1,
+      5,
+      5,
+      5,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      10,
+      10,
+      10,
+      15,
+      15,
+      20,
+      20,
+      25,
+      30,
+      35,
+      40,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      getRandomSliderValue(),
+    ]);
+  }
+
+  // IF splitUniverse is non-zero, having low resolution can lead to
+  // invisible canvases. Let's avoid this.
+  if (state.parameters.splitUniverse > 0 && state.parameters.resolution < 20) {
+    state.parameters.resolution = 50;
+  }
 
   return state;
 };

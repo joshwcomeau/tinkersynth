@@ -35,8 +35,7 @@ type HistorySnapshot = {
 
 const defaultParameters = {
   seed: getRandomSeed(),
-  enableDarkMode: sample([true, false]),
-  enableMargins: sample([true, false]),
+  swatchId: 'inverted-black-on-white',
   enableOcclusion: true,
   amplitudeAmount: 50,
   wavelength: 25,
@@ -48,10 +47,12 @@ const defaultParameters = {
   polarAmount: 0,
   omega: 0,
   splitUniverse: 0,
-  personInflateAmount: 50,
+  peaksCurveAmount: 50,
   waterBoilAmount: 100,
   ballSize: 50,
   dotAmount: 0,
+  lineThicknessAmount: 10,
+  resolution: 50,
   peaksCurve: DEFAULT_PEAKS_CURVE,
   enableMirrored: false, // SECRET PARAM :o
 };
@@ -67,16 +68,17 @@ const poweredOffParameters = {
   polarAmount: 0,
   omega: 0,
   splitUniverse: 0,
-  personInflateAmount: 0,
+  peaksCurveAmount: 0,
   waterBoilAmount: 0,
   ballSize: 0,
   dotAmount: 0,
+  lineThicknessAmount: 0,
+  resolution: 0,
 };
 
 type Parameters = {
   seed: number,
-  enableDarkMode: boolean,
-  enableMargins: boolean,
+  swatchId: string,
   enableOcclusion: boolean,
   amplitudeAmount: number,
   wavelength: number,
@@ -88,10 +90,12 @@ type Parameters = {
   polarAmount: number,
   omega: number,
   splitUniverse: number,
-  personInflateAmount: number,
+  peaksCurveAmount: number,
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
+  lineThicknessAmount: number,
+  resolution: number,
   peaksCurve: Curve,
   enableMirrored: boolean,
 };
@@ -193,8 +197,7 @@ const reducer = produce(
 
         state.parameters = {
           ...defaultParameters,
-          enableDarkMode: state.parameters.enableDarkMode,
-          enableMargins: state.parameters.enableMargins,
+          swatchId: state.parameters.swatchId,
         };
 
         return state;
@@ -221,19 +224,17 @@ const reducer = produce(
   }
 );
 
-export const SlopesProvider = ({
-  children,
-  orderParams,
-}: {
-  children: React$Node,
-  orderParams: ?Parameters,
-}) => {
+export const SlopesProvider = ({ children }: { children: React$Node }) => {
+  const lastSessionParams = retrieveLastSessionSlopesParams() || {};
+
   const initialState = {
     history: [],
     animateTransitions: true,
     isPoweredOn: true,
-    parameters:
-      orderParams || retrieveLastSessionSlopesParams() || defaultParameters,
+    parameters: {
+      ...defaultParameters,
+      ...lastSessionParams,
+    },
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -300,26 +301,7 @@ export const SlopesProvider = ({
   return (
     <SlopesContext.Provider
       value={{
-        seed: state.parameters.seed,
-        enableDarkMode: state.parameters.enableDarkMode,
-        enableMargins: state.parameters.enableMargins,
-        amplitudeAmount: state.parameters.amplitudeAmount,
-        octaveAmount: state.parameters.octaveAmount,
-        perspective: state.parameters.perspective,
-        lineAmount: state.parameters.lineAmount,
-        spikyness: state.parameters.spikyness,
-        staticAmount: state.parameters.staticAmount,
-        polarAmount: state.parameters.polarAmount,
-        omega: state.parameters.omega,
-        splitUniverse: state.parameters.splitUniverse,
-        enableOcclusion: state.parameters.enableOcclusion,
-        peaksCurve: state.parameters.peaksCurve,
-        personInflateAmount: state.parameters.personInflateAmount,
-        wavelength: state.parameters.wavelength,
-        waterBoilAmount: state.parameters.waterBoilAmount,
-        ballSize: state.parameters.ballSize,
-        dotAmount: state.parameters.dotAmount,
-        enableMirrored: state.parameters.enableMirrored,
+        ...state.parameters,
 
         toggleParameter: toggleParameter.current,
         tweakParameter: tweakParameter.current,

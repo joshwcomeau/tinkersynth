@@ -11,7 +11,7 @@ import BezierControl from '../../BezierControl';
 import SliderIconControl from '../../SliderIconControl';
 import Spacer from '../../Spacer';
 
-import PersonInflateVisualization from './PersonInflateVisualization';
+import GradientWidthVisualization from './GradientWidthVisualization';
 import WavelengthVisualization from './WavelengthVisualization';
 
 import type { Curve } from '../../../types';
@@ -20,8 +20,8 @@ import type { TweakParameterAction } from '../SlopesState';
 type Props = {
   width: number,
   peaksCurve: Curve,
-  personInflateAmount: number,
-  isPersonInflateAmountDisabled: boolean,
+  peaksCurveAmount: number,
+  isPeaksCurveAmountDisabled: boolean,
   tweakParameter: TweakParameterAction,
   animateTransitions: boolean,
   isPoweredOn: boolean,
@@ -30,8 +30,8 @@ type Props = {
 const PeaksCluster = ({
   width,
   peaksCurve,
-  personInflateAmount,
-  isPersonInflateAmountDisabled,
+  peaksCurveAmount,
+  isPeaksCurveAmountDisabled,
   tweakParameter,
   animateTransitions,
   isPoweredOn,
@@ -42,7 +42,7 @@ const PeaksCluster = ({
   const sliderPadding = 4;
 
   const bezierControlWidth = innerWidth - sliderWidth - UNIT;
-  const bezierControlHeight = 170;
+  const bezierControlHeight = 142;
 
   const sliderHeight = bezierControlHeight;
 
@@ -62,16 +62,16 @@ const PeaksCluster = ({
       <ControlCompartment
         orientation="vertical"
         numOfDoors={1}
-        isDisabled={isPersonInflateAmountDisabled}
+        isDisabled={isPeaksCurveAmountDisabled}
       >
         <SliderIconControl
           width={sliderWidth}
           height={sliderHeight}
           padding={sliderPadding}
-          value={personInflateAmount}
-          updateValue={val => tweakParameter('personInflateAmount', val)}
-          visualizationComponent={PersonInflateVisualization}
-          disabled={isPersonInflateAmountDisabled}
+          value={peaksCurveAmount}
+          updateValue={val => tweakParameter('peaksCurveAmount', val)}
+          visualizationComponent={GradientWidthVisualization}
+          disabled={isPeaksCurveAmountDisabled}
           isAnimated={animateTransitions}
           isPoweredOn={isPoweredOn}
         />
@@ -90,10 +90,8 @@ const PeaksContainer = ({ width }: { width: number }) => {
     <OptimizedPeaksCluster
       width={width}
       peaksCurve={slopesParams.peaksCurve}
-      personInflateAmount={slopesParams.personInflateAmount}
-      isPersonInflateAmountDisabled={
-        slopesParams.disabledParams.personInflateAmount
-      }
+      peaksCurveAmount={slopesParams.peaksCurveAmount}
+      isPeaksCurveAmountDisabled={slopesParams.disabledParams.peaksCurveAmount}
       tweakParameter={slopesParams.tweakParameter}
       animateTransitions={slopesParams.animateTransitions}
       isPoweredOn={slopesParams.isPoweredOn}

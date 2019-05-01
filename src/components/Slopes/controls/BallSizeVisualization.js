@@ -66,7 +66,7 @@ const getDataForValue = (value: number) => {
       id: 'beachball',
       src: beachballSrc,
       dropFrom: 5,
-      bounciness: 0.75,
+      bounciness: 0.7,
       gravity: 0.1,
       squishiness: 1.6,
     };

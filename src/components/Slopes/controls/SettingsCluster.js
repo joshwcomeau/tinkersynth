@@ -24,15 +24,13 @@ const SettingsCluster = ({
   tweakParameter,
 }: Props) => {
   return (
-    <div style={{ paddingTop: 15 }}>
-      <InstrumentCluster>
-        <SeedPicker
-          seed={seed}
-          isPoweredOn={isPoweredOn}
-          setSeed={val => tweakParameter('seed', val)}
-        />
-      </InstrumentCluster>
-    </div>
+    <InstrumentCluster>
+      <SeedPicker
+        seed={seed}
+        isPoweredOn={isPoweredOn}
+        setSeed={val => tweakParameter('seed', val)}
+      />
+    </InstrumentCluster>
   );
 };
 

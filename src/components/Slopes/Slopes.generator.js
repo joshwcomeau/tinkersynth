@@ -86,6 +86,7 @@ const generator = ({
   peaksCurve,
   selfSimilarity,
   seed,
+  baseSamplesPerRow,
   enableMirrored,
 }) => {
   // For aesthetic reasons, I don't want the lines to start at the very bottom
@@ -102,16 +103,11 @@ const generator = ({
   // canvas, so we need more than 1 point per width-pixel to represent it.
   const samplesPerRowWidthMultiplier = mix(1, 0.5, polarRatio);
 
-  // When our `dotAmount` value gets really low, we actually want to decrease
-  // the samples per row. In combination with tweaking the lineWIdth, this will
-  // give us bigger dots, spaced further apart.
-  const dotAmountMultiplier = clamp(normalize(dotRatio, 0, 1, 1, 0.2), 0, 1);
-
   const samplesPerRow = Math.ceil(
-    width * samplesPerRowWidthMultiplier * dotAmountMultiplier
+    baseSamplesPerRow * samplesPerRowWidthMultiplier
   );
 
-  const distanceBetweenSamples = width / samplesPerRow;
+  const distanceBetweenSamples = width / (samplesPerRow - 1);
 
   const sampleData = {
     width,
@@ -154,7 +150,7 @@ const generator = ({
     start = performance.now();
   }
 
-  let lines = [];
+  let rows = [];
 
   // Precompute all row offsets
   const rowOffsets = range(numOfRows).map(rowIndex => {
@@ -223,11 +219,11 @@ const generator = ({
       row.push(line);
     });
 
-    lines.push(row);
+    rows.push(row);
   });
 
   if (enableOcclusion) {
-    const newLines = lines.map((row, rowIndex) => {
+    const newLines = rows.map((row, rowIndex) => {
       const previousRowIndices = getPossiblyOccludingRowIndices({
         rowIndex,
         rowHeight,
@@ -238,8 +234,8 @@ const generator = ({
       return row.map((line, sampleIndex) => {
         const previousLines = previousRowIndices
           .map(function mapPreviousLines(previousRowIndex) {
-            return lines[previousRowIndex]
-              ? lines[previousRowIndex][sampleIndex]
+            return rows[previousRowIndex]
+              ? rows[previousRowIndex][sampleIndex]
               : null;
           })
           .filter(line => !!line);
@@ -254,15 +250,16 @@ const generator = ({
       });
     });
 
-    lines = newLines;
+    rows = newLines;
   }
 
   if (dotRatio !== 0) {
-    // `dotRatio` is linear between 0 and 1, but most of the range isn't that
-    // interesting.
+    // In addition to trimming the lines into dots, we also want to increase
+    // the spacing between the dots. This is so that it's clearer what's
+    // happening (the dots are often too close together to tell)
     const shiftedDotRatio = clamp(normalize(dotRatio, 0, 0.5, 0.5, 0), 0.01, 1);
 
-    lines.forEach(row => {
+    rows.forEach(row => {
       row.forEach(line => {
         if (!line) {
           return;
@@ -273,15 +270,15 @@ const generator = ({
         const deltaY = p2[1] - p1[1];
 
         line[1] = [
-          p1[0] + deltaX * shiftedDotRatio,
-          p1[1] + deltaY * shiftedDotRatio,
+          p1[0] + deltaX * (1 - dotRatio),
+          p1[1] + deltaY * (1 - dotRatio),
         ];
       });
     });
   }
 
   if (enableMirrored) {
-    lines.forEach((row, rowIndex) => {
+    rows.forEach((row, rowIndex) => {
       const mirroredRow = [];
 
       row.forEach((line, lineIndex) => {
@@ -294,7 +291,7 @@ const generator = ({
         // If both points are above the halfway point, we don't need to render
         // this line at all.
         if (line[0][1] > halfwayPoint && line[1][1] > halfwayPoint) {
-          lines[rowIndex][lineIndex] = null;
+          rows[rowIndex][lineIndex] = null;
           return;
         }
 
@@ -326,32 +323,61 @@ const generator = ({
         mirroredRow.push(flippedLine);
       });
 
-      lines.push(mirroredRow);
+      rows.push(mirroredRow);
     });
   }
 
-  lines = flatten(lines).filter(line => !!line);
+  // At this point, `rows` is an array of rows, and every row is an array of
+  // line segments. Every line segment is an array of two points, pseudo-tuple.
+  // This is a LOT of arrays, so here's an example:
+  /*
 
-  // If our lines are mostly-contiguous (perlinRatio of 1), we should create
-  // polylines instead of having many many 2-point line segments.
-  // This saves a ton of time when it comes to actually drawing the lines:
+  rows === [
+    // Row 1
+    [
+      // Line segment 1
+      [
+        // Point 1
+        [120, 200],
+        // Point 2
+        [121, 199],
+      ],
+      // Sometimes, line segments are `null`, if this segment was occluded
+      null,
+    ]
+  ]
+  */
+
+  // Filter out all occluded-away line segments
+  rows = rows.map(row => row.filter(line => !!line));
+
+  // If it's safe to do so, we should create polylines instead of having many
+  // many 2-point line segments.
+  // This saves a ton of time when it comes to actually drawing the rows:
   // With standard settings, it goes from 30-40ms drawing time to 5-6ms.
+  //
+  // (Note that this is not captured in the DEBUG_PERF here, since it affects
+  // the paint-to-canvas time, not the calculate-rows time.)
   //
   // The data-munging cost of the `joinLineSegments` call is <1ms,
   // so this is a huge win :D
-  const isMostlyContiguous = perlinRatio === 1 && dotRatio === 1;
+  //
+  // I take perlinRatio (spikyness) into account because spikes should not
+  // be joined. Also, polarTanRatio (split universe) is not safe to join (it
+  // creates a bunch of weird additional lines).
+  const isMostlyContiguous = perlinRatio === 1;
   if (isMostlyContiguous) {
-    lines = joinLineSegments(lines);
+    rows = rows.map(joinLineSegments);
   }
 
-  // `polarTanRatio` can create lines with values far outside the canvas.
+  // `polarTanRatio` can create rows with values far outside the canvas.
   // This would normally be fine, except then their rendering is really
-  // unpredictable - the lines change depending on the window size, for example.
+  // unpredictable - the rows change depending on the window size, for example.
   // We should remove any "troublesome" line, to make rendering consistent.
   const requiresTrimming = polarTanRatio > 0;
 
   if (requiresTrimming) {
-    lines = removeTroublesomeLines(width, height, lines);
+    rows = rows.map(row => removeTroublesomeLines(width, height, row));
   }
 
   if (DEBUG_PERF) {
@@ -365,7 +391,7 @@ const generator = ({
     console.info(mean(RECORDED_TIMES));
   }
 
-  return lines;
+  return rows;
 };
 
 /**

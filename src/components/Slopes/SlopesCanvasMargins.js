@@ -2,59 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring/hooks';
 
-import { UNIT, LIGHT_BACKGROUND, DARK_BACKGROUND } from '../../constants';
 import { getMarginSize } from './Slopes.helpers';
 
 const ACTION_SIZE = 38;
 
-const SlopesCanvasMargins = ({
-  width,
-  height,
-  enableMargins,
-  enableDarkMode,
-}) => {
+const SlopesCanvasMargins = ({ width, height, backgroundColor }) => {
   const marginSize = getMarginSize(height);
-
-  const spring = useSpring({
-    marginScale: enableMargins ? 1 : 0.1,
-  });
 
   return (
     <>
       <TopMargin
         style={{
           height: marginSize,
-          background: enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-          transform: spring.marginScale.interpolate(
-            scale => `scaleY(${scale})`
-          ),
+          backgroundColor,
         }}
       />
       <LeftMargin
         style={{
           width: marginSize,
-          background: enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-          transform: spring.marginScale.interpolate(
-            scale => `scaleX(${scale})`
-          ),
+          backgroundColor,
         }}
       />
       <RightMargin
         style={{
           width: marginSize,
-          background: enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-          transform: spring.marginScale.interpolate(
-            scale => `scaleX(${scale})`
-          ),
+          backgroundColor,
         }}
       />
       <BottomMargin
         style={{
           height: marginSize,
-          background: enableDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-          transform: spring.marginScale.interpolate(
-            scale => `scaleY(${scale})`
-          ),
+          backgroundColor,
         }}
       />
     </>

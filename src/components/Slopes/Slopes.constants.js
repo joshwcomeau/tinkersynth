@@ -1,3 +1,5 @@
+export const SLOPES_ASPECT_RATIO = 3 / 4;
+
 export const SLOPES_BREAKPOINTS = {
   xlarge: 1130,
   large: 1024,

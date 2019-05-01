@@ -14,7 +14,7 @@ type Props = {
   color: string,
   height: number,
   version: 1 | 2,
-  isOccluded: boolean,
+  isOccluded?: boolean,
   offset: number,
   duration?: number,
 };

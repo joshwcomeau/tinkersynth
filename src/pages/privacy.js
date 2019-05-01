@@ -24,7 +24,8 @@ const PrivacyPolicy = () => {
       <SEO title="Privacy Policy" url="https://tinkersynth.com/slopes/" />
 
       <Paragraph>
-        <em>Last updated: February 28th</em>
+        <em>Last updated: May 1st 2019</em>.{' '}
+        <TextLink to="/privacy-2019-02-28">View older policy</TextLink>.
       </Paragraph>
 
       <Paragraph>
@@ -40,27 +41,15 @@ const PrivacyPolicy = () => {
       <Spacer size={UNIT * 2} />
 
       <Paragraph>
-        The main method of personal data collection happens when you purchase
-        artwork created through the Tinkersynth machines.
+        Tinkersynth no longer features a store, and as such, we don't collect
+        very much personally-identifiable information anymore.
       </Paragraph>
 
       <Paragraph>
-        Tinkersynth never collects information like your credit card number. We
-        use Stripe for our payment processor, and we delegate the hard work of
-        collecting and protecting sensitive information to them.
-      </Paragraph>
-
-      <Paragraph>
-        I <em>do</em> collect your name and email. If you are purchasing a
-        package that includes a physical print, I also collect your shipping
-        address.
-      </Paragraph>
-
-      <Paragraph>
-        We also offer a <TextLink to="/contact">contact form</TextLink>, for
-        your convenience. This form collects a name, email address, and message,
-        and is sent directly to my email inbox by my server. This data is not
-        persisted in any database.
+        The one area where personal information is still explicitly collected is
+        our <TextLink to="/contact">contact form</TextLink>. This form collects
+        a name, email address, and message, and is sent directly to my email
+        inbox by my server. This data is not persisted in any database.
       </Paragraph>
 
       <Spacer size={UNIT * 4} />
@@ -90,16 +79,44 @@ const PrivacyPolicy = () => {
       <Spacer size={UNIT * 2} />
 
       <Paragraph>
-        Tinkersynth does not use Google Analytics, nor do we use the Facebook or
-        Twitter SDKs. We don't like how major platforms like these will follow
-        you around the internet, painting a clearer and clearer visit with every
-        page you visit.
+        Tinkersynth now uses Google Analytics to grant insights into how people
+        are using the product. Before May 1st, I used{' '}
+        <TextLink to="https://usefathom.com/">Fathom</TextLink>, but as
+        Tinkersynth is transforming from a for-profit store to a
+        100%-free-to-use service, it is no longer financially viable to continue
+        paying for a premium analytics service.
       </Paragraph>
       <Paragraph>
-        This page instead uses{' '}
-        <TextLink to="https://usefathom.com/">Fathom</TextLink> for general page
-        analytics. Fathom is a paid service that protects user data and doesn't
-        share it with any major platforms.
+        There are valid concerns around privacy when it comes to Google
+        products, but I've attempted to mitigate these concerns by taking a few
+        measures:
+      </Paragraph>
+
+      <List>
+        <List.Item>
+          I've disabled automatic information sharing between Google products.
+        </List.Item>
+        <List.Item>
+          I've disabled all remarketing and advertising reporting features
+        </List.Item>
+        <List.Item>
+          I've reduced the event data retention period to 14 months, the lowest
+          option possible
+        </List.Item>
+        <List.Item>
+          I've turned on IP anonymization, so that Google doesn't store your IP
+          address when visiting Tinkersynth
+        </List.Item>
+        <List.Item>
+          I've enabled the "Respect Do-Not-Track" setting. I believe this means
+          that if you have "Do-Not-Track" enabled, Google Analytics will not
+          gather any information about your session, nor will it be available to
+          me.
+        </List.Item>
+      </List>
+
+      <Paragraph>
+        Tinkersynth does not use any Facebook or Twitter SDKs.
       </Paragraph>
 
       <Spacer size={UNIT * 4} />
@@ -107,51 +124,35 @@ const PrivacyPolicy = () => {
       <Spacer size={UNIT * 2} />
 
       <Paragraph>
-        There are two products available through Tinkersynth, which can be
-        purchased separately, or combined into a pack: <em>source images</em> or{' '}
-        <em>fine art prints</em>. The data usage depends on which item(s) are
-        selected.
+        When contacting me, either by email or through our{' '}
+        <TextLink to="/contact">contact form</TextLink>, I use that data to
+        respond to your query.
       </Paragraph>
 
       <Paragraph>
-        For source images, the artwork is produced on a server, and download
-        links are sent in an email to the email address provided, using the
-        first/last name within that email.
+        The analytics data collected through Mixpanel and Google Analytics is
+        used to inform product decisions. For example, I may drop the least-used
+        controls from the Slopes machine, and replace it with a more exciting
+        control (I recently did exactly this, removing the "dark mode" and
+        "margins" controls in favor of the color swatch options).
       </Paragraph>
 
       <Paragraph>
-        For fine art prints, your first/last name and shipping address are used
-        to ship the artwork purchased. I share this information with the
-        printing shop, as they handle order fulfillment. For prints, I also use
-        the first/last name and email address to send a confirmation email, once
-        the print has shipped.
+        If you are one of the people who purchased a print or digital download
+        prior to April 29th, I may reach out to you via email, in a personal
+        non-automated way, to ask for your feedback once you've received your
+        artwork. This is not a newsletter, or any sort of bulk mail. I'm just
+        keen to hear what folks do with the art they buy. I may request photos
+        of the art, to display on the Tinkersynth homepage. Of course this is
+        entirely voluntary, and if you'd rather never hear from me, please just
+        reply to my email and let me know. I'll disappear like a phantom.
       </Paragraph>
 
       <Paragraph>
-        Our contact form uses the contact data collected to respond to your
-        inquiry.
-      </Paragraph>
-
-      <Paragraph>
-        I may reach out to you via email, in a personal non-automated way, to
-        ask for your feedback once you've received your artwork. This is not a
-        newsletter, or any sort of bulk mail. I'm just keen to hear what folks
-        do with the art they buy. I may request photos of the art, to display on
-        the Tinkersynth homepage. Of course this is entirely voluntary, and if
-        you'd rather never hear from me, please just reply to my email and let
-        me know. I'll disappear like a phantom.
-      </Paragraph>
-
-      <Paragraph>
-        The above usages are exclusive. I have no newsletter, and if I do create
-        one later, existing customers won't be auto-subscribed. I won't sell any
-        of the data I've collected. I'm not here for that.
-      </Paragraph>
-
-      <Paragraph>
-        The non-personal analytics information collected is used exclusively by
-        me, Josh Comeau, to understand how Tinkersynth is being used, to educate
-        future product changes.
+        <strong>The above usages are exclusive.</strong> I have no newsletter,
+        and if I do create one later, existing customers won't be
+        auto-subscribed. I won't sell or share any of the data I've collected.
+        I'm not here for that.
       </Paragraph>
 
       <Spacer size={UNIT * 4} />
@@ -174,10 +175,6 @@ const PrivacyPolicy = () => {
           The current settings for the Slopes machine (this is a convenience for
           the user, so that their work isn't destroyed when navigating away from
           the page).
-        </List.Item>
-        <List.Item>
-          Checkout settings, like which size and format is selected, for the
-          convenience of the user.
         </List.Item>
         <List.Item>
           The number of page-loads from this device. This is used to tweak the

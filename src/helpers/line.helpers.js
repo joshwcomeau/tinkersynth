@@ -38,7 +38,7 @@ type ClipLinesWithMarginArgs = {
   withBorder: boolean,
 };
 export const clipLinesWithMargin = ({
-  lines,
+  rows,
   width,
   height,
   margins,
@@ -48,13 +48,7 @@ export const clipLinesWithMargin = ({
 
   // Clip all the lines to a margin
   const box = [left, top, width - left, height - top];
-  let newLines = clipPolylinesToBox(lines, box);
-
-  if (withBorder) {
-    newLines = [...newLines, [box[0], box[1]]];
-  }
-
-  return newLines;
+  return rows.map(row => clipPolylinesToBox(row, box));
 };
 
 /**

@@ -1,22 +1,27 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../../hooks/window-dimensions.hook';
-import { COLORS, UNIT, PRINT_SIZES, HEADER_HEIGHT } from '../../constants';
+import useToggle from '../../hooks/toggle.hook';
+import { COLORS, UNIT, HEADER_HEIGHT } from '../../constants';
 import { getCanvasDimensions } from './SlopesCanvas.helpers';
-import { SLOPES_BREAKPOINTS, getSlopesBreakpoint } from './Slopes.constants';
+import {
+  SLOPES_ASPECT_RATIO,
+  SLOPES_BREAKPOINTS,
+  getSlopesBreakpoint,
+} from './Slopes.constants';
 
 import MaxWidthWrapper from '../MaxWidthWrapper';
 import LimitedExperienceNotice from '../LimitedExperienceNotice';
+import DownloadShelf from './DownloadShelf';
 import CanvasToggle from '../CanvasToggle';
 import Spacer from '../Spacer';
+import SlopesCat from './SlopesCat';
 import { SlopesProvider } from './SlopesState';
 import SlopesCanvasWrapper from './SlopesCanvasWrapper';
 import SlopesCanvasMachine from './SlopesCanvas.machine';
 import SlopesControls from './SlopesControls';
-import SlopesStorefront from './SlopesStorefront';
 
 const getMachineWidth = (slopesBreakpoint, windowWidth) => {
   switch (slopesBreakpoint) {
@@ -38,8 +43,8 @@ const getMachineWidth = (slopesBreakpoint, windowWidth) => {
   }
 };
 
-const Slopes = ({ size, orderParams }) => {
-  const { width: printWidth, height: printHeight } = PRINT_SIZES[size];
+const Slopes = ({ size }) => {
+  const [showDownloadShelf, toggleShowDownloadShelf] = useToggle();
 
   const windowDimensions = useWindowDimensions();
 
@@ -48,22 +53,22 @@ const Slopes = ({ size, orderParams }) => {
   // good on smaller screens =(
   const isFullExperience = windowDimensions.width > 450;
 
-  // Our aspect ratio depends on the size selected.
-  // By default, our size is 18 x 24.
-  const aspectRatio = printWidth / printHeight;
-
   const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(
-    windowDimensions,
-    aspectRatio
+    windowDimensions
   );
 
   const slopesBreakpoint = getSlopesBreakpoint(windowDimensions.width);
 
   return (
-    <SlopesProvider orderParams={orderParams}>
+    <SlopesProvider>
       {!isFullExperience && <LimitedExperienceNotice />}
+
       <MachineWrapper>
-        <MainRow>
+        <MainRow
+          style={{
+            transform: showDownloadShelf ? `scale(0.95, 0.95)` : `scale(1, 1)`,
+          }}
+        >
           {isFullExperience && (
             <ControlsWrapper>
               <SlopesControls
@@ -82,6 +87,7 @@ const Slopes = ({ size, orderParams }) => {
             height={canvasHeight}
             key={`${canvasWidth}/${canvasHeight}`}
             isFullExperience={isFullExperience}
+            toggleDownloadShelf={toggleShowDownloadShelf}
           >
             <SlopesCanvasMachine
               // Whenever the size changes, we want to redraw the canvas.
@@ -92,12 +98,21 @@ const Slopes = ({ size, orderParams }) => {
               height={canvasHeight}
             />
           </SlopesCanvasWrapper>
+
+          {isFullExperience && (
+            <CatWrapper>
+              <SlopesCat />
+            </CatWrapper>
+          )}
         </MainRow>
       </MachineWrapper>
 
       <Spacer size={UNIT * 2} />
 
-      <SlopesStorefront windowDimensions={windowDimensions} />
+      <DownloadShelf
+        isVisible={showDownloadShelf}
+        handleToggle={toggleShowDownloadShelf}
+      />
     </SlopesProvider>
   );
 };
@@ -121,6 +136,8 @@ const MainRow = styled(MaxWidthWrapper)`
   */
   flex-direction: row-reverse;
   justify-content: space-between;
+  transition: transform 400ms;
+  transform-origin: top center;
 
   @media (max-width: ${SLOPES_BREAKPOINTS.xlarge}px) {
     padding-left: ${UNIT}px;
@@ -138,12 +155,11 @@ const MainRow = styled(MaxWidthWrapper)`
   }
 `;
 
-const mapStateToProps = state => {
-  const { size } = state.store.slopes;
+const CatWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+  bottom: -16px;
+  left: 15%;
+`;
 
-  return {
-    size,
-  };
-};
-
-export default connect(mapStateToProps)(Slopes);
+export default Slopes;

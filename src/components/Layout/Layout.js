@@ -26,7 +26,6 @@ type Props = {
   children: React$Node,
   noHeaderBorder?: boolean,
   transparentFooter?: boolean,
-  adminPage?: boolean,
   theme?: 'default' | 'dark',
 };
 
@@ -34,13 +33,10 @@ const Layout = ({
   pageId,
   children,
   noHeaderBorder,
-  adminPage,
   theme = 'default',
 }: Props) => {
   React.useEffect(() => {
-    if (!adminPage) {
-      analytics.logEvent('visit-page', { pageId });
-    }
+    analytics.logEvent('visit-page', { pageId });
   }, []);
 
   return (

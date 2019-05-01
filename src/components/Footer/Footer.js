@@ -13,7 +13,7 @@ const Footer = ({ theme }) => {
   return (
     <Wrapper>
       <InnerWrapper>
-        <Link to="/" style={{ display: 'block', textDecoration: 'none' }}>
+        <Link to="/slopes" style={{ display: 'block', textDecoration: 'none' }}>
           <LogoWithName id="footer-logo" theme="dark" />
         </Link>
 
@@ -39,8 +39,6 @@ const Footer = ({ theme }) => {
 };
 
 const Wrapper = styled.div`
-  position: relative;
-  z-index: 2;
   padding: ${UNIT * 4}px 0px;
   background-color: ${COLORS.navy};
 `;

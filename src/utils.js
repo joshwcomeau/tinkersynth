@@ -4,6 +4,14 @@ export const range = n => Array.from(Array(n).keys());
 
 export const sample = arr => arr[Math.floor(Math.random() * arr.length)];
 
+export const shuffle = arr => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+
 export const random = (min, max) =>
   Math.floor(Math.random() * (max - min)) + min;
 

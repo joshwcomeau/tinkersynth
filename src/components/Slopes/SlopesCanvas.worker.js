@@ -1,6 +1,9 @@
 import { COLORS } from '../../constants';
 import { throttle } from '../../utils';
-import { renderPolylines } from '../../vendor/polylines';
+import {
+  renderPolylines,
+  polylinesToSVG,
+} from '../../services/polylines.service';
 
 import generator from './Slopes.generator';
 import { getRenderOptions } from './SlopesCanvas.helpers';
@@ -13,16 +16,21 @@ import { getRenderOptions } from './SlopesCanvas.helpers';
 // be stored in this variable:
 let ctx;
 
-onmessage = throttle(function({ data }) {
+self.onmessage = throttle(function({ data }) {
   const {
     canvas,
     devicePixelRatio,
     supportsOffscreenCanvas,
-    scaleRatio,
+    messageData,
+    messageData: { width, height, kind },
   } = data;
 
-  const lines = generator(data);
+  const rows = generator(messageData);
 
+  // If the browser supports OffscreenCanvas, we can paint to the canvas right
+  // here and now!
+  // Otherwise, we'll just post the calculated rows back to the main thread,
+  // and the host component can paint to the canvas.
   if (supportsOffscreenCanvas) {
     const isFirstMessage = !ctx;
 
@@ -34,26 +42,19 @@ onmessage = throttle(function({ data }) {
       // - Scale the context to match
       //
       // Because this is running off the main thread, we don't have access to
-      // `canvas.width` or `canvas.style.width`, so we can only do that second
-      // part. We're trusting SlopesCanvas.js to also take devicePixelRatio into
-      // account.
+      // `canvas.style.width`, so we can only do that second part.
+      // We're trusting SlopesCanvas.js to also take devicePixelRatio into
+      // account!!
       ctx.scale(devicePixelRatio, devicePixelRatio);
     }
 
     renderPolylines(
-      lines,
-      getRenderOptions(
-        data.width,
-        data.height,
-        data.kind,
-        ctx,
-        devicePixelRatio,
-        scaleRatio,
-        data
-      )
+      rows,
+      ctx,
+      getRenderOptions(width, height, kind, messageData)
     );
   } else {
     // $FlowIgnore
-    postMessage({ lines, ...data });
+    self.postMessage({ rows, ...messageData });
   }
 }, 17);

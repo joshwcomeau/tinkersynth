@@ -24,28 +24,18 @@ export const breakMachineWithKeyboard = (triggerRef: ?HTMLElement) => ({
   },
 });
 
-export const discoverStorefront = () => ({
-  type: 'DISCOVER_STOREFRONT',
-});
-
 export const dismissToast = (toastId: string) => ({
   type: 'DISMISS_TOAST',
+  restoreFocus: true,
   toastId,
 });
 
-export const selectFormat = (machineName: string, format: string) => ({
-  type: 'SELECT_FORMAT',
-  machineName,
-  format,
+export const rememberCurrentlyFocusedElement = (triggerRef: ?HTMLElement) => ({
+  type: 'REMEMBER_CURRENTLY_FOCUSED_ELEMENT',
+  triggerRef,
 });
 
-export const selectSize = (machineName: string, size: string) => ({
-  type: 'SELECT_SIZE',
-  machineName,
-  size,
-});
-
-export const authenticateAsAdmin = (password: string) => ({
-  type: 'AUTHENTICATE_AS_ADMIN',
-  password,
+export const restoreFocus = () => ({
+  type: 'RESTORE_FOCUS',
+  restoreFocus: true,
 });

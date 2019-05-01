@@ -11,7 +11,7 @@ import { COLORS, UNIT } from '../../constants';
 import Spacer from '../Spacer';
 import UnstyledButton from '../UnstyledButton';
 
-const HEIGHT = 44;
+const HEIGHT = 54;
 
 const SeedPicker = ({ seed, setSeed, isPoweredOn }) => {
   return (
@@ -24,7 +24,7 @@ const SeedPicker = ({ seed, setSeed, isPoweredOn }) => {
       >
         <RetroNumbers
           hits={seed}
-          size={18}
+          size={20}
           minLength={6}
           padding={0}
           digitSpacing={2}

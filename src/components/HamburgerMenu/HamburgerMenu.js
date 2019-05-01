@@ -30,9 +30,9 @@ const HamburgerMenu = ({ theme }) => {
           <FadeIn>
             <Menu>
               <TopItems>
-                <MenuItemLink to="/">Home</MenuItemLink>
                 <MenuItemLink to="/slopes">Create</MenuItemLink>
                 <MenuItemLink to="/faq">FAQ</MenuItemLink>
+                <MenuItemLink to="/backers">Backers</MenuItemLink>
               </TopItems>
 
               <BottomItems>

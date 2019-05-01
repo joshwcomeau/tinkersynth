@@ -12,8 +12,10 @@ import { getValuesForBezierCurve } from '../../helpers/line.helpers';
 import type { Curve } from '../../types';
 
 type InputParameters = {
-  seed: number,
+  width: number,
   height: number,
+  seed: number,
+  swatchId: string,
   amplitudeAmount: number,
   perspective: number,
   lineAmount: number,
@@ -24,20 +26,22 @@ type InputParameters = {
   splitUniverse: number,
   enableOcclusion: boolean,
   peaksCurve: Curve,
-  personInflateAmount: number,
+  peaksCurveAmount: number,
   wavelength: number,
   octaveAmount: number,
   waterBoilAmount: number,
   ballSize: number,
   dotAmount: number,
-  enableDarkMode: boolean,
-  enableMargins: boolean,
+  lineThicknessAmount: number,
+  resolution: number,
   enableMirrored: boolean,
 };
 
 const transformParameters = ({
-  seed,
+  width,
   height,
+  seed,
+  swatchId,
   amplitudeAmount,
   wavelength,
   octaveAmount,
@@ -50,28 +54,28 @@ const transformParameters = ({
   splitUniverse,
   enableOcclusion,
   peaksCurve,
-  personInflateAmount,
+  peaksCurveAmount,
   waterBoilAmount,
   ballSize,
   dotAmount,
-  enableDarkMode,
-  enableMargins,
+  lineThicknessAmount,
+  resolution,
   enableMirrored,
 }: InputParameters) => {
-  // For distanceBetweenRows and rowHeightMultiplier, we want to scale the
+  // For certain control parameters, we want to scale the
   // values on a curve, because the values from 0 to 5 are _much_ more
   // interesting than the values from 95 to 100.
   //
   // To do this, we need to normalize our values to 0-1, and then use a bezier
   // curve to map the values onto.
-  const perspectiveScaleCurve = {
+  const sharpRisingCurve = {
     startPoint: [0, 0],
     endPoint: [1, 1],
     controlPoint1: [1, 0],
   };
 
   const [, perspectiveCurved] = getValuesForBezierCurve(
-    perspectiveScaleCurve,
+    sharpRisingCurve,
     perspective / 100
   );
 
@@ -122,7 +126,7 @@ const transformParameters = ({
   // to be up to 3x taller than they'd otherwise be.
   const amplitudeRatio = (amplitudeAmount / 100) * 3;
 
-  // Transform our `personInflateAmount` to control how wide the effect of the
+  // Transform our `peaksCurveAmount` to control how wide the effect of the
   // peaks curve is.
   //
   // HACK: So, `peaksCurveStrength` is used as an exponent,
@@ -146,7 +150,7 @@ const transformParameters = ({
       endPoint: [1, 1],
       controlPoint1: [0, 0],
     },
-    normalize(personInflateAmount, 0, 100, 5, 0)
+    normalize(peaksCurveAmount, 0, 100, 5, 0)
   );
 
   const polarHoleSize = normalize(ballSize, 0, 100, 5, 150);
@@ -154,12 +158,18 @@ const transformParameters = ({
   const numOfOctaves = normalize(octaveAmount, 0, 100, 1, 5);
 
   // dotAmount -> dotRatio
-  //
-  // This will control a few things:
-  // - samplesPerRow, low values = less samples
-  // - lineWidth, low values = thicker lines (bigger dots)
-  // - The actual segment size, calculated in the generator
   const dotRatio = dotAmount / 100;
+
+  // Line thickness controls the width in px of the line.
+  // Parameter range is from 0px to 10px
+  const lineThickness = lineThicknessAmount / 10;
+
+  let [, baseSamplesPerRow] = getValuesForBezierCurve(
+    sharpRisingCurve,
+    resolution / 100
+  );
+
+  baseSamplesPerRow = normalize(baseSamplesPerRow, 0, 1, 3, width * 2);
 
   return {
     distanceBetweenRows,
@@ -178,13 +188,14 @@ const transformParameters = ({
     amplitudeRatio,
     polarHoleSize,
     dotRatio,
-    // Some fields are just passed right through, no macros:
+    lineThickness,
+    baseSamplesPerRow,
+    // Some fields are just passed right through:
     enableOcclusion,
     peaksCurve,
     selfSimilarity,
     seed,
-    enableDarkMode,
-    enableMargins,
+    swatchId,
     enableMirrored,
   };
 };

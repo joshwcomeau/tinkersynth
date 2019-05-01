@@ -63,7 +63,7 @@ const PersonInflateVisualization = ({ value, size, isAnimated }) => {
 
   return (
     <Wrapper style={{ width: size, height: size }}>
-      <Svg width={size - 4} height={size - 4} viewBox="0 0 36 36" fill="none">
+      <Svg width={size - 2} height={size - 2} viewBox="0 0 36 36" fill="none">
         {/* Left leg */}
         <animated.line
           {...leftLegPoints}
