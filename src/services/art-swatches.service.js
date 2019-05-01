@@ -63,14 +63,14 @@ const ART_SWATCHES: Array<SwatchData> = [
     backgroundColor: '#000000',
   }),
   new Swatch({
-    id: 'agave',
-    label: 'Agave',
+    id: 'cyber-samurai',
+    label: 'Cyber Samurai',
     colors: ['#e9275b', '#f44d9b', '#5de8e5'],
     backgroundColor: '#392270',
   }),
   new Swatch({
-    id: 'hotrod',
-    label: 'Hotrod',
+    id: 'electric-citrus',
+    label: 'Electric Citrus',
     colors: ['#0066FF', '#EB00FF', '#FFE500'],
     backgroundColor: '#000000',
   }),
@@ -87,6 +87,12 @@ const ART_SWATCHES: Array<SwatchData> = [
     backgroundColor: '#011627',
   }),
   new Swatch({
+    id: 'happy-circuits',
+    label: 'Happy Circuits',
+    colors: ['#364f6b', '#3fc1c9', '#fc5185'],
+    backgroundColor: '#F5F5F5',
+  }),
+  new Swatch({
     id: 'lemonade',
     label: 'Lemonade',
     colors: ['#FFE82D', '#FF21FF'],
@@ -97,6 +103,12 @@ const ART_SWATCHES: Array<SwatchData> = [
     label: 'Night Bus',
     colors: ['#1A1A64', '#2C2A89', '#453AA4', '#5C49C6'],
     backgroundColor: '#0B0930',
+  }),
+  new Swatch({
+    id: 'vibrano',
+    label: 'Vibrano',
+    colors: ['#302387', '#ff3796', '#00faac', '#fffdaf'],
+    backgroundColor: '#111111',
   }),
   new Swatch({
     id: 'sepia',
@@ -245,12 +257,12 @@ const ballPositions = {
     '#FC6170': { xRatio: 0.25, yRatio: -0.2, sizeRatio: 0.5 },
     '#FFD747': { xRatio: 0, yRatio: 0.05, sizeRatio: 0.4 },
   },
-  agave: {
+  'cyber-samurai': {
     '#e9275b': { xRatio: -0.35, yRatio: 0.2, sizeRatio: 0.9 },
     '#f44d9b': { xRatio: -0.1, yRatio: -0.1, sizeRatio: 0.6 },
     '#5de8e5': { xRatio: 0.325, yRatio: 0.1, sizeRatio: 0.5 },
   },
-  hotrod: {
+  'electric-citrus': {
     '#0066FF': { xRatio: -0.15, yRatio: 0.1, sizeRatio: 0.65 },
     '#EB00FF': { xRatio: 0.25, yRatio: 0, sizeRatio: 0.525 },
     '#FFE500': { xRatio: 0, yRatio: -0.2, sizeRatio: 0.4 },
@@ -266,6 +278,11 @@ const ballPositions = {
     '#fdfffc': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
     '#ff9f1c': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
   },
+  'happy-circuits': {
+    '#364f6b': { xRatio: 0, yRatio: -0.1, sizeRatio: 1.2 },
+    '#3fc1c9': { xRatio: 0.1, yRatio: 0.1, sizeRatio: 0.7 },
+    '#fc5185': { xRatio: -0.15, yRatio: 0.25, sizeRatio: 0.4 },
+  },
   lemonade: {
     '#FFE82D': { xRatio: -0.2, yRatio: 0, sizeRatio: 0.6 },
     '#FF21FF': { xRatio: 0.2, yRatio: 0, sizeRatio: 0.6 },
@@ -276,6 +293,14 @@ const ballPositions = {
     '#453AA4': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
     '#5C49C6': { xRatio: 0.15, yRatio: -0.1, sizeRatio: 0.45 },
   },
+
+  vibrano: {
+    '#302387': { xRatio: -0.1, yRatio: 0.1, sizeRatio: 0.75 },
+    '#ff3796': { xRatio: 0, yRatio: -0.25, sizeRatio: 0.45 },
+    '#00faac': { xRatio: -0.2, yRatio: -0.2, sizeRatio: 0.6 },
+    '#fffdaf': { xRatio: 0.3, yRatio: 0, sizeRatio: 0.45 },
+  },
+
   sepia: {
     '#bc9369': { xRatio: 0, yRatio: -0.05, sizeRatio: 0.8 },
     '#cda882': { xRatio: -0.25, yRatio: 0.1, sizeRatio: 0.55 },
@@ -367,11 +392,11 @@ const ballPositions = {
     '#ffacfc': { xRatio: -0.2, yRatio: 0.125, sizeRatio: 0.6 },
   },
   'faded-polaroid': {
-    '#ffb3ba': { type: 'random' },
-    '#ffdfba': { type: 'random' },
-    '#ffffba': { type: 'random' },
-    '#baffc9': { type: 'random' },
-    '#bae1ff': { type: 'random' },
+    '#ffb3ba': { xRatio: -0.15, yRatio: 0.2, sizeRatio: 0.8 },
+    '#ffdfba': { xRatio: 0.25, yRatio: 0.1, sizeRatio: 0.65 },
+    '#ffffba': { xRatio: -0.1, yRatio: -0.2, sizeRatio: 0.5 },
+    '#baffc9': { xRatio: 0.25, yRatio: -0.2, sizeRatio: 0.5 },
+    '#bae1ff': { xRatio: 0, yRatio: 0.05, sizeRatio: 0.4 },
   },
 
   'jelly-beans': {
