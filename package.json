@@ -65,7 +65,6 @@
     "svg2img": "^0.5.0",
     "uuid": "^3.3.2"
   },
-  "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
