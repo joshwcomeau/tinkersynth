@@ -63,6 +63,8 @@ const useCanvas = (
       return;
     }
 
+    // If the browser supports it, all we need to do is transfer control.
+    // The actual calculating and updating will happen in SlopesCanvas.worker.
     if (typeof canvasRef.current === 'function') {
       canvasRef.current = canvasRef.current.transferControlToOffscreen();
     } else {
