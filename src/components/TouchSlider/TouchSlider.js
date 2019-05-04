@@ -46,8 +46,6 @@ const useOffscreenCanvasIfAvailable = (
     return;
   }
 
-  const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
-
   const contextRef = useRef(null);
 
   // On mount
@@ -58,7 +56,7 @@ const useOffscreenCanvasIfAvailable = (
 
     // If the browser supports it, we want to allow the canvas to be painted
     // off of the main thread.
-    if (supportsOffscreenCanvas) {
+    if (typeof canvasRef.current === 'function') {
       canvasRef.current = canvasRef.current.transferControlToOffscreen();
     }
 
