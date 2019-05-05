@@ -52,6 +52,8 @@ const useCanvas = (
   const devicePixelRatio = getDevicePixelRatio();
   const hasSentCanvas = React.useRef(false);
 
+  const supportsOffscreenCanvas = typeof canvasRef.current === 'function';
+
   // On mount, set up the worker message-handling
   React.useEffect(() => {
     // If the user forgot to apply the canvas ref, we can't proceed.
@@ -65,7 +67,7 @@ const useCanvas = (
 
     // If the browser supports it, all we need to do is transfer control.
     // The actual calculating and updating will happen in SlopesCanvas.worker.
-    if (typeof canvasRef.current === 'function') {
+    if (supportsOffscreenCanvas) {
       canvasRef.current = canvasRef.current.transferControlToOffscreen();
     } else {
       const context = canvasRef.current.getContext('2d');
