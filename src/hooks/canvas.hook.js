@@ -6,6 +6,7 @@
 import React from 'react';
 
 import useWorker from './worker.hook.js';
+import { getOffscreenCanvasSupport } from '../helpers/canvas.helpers';
 
 type HandleMessage = (context: CanvasRenderingContext2D, data: any) => void;
 
@@ -50,7 +51,7 @@ const useCanvas = (
   const worker = useWorker(WorkerConstructor);
 
   const devicePixelRatio = getDevicePixelRatio();
-  const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
+  const supportsOffscreenCanvas = getOffscreenCanvasSupport();
   const hasSentCanvas = React.useRef(false);
 
   // On mount, set up the worker message-handling

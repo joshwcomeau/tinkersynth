@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { clamp, normalize, throttle } from '../../utils';
 import {
+  getOffscreenCanvasSupport,
   getScaledCanvasProps,
   getDevicePixelRatio,
 } from '../../helpers/canvas.helpers';
@@ -46,7 +47,7 @@ const useOffscreenCanvasIfAvailable = (
     return;
   }
 
-  const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
+  const supportsOffscreenCanvas = getOffscreenCanvasSupport();
 
   const contextRef = useRef(null);
 

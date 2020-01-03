@@ -1,3 +1,19 @@
+export const getOffscreenCanvasSupport = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  // Safari weirdly has an `OffscreenCanvas` in window, but it doesn't actually
+  // support it. For now, we'll force-disable offscreen-canvas if the user
+  // is browsing from Safari.
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if (isSafari) {
+    return false;
+  }
+
+  return 'OffscreenCanvas' in window;
+};
+
 export const getDevicePixelRatio = () => {
   // Don't break SSR by assuming a window is available.
   if (typeof window === 'undefined') {
