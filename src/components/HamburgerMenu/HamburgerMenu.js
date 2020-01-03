@@ -32,7 +32,6 @@ const HamburgerMenu = ({ theme }) => {
               <TopItems>
                 <MenuItemLink to="/slopes">Create</MenuItemLink>
                 <MenuItemLink to="/faq">FAQ</MenuItemLink>
-                <MenuItemLink to="/backers">Backers</MenuItemLink>
               </TopItems>
 
               <BottomItems>

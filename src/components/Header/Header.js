@@ -32,9 +32,6 @@ const Header = ({ theme, noBorder }) => {
             <HeaderNavigationItem color={navigationLinkColor} to="/faq">
               FAQ
             </HeaderNavigationItem>
-            <HeaderNavigationItem color={navigationLinkColor} to="/backers">
-              Backers
-            </HeaderNavigationItem>
             <HeaderNavigationItem color={navigationLinkColor} to="/contact">
               Contact
             </HeaderNavigationItem>
