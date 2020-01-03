@@ -14,10 +14,7 @@ import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
  * On mobile, we do the opposite, since we want to always fill the available
  * width.
  */
-export const getCanvasDimensions = (
-  windowDimensions,
-  aspectRatio = SLOPES_ASPECT_RATIO
-) => {
+export const getCanvasDimensions = (windowDimensions, aspectRatio = 1.5) => {
   const defaultHeight = 552;
   const defaultWidth = defaultHeight * aspectRatio;
 

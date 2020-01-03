@@ -86,7 +86,7 @@ const transformParameters = ({
 
   const rowHeightMultiplier = normalize(perspectiveCurved, 0, 1, 0.05, 0.25);
 
-  let rowHeight = 50 + height * rowHeightMultiplier;
+  let rowHeight = 0 + height * rowHeightMultiplier;
 
   const perlinRatio = (100 - spikyness) / 100;
 
@@ -124,7 +124,7 @@ const transformParameters = ({
 
   // Our amplitudeRatio is a number from 0 to 3, since it can cause the peaks
   // to be up to 3x taller than they'd otherwise be.
-  const amplitudeRatio = (amplitudeAmount / 100) * 3;
+  const amplitudeRatio = (amplitudeAmount / 100) * 100;
 
   // Transform our `peaksCurveAmount` to control how wide the effect of the
   // peaks curve is.

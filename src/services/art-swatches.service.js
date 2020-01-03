@@ -227,6 +227,18 @@ const ART_SWATCHES: Array<SwatchData> = [
     colors: ['#2d2d2d', '#ffffff', '#a34bea', '#fff420'],
     backgroundColor: '#000000',
   }),
+  new Swatch({
+    id: 'dev-beacon',
+    label: 'DevBeacon',
+    colors: ['#FFD600', '#FF007F', '#FFF', '#2DB3FF'],
+    backgroundColor: '#2B00D7',
+  }),
+  new Swatch({
+    id: 'dev-beacon-2',
+    label: 'DevBeacon2',
+    colors: ['#FFD600', '#FF007F', '#FFF', '#2DB3FF'],
+    backgroundColor: '#1E00D7',
+  }),
 ];
 
 export const getSwatchById = id =>
@@ -414,5 +426,17 @@ const ballPositions = {
     '#FFEB3B': { type: 'random' },
     '#FFA000': { type: 'random' },
     '#FF3D00': { type: 'random' },
+  },
+  'dev-beacon': {
+    '#FFD600': { type: 'random' },
+    '#FF007F': { type: 'random' },
+    '#FFF': { type: 'random' },
+    '#2DB3FF': { type: 'random' },
+  },
+  'dev-beacon-2': {
+    '#FFD600': { type: 'random' },
+    '#FF007F': { type: 'random' },
+    '#FFF': { type: 'random' },
+    '#2DB3FF': { type: 'random' },
   },
 };

@@ -127,7 +127,7 @@ const ControlsWrapper = styled.div`
   display: flex;
 `;
 
-const MainRow = styled(MaxWidthWrapper)`
+const MainRow = styled.div`
   display: flex;
   /*
     Reversing because the DOM order is backwards, with the control panel

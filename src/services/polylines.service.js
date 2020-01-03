@@ -6,6 +6,7 @@
 
 import { COLORS } from '../constants';
 import { arePointsEqual } from '../helpers/line.helpers';
+import { mix } from '../utils';
 
 import type { Rows } from '../types';
 
@@ -20,17 +21,17 @@ type Options = {
   lineCap: string,
 };
 
-const generateSvgPath = (pathCommands, color, { lineWidth, lineCap }) => {
+const generateSvgPath = (pathCommand, color, { lineWidth, lineCap }) => {
   const lineJoin = lineCap === 'round' ? 'round' : 'miter';
 
   return `
   <path
-    d="${pathCommands.join(' ')}"
+    d="${pathCommand.join(' ')}"
     stroke="${color}"
     stroke-width="${lineWidth}px"
     fill="none"
-    stroke-linecap="${lineCap}"
-    stroke-linejoin="${lineJoin}"
+    stroke-linecap="butt"
+    stroke-linejoin="bevel"
   />`;
 };
 
@@ -56,6 +57,8 @@ export const polylinesToSVG = function polylinesToSVG(
 
   const paths = [];
 
+  const centerY = height * 0.8;
+
   [...rows].reverse().forEach((row, rowIndex) => {
     row.forEach((lines, segmentIndex) => {
       const pathCommands = [];
@@ -68,10 +71,29 @@ export const polylinesToSVG = function polylinesToSVG(
       );
 
       lines.forEach((point, index) => {
+        // if (index === 0) {
+        //   return;
+        // }
         const command = index === 0 ? 'M' : 'L';
-        const [x, y] = point;
+        let [x, y] = point;
+
+        if (x <= 100) {
+          y = mix(y, centerY, x / 40);
+        }
+
+        // const lastPoint = lines[index - 1];
+        // const [lastX, lastY] = lastPoint;
+
+        // const originalY = lines[0][1];
+        // const delta = Math.abs(originalY - y);
 
         pathCommands.push(`${command}${x} ${y}`);
+        // paths.push(
+        //   generateSvgPath(`M ${x} ${lastY} L${x} ${y}`, color, {
+        //     ...opt,
+        //     lineWidth: delta + 1,
+        //   })
+        // );
       });
 
       const path = generateSvgPath(pathCommands, color, opt);

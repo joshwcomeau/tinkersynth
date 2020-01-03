@@ -251,7 +251,7 @@ export const Z_INDICES = {
 };
 
 export const MIN_NUM_ROWS = 1;
-export const MAX_NUM_ROWS = 75;
+export const MAX_NUM_ROWS = 250;
 
 export const DEV_SERVER_PORT = 4000;
 
