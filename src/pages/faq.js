@@ -53,7 +53,7 @@ const FAQ = () => {
   return (
     <React.Fragment>
       <Paragraph>
-        <em>Last updated: May 1st 2019</em>.
+        <em>Last updated: May 24th 2019</em>.
       </Paragraph>
 
       <Section>
@@ -71,7 +71,7 @@ const FAQ = () => {
           >
             <Paragraph>
               Tinkersynth is an experimental art project. It lets you create
-              unique
+              unique{' '}
               <TextLink to="https://en.wikipedia.org/wiki/Generative_art">
                 generative art
               </TextLink>{' '}
