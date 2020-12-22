@@ -6,10 +6,7 @@ import { convertHSBToHSL, stringifyHSL } from './helpers/color.helpers';
 // Our colors in Figma are given in HSB, which is a really intuitive way to
 // understand color. Unfortunately, CSS only support HSL, which is less
 // intuitive. Do the conversion here.
-const prepColor = compose(
-  stringifyHSL,
-  convertHSBToHSL
-);
+const prepColor = compose(stringifyHSL, convertHSBToHSL);
 
 export const COLORS = {
   red: {
@@ -256,4 +253,5 @@ export const MAX_NUM_ROWS = 75;
 export const DEV_SERVER_PORT = 4000;
 
 export const PATREON_URL = 'https://www.patreon.com/joshwcomeau';
+export const SPONSOR_URL = 'https://github.com/sponsors/joshwcomeau';
 export const ETSY_URL = 'https://www.etsy.com/ca/shop/JoshWComeau';

@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 
-import { COLORS, UNIT, ETSY_URL, PATREON_URL } from '../constants';
+import { COLORS, UNIT, ETSY_URL, SPONSOR_URL } from '../constants';
 import { smoothScrollTo } from '../utils';
 import ccLicense from '../images/cc-license.png';
 import faqPerfCount from '../videos/faq-perf-count.mp4';
@@ -23,7 +23,7 @@ import SimpleTable from '../components/SimpleTable';
 const IntraFAQLink = ({ id, setOpenQuestionId, children }) => (
   <TextLink
     to={`/faq?q=${id}`}
-    onClick={ev => {
+    onClick={(ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -99,8 +99,7 @@ const FAQ = () => {
             <Paragraph>
               Tinkersynth was created and maintained by a single person, Josh
               Comeau. You can support me on{' '}
-              <TextLink to={PATREON_URL}>Patreon</TextLink>, or buy my art on{' '}
-              <TextLink to={ETSY_URL}>Etsy</TextLink>.
+              <TextLink to={SPONSOR_URL}>GitHub</TextLink>.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -192,12 +191,6 @@ const FAQ = () => {
               creation, or if you'd like a beautiful fine-art print for your
               home, you can <TextLink to="/contact">contact me</TextLink> and we
               can work something out.
-            </Paragraph>
-
-            <Paragraph>
-              If you're interested in supporting this project, I have a{' '}
-              <TextLink to={PATREON_URL}>Patreon</TextLink>, and I sell art on{' '}
-              <TextLink to={ETSY_URL}>Etsy</TextLink>.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>

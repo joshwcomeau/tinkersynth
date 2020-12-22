@@ -4,7 +4,7 @@ import { Tooltip } from 'react-tippy';
 
 import useToggle from '../../hooks/toggle.hook';
 import useTimeout from '../../hooks/timeout.hook';
-import { PATREON_URL } from '../../constants';
+import { SPONSOR_URL } from '../../constants';
 
 import Cat from '../Cat';
 import useLocalStorageState from '../../hooks/local-storage-state.hook';
@@ -42,44 +42,41 @@ const useTranslateFromOffscreen = (
     setOffset(-totalWalkDistance);
   }, []);
 
-  React.useEffect(
-    () => {
-      if (!hasStarted) {
-        return;
-      }
+  React.useEffect(() => {
+    if (!hasStarted) {
+      return;
+    }
 
-      if (Math.abs(offset) > walkSpeed) {
-        window.requestAnimationFrame(() => {
-          // Allow the entity to move in either direction
-          const multiplier = offset > 0 ? -1 : 1;
+    if (Math.abs(offset) > walkSpeed) {
+      window.requestAnimationFrame(() => {
+        // Allow the entity to move in either direction
+        const multiplier = offset > 0 ? -1 : 1;
 
-          let increment;
+        let increment;
 
-          if (typeof lastFrameAt.current === 'number') {
-            const timeSinceLastFrame = performance.now() - lastFrameAt.current;
-            // I assume I want to move `walkSpeed` pixels every 1/60th of a
-            // second. If the animation is running slower than that, I should
-            // move further on each frame.
-            const framesPerSecond = timeSinceLastFrame;
-            const fpsAdjustment = framesPerSecond / 60;
+        if (typeof lastFrameAt.current === 'number') {
+          const timeSinceLastFrame = performance.now() - lastFrameAt.current;
+          // I assume I want to move `walkSpeed` pixels every 1/60th of a
+          // second. If the animation is running slower than that, I should
+          // move further on each frame.
+          const framesPerSecond = timeSinceLastFrame;
+          const fpsAdjustment = framesPerSecond / 60;
 
-            increment = walkSpeed * fpsAdjustment;
-          } else {
-            increment = walkSpeed;
-          }
-          setOffset(offset + increment);
+          increment = walkSpeed * fpsAdjustment;
+        } else {
+          increment = walkSpeed;
+        }
+        setOffset(offset + increment);
 
-          lastFrameAt.current = performance.now();
-        });
-      } else if (offset !== 0) {
-        window.requestAnimationFrame(() => {
-          setOffset(0);
-          handleReachDestination();
-        });
-      }
-    },
-    [offset, hasStarted]
-  );
+        lastFrameAt.current = performance.now();
+      });
+    } else if (offset !== 0) {
+      window.requestAnimationFrame(() => {
+        setOffset(0);
+        handleReachDestination();
+      });
+    }
+  }, [offset, hasStarted]);
 
   return offset;
 };
@@ -131,44 +128,41 @@ const SlopesCat = ({ walkSpeed = 8, delay = 15000 }) => {
     }
   };
 
-  React.useEffect(
-    () => {
-      switch (status) {
-        case 'walk-sit-transition': {
-          timeoutId.current = window.setTimeout(() => {
-            setStatus('sitting');
-          }, 200);
-          break;
-        }
-
-        case 'sit-lie-transition': {
-          timeoutId.current = window.setTimeout(() => {
-            setStatus('lying-awake');
-          }, 200);
-          break;
-        }
-
-        case 'lying-awake': {
-          timeoutId.current = window.setTimeout(() => {
-            setStatus('lying-asleep');
-          }, 6000);
-          break;
-        }
-
-        case 'lying-asleep': {
-          setHasSeenCat(true);
-          break;
-        }
+  React.useEffect(() => {
+    switch (status) {
+      case 'walk-sit-transition': {
+        timeoutId.current = window.setTimeout(() => {
+          setStatus('sitting');
+        }, 200);
+        break;
       }
-    },
-    [status]
-  );
+
+      case 'sit-lie-transition': {
+        timeoutId.current = window.setTimeout(() => {
+          setStatus('lying-awake');
+        }, 200);
+        break;
+      }
+
+      case 'lying-awake': {
+        timeoutId.current = window.setTimeout(() => {
+          setStatus('lying-asleep');
+        }, 6000);
+        break;
+      }
+
+      case 'lying-asleep': {
+        setHasSeenCat(true);
+        break;
+      }
+    }
+  }, [status]);
 
   return (
     <Wrapper
       ref={wrapperRef}
       target="_blank"
-      href={PATREON_URL}
+      href={SPONSOR_URL}
       style={{ transform: `translateX(${offset}px)` }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -186,8 +180,8 @@ const SlopesCat = ({ walkSpeed = 8, delay = 15000 }) => {
         html={
           <>
             Enjoying Tinkersynth? Support its creator{' '}
-            <PatreonTooltipLink href={PATREON_URL} target="_blank">
-              on Patreon
+            <PatreonTooltipLink href={SPONSOR_URL} target="_blank">
+              on GitHub
             </PatreonTooltipLink>
             !
           </>
