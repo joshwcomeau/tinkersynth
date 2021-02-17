@@ -24,7 +24,7 @@ type ContactFormProps = {
   setStatus: (status: Status) => void,
 };
 
-const getErrorTextForCode = code => {
+const getErrorTextForCode = (code) => {
   // The server returns a 422 when required fields are left blank.
   // We also have HTML guards, so the only way to see this error should be if
   // the user modifies the DOM tree.
@@ -40,11 +40,7 @@ const getErrorTextForCode = code => {
   return (
     <>
       An unknown error has occurred. If the problem persists, you can email me
-      directly instead, at{' '}
-      <TextLink to="mailto:josh@tinkersynth.com" style={{ color: 'inherit' }}>
-        josh@tinkersynth.com
-      </TextLink>
-      .
+      directly instead, at me@joshwcomeau.com.
     </>
   );
 };
@@ -56,16 +52,16 @@ const ContactForm = ({ status, setStatus, errorCode, setErrorCode }) => {
   const [subject, setSubject] = React.useState('');
   const [message, setMessage] = React.useState('');
 
-  const handleSubmitForm = ev => {
+  const handleSubmitForm = (ev) => {
     ev.preventDefault();
 
     setStatus('sending');
 
     submitContactForm(firstName, lastName, email, subject, message)
-      .then(res => {
+      .then((res) => {
         setStatus('complete');
       })
-      .catch(err => {
+      .catch((err) => {
         setStatus('error');
         setErrorCode(err.status);
       });

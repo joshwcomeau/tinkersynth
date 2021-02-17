@@ -189,7 +189,7 @@ const PrivacyPolicy = () => {
 
       <Paragraph>
         If anything about this policy is unclear, please reach out. Send an
-        email to josh@tinkersynth.com, or use the handy{' '}
+        email to me@joshwcomeau.com, or use the handy{' '}
         <TextLink to="/contact">contact page</TextLink>.
       </Paragraph>
 
