@@ -90,16 +90,10 @@ const FAQ = () => {
             <Paragraph>
               In a former life, Tinkersynth was also a store which sold the
               rights to digital products, as well as physical fine-art prints.
-              This can still be done on-demand (
-              <TextLink to="/contact">Contact me</TextLink> for more info!), but
-              I didn't want to stifle creativity. If you want to use this art as
-              a starting point for your own endeavours, have at it!
             </Paragraph>
 
             <Paragraph>
-              Tinkersynth was created and maintained by a single person, Josh
-              Comeau. You can support me on{' '}
-              <TextLink to={SPONSOR_URL}>GitHub</TextLink>.
+              Tinkersynth was created by me, <a href="https://twitter.com/JoshWComeau">Josh Comeau</a>.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -115,20 +109,6 @@ const FAQ = () => {
               The machines on Tinkersynth are examples of generative art. Unlike
               most traditional forms of visual art, generative art is produced
               by an algorithm.
-            </Paragraph>
-
-            <Paragraph>
-              An algorithm is a fancy computer word, but really it just means
-              that the art is produced by following a set of discrete,
-              repeatable steps. For example, the
-              <TextLink to="https://en.wikipedia.org/wiki/Spirograph">
-                Spirograph
-              </TextLink>{' '}
-              produces generative art by following an algorithm as well. You can
-              produce 10 identical pieces by following the same steps, and you
-              can produce different pieces by modifying those steps, or changing
-              the input parameters (like which gear to use, how many rotations
-              to do, etc).
             </Paragraph>
 
             <Paragraph>
@@ -152,15 +132,6 @@ const FAQ = () => {
               control affects how the others behave, and the result is that
               there are over 1,000,000,000,000,000,000,000,000,000,000 possible
               outputs.
-            </Paragraph>
-
-            <Paragraph>
-              If you're interested in learning more about creating generative
-              art,{' '}
-              <TextLink to="https://twitter.com/JoshWComeau">
-                hit me up on Twitter
-              </TextLink>
-              !
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -187,10 +158,7 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              If you have a commercial project in mind for your Tinkersynth
-              creation, or if you'd like a beautiful fine-art print for your
-              home, you can <TextLink to="/contact">contact me</TextLink> and we
-              can work something out.
+              Check out the "License" question below for more information on this.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>
@@ -290,7 +258,7 @@ const FAQ = () => {
               <List.Item>
                 Please don't do anything commercial with the downloads. I feel
                 funny about people selling art created in minutes through a tool
-                that took days to build.
+                that took months to build.
               </List.Item>
             </List>
 
@@ -306,10 +274,31 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              If you wish to use a Tinkersynth creation in a commercial way,
-              please <TextLink to="/contact">contact me</TextLink> and we'll see
-              if we can work something out.
+              <a href="https://twitter.com/LucLalande/status/1229800830926237696">See some examples of sufficiently-derivative work</a>.
             </Paragraph>
+          </QuestionAndAnswer>
+          <QuestionAndAnswer
+            id="nft"
+            question="Can I sell art created with Tinkersynth as an NFT?"
+            isExpanded={openQuestionId === 'nft'}
+            toggleExpanded={setOpenQuestionId}
+          >
+            <Paragraph>
+              The short answer is "no". Sorry!
+            </Paragraph>
+
+            <Paragraph>
+              Tinkersynth is intended to be a tool used for fun, not profit. It's an experimental toy, something to be played with.
+            </Paragraph>
+
+            <Paragraph>
+              The exception is derivative works. If you use your Tinkersynth export as an <em>input</em> to another creative process, then that's totally fine; the art is yours, and you can do whatever you want with it. But <strong>it has to be significantly transformed</strong>. Cropping, warping, or changing the colors doesn't count.
+            </Paragraph>
+
+            <Paragraph>
+              <a href="https://twitter.com/LucLalande/status/1229800830926237696">See some examples of sufficiently-derivative work</a>.
+            </Paragraph>
+
           </QuestionAndAnswer>
         </Questions>
       </Section>
