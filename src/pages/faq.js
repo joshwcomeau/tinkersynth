@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 
-import { COLORS, UNIT, ETSY_URL, SPONSOR_URL } from '../constants';
+import { COLORS, UNIT } from '../constants';
 import { smoothScrollTo } from '../utils';
 import ccLicense from '../images/cc-license.png';
 import faqPerfCount from '../videos/faq-perf-count.mp4';
@@ -23,7 +23,7 @@ import SimpleTable from '../components/SimpleTable';
 const IntraFAQLink = ({ id, setOpenQuestionId, children }) => (
   <TextLink
     to={`/faq?q=${id}`}
-    onClick={(ev) => {
+    onClick={ev => {
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -93,7 +93,8 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              Tinkersynth was created by me, <a href="https://twitter.com/JoshWComeau">Josh Comeau</a>.
+              Tinkersynth was created by me,{' '}
+              <a href="https://twitter.com/JoshWComeau">Josh Comeau</a>.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -158,7 +159,8 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              Check out the "License" question below for more information on this.
+              Check out the "License" question below for more information on
+              this.
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>
@@ -274,7 +276,10 @@ const FAQ = () => {
             </Paragraph>
 
             <Paragraph>
-              <a href="https://twitter.com/LucLalande/status/1229800830926237696">See some examples of sufficiently-derivative work</a>.
+              <a href="https://twitter.com/LucLalande/status/1229800830926237696">
+                See some examples of sufficiently-derivative work
+              </a>
+              .
             </Paragraph>
           </QuestionAndAnswer>
           <QuestionAndAnswer
@@ -283,22 +288,28 @@ const FAQ = () => {
             isExpanded={openQuestionId === 'nft'}
             toggleExpanded={setOpenQuestionId}
           >
+            <Paragraph>The short answer is "no". Sorry!</Paragraph>
+
             <Paragraph>
-              The short answer is "no". Sorry!
+              Tinkersynth is intended to be a tool used for fun, not profit.
+              It's an experimental toy, something to be played with.
             </Paragraph>
 
             <Paragraph>
-              Tinkersynth is intended to be a tool used for fun, not profit. It's an experimental toy, something to be played with.
+              The exception is derivative works. If you use your Tinkersynth
+              export as an <em>input</em> to another creative process, then
+              that's totally fine; the art is yours, and you can do whatever you
+              want with it. But{' '}
+              <strong>it has to be significantly transformed</strong>. Cropping,
+              warping, or changing the colors doesn't count.
             </Paragraph>
 
             <Paragraph>
-              The exception is derivative works. If you use your Tinkersynth export as an <em>input</em> to another creative process, then that's totally fine; the art is yours, and you can do whatever you want with it. But <strong>it has to be significantly transformed</strong>. Cropping, warping, or changing the colors doesn't count.
+              <a href="https://twitter.com/LucLalande/status/1229800830926237696">
+                See some examples of sufficiently-derivative work
+              </a>
+              .
             </Paragraph>
-
-            <Paragraph>
-              <a href="https://twitter.com/LucLalande/status/1229800830926237696">See some examples of sufficiently-derivative work</a>.
-            </Paragraph>
-
           </QuestionAndAnswer>
         </Questions>
       </Section>
