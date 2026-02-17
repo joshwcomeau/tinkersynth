@@ -14,8 +14,10 @@ import {
 } from '../../services/polylines.service';
 
 import transformParameters from './Slopes.params';
-import SlopesWorker from './SlopesCanvas.worker';
 import { getRenderOptions } from './SlopesCanvas.helpers';
+
+const SlopesWorkerConstructor = () =>
+  new Worker(new URL('./SlopesCanvas.worker.js', import.meta.url));
 
 import type { RenderImageKind } from '../../types';
 
@@ -50,7 +52,7 @@ const SlopesCanvas = ({ width, height, kind, ...params }: Props) => {
   };
 
   const { canvasRef } = useCanvas(
-    SlopesWorker,
+    SlopesWorkerConstructor,
     messageData,
     (context, data) => {
       const { rows, ...passedData } = data;

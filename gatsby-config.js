@@ -1,5 +1,3 @@
-const faviconPath = `./src/images/favicon.${process.env.NODE_ENV}.png`;
-
 module.exports = {
   siteMetadata: {
     title: `Tinkersynth`,
@@ -31,35 +29,26 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Tinkersynth`,
+        short_name: `Tinkersynth`,
         start_url: `/`,
         background_color: `#663399`,
-        theme_color: `#663399`,
+        theme_color: `#F218BC`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/logo.svg`,
       },
     },
     {
-      resolve: `gatsby-plugin-favicon`,
+      resolve: `gatsby-plugin-google-gtag`,
       options: {
-        logo: faviconPath,
-        dir: 'auto',
-        lang: 'en-US',
-        background: '#fff',
-        theme_color: '#F218BC',
-      },
-    },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: 'UA-139212705-1',
-        // Puts tracking script in the head instead of the body
-        head: false,
-        // Setting this parameter is optional
-        anonymize: true,
-        // Setting this parameter is also optional
-        respectDNT: true,
+        trackingIds: ['UA-139212705-1'],
+        gtagConfig: {
+          anonymize_ip: true,
+          respect_dnt: true,
+        },
+        pluginConfig: {
+          head: false,
+        },
       },
     },
   ],
