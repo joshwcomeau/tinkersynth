@@ -4,5 +4,6 @@
   NPM_FLAGS = "--legacy-peer-deps --ignore-scripts"
 
 [build]
-  command = "npm run build"
+  # Rebuild sharp so it installs the Linux native binary (main install uses --ignore-scripts)
+  command = "npm rebuild sharp && npm run build"
   publish = "public"
