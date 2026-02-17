@@ -5,5 +5,5 @@
 
 [build]
   # Rebuild native deps so Linux binaries are installed (main install uses --ignore-scripts)
-  command = "npm rebuild sharp && npm rebuild lmdb && npm run build"
+  command = "npm rebuild sharp && npm rebuild lmdb && npm rebuild @parcel/watcher && npm run build"
   publish = "public"
