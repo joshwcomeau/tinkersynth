@@ -75,6 +75,9 @@
     "nodemon": "^1.18.9",
     "prettier": "^1.15.2"
   },
+  "overrides": {
+    "ajv": "^6.12.6"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/joshwcomeau/tinkersynth"
