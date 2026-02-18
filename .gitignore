@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-store
 
 # Runtime data
 pids
@@ -54,7 +55,11 @@ typings/
 # dotenv environment variables file
 .env
 
-# gatsby files
+# Next.js
+.next/
+out/
+
+# Legacy gatsby (kept for reference)
 .cache/
 public
 
