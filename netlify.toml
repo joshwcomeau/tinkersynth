@@ -1,5 +1,6 @@
 [build.environment]
   NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [build]
   command = "npm run build"
