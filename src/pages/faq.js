@@ -94,7 +94,8 @@ const FAQ = () => {
 
             <Paragraph>
               Tinkersynth was created by me,{' '}
-              <a href="https://twitter.com/JoshWComeau">Josh Comeau</a>.
+              <a href="https://bsky.app/profile/joshwcomeau.com">Josh Comeau</a>
+              .
             </Paragraph>
           </QuestionAndAnswer>
 

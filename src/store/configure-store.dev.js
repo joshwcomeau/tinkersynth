@@ -3,11 +3,15 @@ import { save, load } from 'redux-localstorage-simple';
 
 import rootReducer from '../reducers';
 import createFocusManagerMiddleware from '../middlewares/focus-manager.middleware';
-import DevTools from '../components/DevTools';
 
 import { reduxLocalStorageConfig } from './redux-config';
 
 const focusManagerMiddleware = createFocusManagerMiddleware();
+
+const devToolsEnhancer =
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
+    ? window.__REDUX_DEVTOOLS_EXTENSION__()
+    : (f) => f;
 
 export default function configureStore() {
   const store = createStore(
@@ -15,7 +19,7 @@ export default function configureStore() {
     load(reduxLocalStorageConfig),
     compose(
       applyMiddleware(focusManagerMiddleware, save(reduxLocalStorageConfig)),
-      DevTools.instrument()
+      devToolsEnhancer
     )
   );
 

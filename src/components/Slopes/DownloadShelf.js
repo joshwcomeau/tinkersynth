@@ -21,8 +21,10 @@ import { getCanvasDimensions } from './SlopesCanvas.helpers';
 import generator from './Slopes.generator';
 import { SLOPES_ASPECT_RATIO } from './Slopes.constants';
 import { SlopesContext } from './SlopesState';
-import DownloadShelfWorker from './DownloadShelf.worker';
 import DownloadVariant from './DownloadVariant';
+
+const DownloadShelfWorkerConstructor = () =>
+  new Worker(new URL('./DownloadShelf.worker.js', import.meta.url));
 
 type Props = {
   isVisible: boolean,
@@ -48,7 +50,7 @@ const DownloadShelf = ({ isVisible, handleToggle }: Props) => {
 
   const swatch = getSwatchById(slopesParams.swatchId);
 
-  const worker = useWorker(DownloadShelfWorker);
+  const worker = useWorker(DownloadShelfWorkerConstructor);
 
   worker.onmessage = ({ data }) => {
     const { markup } = data;
