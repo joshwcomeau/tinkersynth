@@ -1,9 +1,8 @@
 # Pin Node version (also use .nvmrc)
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps --ignore-scripts"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [build]
-  # Rebuild native deps so Linux binaries are installed (main install uses --ignore-scripts)
-  command = "npm rebuild sharp && npm rebuild lmdb && npm rebuild @parcel/watcher && npm run build"
+  command = "npm run build"
   publish = "public"
