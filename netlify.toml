@@ -1,9 +1,6 @@
-# Pin Node version (also use .nvmrc)
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps"
 
 [build]
-  # Install parcel watcher Linux binary, then re-pin schema-utils (parcel install can hoist v4 and break validateOptions)
-  command = "npm install @parcel/watcher-linux-x64-glibc@2.5.6 --legacy-peer-deps --no-save && npm install schema-utils@3.3.0 --no-save && npm run build"
+  command = "npm run build"
   publish = "public"
