@@ -4,5 +4,6 @@
   NPM_FLAGS = "--legacy-peer-deps"
 
 [build]
-  command = "npm run build"
+  # Explicitly install parcel watcher Linux binary (Netlify plugin install can skip optional deps)
+  command = "npm install @parcel/watcher-linux-x64-glibc@2.5.6 --no-save && npm run build"
   publish = "public"
