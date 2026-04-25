@@ -23,7 +23,7 @@ import SimpleTable from '../components/SimpleTable';
 const IntraFAQLink = ({ id, setOpenQuestionId, children }) => (
   <TextLink
     to={`/faq?q=${id}`}
-    onClick={ev => {
+    onClick={(ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -94,7 +94,7 @@ const FAQ = () => {
 
             <Paragraph>
               Tinkersynth was created by me,{' '}
-              <a href="https://twitter.com/JoshWComeau">Josh Comeau</a>.
+              <a href="https://joshwcomeau.com/">Josh Comeau</a>.
             </Paragraph>
           </QuestionAndAnswer>
 
@@ -274,13 +274,6 @@ const FAQ = () => {
               find), but please feel free to contact me and I'll grant a
               personal exemption after seeing the work.
             </Paragraph>
-
-            <Paragraph>
-              <a href="https://twitter.com/LucLalande/status/1229800830926237696">
-                See some examples of sufficiently-derivative work
-              </a>
-              .
-            </Paragraph>
           </QuestionAndAnswer>
           <QuestionAndAnswer
             id="nft"
@@ -302,13 +295,6 @@ const FAQ = () => {
               want with it. But{' '}
               <strong>it has to be significantly transformed</strong>. Cropping,
               warping, or changing the colors doesn't count.
-            </Paragraph>
-
-            <Paragraph>
-              <a href="https://twitter.com/LucLalande/status/1229800830926237696">
-                See some examples of sufficiently-derivative work
-              </a>
-              .
             </Paragraph>
           </QuestionAndAnswer>
         </Questions>

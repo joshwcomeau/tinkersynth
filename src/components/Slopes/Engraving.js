@@ -12,7 +12,7 @@ const Engraving = () => (
       <br />
       By{' '}
       <strong>
-        <Link to="https://twitter.com/JoshWComeau" target="_blank">
+        <Link to="https://joshwcomeau.com/" target="_blank">
           Josh Comeau
         </Link>
       </strong>
@@ -35,7 +35,8 @@ const Note = styled.div`
   text-align: right;
   color: ${COLORS.gray[400]};
   line-height: 1.3;
-  text-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.5),
+  text-shadow:
+    0px -0.5px 0px rgba(0, 0, 0, 0.5),
     0px 0.5px 0px rgba(255, 255, 255, 0.9);
 `;
 
