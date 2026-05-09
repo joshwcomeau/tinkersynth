@@ -7439,10 +7439,10 @@ imagemin@^6.0.0:
     pify "^4.0.1"
     replace-ext "^1.0.0"
 
-immer@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.0.tgz#36063119eb65fa3f0e81ce000eb22f4eede9762e"
-  integrity sha512-P0unw4sbgKsQBG3fHQ5IpdLWxmGpmzwmPu0dXpA+H2OLSDJhH4COhSwmGTWyFKq3X2YvoVRbvkBV927eyRGt4Q==
+immer@^9.0.6:
+  version "9.0.6"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.6.tgz#7a96bf2674d06c8143e327cbf73539388ddf1a73"
+  integrity sha512-G95ivKpy+EvVAnAab4fVa4YGYn24J1SpEktnJX7JJ45Bd7xqME/SCplFzYFmTbrkwZbQ4xJK1xMTUYBkN6pWsQ==
 
 immutable@~3.7.6:
   version "3.7.6"
